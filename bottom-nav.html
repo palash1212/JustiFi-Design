@@ -1,0 +1,25 @@
+<nav class="bottom-nav" id="bottomNav">
+  <a href="dashboard.html" class="b-item" data-page="dashboard">
+    <span class="b-icon">🏠</span><span>Dashboard</span>
+  </a>
+  <a href="myconsultancy.html" class="b-item" data-page="myconsultancy">
+    <span class="b-icon">📋</span><span>Consult</span>
+  </a>
+  <a href="affidavit.html" class="b-item" data-page="affidavit">
+    <span class="b-icon">📄</span><span>Affidavit</span>
+  </a>
+  <a href="#" class="b-item">
+    <span class="b-icon">🏘️</span><span>Property</span>
+  </a>
+  <button class="b-item" id="moreBtn" onclick="toggleMorePopup()">
+    <span class="b-icon">➕</span><span>More</span>
+  </button>
+  <div class="more-popup" id="morePopup">
+    <a href="#"><span>📊</span> Corporate &amp; Tax</a>
+    <a href="#"><span>📊</span> Payment &amp; Invoices</a>
+    <a href="profile.html"><span>👤</span> My Profile</a>
+    <div class="divider"></div>
+    <a href="#"><span>⚙️</span> Settings</a>
+    <a href="#" onclick="logout()"><span>↪</span> Logout</a>
+  </div>
+</nav>
