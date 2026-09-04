@@ -1,70 +1,452 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Find Verified Advocates — JustiFi</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body data-page="lawyer_list" data-requires-auth="0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Verified Advocates — JustiFi</title>
 
-  <div id="navbarPlaceholder"></div>
+    <!-- Existing project assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
 
-  <main class="main-content">
-    <div class="container">
-      <div class="page-head">
-        <h1>Find Verified Advocates</h1>
-        <p>Connect with verified Advocates across Bangladesh</p>
+    <!-- Tailwind + Material Symbols -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind config -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              surface: "#f7f9fb",
+              "surface-dim": "#d8dadc",
+              "on-surface-variant": "#44474c",
+              "on-tertiary-fixed": "#261900",
+              tertiary: "#1f1300",
+              "on-background": "#191c1e",
+              "on-primary-fixed-variant": "#38485a",
+              "outline-variant": "#c4c6cd",
+              "on-error": "#ffffff",
+              "tertiary-fixed-dim": "#e9c176",
+              "primary-fixed-dim": "#b7c8de",
+              "primary-fixed": "#d2e4fb",
+              "error-container": "#ffdad6",
+              secondary: "#505f76",
+              "on-surface": "#191c1e",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "surface-container-highest": "#e0e3e5",
+              "secondary-fixed-dim": "#b7c8e1",
+              "secondary-fixed": "#d3e4fe",
+              "surface-tint": "#4f6073",
+              "on-secondary-fixed": "#0b1c30",
+              "on-primary": "#ffffff",
+              "tertiary-container": "#392700",
+              "surface-container": "#eceef0",
+              "on-primary-container": "#8192a7",
+              "on-tertiary-container": "#af8c47",
+              "inverse-primary": "#b7c8de",
+              background: "#f7f9fb",
+              "surface-container-high": "#e6e8ea",
+              "on-primary-fixed": "#0b1d2d",
+              "on-tertiary-fixed-variant": "#5d4201",
+              "on-secondary-fixed-variant": "#38485d",
+              "secondary-container": "#d0e1fb",
+              primary: "#041627",
+              "on-secondary": "#ffffff",
+              "on-error-container": "#93000a",
+              "surface-container-lowest": "#ffffff",
+              error: "#ba1a1a",
+              outline: "#74777d",
+              "surface-variant": "#e0e3e5",
+              "surface-container-low": "#f2f4f6",
+              "brand-gold": "#C5A059",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "stack-lg": "32px",
+              "margin-desktop": "40px",
+              gutter: "24px",
+              "stack-sm": "8px",
+              "stack-md": "16px",
+              "margin-mobile": "16px",
+              "container-max": "1280px",
+              unit: "8px",
+            },
+            fontFamily: {
+              "body-md": ["Inter"],
+              "headline-lg": ["Inter"],
+              "body-lg": ["Inter"],
+              "label-md": ["Inter"],
+              "headline-md": ["Inter"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+      .legal-soft-shadow {
+        box-shadow: 0 4px 20px 0 rgba(26, 43, 60, 0.04);
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        vertical-align: middle;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        height: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+      }
+      .filter-dropdown {
+        min-width: 0;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-background font-body-md selection:bg-brand-gold selection:text-white overflow-x-hidden"
+    data-page="lawyer_list"
+    data-requires-auth="0"
+  >
+    <!-- Shared Navbar -->
+    <div id="navbarPlaceholder"></div>
+
+    <main
+      class="w-full max-w-full px-4 md:px-margin-desktop py-4 md:py-stack-lg mx-auto"
+    >
+      <!-- Hero Section -->
+      <section class="mb-4 md:mb-stack-lg">
+        <h1 class="text-2xl md:text-headline-lg text-primary mb-2">
+          Find Verified Advocates
+        </h1>
+        <p class="text-sm md:text-body-lg text-secondary max-w-2xl">
+          Connect with Supreme Court and District Bar Advocates for reliable
+          legal representation and consultation across Bangladesh.
+        </p>
+      </section>
+
+      <!-- Search & Filter Area -->
+      <section class="mb-4 md:mb-stack-lg">
+        <div
+          class="bg-surface-container-lowest p-4 md:p-6 rounded-xl legal-soft-shadow border border-outline-variant/30 w-full"
+        >
+          <!-- Search Bar -->
+          <div class="relative w-full mb-4 md:mb-6">
+            <span
+              class="material-symbols-outlined absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-outline text-lg md:text-base"
+              >search</span
+            >
+            <input
+              class="w-full max-w-full pl-10 md:pl-12 pr-3 md:pr-4 py-3 md:py-4 rounded-lg border-outline-variant focus:border-brand-gold focus:ring-brand-gold bg-surface-container-low transition-all text-sm md:text-base"
+              placeholder="Search by name, expertise, or bar association..."
+              type="text"
+              id="searchInput"
+              oninput="filterLawyers()"
+            />
+          </div>
+
+          <!-- Filters Row -->
+          <div
+            class="flex flex-col lg:flex-row items-start lg:items-center gap-3 md:gap-4 w-full"
+          >
+            <!-- Filter dropdowns: 2-column mobile, 3-column desktop -->
+            <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+              <!-- Expertise -->
+              <div class="relative filter-dropdown w-full">
+                <select
+                  class="w-full appearance-none bg-white border border-outline-variant rounded-lg px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5 lg:text-label-md focus:ring-brand-gold focus:border-brand-gold"
+                  id="filterExpertise"
+                  onchange="filterLawyers()"
+                >
+                  <option value="all">All Expertise</option>
+                  <option value="Family">Family Law</option>
+                  <option value="Corporate">Corporate Law</option>
+                  <option value="Property">Property Law</option>
+                  <option value="Criminal">Criminal Law</option>
+                </select>
+                <span
+                  class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-sm lg:text-base"
+                  >expand_more</span
+                >
+              </div>
+              <!-- Experience -->
+              <div class="relative filter-dropdown w-full">
+                <select
+                  class="w-full appearance-none bg-white border border-outline-variant rounded-lg px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5 lg:text-label-md focus:ring-brand-gold focus:border-brand-gold"
+                >
+                  <option>Experience</option>
+                  <option>5+ Years</option>
+                  <option>10+ Years</option>
+                  <option>Senior Advocate</option>
+                </select>
+                <span
+                  class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-sm lg:text-base"
+                  >expand_more</span
+                >
+              </div>
+              <!-- Rating -->
+              <div class="relative filter-dropdown w-full">
+                <select
+                  class="w-full appearance-none bg-white border border-outline-variant rounded-lg px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5 lg:text-label-md focus:ring-brand-gold focus:border-brand-gold"
+                >
+                  <option>Rating</option>
+                  <option>4.5+ Stars</option>
+                  <option>4.0+ Stars</option>
+                </select>
+                <span
+                  class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-sm lg:text-base"
+                  >expand_more</span
+                >
+              </div>
+              <!-- City/Bar -->
+              <div class="relative filter-dropdown w-full">
+                <select
+                  class="w-full appearance-none bg-white border border-outline-variant rounded-lg px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5 lg:text-label-md focus:ring-brand-gold focus:border-brand-gold"
+                >
+                  <option>City / Bar</option>
+                  <option>Dhaka Bar</option>
+                  <option>Chittagong Bar</option>
+                  <option>Supreme Court</option>
+                </select>
+                <span
+                  class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-sm lg:text-base"
+                  >expand_more</span
+                >
+              </div>
+              <!-- Fee Range -->
+              <div class="relative filter-dropdown w-full">
+                <select
+                  class="w-full appearance-none bg-white border border-outline-variant rounded-lg px-3 py-2 text-xs md:text-sm lg:px-4 lg:py-2.5 lg:text-label-md focus:ring-brand-gold focus:border-brand-gold"
+                >
+                  <option>Fee Range</option>
+                  <option>৳0 - ৳2,000</option>
+                  <option>৳2,000 - ৳5,000</option>
+                  <option>৳5,000+</option>
+                </select>
+                <span
+                  class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-outline pointer-events-none text-sm lg:text-base"
+                  >expand_more</span
+                >
+              </div>
+              <!-- This cell is intentionally left empty to maintain grid symmetry -->
+              <div class="hidden md:block"></div>
+            </div>
+
+            <!-- Available Toggle (full width on mobile, inline on desktop) -->
+            <div
+              class="w-full lg:w-auto flex items-center justify-center lg:justify-start gap-3 bg-surface-container rounded-lg px-4 py-2 border border-outline-variant/30 whitespace-nowrap"
+            >
+              <span class="text-xs md:text-label-md text-primary"
+                >Available Today</span
+              >
+              <button
+                class="relative inline-flex h-6 w-11 items-center rounded-full bg-surface-dim transition-colors flex-shrink-0"
+                id="availableToggle"
+                onclick="this.classList.toggle('bg-brand-gold')"
+              >
+                <span
+                  class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"
+                  id="toggleCircle"
+                  style="transform: translateX(4px)"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Summary -->
+      <div
+        class="flex flex-wrap justify-between items-center gap-2 mb-4 md:mb-6"
+      >
+        <h3 class="text-base md:text-headline-md text-primary">
+          Showing
+          <span id="resultCount" class="text-brand-gold">4</span> Advocates
+        </h3>
+        <div class="flex items-center gap-2">
+          <span class="text-xs md:text-caption text-secondary">Sort by:</span>
+          <select
+            class="border-none bg-transparent text-xs md:text-label-md text-primary focus:ring-0 cursor-pointer"
+          >
+            <option>Most Relevant</option>
+            <option>Highest Rating</option>
+            <option>Experience: High to Low</option>
+          </select>
+        </div>
       </div>
 
-      <div class="filters-bar">
-        <input class="search-input" id="searchInput" type="text" placeholder="Search lawyer name or practice area" oninput="renderList()" />
-        <span class="chip active" data-dept="all" onclick="filterLawyers('all', this)">All</span>
-        <span class="chip" data-dept="Corporate" onclick="filterLawyers('Corporate', this)">Corporate</span>
-        <span class="chip" data-dept="Family" onclick="filterLawyers('Family', this)">Family</span>
-        <span class="chip" data-dept="Property" onclick="filterLawyers('Property', this)">Property</span>
-        <span class="chip">Experience ▾</span>
-        <span class="chip">Rating ▾</span>
-        <span class="chip">City / Bar ▾</span>
-        <span class="chip">Fee Range ▾</span>
-        <span class="chip">Available Today</span>
-        <span class="chip">Sort: Top Rated ▾</span>
+      <!-- Lawyers Grid -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-gutter w-full"
+        id="lawyerGrid"
+      >
+        <!-- Cards generated by JavaScript -->
       </div>
 
-      <div class="lawyer-grid" id="listGrid"></div>
-    </div>
-  </main>
+      <!-- Load More (placeholder) -->
+      <div class="flex justify-center mt-4 md:mt-stack-lg">
+        <button
+          class="flex items-center gap-2 px-6 md:px-8 py-2 md:py-3 rounded-xl border-2 border-brand-gold text-brand-gold font-bold hover:bg-brand-gold/5 transition-all group active:scale-95 text-sm md:text-base"
+        >
+          <span>Load More Advocates</span>
+          <span
+            class="material-symbols-outlined group-hover:translate-y-1 transition-transform text-sm md:text-base"
+            >expand_more</span
+          >
+        </button>
+      </div>
+    </main>
 
-  <div id="footerPlaceholder"></div>
+    <!-- Shared Footer -->
+    <div id="footerPlaceholder"></div>
 
-  <script src="js/data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/partials.js"></script>
-  <script>
-    var currentDept = 'all';
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/partials.js"></script>
 
-    function renderList() {
-      var q = (document.getElementById('searchInput').value || '').toLowerCase();
-      document.getElementById('listGrid').innerHTML = LAWYERS
-        .filter(function (l) {
-          var deptMatch = currentDept === 'all' || l.dept === currentDept;
-          var textMatch = !q || l.name.toLowerCase().indexOf(q) > -1 || l.dept.toLowerCase().indexOf(q) > -1;
-          return deptMatch && textMatch;
-        })
-        .map(lawyerCardHTML).join('');
-    }
+    <script>
+      // ---- Lawyer List Card Generator ----
+      function lawyerListCardHTML(l) {
+        var rating = (4.5 + Math.random() * 0.5).toFixed(1);
+        var exp = Math.floor(8 + Math.random() * 17) + " Years Experience";
+        var practiceTags = {
+          Family: ["Family Law", "Mediation"],
+          Corporate: ["Corporate Law", "VAT/Tax"],
+          Property: ["Land Disputes", "Property Verification"],
+          Criminal: ["Criminal Law", "Bail Petitions"],
+        }[l.dept] || ["General Practice"];
 
-    function filterLawyers(dept, el) {
-      currentDept = dept;
-      document.querySelectorAll('.filters-bar .chip[data-dept]').forEach(function (c) { c.classList.remove('active'); });
-      el.classList.add('active');
-      renderList();
-    }
+        var photoHtml = l.img
+          ? '<img src="' +
+            l.img +
+            '" alt="' +
+            l.name +
+            '" class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-brand-gold p-0.5" />'
+          : '<div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-surface-container flex items-center justify-center text-2xl md:text-3xl text-surface-variant border-2 border-brand-gold p-0.5">' +
+            l.init +
+            "</div>";
 
-    renderList();
-  </script>
-</body>
+        var chambers = [
+          "Banani, Dhaka",
+          "Paltan, Dhaka",
+          "Agrabad, CTG",
+          "Segunbagicha, Dhaka",
+          "Mirpur, Dhaka",
+          "Zindabazar, Sylhet",
+        ];
+        var chamber = chambers[Math.floor(Math.random() * chambers.length)];
+
+        return `
+        <div class="bg-surface-container-lowest rounded-xl p-4 md:p-6 legal-soft-shadow hover:translate-y-[-4px] transition-all duration-300 border border-outline-variant/20 flex flex-col w-full">
+          <div class="flex gap-3 md:gap-4 items-start mb-3 md:mb-4">
+            <div class="relative flex-shrink-0">
+              ${photoHtml}
+              <div class="absolute -bottom-1 -right-1 bg-brand-gold text-white rounded-full p-0.5 md:p-1 border-2 border-white" title="Verified Sanad">
+                <span class="material-symbols-outlined text-[10px] md:text-[14px] font-bold" style="font-variation-settings: 'FILL' 1;">verified</span>
+              </div>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h4 class="text-base md:text-[18px] font-headline-md text-primary break-words">${l.name}</h4>
+              <p class="text-xs md:text-caption text-secondary mb-1">Advocate, ${l.dept} Division</p>
+              <div class="flex items-center gap-1 text-brand-gold flex-wrap">
+                <span class="material-symbols-outlined text-[14px] md:text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                <span class="text-xs md:text-[14px] font-label-md">${rating}</span>
+                <span class="text-[10px] md:text-caption text-outline-variant">(${Math.floor(Math.random() * 150 + 20)} Reviews)</span>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-2 md:space-y-3 mb-4 md:mb-6 flex-grow">
+            <div class="flex items-center gap-2 text-on-surface-variant">
+              <span class="material-symbols-outlined text-[16px] md:text-[20px] flex-shrink-0">work_history</span>
+              <span class="text-xs md:text-caption truncate">${exp}</span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant">
+              <span class="material-symbols-outlined text-[16px] md:text-[20px] flex-shrink-0">location_on</span>
+              <span class="text-xs md:text-caption truncate">Chamber: ${chamber}</span>
+            </div>
+            <div class="flex flex-wrap gap-1 md:gap-2 mt-1 md:mt-2">
+              ${practiceTags.map((t) => `<span class="bg-surface-container px-2 md:px-3 py-0.5 md:py-1 rounded-full text-[10px] md:text-[12px] font-medium text-on-secondary-container">${t}</span>`).join("")}
+            </div>
+          </div>
+          <div class="pt-3 md:pt-4 border-t border-outline-variant/30 flex flex-col gap-2 md:gap-3">
+            <div class="flex justify-between items-center mb-1 md:mb-2">
+              <span class="text-[10px] md:text-caption text-secondary">Consultation Fee</span>
+              <span class="text-base md:text-[18px] font-headline-md text-primary">${l.fee} <span class="text-[10px] md:text-[12px] text-secondary font-normal">/ Session</span></span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 md:gap-3">
+              <a href="lawyer-portfolio.html?lawyer=${l.id}" class="px-2 md:px-4 py-2 md:py-2.5 rounded-lg border border-primary text-primary font-medium text-xs md:text-label-md hover:bg-primary/5 transition-colors text-center truncate">View</a>
+              <a href="consultancy-booking.html?lawyer=${l.id}" class="px-2 md:px-4 py-2 md:py-2.5 rounded-lg bg-brand-gold text-white font-medium text-xs md:text-label-md hover:brightness-110 active:scale-[0.98] transition-all text-center truncate">Book Now</a>
+            </div>
+          </div>
+        </div>
+      `;
+      }
+
+      // ---- Render + filtering ----
+      function renderLawyerList() {
+        var grid = document.getElementById("lawyerGrid");
+        var searchTerm = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        var expertiseFilter = document.getElementById("filterExpertise").value;
+
+        var filtered = LAWYERS.filter(function (l) {
+          var nameMatch =
+            l.name.toLowerCase().includes(searchTerm) ||
+            l.dept.toLowerCase().includes(searchTerm);
+          var deptMatch =
+            expertiseFilter === "all" || l.dept === expertiseFilter;
+          return nameMatch && deptMatch;
+        });
+
+        document.getElementById("resultCount").textContent = filtered.length;
+        grid.innerHTML = filtered.map(lawyerListCardHTML).join("");
+      }
+
+      window.filterLawyers = renderLawyerList;
+
+      // ---- Toggle micro‑interaction ----
+      document
+        .getElementById("availableToggle")
+        .addEventListener("click", function () {
+          var circle = document.getElementById("toggleCircle");
+          if (this.classList.contains("bg-brand-gold")) {
+            circle.style.transform = "translateX(20px)";
+          } else {
+            circle.style.transform = "translateX(4px)";
+          }
+        });
+
+      // ---- Initial render ----
+      renderLawyerList();
+    </script>
+  </body>
 </html>

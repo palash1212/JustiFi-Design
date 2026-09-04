@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Consultation — JustiFi</title>
+
+  <!-- Existing project assets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Tailwind + Material Symbols -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind config (matches the new design) -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary-fixed": "#0b1d2d",
+            "surface-container-low": "#f2f4f6",
+            "error": "#ba1a1a",
+            "surface-container-high": "#e6e8ea",
+            "on-secondary-fixed": "#0b1c30",
+            "primary-fixed-dim": "#b7c8de",
+            "inverse-primary": "#b7c8de",
+            "surface-dim": "#d8dadc",
+            "on-secondary-container": "#54647a",
+            "secondary-fixed-dim": "#b7c8e1",
+            "outline": "#74777d",
+            "on-tertiary-fixed": "#261900",
+            "on-primary": "#ffffff",
+            "surface-tint": "#4f6073",
+            "on-tertiary-fixed-variant": "#5d4201",
+            "tertiary-fixed-dim": "#e9c176",
+            "primary-fixed": "#d2e4fb",
+            "primary": "#041627",
+            "on-background": "#191c1e",
+            "on-tertiary-container": "#af8c47",
+            "surface-variant": "#e0e3e5",
+            "on-surface-variant": "#44474c",
+            "on-surface": "#191c1e",
+            "on-secondary-fixed-variant": "#38485d",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-fixed": "#ffdea5",
+            "surface-bright": "#f7f9fb",
+            "on-tertiary": "#ffffff",
+            "tertiary": "#1f1300",
+            "on-error": "#ffffff",
+            "outline-variant": "#c4c6cd",
+            "background": "#f7f9fb",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#eff1f3",
+            "surface-container": "#eceef0",
+            "on-primary-fixed-variant": "#38485a",
+            "on-primary-container": "#8192a7",
+            "error-container": "#ffdad6",
+            "surface-container-highest": "#e0e3e5",
+            "inverse-surface": "#2d3133",
+            "secondary-container": "#d0e1fb",
+            "secondary-fixed": "#d3e4fe",
+            "surface": "#f7f9fb",
+            "on-secondary": "#ffffff",
+            "secondary": "#505f76",
+            "tertiary-container": "#392700",
+            "primary-container": "#1a2b3c",
+            "warm-gold": "#C5A059"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "gutter": "24px",
+            "margin-desktop": "40px",
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            "stack-lg": "32px",
+            "unit": "8px",
+            "margin-mobile": "16px",
+            "container-max": "1280px"
+          },
+          fontFamily: {
+            "headline-lg": ["Inter"],
+            "caption": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          fontSize: {
+            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .legal-soft-shadow {
+      box-shadow: 0px 4px 20px rgba(26, 43, 60, 0.04);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: #e2e8e9;
+      border-radius: 10px;
+    }
+    body {
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-warm-gold selection:text-white overflow-x-hidden" data-page="lawyer_list" data-requires-auth="0">
+
+  <!-- Shared Navbar -->
+  <div id="navbarPlaceholder"></div>
+
+  <main class="pt-4 md:pt-8 pb-32 px-4 md:px-margin-desktop max-w-container-max mx-auto">
+    <!-- Header Section -->
+    <div class="mb-stack-lg">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 class="font-headline-lg text-headline-lg text-primary mb-2" id="bookingTitle">Book Consultation</h1>
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-label-md flex items-center gap-1">
+              <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+              Verified Advocate
+            </span>
+            <span class="text-on-surface-variant font-body-md">•</span>
+            <span class="text-primary font-bold font-body-md" id="bookingFee">Fee ৳2,000 / Session</span>
+            <span class="text-on-surface-variant font-body-md">•</span>
+            <span class="text-on-surface-variant font-body-md">Supreme Court of Bangladesh</span>
+          </div>
+        </div>
+        <div class="flex items-center -space-x-3 overflow-hidden">
+          <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white object-cover" id="bookingAvatar" src="" alt="Advocate" />
+          <div class="h-12 w-12 rounded-full ring-2 ring-white bg-surface-container-high flex items-center justify-center text-primary font-bold text-caption">+12</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+      <!-- Left Column: Form Sections -->
+      <form class="lg:col-span-8 space-y-gutter" id="consultancy-booking">
+        <!-- 1. Legal Matter Classification -->
+        <section class="bg-surface-container-lowest rounded-xl p-stack-lg legal-soft-shadow">
+          <h2 class="font-headline-md text-headline-md text-primary mb-stack-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-warm-gold">gavel</span>
+            Legal Matter Classification
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-stack-md">
+            <label class="relative group cursor-pointer">
+              <input checked class="peer sr-only" name="legal_matter" type="radio" value="property" />
+              <div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all flex flex-col gap-2 hover:border-warm-gold/50">
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-warm-gold transition-colors">home_work</span>
+                <span class="font-bold text-label-md text-primary">Property / Land Dispute</span>
+              </div>
+            </label>
+            <label class="relative group cursor-pointer">
+              <input class="peer sr-only" name="legal_matter" type="radio" value="family" />
+              <div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all flex flex-col gap-2 hover:border-warm-gold/50">
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-warm-gold transition-colors">family_restroom</span>
+                <span class="font-bold text-label-md text-primary">Family Court &amp; Mahr</span>
+              </div>
+            </label>
+            <label class="relative group cursor-pointer">
+              <input class="peer sr-only" name="legal_matter" type="radio" value="criminal" />
+              <div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all flex flex-col gap-2 hover:border-warm-gold/50">
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-warm-gold transition-colors">balance</span>
+                <span class="font-bold text-label-md text-primary">Criminal Bail</span>
+              </div>
+            </label>
+            <label class="relative group cursor-pointer">
+              <input class="peer sr-only" name="legal_matter" type="radio" value="corporate" />
+              <div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all flex flex-col gap-2 hover:border-warm-gold/50">
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-warm-gold transition-colors">business</span>
+                <span class="font-bold text-label-md text-primary">Corporate Registration</span>
+              </div>
+            </label>
+            <label class="relative group cursor-pointer">
+              <input class="peer sr-only" name="legal_matter" type="radio" value="tax" />
+              <div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all flex flex-col gap-2 hover:border-warm-gold/50">
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-warm-gold transition-colors">account_balance_wallet</span>
+                <span class="font-bold text-label-md text-primary">Income Tax / VAT</span>
+              </div>
+            </label>
+            <label class="relative group cursor-pointer">
+              <input class="peer sr-only" name="legal_matter" type="radio" value="writ" />
+              <div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all flex flex-col gap-2 hover:border-warm-gold/50">
+                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-warm-gold transition-colors">history_edu</span>
+                <span class="font-bold text-label-md text-primary">Writ Petition</span>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <!-- 2. Consultation Mode -->
+        <section class="bg-surface-container-lowest rounded-xl p-stack-lg legal-soft-shadow">
+          <h2 class="font-headline-md text-headline-md text-primary mb-stack-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-warm-gold">video_chat</span>
+            Consultation Mode
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md mb-stack-md">
+            <label class="relative cursor-pointer">
+              <input checked class="peer sr-only" name="mode" onchange="toggleChamber(false)" type="radio" value="online" />
+              <div class="flex items-center gap-4 p-6 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all">
+                <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white">videocam</span>
+                </div>
+                <div>
+                  <p class="font-bold text-body-lg text-primary">Online Video Call</p>
+                  <p class="text-caption text-on-surface-variant">Google Meet or WhatsApp</p>
+                </div>
+                <span class="ml-auto material-symbols-outlined text-warm-gold opacity-0 peer-checked:opacity-100 transition-opacity">check_circle</span>
+              </div>
+            </label>
+            <label class="relative cursor-pointer">
+              <input class="peer sr-only" name="mode" onchange="toggleChamber(true)" type="radio" value="chamber" />
+              <div class="flex items-center gap-4 p-6 border-2 border-surface-container-high rounded-xl peer-checked:border-warm-gold peer-checked:bg-surface-bright transition-all">
+                <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-primary">location_on</span>
+                </div>
+                <div>
+                  <p class="font-bold text-body-lg text-primary">Chamber Visit</p>
+                  <p class="text-caption text-on-surface-variant">In-person Meeting</p>
+                </div>
+                <span class="ml-auto material-symbols-outlined text-warm-gold opacity-0 peer-checked:opacity-100 transition-opacity">check_circle</span>
+              </div>
+            </label>
+          </div>
+          <div class="hidden animate-in fade-in slide-in-from-top-2 duration-300" id="chamber-selector">
+            <p class="font-bold text-label-md text-primary mb-2">Select Chamber Location</p>
+            <select class="w-full h-12 border-surface-variant rounded-xl focus:border-warm-gold focus:ring-warm-gold">
+              <option value="kakrail">Kakrail Chamber - 12/A Sky Tower, Kakrail, Dhaka</option>
+              <option value="banani">Banani Chamber - House 45, Block E, Banani, Dhaka</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- 3. Date & Time Selection -->
+        <section class="bg-surface-container-lowest rounded-xl p-stack-lg legal-soft-shadow">
+          <h2 class="font-headline-md text-headline-md text-primary mb-stack-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-warm-gold">calendar_today</span>
+            Date &amp; Time Selection
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+            <!-- Simplified Calendar UI -->
+            <div class="bg-surface-bright p-4 rounded-xl border border-surface-container-high">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-primary">October 2023</h3>
+                <div class="flex gap-2">
+                  <button class="material-symbols-outlined text-primary-container" type="button">chevron_left</button>
+                  <button class="material-symbols-outlined text-primary-container" type="button">chevron_right</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-7 gap-1 text-center text-caption text-on-surface-variant mb-2">
+                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+              </div>
+              <div class="grid grid-cols-7 gap-1">
+                <!-- Simple 30-day grid (simplified) -->
+                <div class="h-10 flex items-center justify-center opacity-30">27</div>
+                <div class="h-10 flex items-center justify-center opacity-30">28</div>
+                <div class="h-10 flex items-center justify-center opacity-30">29</div>
+                <div class="h-10 flex items-center justify-center opacity-30">30</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">1</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">2</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">3</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">23</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary bg-warm-gold text-white rounded-full">24</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">25</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">26</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">27</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">28</div>
+                <div class="h-10 flex items-center justify-center font-bold text-primary">29</div>
+              </div>
+            </div>
+            <!-- Time Slots Chips -->
+            <div>
+              <h3 class="font-bold text-primary mb-4">Available Time Slots</h3>
+              <div class="flex flex-wrap gap-stack-sm">
+                <button class="px-6 py-2 rounded-full border-2 border-surface-container-high text-primary hover:border-warm-gold transition-colors font-bold text-label-md" type="button">9:00 AM</button>
+                <button class="px-6 py-2 rounded-full border-2 border-surface-container-high text-primary hover:border-warm-gold transition-colors font-bold text-label-md" type="button">10:30 AM</button>
+                <button class="px-6 py-2 rounded-full bg-warm-gold border-2 border-warm-gold text-white font-bold text-label-md" type="button">2:00 PM</button>
+                <button class="px-6 py-2 rounded-full border-2 border-surface-container-high text-primary hover:border-warm-gold transition-colors font-bold text-label-md" type="button">4:30 PM</button>
+              </div>
+              <div class="mt-stack-lg p-4 bg-primary-container/10 border border-primary-container/20 rounded-xl">
+                <p class="text-caption text-primary leading-tight">
+                  <span class="font-bold">Note:</span> Each session typically lasts 45 minutes. Please be punctual for your appointment.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Case Summary & Documents -->
+        <section class="bg-surface-container-lowest rounded-xl p-stack-lg legal-soft-shadow">
+          <h2 class="font-headline-md text-headline-md text-primary mb-stack-md flex items-center gap-2">
+            <span class="material-symbols-outlined text-warm-gold">description</span>
+            Case Summary &amp; Documents
+          </h2>
+          <div class="space-y-stack-md">
+            <div>
+              <label class="block font-bold text-label-md text-primary mb-2">Brief Description of Your Legal Issue</label>
+              <textarea class="w-full border-surface-variant rounded-xl focus:border-warm-gold focus:ring-warm-gold placeholder:text-on-surface-variant/50" placeholder="Please describe your case in detail..." rows="4"></textarea>
+            </div>
+            <div class="flex flex-col md:flex-row md:items-center gap-4 py-2">
+              <span class="font-bold text-label-md text-primary">Existing court cases?</span>
+              <div class="flex gap-4">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input class="text-warm-gold focus:ring-warm-gold" name="existing_case" type="radio" value="yes" />
+                  <span class="text-on-surface">Yes</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input checked class="text-warm-gold focus:ring-warm-gold" name="existing_case" type="radio" value="no" />
+                  <span class="text-on-surface">No</span>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label class="block font-bold text-label-md text-primary mb-2">Relevant Documents (Optional)</label>
+              <div class="border-2 border-dashed border-surface-variant rounded-xl p-stack-lg flex flex-col items-center justify-center gap-2 bg-surface-bright group hover:border-warm-gold transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-[48px] text-on-surface-variant group-hover:text-warm-gold transition-colors">cloud_upload</span>
+                <p class="font-bold text-primary">Drag &amp; Drop or <span class="text-warm-gold underline">Browse</span></p>
+                <p class="text-caption text-on-surface-variant">Supports PDF, JPG, PNG (Max 10MB)</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Client Declaration -->
+        <section class="bg-surface-container-lowest rounded-xl p-stack-lg legal-soft-shadow">
+          <label class="flex items-start gap-4 cursor-pointer">
+            <input class="mt-1 text-warm-gold focus:ring-warm-gold rounded" required type="checkbox" />
+            <span class="text-body-md text-on-surface leading-snug">
+              I hereby declare that the information provided above is true to the best of my knowledge and I understand that legal advice is based on these facts.
+            </span>
+          </label>
+        </section>
+
+        <!-- Bottom Actions -->
+        <div class="flex flex-col sm:flex-row items-center justify-end gap-stack-md pt-stack-md">
+          <a href="lawyer_list.html" class="w-full sm:w-auto px-8 py-3 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary-container hover:text-white transition-all text-center">Cancel</a>
+          <button class="w-full sm:w-auto px-12 py-3 bg-warm-gold text-white font-extrabold text-body-lg rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all" type="submit">Confirm Booking</button>
+        </div>
+      </form>
+
+      <!-- Right Column: Summary Card (Sticky) -->
+      <aside class="lg:col-span-4">
+        <div class="sticky top-24 space-y-gutter">
+          <!-- Advocate Card -->
+          <div class="bg-primary text-white rounded-xl overflow-hidden shadow-xl">
+            <div class="p-6">
+              <div class="flex items-center gap-4 mb-4">
+                <img class="w-16 h-16 rounded-xl object-cover ring-2 ring-warm-gold" id="summaryAvatar" src="" alt="Advocate" />
+                <div>
+                  <h3 class="font-bold text-body-lg leading-tight" id="summaryName">Adv. Tanveer Ahmed</h3>
+                  <p class="text-caption opacity-70">Enrolled 2012</p>
+                  <div class="flex text-warm-gold">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+                    <span class="text-caption text-white ml-1">(48 Reviews)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="space-y-3 pt-4 border-t border-white/10">
+                <div class="flex justify-between items-center text-label-md">
+                  <span class="opacity-70">Consultation Fee</span>
+                  <span class="font-bold" id="summaryFee">৳2,000</span>
+                </div>
+                <div class="flex justify-between items-center text-label-md">
+                  <span class="opacity-70">Platform Charge</span>
+                  <span class="font-bold">৳150</span>
+                </div>
+                <div class="flex justify-between items-center text-body-lg pt-2 border-t border-white/20">
+                  <span class="font-bold">Total Payable</span>
+                  <span class="font-extrabold text-warm-gold" id="summaryTotal">৳2,150</span>
+                </div>
+              </div>
+            </div>
+            <div class="bg-warm-gold text-primary p-3 text-center font-bold text-caption tracking-wider uppercase">
+              Secure Payment via SSLCommerz
+            </div>
+          </div>
+
+          <!-- Trust Indicators -->
+          <div class="bg-surface-container-lowest rounded-xl p-stack-lg legal-soft-shadow space-y-4">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-warm-gold">shield</span>
+              <div>
+                <p class="font-bold text-label-md text-primary">Confidentiality Assured</p>
+                <p class="text-caption text-on-surface-variant">All communications are end-to-end encrypted and covered by lawyer-client privilege.</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-warm-gold">verified_user</span>
+              <div>
+                <p class="font-bold text-label-md text-primary">100% Verified Advocates</p>
+                <p class="text-caption text-on-surface-variant">Bar Council membership and track records are manually verified by JustiFi.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help Widget -->
+          <div class="bg-secondary-container/30 rounded-xl p-4 border border-secondary-container flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary">support_agent</span>
+              <div>
+                <p class="font-bold text-label-md text-primary">Need Help?</p>
+                <p class="text-caption text-on-surface-variant">+880 1711 000 000</p>
+              </div>
+            </div>
+            <button class="bg-primary text-white p-2 rounded-lg" type="button">
+              <span class="material-symbols-outlined text-[20px]">chat</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Shared Footer -->
+  <div id="footerPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+
+  <script>
+    // ---- Populate advocate data from URL ----
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var lawyerId = params.get('lawyer') || 'farhana-rahman';
+      var lawyer = findLawyer(lawyerId);
+      if (!lawyer) lawyer = LAWYERS[0];
+
+      // Update header
+      document.getElementById('bookingTitle').textContent = 'Book Consultation with ' + lawyer.name;
+      document.getElementById('bookingFee').textContent = 'Fee ' + lawyer.fee + ' / Session';
+
+      // Avatar in header
+      var avatarImg = document.getElementById('bookingAvatar');
+      if (lawyer.img) {
+        avatarImg.src = lawyer.img;
+      } else {
+        avatarImg.alt = lawyer.init;
+        avatarImg.style.display = 'none';
+        // fallback: show initials
+        var fallback = document.createElement('div');
+        fallback.className = 'h-12 w-12 rounded-full ring-2 ring-white bg-surface-container-high flex items-center justify-center text-primary font-bold text-caption';
+        fallback.textContent = lawyer.init;
+        avatarImg.parentNode.replaceChild(fallback, avatarImg);
+      }
+
+      // Summary card
+      document.getElementById('summaryName').textContent = lawyer.name;
+      document.getElementById('summaryFee').textContent = lawyer.fee;
+      // Calculate total (fee + 150)
+      var feeNum = parseInt(lawyer.fee.replace(/[^0-9]/g, ''));
+      var total = feeNum + 150;
+      document.getElementById('summaryTotal').textContent = '৳' + total.toLocaleString();
+
+      var summaryAvatar = document.getElementById('summaryAvatar');
+      if (lawyer.img) {
+        summaryAvatar.src = lawyer.img;
+      } else {
+        summaryAvatar.alt = lawyer.init;
+        summaryAvatar.style.display = 'none';
+        var fallback2 = document.createElement('div');
+        fallback2.className = 'w-16 h-16 rounded-xl ring-2 ring-warm-gold bg-surface-container-high flex items-center justify-center text-primary font-bold text-xl';
+        fallback2.textContent = lawyer.init;
+        summaryAvatar.parentNode.replaceChild(fallback2, summaryAvatar);
+      }
+    })();
+
+    // ---- toggle chamber selector ----
+    function toggleChamber(show) {
+      var selector = document.getElementById('chamber-selector');
+      if (show) {
+        selector.classList.remove('hidden');
+      } else {
+        selector.classList.add('hidden');
+      }
+    }
+
+    // ---- form submit ----
+    document.getElementById('consultancy-booking').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Booking request submitted! We will redirect you to the payment gateway.');
+    });
+  </script>
+
+</body>
+</html>
