@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Verified Advocates — JustiFi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="lawyer_list" data-requires-auth="0">
+
+  <div id="navbarPlaceholder"></div>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="page-head">
+        <h1>Find Verified Advocates</h1>
+        <p>Connect with verified Advocates across Bangladesh</p>
+      </div>
+
+      <div class="filters-bar">
+        <input class="search-input" id="searchInput" type="text" placeholder="Search lawyer name or practice area" oninput="renderList()" />
+        <span class="chip active" data-dept="all" onclick="filterLawyers('all', this)">All</span>
+        <span class="chip" data-dept="Corporate" onclick="filterLawyers('Corporate', this)">Corporate</span>
+        <span class="chip" data-dept="Family" onclick="filterLawyers('Family', this)">Family</span>
+        <span class="chip" data-dept="Property" onclick="filterLawyers('Property', this)">Property</span>
+        <span class="chip">Experience ▾</span>
+        <span class="chip">Rating ▾</span>
+        <span class="chip">City / Bar ▾</span>
+        <span class="chip">Fee Range ▾</span>
+        <span class="chip">Available Today</span>
+        <span class="chip">Sort: Top Rated ▾</span>
+      </div>
+
+      <div class="lawyer-grid" id="listGrid"></div>
+    </div>
+  </main>
+
+  <div id="footerPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+  <script>
+    var currentDept = 'all';
+
+    function renderList() {
+      var q = (document.getElementById('searchInput').value || '').toLowerCase();
+      document.getElementById('listGrid').innerHTML = LAWYERS
+        .filter(function (l) {
+          var deptMatch = currentDept === 'all' || l.dept === currentDept;
+          var textMatch = !q || l.name.toLowerCase().indexOf(q) > -1 || l.dept.toLowerCase().indexOf(q) > -1;
+          return deptMatch && textMatch;
+        })
+        .map(lawyerCardHTML).join('');
+    }
+
+    function filterLawyers(dept, el) {
+      currentDept = dept;
+      document.querySelectorAll('.filters-bar .chip[data-dept]').forEach(function (c) { c.classList.remove('active'); });
+      el.classList.add('active');
+      renderList();
+    }
+
+    renderList();
+  </script>
+</body>
+</html>

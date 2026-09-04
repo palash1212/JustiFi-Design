@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — JustiFi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="dashboard" data-requires-auth="1">
+
+  <div id="navbarPlaceholder"></div>
+
+  <div class="app-shell" id="appShell">
+    <div id="sidebarPlaceholder"></div>
+
+    <main class="main-content">
+      <div class="dash-head">
+        <div>
+          <h1>Good Morning, Mehedi 👋</h1>
+          <p>Manage your legal services, consultations and applications from one place.</p>
+        </div>
+        <div class="date-pill" id="dashDate"></div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <a class="qa-card card primary" href="lawyer_list.html"><h4>Book a Lawyer</h4><p>Schedule a new consultation</p></a>
+        <a class="qa-card card" href="affidavit.html"><h4>Request Affidavit</h4><p>Draft standardized documents</p></a>
+        <div class="qa-card card"><h4>Verify Property</h4><p>Land registry background checks</p></div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card card"><div class="s-top"><span>My Consultations</span><span class="s-icon">⚖️</span></div><div class="s-num">05</div><div class="s-note gold">2 upcoming</div></div>
+        <div class="stat-card card"><div class="s-top"><span>My Affidavits</span><span class="s-icon">📄</span></div><div class="s-num">03</div><div class="s-note gold">1 pending</div></div>
+        <div class="stat-card card"><div class="s-top"><span>Land &amp; Property</span><span class="s-icon">🏘️</span></div><div class="s-num">02</div><div class="s-note gold">1 under verification</div></div>
+        <div class="stat-card card"><div class="s-top"><span>Active Services</span><span class="s-icon">◇</span></div><div class="s-num">04</div><div class="s-note gold">2 pending actions</div></div>
+      </div>
+
+      <!-- Row 1: Applications + Usage -->
+      <div class="dash-row">
+        <div class="card">
+          <div class="panel-head"><h3>Active Applications</h3><a class="view-all" href="myconsultancy.html">View All</a></div>
+          <div class="progress-item">
+            <div class="prog-head" style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><strong>Affidavit — Name Correction</strong><span>60%</span></div>
+            <div class="stepper">
+              <div class="step done"><div class="dot"></div><div class="line"></div><div class="label">Submitted</div></div>
+              <div class="step done"><div class="dot"></div><div class="line"></div><div class="label">Info Received</div></div>
+              <div class="step active"><div class="dot"></div><div class="line"></div><div class="label">Preparing Draft</div></div>
+              <div class="step"><div class="dot"></div><div class="line"></div><div class="label">User Review</div></div>
+              <div class="step"><div class="dot"></div><div class="label">Completed</div></div>
+            </div>
+            <div class="app-status">● <span class="highlight">Lawyer is preparing your affidavit</span></div>
+            <a class="btn-outline" style="font-size:12px; padding:6px 16px; display:inline-block;" href="myconsultancy.html">View Application</a>
+          </div>
+          <div class="progress-item" style="margin-top:20px;">
+            <div class="prog-head" style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><strong>Property Verification #LP-10245</strong><span>55%</span></div>
+            <div class="stepper">
+              <div class="step done"><div class="dot"></div><div class="line"></div><div class="label">Submitted</div></div>
+              <div class="step done"><div class="dot"></div><div class="line"></div><div class="label">Info Received</div></div>
+              <div class="step active"><div class="dot"></div><div class="line"></div><div class="label">Legal Review</div></div>
+              <div class="step"><div class="dot"></div><div class="line"></div><div class="label">Site Visit</div></div>
+              <div class="step"><div class="dot"></div><div class="label">Completed</div></div>
+            </div>
+            <div class="app-status">● <span class="highlight">Under legal review</span></div>
+            <a class="btn-outline" style="font-size:12px; padding:6px 16px; display:inline-block;" href="myconsultancy.html">View Application</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="panel-head"><h3>Service Usage</h3></div>
+          <div class="donut-wrap">
+            <div class="donut"></div>
+            <div class="legend">
+              <div class="legend-row"><span class="legend-dot" style="background:var(--gold)"></span>Consultancy — 40%</div>
+              <div class="legend-row"><span class="legend-dot" style="background:var(--navy)"></span>Affidavit — 25%</div>
+              <div class="legend-row"><span class="legend-dot" style="background:var(--slate)"></span>Land &amp; Property — 20%</div>
+              <div class="legend-row"><span class="legend-dot" style="background:var(--border)"></span>Corporate &amp; Tax — 15%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Consultations + Activity -->
+      <div class="dash-row">
+        <div class="card">
+          <div class="panel-head"><h3>Upcoming Consultations</h3><a class="view-all" href="myconsultancy.html">View All</a></div>
+          <div class="appt-primary">
+            <div class="info">
+              <div class="name">Advocate Md. Rahman</div>
+              <div class="meta">Property Law · Online · 30 Aug, 4:30 PM</div>
+            </div>
+            <div class="actions">
+              <a class="btn-outline" style="font-size:11px; padding:6px 14px;" href="myconsultancy.html">View Details</a>
+              <button class="btn-gold" style="font-size:11px; padding:6px 14px;">Join Consultation</button>
+            </div>
+          </div>
+          <div class="appt-row"><div class="photo">AK</div><div class="info"><div class="name">Advocate Karim</div><div class="meta">Family Law · Online · 02 Sep, 11:00 AM</div></div><a class="btn-outline" style="font-size:11px; padding:4px 12px;" href="myconsultancy.html">View</a></div>
+          <div class="appt-row"><div class="photo">SH</div><div class="info"><div class="name">Advocate Shafiqul</div><div class="meta">Corporate · Chamber · 03 Sep, 2:30 PM</div></div><a class="btn-outline" style="font-size:11px; padding:4px 12px;" href="myconsultancy.html">View</a></div>
+        </div>
+
+        <div class="card">
+          <div class="panel-head"><h3>Recent Activity</h3></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="a-title">Affidavit application submitted</div><div class="a-desc">Pending lawyer review</div><div class="a-date">29 Aug</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="a-title">Consultation confirmed</div><div class="a-desc">Advocate Rahman</div><div class="a-date">28 Aug</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="a-title">Land verification started</div><div class="a-desc">Under verification</div><div class="a-date">27 Aug</div></div></div>
+          <div class="activity-item"><div class="activity-dot"></div><div><div class="a-title">Consultation completed</div><div class="a-desc"></div><div class="a-date">25 Aug</div></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="footerPlaceholder"></div>
+  <div id="bottomNavPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+  <script>
+    document.getElementById('dashDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+  </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JustiFi — Trusted Legal Guidance in Bangladesh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body data-page="home" data-requires-auth="0">
+    <!-- Navbar (loaded from partials/navbar.html) -->
+    <div id="navbarPlaceholder"></div>
+
+    <!-- ============================================================
+  HOMEPAGE CONTENT
+  ============================================================ -->
+    <main>
+      <!-- Hero -->
+      <div class="hero">
+        <h1>
+          Trusted Legal Guidance &amp; Instant Affidavit Services Across
+          Bangladesh
+        </h1>
+        <p>
+          Connect with verified Advocates of the Supreme Court and District
+          Bars. Get expert legal counsel and affidavit assistance online.
+        </p>
+        <div class="hero-search">
+          <span>🔍</span>
+          <input
+            type="text"
+            placeholder="Search by Lawyer Name, Practice Area, or Bar Association e.g., Dhaka Bar, High Court Division"
+          />
+          <button onclick="location.href = 'lawyer_list.html'">
+            Find Lawyer
+          </button>
+        </div>
+        <div class="trust-counters">
+          <div>
+            <div class="num">100+</div>
+            <div class="lbl">Verified Advocates</div>
+          </div>
+          <div>
+            <div class="num">1,000+</div>
+            <div class="lbl">Consultations Completed</div>
+          </div>
+          <div>
+            <div class="num">24/7</div>
+            <div class="lbl">Digital Affidavit Processing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Core Services -->
+        <h2 class="section-title" style="margin-top: 50px">
+          Our Core Legal Services
+        </h2>
+        <div class="services-grid">
+          <div class="service-card card">
+            <div class="icon">⚖️</div>
+            <h3>Legal Consultancy</h3>
+            <p>Expert advice on civil, criminal, and constitutional matters.</p>
+            <a href="lawyer_list.html" class="explore">Explore Service →</a>
+          </div>
+          <div class="service-card card">
+            <div class="icon">📄</div>
+            <h3>Affidavit &amp; Notarization</h3>
+            <p>
+              Drafting and notarizing affidavits for courts, banks, and
+              government.
+            </p>
+            <a href="affidavit.html" class="explore">Explore Service →</a>
+          </div>
+          <div class="service-card card">
+            <div class="icon">🏘️</div>
+            <h3>Land &amp; Property Title Verification</h3>
+            <p>
+              Comprehensive title search and due diligence for property deals.
+            </p>
+            <a href="#" class="explore">Explore Service →</a>
+          </div>
+          <div class="service-card card">
+            <div class="icon">📊</div>
+            <h3>Corporate &amp; Tax/VAT Advisory</h3>
+            <p>Business structuring, tax planning, and VAT compliance.</p>
+            <a href="#" class="explore">Explore Service →</a>
+          </div>
+          <div class="service-card card">
+            <div class="icon">👨‍👩‍👧</div>
+            <h3>Family Court &amp; Mahr Settlements</h3>
+            <p>Family law, divorce, and Mahr (dower) dispute resolution.</p>
+            <a href="lawyer_list.html" class="explore">Explore Service →</a>
+          </div>
+          <div class="service-card card">
+            <div class="icon">⚖️</div>
+            <h3>Criminal Bail &amp; Writ Petitions</h3>
+            <p>Bail applications and constitutional writs in High Court.</p>
+            <a href="lawyer_list.html" class="explore">Explore Service →</a>
+          </div>
+        </div>
+
+        <!-- Top Advocates -->
+        <h2 class="section-title">Consult with Top-Rated Advocates</h2>
+        <div class="lawyer-grid" id="homeLawyerGrid"></div>
+
+        <!-- Testimonials -->
+        <h2 class="section-title">What Our Clients Say Across Bangladesh</h2>
+        <div class="testimonial-grid">
+          <div class="testimonial-card card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">
+              "JustiFi made the affidavit process seamless. Highly professional
+              team."
+            </p>
+            <div class="author">Rasheda Akhter <span>· Sylhet</span></div>
+          </div>
+          <div class="testimonial-card card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">
+              "Found an excellent property lawyer within hours. Land
+              verification was thorough."
+            </p>
+            <div class="author">Kamal Hossain <span>· Dhaka</span></div>
+          </div>
+          <div class="testimonial-card card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">
+              "The corporate tax advisory saved us significant VAT liabilities.
+              Highly recommend."
+            </p>
+            <div class="author">Shahana Parvin <span>· Chittagong</span></div>
+          </div>
+        </div>
+
+        <!-- Blog -->
+        <h2 class="section-title">
+          Legal Insights &amp; Everyday Problem Guides
+        </h2>
+        <div class="blog-grid">
+          <div class="blog-card card">
+            <div class="thumb">📰</div>
+            <div class="body">
+              <div class="tag">Property Law · 4 min read</div>
+              <h4>New Land Registration Rules in Bangladesh</h4>
+              <p>
+                A comprehensive guide to the updated process for mutation and
+                registration.
+              </p>
+              <a href="#" class="readmore">Read Full Article →</a>
+            </div>
+          </div>
+          <div class="blog-card card">
+            <div class="thumb">📰</div>
+            <div class="body">
+              <div class="tag">Family Law · 5 min read</div>
+              <h4>Understanding Mahr in Islamic Marriages</h4>
+              <p>
+                Legal implications and recent High Court rulings on dower
+                settlements.
+              </p>
+              <a href="#" class="readmore">Read Full Article →</a>
+            </div>
+          </div>
+          <div class="blog-card card">
+            <div class="thumb">📰</div>
+            <div class="body">
+              <div class="tag">Corporate · 3 min read</div>
+              <h4>VAT Exemptions for SMEs in 2026</h4>
+              <p>
+                Key changes in the VAT Act and how small businesses can benefit.
+              </p>
+              <a href="#" class="readmore">Read Full Article →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer (loaded from partials/footer.html) -->
+    <div id="footerPlaceholder"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/partials.js"></script>
+    <script>
+      document.getElementById("homeLawyerGrid").innerHTML =
+        LAWYERS.map(lawyerCardHTML).join("");
+    </script>
+  </body>
+</html>

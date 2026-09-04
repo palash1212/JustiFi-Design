@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Affidavit Generator — JustiFi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="affidavit" data-requires-auth="0">
+
+  <div id="navbarPlaceholder"></div>
+
+  <main class="main-content">
+    <div class="container" style="max-width:1000px;">
+
+      <!-- Stepper -->
+      <div class="afd-stepper" id="afdStepper">
+        <div class="afd-step" data-step="1"><div class="afd-dot">1</div><div class="afd-line"></div><div class="afd-label">Affidavit Type</div></div>
+        <div class="afd-step" data-step="2"><div class="afd-dot">2</div><div class="afd-line"></div><div class="afd-label">Facts &amp; Purpose</div></div>
+        <div class="afd-step" data-step="3"><div class="afd-dot">3</div><div class="afd-line"></div><div class="afd-label">Deponent Details</div></div>
+        <div class="afd-step" data-step="4"><div class="afd-dot">4</div><div class="afd-label">Preview &amp; Submit</div></div>
+      </div>
+
+      <!-- ===================== STEP 1 ===================== -->
+      <div class="afd-panel" id="afdStep1">
+        <div class="page-head" style="text-align:center;">
+          <h1>Select Affidavit Type</h1>
+          <p>Step 1 of 4</p>
+        </div>
+        <div class="card" style="max-width:680px; margin:0 auto;">
+          <div class="afd-type-grid" id="afdTypeGrid"></div>
+        </div>
+        <div class="afd-nav-btns" style="max-width:680px; margin-left:auto; margin-right:auto;">
+          <a class="btn-outline" href="index.html">Cancel</a>
+          <button class="btn-gold" onclick="afdGoTo(2)">Save &amp; Continue</button>
+        </div>
+      </div>
+
+      <!-- ===================== STEP 2 ===================== -->
+      <div class="afd-panel hidden" id="afdStep2">
+        <div class="page-head" style="text-align:center;">
+          <h1>Statement of Facts &amp; Purpose</h1>
+          <p>Step 2 of 4</p>
+        </div>
+        <div class="card" style="max-width:680px; margin:0 auto;">
+          <div class="form-field">
+            <label>Specific Cause / Purpose of this Affidavit</label>
+            <input type="text" id="afdPurpose" placeholder="e.g., Correction of spelling in SSC Certificate" />
+          </div>
+          <div class="form-field">
+            <label>Detailed Declaratory Points</label>
+            <div id="afdPointsList"></div>
+            <button type="button" class="afd-add-point" onclick="afdAddPoint()">+ Add Another Point</button>
+          </div>
+        </div>
+        <div class="afd-nav-btns" style="max-width:680px; margin-left:auto; margin-right:auto;">
+          <button class="btn-outline" onclick="afdGoTo(1)">Back</button>
+          <button class="btn-gold" onclick="afdGoTo(3)">Save &amp; Continue</button>
+        </div>
+      </div>
+
+      <!-- ===================== STEP 3 ===================== -->
+      <div class="afd-panel hidden" id="afdStep3">
+        <div class="page-head" style="text-align:center;">
+          <h1>Deponent (Applicant) Identity Details</h1>
+          <p>Step 3 of 4</p>
+        </div>
+        <div class="card" style="max-width:760px; margin:0 auto;">
+
+          <div class="afd-section-title">Personal Information</div>
+          <div class="afd-field-grid">
+            <div class="form-field"><label>Full Name (English – CAPITAL LETTERS)</label><input type="text" id="afdNameEn" style="text-transform:uppercase;" placeholder="MD. RAHIM UDDIN" /></div>
+            <div class="form-field"><label>Full Name (Bangla)</label><input type="text" id="afdNameBn" placeholder="মোঃ রহিম উদ্দিন" /></div>
+            <div class="form-field"><label>Father's Name / Husband's Name</label><input type="text" id="afdFather" /></div>
+            <div class="form-field"><label>Mother's Name</label><input type="text" id="afdMother" /></div>
+            <div class="form-field"><label>Date of Birth</label><input type="date" id="afdDob" /></div>
+            <div class="form-field"><label>Age</label><input type="number" id="afdAge" min="0" /></div>
+          </div>
+
+          <div class="afd-section-title">Identity Document</div>
+          <div class="afd-field-grid">
+            <div class="form-field"><label>Document Type</label>
+              <select id="afdDocType">
+                <option>NID (10 or 17 digit)</option>
+                <option>Smart Card</option>
+                <option>Birth Registration Certificate (BRC)</option>
+                <option>Passport</option>
+              </select>
+            </div>
+            <div class="form-field"><label>Document Number</label><input type="text" id="afdDocNumber" /></div>
+          </div>
+
+          <div class="afd-section-title">Permanent Address</div>
+          <div class="afd-field-grid">
+            <div class="form-field"><label>Village / House, Road</label><input type="text" id="afdPermHouse" /></div>
+            <div class="form-field"><label>Post Office, Post Code</label><input type="text" id="afdPermPost" /></div>
+            <div class="form-field"><label>Upazila / Thana</label><input type="text" id="afdPermUpazila" /></div>
+            <div class="form-field"><label>District</label><input type="text" id="afdPermDistrict" /></div>
+          </div>
+
+          <div class="afd-checkbox-row">
+            <input type="checkbox" id="afdSameAddr" checked onchange="afdToggleAddress()" />
+            <label for="afdSameAddr" style="font-weight:400; margin:0;">Present Address is same as Permanent Address</label>
+          </div>
+
+          <div id="afdPresentAddrBlock" class="hidden">
+            <div class="afd-section-title">Present Address</div>
+            <div class="afd-field-grid">
+              <div class="form-field"><label>Village / House, Road</label><input type="text" id="afdPresHouse" /></div>
+              <div class="form-field"><label>Post Office, Post Code</label><input type="text" id="afdPresPost" /></div>
+              <div class="form-field"><label>Upazila / Thana</label><input type="text" id="afdPresUpazila" /></div>
+              <div class="form-field"><label>District</label><input type="text" id="afdPresDistrict" /></div>
+            </div>
+          </div>
+
+          <div class="afd-section-title">Other</div>
+          <div class="afd-field-grid">
+            <div class="form-field"><label>Religion</label><input type="text" id="afdReligion" /></div>
+            <div class="form-field"><label>Nationality</label><input type="text" id="afdNationality" value="Bangladeshi" /></div>
+          </div>
+        </div>
+        <div class="afd-nav-btns" style="max-width:760px; margin-left:auto; margin-right:auto;">
+          <button class="btn-outline" onclick="afdGoTo(2)">Back</button>
+          <button class="btn-gold" onclick="afdGoTo(4)">Save &amp; Continue</button>
+        </div>
+      </div>
+
+      <!-- ===================== STEP 4 ===================== -->
+      <div class="afd-panel hidden" id="afdStep4">
+        <div class="page-head" style="text-align:center;">
+          <h1>Preview &amp; Verification</h1>
+          <p>Step 4 of 4</p>
+        </div>
+
+        <div class="afd-preview-body">
+          <!-- Left: summary -->
+          <div class="card">
+            <h3 style="margin-bottom:10px;">Summary</h3>
+            <div id="afdSummary"></div>
+            <div class="afd-checkbox-row" style="margin-top:16px;">
+              <input type="checkbox" id="afdDeclare" />
+              <label for="afdDeclare" style="font-weight:400; margin:0; font-size:12.5px;">I solemnly declare that the information provided is true and correct to the best of my knowledge and belief.</label>
+            </div>
+          </div>
+
+          <!-- Right: stamp paper preview -->
+          <div class="afd-stamp-paper" id="afdStampPaper">
+            <div class="afd-watermark">JUSTIFI DEMO DRAFT — NOT FOR LEGAL USE</div>
+            <div class="afd-stamp-head">৳300 NON-JUDICIAL STAMP — Government of the People's Republic of Bangladesh</div>
+            <h4>AFFIDAVIT</h4>
+            <div id="afdPreviewBody" style="position:relative; z-index:2;"></div>
+            <div class="afd-sign-block">
+              <div class="afd-sign-line">Deponent's Signature</div>
+              <div class="afd-sign-line">Notary Public Seal</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="afd-nav-btns" style="max-width:100%;">
+          <button class="btn-outline" onclick="afdGoTo(3)">Back</button>
+          <button class="btn-gold" onclick="afdSubmit()">Submit for Processing</button>
+        </div>
+        <p class="afd-note" style="text-align:center;">After submission, JustiFi will process your affidavit through verified channels and deliver the final stamped version to your dashboard.</p>
+
+        <div class="success-box" id="afdSuccessBox">
+          <div class="tick">✅</div>
+          <p style="font-weight:600; margin:10px 0 4px;">Affidavit submitted for processing</p>
+          <p style="font-size:13px; color:var(--slate);">Our verified partner lawyer will review and prepare your final stamped document.</p>
+          <a href="dashboard.html" style="color:var(--gold); font-weight:600; margin-top:10px; display:inline-block;">View in My Dashboard</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footerPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+  <script>
+    /* ===================== AFFIDAVIT GENERATOR LOGIC ===================== */
+    var AFD_TYPES = [
+      'Name Change / Title Correction Affidavit',
+      'Same Person Affidavit',
+      'Financial Support / Income Declaration Affidavit',
+      'Address / Passport / Visa Proof Affidavit',
+      'Unmarried / Marital Status Affidavit',
+      'Property / Land Ownership Affidavit',
+      'General Declaratory Affidavit'
+    ];
+
+    var afdState = { type: AFD_TYPES[0], points: 1 };
+    var afdCurrentStep = 1;
+
+    // --- Step 1: type cards ---
+    document.getElementById('afdTypeGrid').innerHTML = AFD_TYPES.map(function (t, i) {
+      return '<div class="afd-type-card' + (i === 0 ? ' selected' : '') + '" onclick="afdSelectType(this,\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</div>';
+    }).join('');
+
+    function afdSelectType(el, type) {
+      afdState.type = type;
+      document.querySelectorAll('.afd-type-card').forEach(function (c) { c.classList.remove('selected'); });
+      el.classList.add('selected');
+    }
+
+    // --- Step 2: dynamic points ---
+    function afdRenderPoints() {
+      var wrap = document.getElementById('afdPointsList');
+      var html = '';
+      for (var i = 1; i <= afdState.points; i++) {
+        html += '<div class="afd-point-row">' +
+          '<div class="afd-point-num">' + i + '</div>' +
+          '<textarea rows="2" id="afdPoint' + i + '" placeholder="Declaratory point ' + i + '"></textarea>' +
+          (afdState.points > 1 ? '<button type="button" class="afd-point-remove" onclick="afdRemovePoint(' + i + ')">✕</button>' : '') +
+          '</div>';
+      }
+      wrap.innerHTML = html;
+    }
+    function afdAddPoint() {
+      // preserve existing values before re-render
+      var vals = afdCollectPoints();
+      afdState.points++;
+      afdRenderPoints();
+      vals.forEach(function (v, idx) { var f = document.getElementById('afdPoint' + (idx + 1)); if (f) f.value = v; });
+    }
+    function afdRemovePoint(n) {
+      var vals = afdCollectPoints();
+      vals.splice(n - 1, 1);
+      afdState.points = Math.max(1, afdState.points - 1);
+      afdRenderPoints();
+      vals.forEach(function (v, idx) { var f = document.getElementById('afdPoint' + (idx + 1)); if (f) f.value = v; });
+    }
+    function afdCollectPoints() {
+      var out = [];
+      for (var i = 1; i <= afdState.points; i++) {
+        var f = document.getElementById('afdPoint' + i);
+        out.push(f ? f.value : '');
+      }
+      return out;
+    }
+    afdRenderPoints();
+
+    // --- Step 3: address toggle ---
+    function afdToggleAddress() {
+      var same = document.getElementById('afdSameAddr').checked;
+      document.getElementById('afdPresentAddrBlock').classList.toggle('hidden', same);
+    }
+
+    // --- Step navigation ---
+    function afdGoTo(step) {
+      afdCurrentStep = step;
+      for (var i = 1; i <= 4; i++) {
+        document.getElementById('afdStep' + i).classList.toggle('hidden', i !== step);
+      }
+      document.querySelectorAll('.afd-step').forEach(function (s) {
+        var n = parseInt(s.dataset.step, 10);
+        s.classList.toggle('done', n < step);
+        s.classList.toggle('active', n === step);
+      });
+      if (step === 4) afdBuildPreview();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function afdVal(id) { var e = document.getElementById(id); return e ? e.value : ''; }
+
+    function afdBuildPreview() {
+      var purpose = afdVal('afdPurpose');
+      var points = afdCollectPoints().filter(function (p) { return p.trim() !== ''; });
+      var nameEn = afdVal('afdNameEn');
+      var father = afdVal('afdFather');
+      var mother = afdVal('afdMother');
+      var docType = afdVal('afdDocType');
+      var docNumber = afdVal('afdDocNumber');
+      var permAddr = [afdVal('afdPermHouse'), afdVal('afdPermPost'), afdVal('afdPermUpazila'), afdVal('afdPermDistrict')].filter(Boolean).join(', ');
+      var sameAddr = document.getElementById('afdSameAddr').checked;
+      var presAddr = sameAddr ? permAddr : [afdVal('afdPresHouse'), afdVal('afdPresPost'), afdVal('afdPresUpazila'), afdVal('afdPresDistrict')].filter(Boolean).join(', ');
+      var religion = afdVal('afdReligion');
+      var nationality = afdVal('afdNationality');
+
+      // Summary (left panel)
+      var rows = [
+        ['Affidavit Type', afdState.type],
+        ['Purpose', purpose || '—'],
+        ['Declaratory Points', points.length + ' point(s)'],
+        ['Deponent Name', nameEn || '—'],
+        ["Father's/Husband's Name", father || '—'],
+        ["Mother's Name", mother || '—'],
+        ['Identity Document', (docType || '—') + (docNumber ? ' · ' + docNumber : '')],
+        ['Permanent Address', permAddr || '—'],
+        ['Present Address', presAddr || '—'],
+        ['Religion / Nationality', (religion || '—') + ' / ' + (nationality || '—')]
+      ];
+      document.getElementById('afdSummary').innerHTML = rows.map(function (r) {
+        return '<div class="afd-summary-row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+      }).join('');
+
+      // Stamp-paper style preview (right panel)
+      var pointsHtml = points.length
+        ? '<ol style="padding-left:18px;">' + points.map(function (p) { return '<li style="margin-bottom:6px;">' + p + '</li>'; }).join('') + '</ol>'
+        : '<p style="color:var(--slate);">No declaratory points added yet.</p>';
+
+      document.getElementById('afdPreviewBody').innerHTML =
+        '<p><strong>I, ' + (nameEn || '[DEPONENT NAME]') + '</strong>, ' +
+        (father ? 'son/daughter of ' + father + ', ' : '') +
+        (religion ? 'by faith ' + religion + ', ' : '') +
+        'by nationality ' + (nationality || 'Bangladeshi') + ', ' +
+        (docType ? 'holder of ' + docType + (docNumber ? ' No. ' + docNumber : '') + ', ' : '') +
+        'presently residing at ' + (presAddr || '[PRESENT ADDRESS]') + ', permanent address ' + (permAddr || '[PERMANENT ADDRESS]') +
+        ', do hereby solemnly affirm and declare as follows:</p>' +
+        '<p style="margin-top:10px;"><strong>Purpose:</strong> ' + (purpose || '[PURPOSE OF AFFIDAVIT]') + '</p>' +
+        '<div style="margin-top:10px;">' + pointsHtml + '</div>' +
+        '<p style="margin-top:12px;">The statements made above are true to the best of my knowledge and belief.</p>';
+    }
+
+    function afdSubmit() {
+      if (!document.getElementById('afdDeclare').checked) {
+        alert('Please confirm the declaration checkbox before submitting.');
+        return;
+      }
+      document.querySelectorAll('#afdStep4 .afd-preview-body, #afdStep4 .afd-nav-btns, #afdStep4 .afd-note').forEach(function (el) { el.style.display = 'none'; });
+      document.getElementById('afdSuccessBox').style.display = 'block';
+    }
+
+    afdGoTo(1);
+  </script>
+</body>
+</html>

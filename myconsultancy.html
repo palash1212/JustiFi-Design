@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Consultations — JustiFi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="myconsultancy" data-requires-auth="1">
+
+  <div id="navbarPlaceholder"></div>
+
+  <div class="app-shell" id="appShell">
+    <div id="sidebarPlaceholder"></div>
+
+    <main class="main-content">
+      <div class="page-head">
+        <h1>My Consultations</h1>
+        <p>All your booked and past consultations in one place.</p>
+      </div>
+
+      <div class="filters-bar">
+        <span class="chip active">All</span>
+        <span class="chip">Upcoming</span>
+        <span class="chip">Completed</span>
+        <span class="chip">Cancelled</span>
+      </div>
+
+      <div class="card">
+        <div class="panel-head"><h3>Upcoming</h3></div>
+        <div class="appt-primary">
+          <div class="info">
+            <div class="name">Advocate Md. Rahman</div>
+            <div class="meta">Property Law · Online · 30 Aug, 4:30 PM</div>
+          </div>
+          <div class="actions">
+            <a class="btn-outline" style="font-size:11px; padding:6px 14px;" href="booking.html?lawyer=nusrat-jahan">View Details</a>
+            <button class="btn-gold" style="font-size:11px; padding:6px 14px;">Join Consultation</button>
+          </div>
+        </div>
+        <div class="appt-row"><div class="photo">AK</div><div class="info"><div class="name">Advocate Karim</div><div class="meta">Family Law · Online · 02 Sep, 11:00 AM</div></div><a class="btn-outline" style="font-size:11px; padding:4px 12px;" href="booking.html?lawyer=farhana-rahman">View</a></div>
+        <div class="appt-row"><div class="photo">SH</div><div class="info"><div class="name">Advocate Shafiqul</div><div class="meta">Corporate · Chamber · 03 Sep, 2:30 PM</div></div><a class="btn-outline" style="font-size:11px; padding:4px 12px;" href="booking.html?lawyer=shafiqul-islam">View</a></div>
+      </div>
+
+      <div class="card" style="margin-top:18px;">
+        <div class="panel-head"><h3>Active Applications</h3></div>
+        <div class="progress-item">
+          <div class="prog-head" style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;"><strong>Affidavit — Name Correction</strong><span>60%</span></div>
+          <div class="stepper">
+            <div class="step done"><div class="dot"></div><div class="line"></div><div class="label">Submitted</div></div>
+            <div class="step done"><div class="dot"></div><div class="line"></div><div class="label">Info Received</div></div>
+            <div class="step active"><div class="dot"></div><div class="line"></div><div class="label">Preparing Draft</div></div>
+            <div class="step"><div class="dot"></div><div class="line"></div><div class="label">User Review</div></div>
+            <div class="step"><div class="dot"></div><div class="label">Completed</div></div>
+          </div>
+          <div class="app-status">● <span class="highlight">Lawyer is preparing your affidavit</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="footerPlaceholder"></div>
+  <div id="bottomNavPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+</body>
+</html>

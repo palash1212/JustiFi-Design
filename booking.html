@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Consultation — JustiFi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="lawyer_list" data-requires-auth="0">
+
+  <div id="navbarPlaceholder"></div>
+
+  <main class="main-content">
+    <div class="container">
+      <a href="lawyer_list.html" style="font-size:13px; color:var(--slate); display:inline-block; margin-bottom:16px;">← Back to advocates</a>
+
+      <!-- Portfolio Header -->
+      <div class="detail-header">
+        <div class="photo" id="detPhoto">FR</div>
+        <div class="info">
+          <h2 id="detName">Name</h2>
+          <div class="sub" id="detSub">Department · High Court Division</div>
+          <div style="margin-top:6px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <span class="badge-gold">🏆 Verified Sanad</span>
+            <span style="font-size:12px; color:var(--slate);">8+ years · ⭐ 4.9 (128 reviews)</span>
+          </div>
+          <div style="font-size:12px; color:var(--slate); margin-top:4px;">Chamber: Bar Council Bhaban, Dhaka Judge Court · Gulshan Chamber Complex</div>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <!-- Left: Portfolio Info -->
+        <div>
+          <section><h3>About</h3><p id="detAbout">Advises clients across the High Court and District Bar with a focus on practical, client-first resolution. Available for online and chamber consultations.</p></section>
+          <section><h3>Practice Areas</h3><div id="detTags"><span class="tag">Family Law</span><span class="tag">Property Disputes</span><span class="tag">Corporate Advisory</span></div></section>
+          <section><h3>Education &amp; Qualifications</h3><p>LL.B (Hons), University of Dhaka · Bar-at-Law, Lincoln's Inn</p></section>
+          <section><h3>Professional Experience</h3><p>8+ years practicing before the High Court Division and District Bar Association, with a strong record of successful case resolutions and client satisfaction.</p></section>
+          <section><h3>Bar Memberships</h3><span class="tag">Dhaka Bar Association</span><span class="tag">Supreme Court Bar Association</span></section>
+          <section>
+            <h3>Client Reviews</h3>
+            <div class="card" style="padding:14px; margin-bottom:8px;"><div class="stars" style="color:var(--gold); margin-bottom:4px;">★★★★★</div><p style="font-size:13px; color:var(--slate);">"Extremely professional and explained everything clearly."</p></div>
+            <div class="card" style="padding:14px;"><div class="stars" style="color:var(--gold); margin-bottom:4px;">★★★★★</div><p style="font-size:13px; color:var(--slate);">"Resolved my property dispute faster than expected."</p></div>
+          </section>
+        </div>
+
+        <!-- Right: Book Now form (sticky) -->
+        <div class="book-panel card">
+          <h3 style="margin-bottom:6px;">Book Consultation</h3>
+          <div class="fee-row" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--border);">
+            <span style="font-size:13px; color:var(--slate);">Session fee</span>
+            <span class="fee-amt" id="detFee" style="font-size:20px; font-weight:700;">৳1,500</span>
+          </div>
+
+          <div class="form-field"><label>Legal Matter Type</label>
+            <select id="matterType"><option>Property Dispute</option><option>Family Law</option><option>Corporate Advisory</option><option>Criminal Bail</option><option>Other</option></select>
+          </div>
+          <div class="form-field"><label>Consultation Mode</label>
+            <select id="consultMode"><option>Online Video Call</option><option>Chamber Visit</option></select>
+          </div>
+          <div class="form-field"><label>Select Date</label><div class="date-row" id="dateRow"></div></div>
+          <div class="form-field"><label>Available Time Slots</label><div class="slot-grid" id="slotGrid"></div></div>
+          <div class="form-field"><label>Full Name</label><input type="text" id="fullName" placeholder="Your full name" /></div>
+          <div class="form-field"><label>Phone Number</label><input type="text" id="phone" placeholder="+880" /></div>
+          <div class="form-field"><label>Email</label><input type="email" id="email" placeholder="you@example.com" /></div>
+          <div class="form-field"><label>Brief Case Summary</label><textarea id="caseSummary" rows="3" placeholder="Briefly describe your legal matter"></textarea></div>
+          <div class="form-field"><label>Document Upload (optional)</label><input type="file" id="docUpload" /></div>
+          <div class="afd-checkbox-row" style="margin-bottom:14px;">
+            <input type="checkbox" id="declareCheck" />
+            <label for="declareCheck" style="font-weight:400; margin:0;">I confirm the information above is accurate.</label>
+          </div>
+
+          <button class="btn-gold btn-full" onclick="confirmBooking()">Confirm Booking</button>
+          <p class="err-text" id="bookErr">Please select a time slot before confirming.</p>
+
+          <div class="success-box" id="bookSuccess">
+            <div class="tick">✅</div>
+            <p style="font-weight:600; margin:10px 0 4px;">Booking confirmed</p>
+            <p id="successDetail" style="font-size:13px; color:var(--slate);"></p>
+            <a href="dashboard.html" style="color:var(--gold); font-weight:600; margin-top:10px; display:inline-block;">View in My Consultations</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footerPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    var currentLawyer = findLawyer(params.get('lawyer') || 'farhana-rahman');
+    var selectedDate = null, selectedSlot = null;
+
+    document.getElementById('detPhoto').textContent = currentLawyer.init;
+    document.getElementById('detName').textContent = currentLawyer.name;
+    document.getElementById('detSub').textContent = currentLawyer.dept + ' Law · High Court Division';
+    document.getElementById('detFee').textContent = currentLawyer.fee;
+    document.getElementById('detAbout').textContent = currentLawyer.about;
+
+    function renderDates() {
+      document.getElementById('dateRow').innerHTML = BOOKING_DATES.map(function (d, i) {
+        return '<div class="date-chip' + (i === 0 ? ' active' : '') + '" onclick="selectDate(this,\'' + d + '\')">' + d + '</div>';
+      }).join('');
+      selectedDate = BOOKING_DATES[0];
+    }
+    function selectDate(el, d) {
+      selectedDate = d;
+      document.querySelectorAll('.date-chip').forEach(function (c) { c.classList.remove('active'); });
+      el.classList.add('active');
+    }
+    function renderSlots() {
+      document.getElementById('slotGrid').innerHTML = BOOKING_SLOTS.map(function (s) {
+        return '<div class="slot-chip" onclick="selectSlot(this,\'' + s + '\')">' + s + '</div>';
+      }).join('');
+    }
+    function selectSlot(el, s) {
+      selectedSlot = s;
+      document.querySelectorAll('.slot-chip').forEach(function (c) { c.classList.remove('active'); });
+      el.classList.add('active');
+    }
+    function confirmBooking() {
+      if (!selectedSlot) { document.getElementById('bookErr').style.display = 'block'; return; }
+      document.querySelectorAll('.book-panel .form-field, .book-panel > button.btn-gold, .book-panel .afd-checkbox-row').forEach(function (el) { el.style.display = 'none'; });
+      document.getElementById('bookErr').style.display = 'none';
+      document.getElementById('bookSuccess').style.display = 'block';
+      document.getElementById('successDetail').textContent = selectedDate + ' · ' + selectedSlot + ' with ' + currentLawyer.name;
+    }
+
+    renderDates();
+    renderSlots();
+  </script>
+</body>
+</html>

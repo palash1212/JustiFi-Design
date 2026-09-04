@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile — JustiFi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="profile" data-requires-auth="1">
+
+  <div id="navbarPlaceholder"></div>
+
+  <div class="app-shell" id="appShell">
+    <div id="sidebarPlaceholder"></div>
+
+    <main class="main-content">
+      <div class="page-head">
+        <h1>My Profile</h1>
+        <p>Manage your personal information and account settings.</p>
+      </div>
+
+      <div class="card" style="max-width:640px;">
+        <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
+          <div class="avatar-circle" style="width:64px; height:64px; font-size:22px;">M</div>
+          <div>
+            <div style="font-weight:700; font-size:16px;">Mehedi Hasan</div>
+            <div style="font-size:12px; color:var(--slate);">Member since Jan 2026</div>
+          </div>
+        </div>
+        <div class="form-field"><label>Full Name</label><input type="text" value="Mehedi Hasan" /></div>
+        <div class="form-field"><label>Phone Number</label><input type="text" value="+880 1XXX-XXXXXX" /></div>
+        <div class="form-field"><label>Email</label><input type="email" value="mehedi@example.com" /></div>
+        <div class="form-field"><label>NID Number</label><input type="text" placeholder="10 or 17 digit NID" /></div>
+        <button class="btn-gold">Save Changes</button>
+      </div>
+    </main>
+  </div>
+
+  <div id="footerPlaceholder"></div>
+  <div id="bottomNavPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+</body>
+</html>
