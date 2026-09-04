@@ -4,43 +4,347 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Us — JustiFi</title>
+
+  <!-- Existing project assets -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="css/style.css" />
-</head>
-<body data-page="about" data-requires-auth="0">
 
+  <!-- Tailwind + Material Symbols (for the new design) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <!-- Override Tailwind config to match our design tokens if needed -->
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-variant": "#e0e3e5",
+            "secondary-fixed": "#d3e4fe",
+            "surface-bright": "#f7f9fb",
+            "secondary-fixed-dim": "#b7c8e1",
+            "on-secondary": "#ffffff",
+            "tertiary": "#1f1300",
+            "primary-fixed": "#d2e4fb",
+            "error": "#ba1a1a",
+            "primary-container": "#1a2b3c",
+            "error-container": "#ffdad6",
+            "secondary": "#505f76",
+            "on-primary-fixed-variant": "#38485a",
+            "on-primary-fixed": "#0b1d2d",
+            "inverse-surface": "#2d3133",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#b7c8de",
+            "surface-tint": "#4f6073",
+            "on-tertiary-fixed-variant": "#5d4201",
+            "on-background": "#191c1e",
+            "surface-container": "#eceef0",
+            "secondary-container": "#d0e1fb",
+            "on-surface-variant": "#44474c",
+            "surface": "#f7f9fb",
+            "primary": "#041627",
+            "outline-variant": "#c4c6cd",
+            "surface-container-high": "#e6e8ea",
+            "tertiary-fixed-dim": "#e9c176",
+            "on-tertiary-container": "#af8c47",
+            "background": "#f7f9fb",
+            "on-tertiary-fixed": "#261900",
+            "outline": "#74777d",
+            "tertiary-container": "#392700",
+            "tertiary-fixed": "#ffdea5",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#38485d",
+            "on-primary": "#ffffff",
+            "inverse-primary": "#b7c8de",
+            "on-secondary-container": "#54647a",
+            "on-primary-container": "#8192a7",
+            "inverse-on-surface": "#eff1f3",
+            "on-error": "#ffffff",
+            "surface-container-low": "#f2f4f6",
+            "on-secondary-fixed": "#0b1c30",
+            "on-error-container": "#93000a",
+            "surface-dim": "#d8dadc",
+            "surface-container-highest": "#e0e3e5",
+            "on-surface": "#191c1e"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          spacing: {
+            "stack-md": "16px",
+            "unit": "8px",
+            "margin-mobile": "16px",
+            "margin-desktop": "40px",
+            "stack-sm": "8px",
+            "stack-lg": "32px",
+            "gutter": "24px",
+            "container-max": "1280px"
+          },
+          fontFamily: {
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "caption": ["Inter"],
+            "headline-lg": ["Inter"],
+            "display-lg": ["Inter"],
+            "body-md": ["Inter"]
+          },
+          fontSize: {
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+            "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "700" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "caption": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }]
+          }
+        },
+      },
+    }
+  </script>
+
+  <!-- Extra custom styles (from the new design) -->
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .legal-soft-shadow {
+      box-shadow: 0 4px 20px rgba(26, 43, 60, 0.04);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .transition-all {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  </style>
+</head>
+<body data-page="about" data-requires-auth="0" class="bg-surface font-body-md text-on-surface">
+
+  <!-- Shared Navbar -->
   <div id="navbarPlaceholder"></div>
 
-  <main class="main-content">
-    <div class="container">
-      <div class="page-head">
-        <h1>About JustiFi</h1>
-        <p>Bangladesh's modern legal-tech platform, built to make trusted legal help reachable for everyone.</p>
+  <main>
+    <!-- 1. Hero Banner -->
+    <section class="relative w-full h-[500px] flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0 z-0" 
+           style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDEJ3QSfIA3_SRpOaxRdXORwMXrxDw2STTskCAIPrNJmHL-YPgDqSQmrUJ2ZZd6Tdl38n3EBJ1CN7inNDXMXU45EhTxrCDwKTu86stnfi4ck_UH5bNzBJGzD5d-qY5sbDtOPVrBEhHmVmiSoTsspc2MQUiFrOYlx_G1DDk_K5Vw-ieEWkOVcNUYBTIe61Gr5P1hWsr98y2NTMebQf6VWsBwsBAJrubc0xhp_mRmsXV9RbVtCx0t0zkJ')">
       </div>
-
-      <div class="card" style="margin-bottom:20px;">
-        <h3 style="margin-bottom:10px;">Our Mission</h3>
-        <p style="color:var(--slate); font-size:14px; line-height:1.8;">
-          JustiFi connects everyday people across Bangladesh with verified Advocates of the Supreme Court and
-          District Bars, and digitizes the paperwork — affidavits, verifications, and consultations — that
-          usually takes weeks of chamber visits down to a few clicks.
+      <div class="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70 z-10"></div>
+      <div class="relative z-20 text-center px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto space-y-6">
+        <h1 class="font-display-lg text-display-lg text-white leading-tight">
+          Bridging the Gap Between You and the Law
+        </h1>
+        <p class="font-body-lg text-body-lg text-on-primary-container max-w-2xl mx-auto">
+          JustiFi is Bangladesh’s pioneer legal-tech platform, combining technology and legal excellence to make justice accessible, transparent, and seamless for every citizen.
         </p>
+        <div class="w-24 h-1 bg-tertiary-fixed-dim mx-auto rounded-full"></div>
       </div>
+    </section>
 
-      <div class="services-grid" style="margin:30px 0 50px;">
-        <div class="service-card card"><div class="icon">🏛️</div><h3>100+ Verified Advocates</h3><p>Every advocate on JustiFi is verified against Bar Council records.</p></div>
-        <div class="service-card card"><div class="icon">🔒</div><h3>Secure &amp; Confidential</h3><p>Your case details and documents are encrypted and handled with strict confidentiality.</p></div>
-        <div class="service-card card"><div class="icon">⚡</div><h3>Fast Turnaround</h3><p>Book a consultation or generate an affidavit draft in minutes, not weeks.</p></div>
+    <!-- 2. Our Story -->
+    <section class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+        <div class="space-y-stack-lg">
+          <div class="space-y-stack-md">
+            <span class="text-tertiary-fixed-dim font-label-md text-label-md tracking-widest">SINCE 2024</span>
+            <h2 class="font-headline-lg text-headline-lg text-primary">Our Story</h2>
+          </div>
+          <div class="space-y-stack-md text-on-surface-variant leading-relaxed">
+            <p class="font-body-md text-body-md">
+              JustiFi was born from a vision to democratize access to justice in Bangladesh. For too long, navigating the legal landscape has been a daunting task for the average citizen, clouded by complexity and traditional barriers.
+            </p>
+            <p class="font-body-md text-body-md">
+              From the bustling courts of Dhaka to the remote Union Parishads, we are committed to providing a digital bridge. By integrating advanced technology with the expertise of verified legal professionals, we've created a platform where justice isn't just a right—it's an accessible reality for everyone, everywhere in Bangladesh.
+            </p>
+          </div>
+        </div>
+        <div class="relative group">
+          <div class="absolute -inset-4 bg-tertiary-fixed/20 rounded-2xl -z-10 group-hover:bg-tertiary-fixed/30 transition-all"></div>
+          <div class="h-[400px] rounded-xl overflow-hidden legal-soft-shadow"
+               style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBsvs9vmebhC5eIvcjWfcMPM-2xCZ5sTDJ-IYdfmAMKbJlXaSSHd8JAtzSlxQ4dVWJFCyyXA1A7Va2Gi9uKKWqDJsN4UqZDYxEgTjeNLxC_JqEqVNCdwES45vMLeimWxECZ3mDXQWgYs8_zo8zdlkbjRh47W_r2zJhyi_Gs6ymMZ1FoFWC5lVq0YY6yduDTdNYrmrkK01A8AaljLQQam9t3cgaAXryV-t4ud0SfVFLoPYWyeckTuK2a')">
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- 3. Mission & Vision -->
+    <section class="py-24 bg-surface-container-low">
+      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-gutter">
+        <div class="bg-white p-10 rounded-xl legal-soft-shadow border border-outline-variant/30 space-y-stack-lg hover:-translate-y-1 transition-all">
+          <div class="w-16 h-16 bg-tertiary-fixed/30 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-tertiary-container text-4xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+          </div>
+          <div class="space-y-stack-md">
+            <h3 class="font-headline-md text-headline-md text-primary">Our Mission</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              To digitize legal workflows across Bangladesh while maintaining strict compliance with Bar Council standards. We aim to empower citizens with the tools they need to secure their legal rights through a transparent, efficient, and technology-driven ecosystem.
+            </p>
+          </div>
+        </div>
+        <div class="bg-white p-10 rounded-xl legal-soft-shadow border border-outline-variant/30 space-y-stack-lg hover:-translate-y-1 transition-all">
+          <div class="w-16 h-16 bg-tertiary-fixed/30 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-tertiary-container text-4xl" style="font-variation-settings: 'FILL' 1;">visibility</span>
+          </div>
+          <div class="space-y-stack-md">
+            <h3 class="font-headline-md text-headline-md text-primary">Our Vision</h3>
+            <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              A Bangladesh where every citizen lives under the umbrella of trustworthy legal protection. We envision a future with zero hidden fees, instant legal aid, and a nationwide network of advocates reachable at the click of a button.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Why Choose JustiFi -->
+    <section class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-stack-md">
+        <h2 class="font-headline-lg text-headline-lg text-primary">Why Choose JustiFi</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant">We combine legal integrity with modern technology to deliver a superior service experience.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+        <div class="p-8 bg-white rounded-xl legal-soft-shadow border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-all">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim mb-4 block text-3xl">verified</span>
+          <h4 class="font-headline-md text-[20px] text-primary mb-2">Verified Advocates</h4>
+          <p class="font-caption text-body-md text-on-surface-variant">Every legal professional is Bar Council Sanad verified for your peace of mind.</p>
+        </div>
+        <div class="p-8 bg-white rounded-xl legal-soft-shadow border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-all">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim mb-4 block text-3xl">lock</span>
+          <h4 class="font-headline-md text-[20px] text-primary mb-2">Encrypted Security</h4>
+          <p class="font-caption text-body-md text-on-surface-variant">Your consultations and documents are protected by enterprise-grade encryption.</p>
+        </div>
+        <div class="p-8 bg-white rounded-xl legal-soft-shadow border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-all">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim mb-4 block text-3xl">payments</span>
+          <h4 class="font-headline-md text-[20px] text-primary mb-2">Transparent Pricing</h4>
+          <p class="font-caption text-body-md text-on-surface-variant">Clear ৳ BDT pricing with no hidden charges or unexpected legal costs.</p>
+        </div>
+        <div class="p-8 bg-white rounded-xl legal-soft-shadow border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-all">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim mb-4 block text-3xl">description</span>
+          <h4 class="font-headline-md text-[20px] text-primary mb-2">Instant Drafting</h4>
+          <p class="font-caption text-body-md text-on-surface-variant">Generate legally compliant affidavit drafts instantly using our smart templates.</p>
+        </div>
+        <div class="p-8 bg-white rounded-xl legal-soft-shadow border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-all">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim mb-4 block text-3xl">map</span>
+          <h4 class="font-headline-md text-[20px] text-primary mb-2">Nationwide Coverage</h4>
+          <p class="font-caption text-body-md text-on-surface-variant">Access legal support from any district in Bangladesh, from Tetulia to Teknaf.</p>
+        </div>
+        <div class="p-8 bg-white rounded-xl legal-soft-shadow border border-outline-variant/20 hover:border-tertiary-fixed-dim transition-all">
+          <span class="material-symbols-outlined text-tertiary-fixed-dim mb-4 block text-3xl">support_agent</span>
+          <h4 class="font-headline-md text-[20px] text-primary mb-2">Dedicated Support</h4>
+          <p class="font-caption text-body-md text-on-surface-variant">Our support team is available to guide you through every step of your legal journey.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Leadership Team -->
+    <section class="py-24 bg-surface-container-highest/30">
+      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+        <div class="text-center max-w-2xl mx-auto mb-16 space-y-stack-md">
+          <h2 class="font-headline-lg text-headline-lg text-primary">Our Leadership &amp; Advisory Team</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant">Guided by industry veterans and legal experts with decades of experience.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          <!-- Member 1 -->
+          <div class="bg-white rounded-xl overflow-hidden legal-soft-shadow group">
+            <div class="h-64 w-full bg-surface-container overflow-hidden">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIzO6lYjvtrrFharXtKJZKR79q6ws3YlT-7fQ019XRlvWhT8uf1_y8vElkQTUz2MGhTLyuLJ1RbAjtbEcJOMyQQyUtfvjIlI3E_t1hzJDAzklfw_BdvEYiA1-z7RK8i3G62dk9r2VZsTYLOZPAxGJqTVRbDthM4j9l7jSd7puXzUoA7rGiWv-GCGIZwlKPhW46ouJB1R7VwDNtiUzB9W0E7BDIEwxodIbtSZxiouBE434HChpJ7zyE"
+                   alt="Adv. Rahim Ahmed" />
+            </div>
+            <div class="p-6 space-y-2 text-center">
+              <h5 class="font-headline-md text-[18px] text-primary">Adv. Rahim Ahmed</h5>
+              <p class="text-on-tertiary-container font-label-md text-[12px] uppercase tracking-wider">Senior Advocate, High Court</p>
+              <p class="font-caption text-on-surface-variant">30+ years of expertise in constitutional and civil litigation.</p>
+            </div>
+          </div>
+          <!-- Member 2 -->
+          <div class="bg-white rounded-xl overflow-hidden legal-soft-shadow group">
+            <div class="h-64 w-full bg-surface-container overflow-hidden">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaMWjhhsLJ_Td10gxrFcGgF1_J6UN__Ap3-M0aw9K6gY0mJPNfnOz9wqjKUfhy-himL4LgU-spUNAu6XwwGKmQ9EpVosdmxlnAl7PY5mszOh0VPPlPZIt_KDpD3zMAVKwc094Kk_NetOWPE2RZK1DcXYcWcgVPos5aofvpNS0BydYySMBAeld8Yru7NZHbhZnJRoBpoph52b2FTlsvaKBAHbgrXFxxMHytLX2S00tQ2JOMqP9kA4Su"
+                   alt="Farhana Islam" />
+            </div>
+            <div class="p-6 space-y-2 text-center">
+              <h5 class="font-headline-md text-[18px] text-primary">Farhana Islam</h5>
+              <p class="text-on-tertiary-container font-label-md text-[12px] uppercase tracking-wider">Managing Director</p>
+              <p class="font-caption text-on-surface-variant">Pioneer in legal-tech integration and operational excellence.</p>
+            </div>
+          </div>
+          <!-- Member 3 -->
+          <div class="bg-white rounded-xl overflow-hidden legal-soft-shadow group">
+            <div class="h-64 w-full bg-surface-container overflow-hidden">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBERYwfiOXmNC0UYnvE4bNuwsZnelqymSJDOGnzPIrJsHhztAVa_qIgOPsANBkmzJg8F8S-tFYeus4tU2_t8MC6khnOdqMZ1Pwj33lpoIlxu77UDkhKrD_429xDM55HBy9DRAdM4_KeWrZ0TnuimDhS39iThsjLirsHryfw0WP11MNo8BM98j5OO-HsNv6pRsrrNfsBc3lCZyXltYTA1bQU7-Tos9aAcH-XUpDrWpwsBXDZZ5c9L9rH"
+                   alt="Dr. Salman Khan" />
+            </div>
+            <div class="p-6 space-y-2 text-center">
+              <h5 class="font-headline-md text-[18px] text-primary">Dr. Salman Khan</h5>
+              <p class="text-on-tertiary-container font-label-md text-[12px] uppercase tracking-wider">Legal Advisory Head</p>
+              <p class="font-caption text-on-surface-variant">Expert in corporate law and regulatory compliance in Bangladesh.</p>
+            </div>
+          </div>
+          <!-- Member 4 -->
+          <div class="bg-white rounded-xl overflow-hidden legal-soft-shadow group">
+            <div class="h-64 w-full bg-surface-container overflow-hidden">
+              <img class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyiQNTvwinP8eQbjl2W8QermC9yC5O_7WtZOolfexk5LkGP2JHDfqkqc9knaYUJOu91NTxfukQuP8xG5NBQAi_UM9B3PqXgpZGdcDRlMTr6b7IJPiyKrSLDnPYZAMpBAYbb4rmqVPo0R-N8eQlhMEOlE4mRBzIMSu6PkkGha6qwiEQp13kuirsAhYZ40vh2F9m3nn9ZcWE2qcS93KxelhSHFnM7nFKu1qkRthgsTCoTSxhJpMGRnRw"
+                   alt="Nabila Rahman" />
+            </div>
+            <div class="p-6 space-y-2 text-center">
+              <h5 class="font-headline-md text-[18px] text-primary">Nabila Rahman</h5>
+              <p class="text-on-tertiary-container font-label-md text-[12px] uppercase tracking-wider">Chief Technology Officer</p>
+              <p class="font-caption text-on-surface-variant">Leading our digital transformation and data security initiatives.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Bottom CTA -->
+    <section class="py-16 bg-primary-container">
+      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="text-center md:text-left space-y-2">
+          <h2 class="font-headline-lg text-white">Ready to experience accessible justice?</h2>
+          <p class="font-body-md text-on-primary-container">Connect with the right legal expert today.</p>
+        </div>
+        <a href="lawyer_list.html" class="bg-tertiary-fixed text-primary px-10 py-4 rounded-xl font-headline-md text-[18px] hover:bg-tertiary-fixed-dim transition-all shadow-lg active:scale-95 whitespace-nowrap">
+          Find an Advocate
+        </a>
+      </div>
+    </section>
   </main>
 
+  <!-- Shared Footer -->
   <div id="footerPlaceholder"></div>
 
+  <!-- Scripts (existing project logic) -->
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/partials.js"></script>
+
+  <!-- Simple scroll animation for header (optional) – but our navbar is sticky, so we keep it for consistency -->
+  <script>
+    document.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (header) {
+        if (window.scrollY > 20) {
+          header.classList.add('py-2');
+          header.classList.remove('h-20');
+        } else {
+          header.classList.remove('py-2');
+          header.classList.add('h-20');
+        }
+      }
+    });
+  </script>
 </body>
 </html>
