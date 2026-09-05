@@ -1,6 +1,9 @@
 <footer class="footer">
-  <div class="grid">
-    <div>
+  <!-- Grid: 2 columns on mobile, 4 columns on desktop -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+
+    <!-- Helpline – mobile: left column, row 1; desktop: column 1 -->
+    <div class="col-start-1 row-start-1 md:col-start-auto md:row-start-auto">
       <h4>📞 Helpline</h4>
       <p>+880 1234-567890</p>
       <p>support@justifi.com</p>
@@ -10,26 +13,35 @@
         <a href="#"><i class="fab fa-linkedin"></i></a>
       </div>
     </div>
-    <div>
+
+    <!-- Services – mobile: left column, row 2; desktop: column 2 -->
+    <div class="col-start-1 row-start-2 md:col-start-auto md:row-start-auto">
       <h4>Services</h4>
       <a href="lawyer_list.html">Consultancy</a>
       <a href="affidavit.html">Affidavits</a>
       <a href="#">Land &amp; Property</a>
       <a href="#">Corporate &amp; Tax</a>
     </div>
-    <div>
+
+    <!-- Company – mobile: right column, row 1; desktop: column 3 -->
+    <div class="col-start-2 row-start-1 md:col-start-auto md:row-start-auto">
       <h4>Company</h4>
       <a href="about.html">About Us</a>
       <a href="#">Careers</a>
       <a href="#">Contact</a>
       <a href="#">Legal Insights</a>
     </div>
-    <div>
+
+    <!-- Support – mobile: right column, row 2; desktop: column 4 -->
+    <div class="col-start-2 row-start-2 md:col-start-auto md:row-start-auto">
       <h4>Support</h4>
       <a href="#">Help Center</a>
       <a href="#">Privacy Policy</a>
       <a href="#">Terms of Service</a>
     </div>
+
   </div>
+
+  <!-- Copyright – full width -->
   <div class="copyright">© 2026 JustiFi. All rights reserved.</div>
 </footer>

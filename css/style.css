@@ -153,6 +153,7 @@ button {
   min-width: 220px;
   z-index: 1200;
 }
+.services-drop.open .drop-menu,
 .services-drop:hover .drop-menu {
   display: block;
 }
@@ -711,6 +712,23 @@ button {
   color: #0C447C;
   margin-bottom: 10px;
 }
+.lawyer-card .photo-wrapper {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #E6F1FB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+.lawyer-card .photo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .lawyer-card h4 {
   font-size: 15px;
 }
@@ -1248,6 +1266,12 @@ button {
   font-size: 28px;
   font-weight: 700;
   color: #0C447C;
+  overflow: hidden;
+}
+.detail-header .photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .detail-header .info h2 {
   font-size: 22px;
@@ -1389,7 +1413,7 @@ button {
 }
 @media (max-width: 600px) {
   .footer .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 }
 .footer h4 {
@@ -1783,9 +1807,4 @@ button {
   color: var(--slate);
   margin-top: 10px;
   line-height: 1.6;
-}
-/* Append this to the existing CSS (e.g., after the affidavit rules) */
-.services-drop.open .drop-menu,
-.services-drop:hover .drop-menu {
-  display: block;
 }

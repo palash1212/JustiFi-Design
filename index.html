@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JustiFi — Trusted Legal Guidance in Bangladesh</title>
+
+    <!-- Existing project assets -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -14,186 +16,837 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Tailwind + Material Symbols (new design) -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind config (matches the provided design) -->
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#54647a",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2d3133",
+              "on-surface-variant": "#44474c",
+              "secondary-container": "#d0e1fb",
+              "on-primary-fixed-variant": "#38485a",
+              "surface-tint": "#4f6073",
+              surface: "#f7f9fb",
+              "surface-container-lowest": "#ffffff",
+              "surface-dim": "#d8dadc",
+              "on-secondary": "#ffffff",
+              "surface-container-high": "#e6e8ea",
+              "surface-variant": "#e0e3e5",
+              "secondary-fixed": "#d3e4fe",
+              "tertiary-fixed": "#ffdea5",
+              "on-secondary-fixed-variant": "#38485d",
+              secondary: "#505f76",
+              "error-container": "#ffdad6",
+              "on-tertiary-fixed": "#261900",
+              "on-error": "#ffffff",
+              "secondary-fixed-dim": "#b7c8e1",
+              "surface-container-highest": "#e0e3e5",
+              background: "#f7f9fb",
+              "on-secondary-fixed": "#0b1c30",
+              "on-primary-fixed": "#0b1d2d",
+              "on-tertiary-container": "#af8c47",
+              tertiary: "#1f1300",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#b7c8de",
+              "surface-container": "#eceef0",
+              "surface-bright": "#f7f9fb",
+              "primary-fixed": "#d2e4fb",
+              "primary-fixed-dim": "#b7c8de",
+              "inverse-on-surface": "#eff1f3",
+              primary: "#041627",
+              "tertiary-container": "#392700",
+              "outline-variant": "#c4c6cd",
+              "on-surface": "#191c1e",
+              "primary-container": "#1a2b3c",
+              "on-background": "#191c1e",
+              error: "#ba1a1a",
+              "on-primary-container": "#8192a7",
+              "on-primary": "#ffffff",
+              "surface-container-low": "#f2f4f6",
+              outline: "#74777d",
+              "tertiary-fixed-dim": "#e9c176",
+              "on-tertiary-fixed-variant": "#5d4201",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              "2xl": "1rem",
+              full: "9999px",
+            },
+            spacing: {
+              gutter: "24px",
+              "stack-sm": "8px",
+              "container-max": "1280px",
+              "stack-lg": "32px",
+              "margin-desktop": "40px",
+              "stack-md": "16px",
+              "margin-mobile": "16px",
+              unit: "8px",
+            },
+            fontFamily: {
+              "display-lg": ["Inter"],
+              "headline-md": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "label-md": ["Inter"],
+              "body-md": ["Inter"],
+              caption: ["Inter"],
+              "body-lg": ["Inter"],
+              "headline-lg": ["Inter"],
+            },
+            fontSize: {
+              "display-lg": [
+                "48px",
+                {
+                  lineHeight: "56px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "headline-lg-mobile": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "700" },
+              ],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              caption: ["12px", { lineHeight: "16px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "700",
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Custom styles from the provided design -->
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .legal-soft-shadow {
+        box-shadow: 0px 4px 20px rgba(26, 43, 60, 0.04);
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          rgba(4, 22, 39, 0.85),
+          rgba(4, 22, 39, 0.6)
+        );
+      }
+      .active-nav-border {
+        border-bottom: 2px solid #e9c176;
+      }
+    </style>
   </head>
-  <body data-page="home" data-requires-auth="0">
-    <!-- Navbar (loaded from partials/navbar.html) -->
+  <body
+    class="bg-background text-on-surface font-body-md"
+    data-page="home"
+    data-requires-auth="0"
+  >
+    <!-- Shared Navbar -->
     <div id="navbarPlaceholder"></div>
 
-    <!-- ============================================================
-  HOMEPAGE CONTENT
-  ============================================================ -->
     <main>
-      <!-- Hero -->
-      <div class="hero">
-        <h1>
-          Trusted Legal Guidance &amp; Instant Affidavit Services Across
-          Bangladesh
-        </h1>
-        <p>
-          Connect with verified Advocates of the Supreme Court and District
-          Bars. Get expert legal counsel and affidavit assistance online.
-        </p>
-        <div class="hero-search">
-          <span>🔍</span>
-          <input
-            type="text"
-            placeholder="Search by Lawyer Name, Practice Area, or Bar Association e.g., Dhaka Bar, High Court Division"
-          />
-          <button onclick="location.href = 'lawyer_list.html'">
-            Find Lawyer
-          </button>
+      <!-- Hero Section -->
+      <section
+        class="relative min-h-[870px] flex items-center justify-center overflow-hidden"
+      >
+        <div class="absolute inset-0 z-0">
+          <div class="w-full h-full hero-gradient absolute z-10"></div>
+          <div
+            class="w-full h-full bg-cover bg-center"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAfsDYQip__b4J86_wI058-Osorg_Nk05rkRDc_sllwkOjZRe3wHt-3x4AIL4giM9OpL4kGlvfv7uhdQIT7whBWN3rjq1DrnQhLcNFOXl8BPNPpmGWLCyrLiGeXhlk_0g99LbKc3FeD2peYdgOj8bWaHw5kVjdFqDhlg_ySiMq-M9f0TIljKNc-F6xjRAv0aTPmYhtUck-3rKUJ8It7zgYl02925o5UPkku8Ezag6ZDwwiPYYYM_-zZ&quot;);
+            "
+          ></div>
         </div>
-        <div class="trust-counters">
-          <div>
-            <div class="num">100+</div>
-            <div class="lbl">Verified Advocates</div>
-          </div>
-          <div>
-            <div class="num">1,000+</div>
-            <div class="lbl">Consultations Completed</div>
-          </div>
-          <div>
-            <div class="num">24/7</div>
-            <div class="lbl">Digital Affidavit Processing</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <!-- Core Services -->
-        <h2 class="section-title" style="margin-top: 50px">
-          Our Core Legal Services
-        </h2>
-        <div class="services-grid">
-          <div class="service-card card">
-            <div class="icon">⚖️</div>
-            <h3>Legal Consultancy</h3>
-            <p>Expert advice on civil, criminal, and constitutional matters.</p>
-            <a href="lawyer_list.html" class="explore">Explore Service →</a>
-          </div>
-          <div class="service-card card">
-            <div class="icon">📄</div>
-            <h3>Affidavit &amp; Notarization</h3>
-            <p>
-              Drafting and notarizing affidavits for courts, banks, and
-              government.
-            </p>
-            <a href="affidavit.html" class="explore">Explore Service →</a>
-          </div>
-          <div class="service-card card">
-            <div class="icon">🏘️</div>
-            <h3>Land &amp; Property Title Verification</h3>
-            <p>
-              Comprehensive title search and due diligence for property deals.
-            </p>
-            <a href="#" class="explore">Explore Service →</a>
-          </div>
-          <div class="service-card card">
-            <div class="icon">📊</div>
-            <h3>Corporate &amp; Tax/VAT Advisory</h3>
-            <p>Business structuring, tax planning, and VAT compliance.</p>
-            <a href="#" class="explore">Explore Service →</a>
-          </div>
-          <div class="service-card card">
-            <div class="icon">👨‍👩‍👧</div>
-            <h3>Family Court &amp; Mahr Settlements</h3>
-            <p>Family law, divorce, and Mahr (dower) dispute resolution.</p>
-            <a href="lawyer_list.html" class="explore">Explore Service →</a>
-          </div>
-          <div class="service-card card">
-            <div class="icon">⚖️</div>
-            <h3>Criminal Bail &amp; Writ Petitions</h3>
-            <p>Bail applications and constitutional writs in High Court.</p>
-            <a href="lawyer_list.html" class="explore">Explore Service →</a>
-          </div>
-        </div>
-
-        <!-- Top Advocates -->
-        <h2 class="section-title">Consult with Top-Rated Advocates</h2>
-        <div class="lawyer-grid" id="homeLawyerGrid"></div>
-
-        <!-- Testimonials -->
-        <h2 class="section-title">What Our Clients Say Across Bangladesh</h2>
-        <div class="testimonial-grid">
-          <div class="testimonial-card card">
-            <div class="stars">★★★★★</div>
-            <p class="quote">
-              "JustiFi made the affidavit process seamless. Highly professional
-              team."
-            </p>
-            <div class="author">Rasheda Akhter <span>· Sylhet</span></div>
-          </div>
-          <div class="testimonial-card card">
-            <div class="stars">★★★★★</div>
-            <p class="quote">
-              "Found an excellent property lawyer within hours. Land
-              verification was thorough."
-            </p>
-            <div class="author">Kamal Hossain <span>· Dhaka</span></div>
-          </div>
-          <div class="testimonial-card card">
-            <div class="stars">★★★★★</div>
-            <p class="quote">
-              "The corporate tax advisory saved us significant VAT liabilities.
-              Highly recommend."
-            </p>
-            <div class="author">Shahana Parvin <span>· Chittagong</span></div>
-          </div>
-        </div>
-
-        <!-- Blog -->
-        <h2 class="section-title">
-          Legal Insights &amp; Everyday Problem Guides
-        </h2>
-        <div class="blog-grid">
-          <div class="blog-card card">
-            <div class="thumb">📰</div>
-            <div class="body">
-              <div class="tag">Property Law · 4 min read</div>
-              <h4>New Land Registration Rules in Bangladesh</h4>
-              <p>
-                A comprehensive guide to the updated process for mutation and
-                registration.
-              </p>
-              <a href="#" class="readmore">Read Full Article →</a>
+        <div
+          class="relative z-20 text-center px-margin-mobile md:px-margin-desktop max-w-4xl mx-auto"
+        >
+          <h1
+            class="font-display-lg text-[40px] md:text-display-lg text-on-primary mb-stack-md leading-tight"
+          >
+            Trusted Legal Guidance &amp; Instant Affidavit Services Across
+            Bangladesh
+          </h1>
+          <p
+            class="font-body-lg text-body-lg text-on-primary/90 mb-stack-lg max-w-2xl mx-auto"
+          >
+            Connect with verified Advocates of the Supreme Court and District
+            Bars for reliable and efficient legal solutions.
+          </p>
+          <div
+            class="bg-white rounded-2xl p-2 flex flex-col md:flex-row gap-2 max-w-2xl mx-auto legal-soft-shadow"
+          >
+            <div class="flex-1 flex items-center px-4 gap-3">
+              <span class="material-symbols-outlined text-outline">search</span>
+              <input
+                class="w-full border-none focus:ring-0 text-body-md font-body-md py-3 placeholder:text-outline-variant"
+                placeholder="Search by Lawyer Name, Practice Area..."
+                type="text"
+              />
             </div>
+            <a
+              href="lawyer_list.html"
+              class="bg-tertiary-fixed-dim text-primary font-label-md text-label-md px-8 py-3 rounded-xl hover:opacity-90 transition-all text-center"
+              >Search Now</a
+            >
           </div>
-          <div class="blog-card card">
-            <div class="thumb">📰</div>
-            <div class="body">
-              <div class="tag">Family Law · 5 min read</div>
-              <h4>Understanding Mahr in Islamic Marriages</h4>
-              <p>
-                Legal implications and recent High Court rulings on dower
-                settlements.
-              </p>
-              <a href="#" class="readmore">Read Full Article →</a>
+          <div
+            class="mt-stack-lg grid grid-cols-1 md:grid-cols-3 gap-8 pt-12 border-t border-white/10"
+          >
+            <div class="flex items-center justify-center gap-3">
+              <span
+                class="material-symbols-outlined text-tertiary-fixed-dim text-3xl"
+                >verified_user</span
+              >
+              <div class="text-left">
+                <div
+                  class="font-headline-md text-headline-md text-on-primary leading-none"
+                >
+                  100+
+                </div>
+                <div class="font-caption text-caption text-on-primary/70">
+                  Verified Advocates
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="blog-card card">
-            <div class="thumb">📰</div>
-            <div class="body">
-              <div class="tag">Corporate · 3 min read</div>
-              <h4>VAT Exemptions for SMEs in 2026</h4>
-              <p>
-                Key changes in the VAT Act and how small businesses can benefit.
-              </p>
-              <a href="#" class="readmore">Read Full Article →</a>
+            <div class="flex items-center justify-center gap-3">
+              <span
+                class="material-symbols-outlined text-tertiary-fixed-dim text-3xl"
+                >groups</span
+              >
+              <div class="text-left">
+                <div
+                  class="font-headline-md text-headline-md text-on-primary leading-none"
+                >
+                  1,000+
+                </div>
+                <div class="font-caption text-caption text-on-primary/70">
+                  Consultations
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center justify-center gap-3">
+              <span
+                class="material-symbols-outlined text-tertiary-fixed-dim text-3xl"
+                >digital_wellbeing</span
+              >
+              <div class="text-left">
+                <div
+                  class="font-headline-md text-headline-md text-on-primary leading-none"
+                >
+                  24/7
+                </div>
+                <div class="font-caption text-caption text-on-primary/70">
+                  Digital Processing
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Services Section -->
+      <section
+        class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
+      >
+        <div class="text-center mb-16">
+          <h2 class="font-headline-lg text-headline-lg text-primary mb-4">
+            Our Core Legal Services
+          </h2>
+          <div
+            class="h-1 w-20 bg-tertiary-fixed-dim mx-auto rounded-full"
+          ></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+          <!-- Service Cards -->
+          <div
+            class="bg-white p-8 rounded-2xl legal-soft-shadow group hover:-translate-y-1 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 text-tertiary-fixed-dim group-hover:bg-primary group-hover:text-tertiary-fixed transition-colors"
+            >
+              <span class="material-symbols-outlined text-3xl">gavel</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md text-primary mb-3">
+              Legal Consultancy
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-6">
+              Strategic advice from senior counsel for complex litigations and
+              legal planning.
+            </p>
+            <a
+              href="lawyer_list.html"
+              class="text-primary font-label-md flex items-center gap-2 hover:gap-3 transition-all"
+              >Learn More
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl legal-soft-shadow group hover:-translate-y-1 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 text-tertiary-fixed-dim group-hover:bg-primary group-hover:text-tertiary-fixed transition-colors"
+            >
+              <span class="material-symbols-outlined text-3xl"
+                >history_edu</span
+              >
+            </div>
+            <h3 class="font-headline-md text-headline-md text-primary mb-3">
+              Affidavit &amp; Notarization
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-6">
+              Verified digital drafting and notarization of legal documents with
+              home delivery.
+            </p>
+            <a
+              href="affidavit.html"
+              class="text-primary font-label-md flex items-center gap-2 hover:gap-3 transition-all"
+              >Learn More
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl legal-soft-shadow group hover:-translate-y-1 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 text-tertiary-fixed-dim group-hover:bg-primary group-hover:text-tertiary-fixed transition-colors"
+            >
+              <span class="material-symbols-outlined text-3xl">apartment</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md text-primary mb-3">
+              Land &amp; Property Verification
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-6">
+              Thorough checking of title deeds, CS/SA/RS khatian records for
+              secure property deals.
+            </p>
+            <a
+              href="#"
+              class="text-primary font-label-md flex items-center gap-2 hover:gap-3 transition-all"
+              >Learn More
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl legal-soft-shadow group hover:-translate-y-1 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 text-tertiary-fixed-dim group-hover:bg-primary group-hover:text-tertiary-fixed transition-colors"
+            >
+              <span class="material-symbols-outlined text-3xl"
+                >corporate_fare</span
+              >
+            </div>
+            <h3 class="font-headline-md text-headline-md text-primary mb-3">
+              Corporate &amp; Tax Advisory
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-6">
+              Expert guidance for company formation, RJSC filings, and
+              VAT/Income Tax compliance.
+            </p>
+            <a
+              href="#"
+              class="text-primary font-label-md flex items-center gap-2 hover:gap-3 transition-all"
+              >Learn More
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl legal-soft-shadow group hover:-translate-y-1 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 text-tertiary-fixed-dim group-hover:bg-primary group-hover:text-tertiary-fixed transition-colors"
+            >
+              <span class="material-symbols-outlined text-3xl"
+                >family_restroom</span
+              >
+            </div>
+            <h3 class="font-headline-md text-headline-md text-primary mb-3">
+              Family &amp; Mahr Settlements
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-6">
+              Discreet and professional handling of divorce, child custody, and
+              dower money disputes.
+            </p>
+            <a
+              href="lawyer_list.html"
+              class="text-primary font-label-md flex items-center gap-2 hover:gap-3 transition-all"
+              >Learn More
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+          <div
+            class="bg-white p-8 rounded-2xl legal-soft-shadow group hover:-translate-y-1 transition-all duration-300"
+          >
+            <div
+              class="w-14 h-14 bg-surface-container-low rounded-xl flex items-center justify-center mb-6 text-tertiary-fixed-dim group-hover:bg-primary group-hover:text-tertiary-fixed transition-colors"
+            >
+              <span class="material-symbols-outlined text-3xl"
+                >account_balance</span
+              >
+            </div>
+            <h3 class="font-headline-md text-headline-md text-primary mb-3">
+              Criminal Bail &amp; Writ Petitions
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-6">
+              Immediate legal intervention for bail hearings and constitutional
+              writ petitions.
+            </p>
+            <a
+              href="lawyer_list.html"
+              class="text-primary font-label-md flex items-center gap-2 hover:gap-3 transition-all"
+              >Learn More
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Leadership Section -->
+      <section class="bg-primary text-on-primary py-24">
+        <div
+          class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+        >
+          <div class="relative">
+            <div
+              class="absolute -top-4 -left-4 w-24 h-24 border-t-4 border-l-4 border-tertiary-fixed-dim"
+            ></div>
+            <div
+              class="w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl relative z-10"
+            >
+              <img
+                class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxRazSvqvjhFIomY5-3LiOdL6GB5oWQhpXHNgDYNy0TzWRwIQYQvAchOQFKel10_IT8rZkCfW1VlJ6IVZZNZi6-iPGaRKqn4jVoE7KIMYmV4jTNDi-P9izzFjb-NPMJXoI2U9CbeD6ateZFB50NKQu-5jnRnX6Ec9IT1Spr8VOTZKmEBSP8QVdvk-m0A2hAwW8utXCH_XFza3ZcYRG9JiYOQ5okgeL0VTEAX3ZDxZV2Au2p2cunjkv"
+                alt="Senior Advocate K. Ahmed"
+              />
+            </div>
+            <div
+              class="absolute -bottom-6 -right-6 bg-tertiary-fixed-dim text-primary p-6 rounded-2xl z-20 hidden md:block"
+            >
+              <p class="font-headline-md text-headline-md mb-0">30+ Years</p>
+              <p class="font-caption text-caption uppercase tracking-wider">
+                Legal Experience
+              </p>
+            </div>
+          </div>
+          <div>
+            <span
+              class="material-symbols-outlined text-tertiary-fixed-dim text-6xl opacity-50 mb-4"
+              >format_quote</span
+            >
+            <h2
+              class="font-display-lg text-[32px] md:text-display-lg text-tertiary-fixed-dim mb-stack-lg leading-snug"
+            >
+              Justice should not be a privilege bounded by physical distance...
+              JustiFi was built to empower every citizen of Bangladesh.
+            </h2>
+            <p class="text-body-lg text-primary-fixed-dim mb-stack-lg italic">
+              "By digitizing the bridge between citizens and the judicial
+              system, we are ensuring that quality legal representation is
+              accessible from Teknaf to Tetulia."
+            </p>
+            <div class="pt-8 border-t border-white/10">
+              <p class="font-headline-md text-headline-md text-on-primary">
+                Senior Advocate K. Ahmed
+              </p>
+              <p class="text-on-primary-container">
+                Legal Director &amp; Advisory Chair
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Advocates -->
+      <section
+        class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto overflow-hidden"
+      >
+        <div class="flex justify-between items-end mb-12">
+          <div>
+            <h2 class="font-headline-lg text-headline-lg text-primary">
+              Consult with Top-Rated Advocates
+            </h2>
+            <p class="text-on-surface-variant text-body-md mt-2">
+              Specialists vetted for expertise, ethics, and successful track
+              records.
+            </p>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors"
+            >
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button
+              class="w-12 h-12 rounded-full border border-outline-variant flex items-center justify-center hover:bg-surface-container transition-colors"
+            >
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+        </div>
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter"
+          id="homeLawyerGrid"
+        >
+          <!-- Rendered by data.js -> lawyerCardHTML -->
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section
+        class="bg-surface-container-low py-24 px-margin-mobile md:px-margin-desktop"
+      >
+        <div class="max-w-container-max mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="font-headline-lg text-headline-lg text-primary">
+              What Our Clients Say
+            </h2>
+            <p class="text-on-surface-variant mt-2">
+              Empowering thousands through digital legal accessibility.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl legal-soft-shadow">
+              <div class="flex text-tertiary-container mb-4">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+              </div>
+              <p class="text-body-md text-on-surface-variant mb-8 italic">
+                "I needed urgent title verification for my land in Gazipur.
+                JustiFi connected me with a property expert within an hour.
+                Professional and efficient."
+              </p>
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold"
+                >
+                  RH
+                </div>
+                <div>
+                  <p class="font-label-md text-label-md text-primary">
+                    Md. Rahat Hossain
+                  </p>
+                  <p class="text-caption text-on-surface-variant">
+                    Dhanmondi, Dhaka
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl legal-soft-shadow">
+              <div class="flex text-tertiary-container mb-4">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+              </div>
+              <p class="text-body-md text-on-surface-variant mb-8 italic">
+                "Digital Affidavit service is a game changer. I didn't have to
+                visit the court and wait in long lines. Everything was handled
+                online securely."
+              </p>
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-on-primary font-bold"
+                >
+                  SN
+                </div>
+                <div>
+                  <p class="font-label-md text-label-md text-primary">
+                    Sharmin Nahar
+                  </p>
+                  <p class="text-caption text-on-surface-variant">
+                    Chittagong City
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-white p-8 rounded-2xl legal-soft-shadow">
+              <div class="flex text-tertiary-container mb-4">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >star</span
+                >
+              </div>
+              <p class="text-body-md text-on-surface-variant mb-8 italic">
+                "As a startup founder, finding a reliable tax lawyer was
+                difficult. JustiFi made it simple to find someone specialized in
+                tech regulations."
+              </p>
+              <div class="flex items-center gap-4">
+                <div
+                  class="w-12 h-12 rounded-full bg-on-secondary-container flex items-center justify-center text-on-primary font-bold"
+                >
+                  AK
+                </div>
+                <div>
+                  <p class="font-label-md text-label-md text-primary">
+                    Anisur Khan
+                  </p>
+                  <p class="text-caption text-on-surface-variant">
+                    Uttara, Dhaka
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Legal Insights -->
+      <section
+        class="py-24 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto"
+      >
+        <div class="flex justify-between items-center mb-12">
+          <h2 class="font-headline-lg text-headline-lg text-primary">
+            Legal Insights &amp; Updates
+          </h2>
+          <a
+            href="#"
+            class="text-primary font-label-md border-b-2 border-tertiary-fixed-dim pb-1 hover:text-tertiary-container transition-all"
+            >View All Articles</a
+          >
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <article class="group cursor-pointer">
+            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsK5oscA9ufTt8pFmnm8ugMCbw_EBy9qpwTVgMMiph4H1M8-0gRP-NHB8AT2rlpfiTUqCUGSpwjKb6G7yPzKMWtjL01_T-Xao0UiaHj6dOb0T8HpEtnfiAkQ5AyDDcMePeR7IouEqCyJAVrtQn7WocENxTLIn08F8jYDAwTUsR7etjsGGGHbsYzOWUZpjQ8-TgcL2YvsBe6OtlxLqz6qPq5llzHxd0NByl5ziakxt69V0ytKrH5XYD"
+                alt="Legal insight article"
+              />
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+              <span
+                class="text-caption font-bold text-tertiary-container uppercase tracking-wider"
+                >Property Law</span
+              >
+              <span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+              <span class="text-caption text-on-surface-variant"
+                >6 min read</span
+              >
+            </div>
+            <h3
+              class="font-headline-md text-headline-md text-primary group-hover:text-tertiary-container transition-colors mb-3"
+            >
+              Understanding the Land Survey Act 2024
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-4">
+              A comprehensive guide on how the new land survey regulations
+              affect urban property owners in Dhaka...
+            </p>
+            <a
+              href="#"
+              class="font-label-md text-primary flex items-center gap-2"
+              >Read Full Article
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </article>
+          <article class="group cursor-pointer">
+            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz7eK4fnMcW3-l5KjiJscQxY5j_ITMIjHd_yyh1Rav0_FnlWRB52wIqAVd79mndPGetK5o3JI4Z3ooFzTjYgk4FUYMYQkiLVNsWuBVbtd1cZC_n7hk-QPeeyw6P5KydE_olRp9POO7H4r1ASt4WScmc92lQ08SrshW4RkvJERa1hPd5YGVdamld6pwNg35nKgL2atDmwW58WmMzd7druo6AgHtQ83tFuUiGMNa3ypMJpU5oW5r0og9"
+                alt="Legal insight article"
+              />
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+              <span
+                class="text-caption font-bold text-tertiary-container uppercase tracking-wider"
+                >Corporate</span
+              >
+              <span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+              <span class="text-caption text-on-surface-variant"
+                >4 min read</span
+              >
+            </div>
+            <h3
+              class="font-headline-md text-headline-md text-primary group-hover:text-tertiary-container transition-colors mb-3"
+            >
+              Startup Registration: RJSC Step-by-Step
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-4">
+              Everything young entrepreneurs need to know about incorporating a
+              limited company in Bangladesh...
+            </p>
+            <a
+              href="#"
+              class="font-label-md text-primary flex items-center gap-2"
+              >Read Full Article
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </article>
+          <article class="group cursor-pointer">
+            <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+              <img
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhyrjgBNToDOEYlV5mf_CO46lsOlyu61VCfVOddHsR0mcuJXGy03JR55M8l9UfCr_R51clTQxKKCuWVz61SDzKdtCitRXWtCDH0A3en83PmfdkMH6KM_hoUv_R5cYLrCWt2W-J0ayfxZ7md2lebWGTjay7rgtgrcD2SLN26NpsKr8OYiiU1bGw6F3WinE3g00VQJRaTpE8X6x4Z3LOHoI2NvsgST4nvKZLsbEoP-JOC6RF2yhHgtCB"
+                alt="Legal insight article"
+              />
+            </div>
+            <div class="flex items-center gap-4 mb-4">
+              <span
+                class="text-caption font-bold text-tertiary-container uppercase tracking-wider"
+                >Family Law</span
+              >
+              <span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+              <span class="text-caption text-on-surface-variant"
+                >8 min read</span
+              >
+            </div>
+            <h3
+              class="font-headline-md text-headline-md text-primary group-hover:text-tertiary-container transition-colors mb-3"
+            >
+              Inheritance Rights Under Muslim Personal Law
+            </h3>
+            <p class="text-on-surface-variant text-body-md mb-4">
+              A deep dive into the complex distribution of assets according to
+              Faraiz for modern families...
+            </p>
+            <a
+              href="#"
+              class="font-label-md text-primary flex items-center gap-2"
+              >Read Full Article
+              <span class="material-symbols-outlined text-sm"
+                >arrow_forward</span
+              ></a
+            >
+          </article>
+        </div>
+      </section>
     </main>
 
-    <!-- Footer (loaded from partials/footer.html) -->
+    <!-- Shared Footer -->
     <div id="footerPlaceholder"></div>
 
+    <!-- Scripts -->
     <script src="js/data.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/partials.js"></script>
+
+    <!-- Render the advocate cards using lawyerCardHTML from data.js -->
     <script>
-      document.getElementById("homeLawyerGrid").innerHTML =
-        LAWYERS.map(lawyerCardHTML).join("");
+      (function () {
+        var grid = document.getElementById("homeLawyerGrid");
+        if (!grid) return;
+        // Use the shared function from data.js
+        grid.innerHTML = LAWYERS.map(lawyerCardHTML).join("");
+      })();
     </script>
   </body>
 </html>
