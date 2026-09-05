@@ -1,331 +1,1725 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Affidavit Generator — JustiFi</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-</head>
-<body data-page="affidavit" data-requires-auth="0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Affidavit Generator — JustiFi</title>
 
-  <div id="navbarPlaceholder"></div>
+    <!-- Existing project assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
 
-  <main class="main-content">
-    <div class="container" style="max-width:1000px;">
+    <!-- Tailwind + Material Symbols -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
 
-      <!-- Stepper -->
-      <div class="afd-stepper" id="afdStepper">
-        <div class="afd-step" data-step="1"><div class="afd-dot">1</div><div class="afd-line"></div><div class="afd-label">Affidavit Type</div></div>
-        <div class="afd-step" data-step="2"><div class="afd-dot">2</div><div class="afd-line"></div><div class="afd-label">Facts &amp; Purpose</div></div>
-        <div class="afd-step" data-step="3"><div class="afd-dot">3</div><div class="afd-line"></div><div class="afd-label">Deponent Details</div></div>
-        <div class="afd-step" data-step="4"><div class="afd-dot">4</div><div class="afd-label">Preview &amp; Submit</div></div>
-      </div>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#041627",
+              secondary: "#505f76",
+              gold: "#C5A059",
+              "gold-light": "#f5e8c8",
+              "gold-dark": "#a07d3a",
+              surface: "#f7f9fb",
+              "surface-container": "#eceef0",
+              "surface-container-low": "#f2f4f6",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-high": "#e6e8ea",
+              "on-surface": "#191c1e",
+              "on-surface-variant": "#44474c",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#8192a7",
+              "primary-container": "#1a2b3c",
+              outline: "#74777d",
+              "outline-variant": "#c4c6cd",
+              error: "#ba1a1a",
+              success: "#16a34a",
+              background: "#f8fafc",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "12px",
+              "2xl": "16px",
+              full: "9999px",
+            },
+            spacing: {
+              "stack-sm": "8px",
+              "stack-md": "16px",
+              "stack-lg": "32px",
+              gutter: "24px",
+              "container-max": "1280px",
+            },
+            fontFamily: {
+              body: ["Inter"],
+              serif: ["Georgia", "Times New Roman", "serif"],
+            },
+            fontSize: {
+              "headline-lg": [
+                "32px",
+                {
+                  lineHeight: "40px",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-md": [
+                "24px",
+                { lineHeight: "32px", fontWeight: "600" },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "label-md": [
+                "14px",
+                {
+                  lineHeight: "20px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              caption: ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
 
-      <!-- ===================== STEP 1 ===================== -->
-      <div class="afd-panel" id="afdStep1">
-        <div class="page-head" style="text-align:center;">
-          <h1>Select Affidavit Type</h1>
-          <p>Step 1 of 4</p>
-        </div>
-        <div class="card" style="max-width:680px; margin:0 auto;">
-          <div class="afd-type-grid" id="afdTypeGrid"></div>
-        </div>
-        <div class="afd-nav-btns" style="max-width:680px; margin-left:auto; margin-right:auto;">
-          <a class="btn-outline" href="index.html">Cancel</a>
-          <button class="btn-gold" onclick="afdGoTo(2)">Save &amp; Continue</button>
-        </div>
-      </div>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f8fafc;
+      }
+      .legal-soft-shadow {
+        box-shadow: 0 4px 24px rgba(4, 22, 39, 0.06);
+      }
+      .bg-gold {
+        background-color: #c5a059;
+      }
+      .text-gold {
+        color: #c5a059;
+      }
+      .border-gold {
+        border-color: #c5a059;
+      }
+      .bg-gold-light {
+        background-color: #f5e8c8;
+      }
+      .hover\:bg-gold-dark:hover {
+        background-color: #a07d3a;
+      }
 
-      <!-- ===================== STEP 2 ===================== -->
-      <div class="afd-panel hidden" id="afdStep2">
-        <div class="page-head" style="text-align:center;">
-          <h1>Statement of Facts &amp; Purpose</h1>
-          <p>Step 2 of 4</p>
-        </div>
-        <div class="card" style="max-width:680px; margin:0 auto;">
-          <div class="form-field">
-            <label>Specific Cause / Purpose of this Affidavit</label>
-            <input type="text" id="afdPurpose" placeholder="e.g., Correction of spelling in SSC Certificate" />
-          </div>
-          <div class="form-field">
-            <label>Detailed Declaratory Points</label>
-            <div id="afdPointsList"></div>
-            <button type="button" class="afd-add-point" onclick="afdAddPoint()">+ Add Another Point</button>
-          </div>
-        </div>
-        <div class="afd-nav-btns" style="max-width:680px; margin-left:auto; margin-right:auto;">
-          <button class="btn-outline" onclick="afdGoTo(1)">Back</button>
-          <button class="btn-gold" onclick="afdGoTo(3)">Save &amp; Continue</button>
-        </div>
-      </div>
+      /* Stepper */
+      .step-dot {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 15px;
+        border: 2.5px solid #e2e8f0;
+        background: #fff;
+        color: #94a3b8;
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .step-dot.active {
+        border-color: #c5a059;
+        background: #c5a059;
+        color: #fff;
+        box-shadow: 0 0 0 5px rgba(197, 160, 89, 0.25);
+        transform: scale(1.05);
+      }
+      .step-dot.done {
+        border-color: #041627;
+        background: #041627;
+        color: #fff;
+      }
+      .step-dot.done::after {
+        content: "✓";
+        font-size: 16px;
+      }
+      .step-dot.done span {
+        display: none;
+      }
+      .step-line {
+        height: 2.5px;
+        background: #e2e8f0;
+        flex: 1;
+        margin: 0 12px;
+        border-radius: 2px;
+        transition: background 0.4s;
+      }
+      .step-line.done {
+        background: #041627;
+      }
+      .step-label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-align: center;
+        margin-top: 4px;
+        transition: color 0.3s;
+      }
+      .step-label.active {
+        color: #c5a059;
+      }
+      .step-label.done {
+        color: #041627;
+      }
+      .step-label.inactive {
+        color: #94a3b8;
+      }
 
-      <!-- ===================== STEP 3 ===================== -->
-      <div class="afd-panel hidden" id="afdStep3">
-        <div class="page-head" style="text-align:center;">
-          <h1>Deponent (Applicant) Identity Details</h1>
-          <p>Step 3 of 4</p>
-        </div>
-        <div class="card" style="max-width:760px; margin:0 auto;">
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #c5a059 !important;
+        box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
+      }
+      .form-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 32px;
+        border: 1px solid #eef1f4;
+        box-shadow: 0 4px 24px rgba(4, 22, 39, 0.05);
+      }
+      .form-card .section-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #041627;
+        border-bottom: 2px solid #f1f3f5;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .form-card .section-title .icon {
+        color: #c5a059;
+      }
 
-          <div class="afd-section-title">Personal Information</div>
-          <div class="afd-field-grid">
-            <div class="form-field"><label>Full Name (English – CAPITAL LETTERS)</label><input type="text" id="afdNameEn" style="text-transform:uppercase;" placeholder="MD. RAHIM UDDIN" /></div>
-            <div class="form-field"><label>Full Name (Bangla)</label><input type="text" id="afdNameBn" placeholder="মোঃ রহিম উদ্দিন" /></div>
-            <div class="form-field"><label>Father's Name / Husband's Name</label><input type="text" id="afdFather" /></div>
-            <div class="form-field"><label>Mother's Name</label><input type="text" id="afdMother" /></div>
-            <div class="form-field"><label>Date of Birth</label><input type="date" id="afdDob" /></div>
-            <div class="form-field"><label>Age</label><input type="number" id="afdAge" min="0" /></div>
-          </div>
+      /* Document viewer frame */
+      .document-viewer {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 8px 30px rgba(4, 22, 39, 0.08);
+        overflow: hidden;
+        transition: box-shadow 0.3s;
+      }
+      .document-viewer:hover {
+        box-shadow: 0 12px 40px rgba(4, 22, 39, 0.12);
+      }
+      .document-viewer .viewer-header {
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: 600;
+        color: #475569;
+      }
+      .document-viewer .viewer-header .icon {
+        color: #c5a059;
+        font-size: 18px;
+      }
+      .document-viewer .viewer-body {
+        padding: 12px;
+        background: #fcfcf9;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .document-viewer .viewer-body img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        border: 1px solid #e8e8e0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .document-viewer .viewer-footer {
+        padding: 8px 16px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 10px;
+        color: #94a3b8;
+        text-align: center;
+        background: #fafbfc;
+      }
+      .viewer-body .img-placeholder {
+        color: #94a3b8;
+        font-size: 14px;
+        text-align: center;
+        padding: 20px;
+      }
 
-          <div class="afd-section-title">Identity Document</div>
-          <div class="afd-field-grid">
-            <div class="form-field"><label>Document Type</label>
-              <select id="afdDocType">
-                <option>NID (10 or 17 digit)</option>
-                <option>Smart Card</option>
-                <option>Birth Registration Certificate (BRC)</option>
-                <option>Passport</option>
-              </select>
+      .upload-zone {
+        border: 2px dashed #e2e8f0;
+        border-radius: 14px;
+        padding: 28px 20px;
+        text-align: center;
+        background: #fafbfc;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .upload-zone:hover {
+        border-color: #c5a059;
+        background: #fcf9f0;
+      }
+
+      /* Success popup animation */
+      .success-popup {
+        animation: slideUp 0.5s ease forwards;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .form-card {
+          padding: 20px;
+        }
+      }
+      @media (max-width: 768px) {
+        .step-dot {
+          width: 34px;
+          height: 34px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-background" data-page="affidavit" data-requires-auth="0">
+    <!-- Shared Navbar -->
+    <div id="navbarPlaceholder"></div>
+
+    <!-- ====== INTRO SECTION ====== -->
+    <section
+      id="introSection"
+      class="max-w-container-max mx-auto px-4 md:px-8 py-6 md:py-12"
+    >
+      <div
+        class="bg-white rounded-[24px] border border-[#eef1f4] shadow-sm overflow-hidden"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-12">
+          <!-- LEFT: MAIN MESSAGE -->
+          <div class="lg:col-span-7 p-6 md:p-10 lg:p-12">
+            <div
+              class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gold-light border border-[#ead5a7] text-gold-dark text-xs font-bold"
+            >
+              <span class="material-symbols-outlined text-[17px]"
+                >verified</span
+              >
+              Trusted. Fast. Secure.
             </div>
-            <div class="form-field"><label>Document Number</label><input type="text" id="afdDocNumber" /></div>
-          </div>
 
-          <div class="afd-section-title">Permanent Address</div>
-          <div class="afd-field-grid">
-            <div class="form-field"><label>Village / House, Road</label><input type="text" id="afdPermHouse" /></div>
-            <div class="form-field"><label>Post Office, Post Code</label><input type="text" id="afdPermPost" /></div>
-            <div class="form-field"><label>Upazila / Thana</label><input type="text" id="afdPermUpazila" /></div>
-            <div class="form-field"><label>District</label><input type="text" id="afdPermDistrict" /></div>
-          </div>
+            <div class="mt-5">
+              <p class="text-sm font-semibold text-secondary mb-2">
+                JustiFi Legal Document Service
+              </p>
+              <h1
+                class="text-4xl md:text-5xl font-extrabold text-primary leading-tight tracking-tight"
+              >
+                Affidavit <span class="text-gold">Generator</span>
+              </h1>
+              <p
+                class="mt-3 text-base md:text-lg text-secondary max-w-2xl leading-7"
+              >
+                Generate your affidavit in a simple, secure and professional way
+                — without the usual pre‑court hassle.
+              </p>
+            </div>
 
-          <div class="afd-checkbox-row">
-            <input type="checkbox" id="afdSameAddr" checked onchange="afdToggleAddress()" />
-            <label for="afdSameAddr" style="font-weight:400; margin:0;">Present Address is same as Permanent Address</label>
-          </div>
+            <!-- MAIN AGENDA -->
+            <div
+              class="mt-7 rounded-2xl border border-[#ead5a7] bg-[#fffaf0] p-5 md:p-6"
+            >
+              <div class="flex items-start gap-3">
+                <div
+                  class="w-10 h-10 rounded-xl bg-gold-light flex items-center justify-center shrink-0"
+                >
+                  <span class="material-symbols-outlined text-gold-dark"
+                    >target</span
+                  >
+                </div>
+                <div>
+                  <h2 class="text-lg font-bold text-primary">
+                    Our goal: remove the pre-court hassle.
+                  </h2>
+                  <p class="mt-2 text-sm text-secondary leading-6">
+                    You just provide your information, purpose and documents. We
+                    will prepare, verify and process everything for you. You
+                    only need to visit the court once for your signature and
+                    identification. Our lawyers will handle the rest and deliver
+                    your affidavit in the shortest time.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-          <div id="afdPresentAddrBlock" class="hidden">
-            <div class="afd-section-title">Present Address</div>
-            <div class="afd-field-grid">
-              <div class="form-field"><label>Village / House, Road</label><input type="text" id="afdPresHouse" /></div>
-              <div class="form-field"><label>Post Office, Post Code</label><input type="text" id="afdPresPost" /></div>
-              <div class="form-field"><label>Upazila / Thana</label><input type="text" id="afdPresUpazila" /></div>
-              <div class="form-field"><label>District</label><input type="text" id="afdPresDistrict" /></div>
+            <!-- BENEFITS -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+              <div class="text-center p-3">
+                <div
+                  class="mx-auto w-10 h-10 rounded-xl bg-gold-light flex items-center justify-center"
+                >
+                  <span class="material-symbols-outlined text-gold-dark"
+                    >person_off</span
+                  >
+                </div>
+                <p class="mt-2 text-xs font-bold text-primary">
+                  No More Chamber Visits
+                </p>
+              </div>
+              <div class="text-center p-3">
+                <div
+                  class="mx-auto w-10 h-10 rounded-xl bg-gold-light flex items-center justify-center"
+                >
+                  <span class="material-symbols-outlined text-gold-dark"
+                    >schedule</span
+                  >
+                </div>
+                <p class="mt-2 text-xs font-bold text-primary">
+                  Save Time &amp; Money
+                </p>
+              </div>
+              <div class="text-center p-3">
+                <div
+                  class="mx-auto w-10 h-10 rounded-xl bg-gold-light flex items-center justify-center"
+                >
+                  <span class="material-symbols-outlined text-gold-dark"
+                    >support_agent</span
+                  >
+                </div>
+                <p class="mt-2 text-xs font-bold text-primary">
+                  Expert Lawyers Handle It
+                </p>
+              </div>
+              <div class="text-center p-3">
+                <div
+                  class="mx-auto w-10 h-10 rounded-xl bg-gold-light flex items-center justify-center"
+                >
+                  <span class="material-symbols-outlined text-gold-dark"
+                    >lock</span
+                  >
+                </div>
+                <p class="mt-2 text-xs font-bold text-primary">
+                  Secure &amp; Confidential
+                </p>
+              </div>
+            </div>
+
+            <button
+              onclick="startGenerator()"
+              class="mt-5 w-full px-6 py-4 rounded-xl bg-gold text-white font-bold hover:bg-gold-dark shadow-lg transition-all flex items-center justify-center gap-3"
+            >
+              <span class="material-symbols-outlined">description</span>
+              Create My Affidavit
+              <span class="material-symbols-outlined text-lg"
+                >arrow_forward</span
+              >
+            </button>
+
+            <div
+              class="flex items-center justify-center gap-2 mt-3 text-xs text-secondary"
+            >
+              <span class="material-symbols-outlined text-[15px]">lock</span>
+              Your information is 100% secure and confidential.
             </div>
           </div>
 
-          <div class="afd-section-title">Other</div>
-          <div class="afd-field-grid">
-            <div class="form-field"><label>Religion</label><input type="text" id="afdReligion" /></div>
-            <div class="form-field"><label>Nationality</label><input type="text" id="afdNationality" value="Bangladeshi" /></div>
+          <!-- RIGHT: OVERVIEW IMAGE (image1.png) -->
+          <div
+            class="lg:col-span-5 bg-surface border-l border-[#eef1f4] p-6 md:p-10 flex flex-col justify-center"
+          >
+            <div class="document-viewer">
+              <div class="viewer-header">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon"
+                    >description</span
+                  >
+                  Document Overview
+                </span>
+                <span class="text-[10px] text-gold-dark font-semibold"
+                  >Sample</span
+                >
+              </div>
+              <div class="viewer-body">
+                <img
+                  src="/images/image1.png"
+                  alt="Affidavit overview"
+                  class="w-full h-auto"
+                  onerror="
+                    this.style.display = 'none';
+                    this.parentElement.innerHTML =
+                      '<div class=\'img-placeholder\'><span class=\'material-symbols-outlined text-4xl block mb-2\'>image_not_supported</span>Image not found: image1.png<br>Please place it in the /images/ folder</div>';
+                  "
+                />
+              </div>
+              <div class="viewer-footer">Affidavit sample — JustiFi</div>
+            </div>
+            <p class="overview-caption mt-3">
+              Streamline your affidavit process with JustiFi
+            </p>
+            <div
+              class="mt-4 bg-white rounded-2xl border border-[#eef1f4] p-5 relative overflow-hidden"
+            >
+              <div
+                class="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-gold-light"
+              ></div>
+              <div class="relative flex items-center gap-4">
+                <div
+                  class="w-16 h-12 rounded-lg bg-primary flex items-center justify-center shadow-md"
+                >
+                  <span class="material-symbols-outlined text-white text-3xl"
+                    >description</span
+                  >
+                </div>
+                <div class="flex-1">
+                  <div class="h-2 rounded-full bg-slate-200 w-4/5"></div>
+                  <div class="h-2 rounded-full bg-slate-200 w-3/5 mt-2"></div>
+                  <div class="h-2 rounded-full bg-slate-200 w-2/3 mt-2"></div>
+                </div>
+                <span class="material-symbols-outlined text-gold text-3xl"
+                  >verified</span
+                >
+              </div>
+              <p class="relative text-xs text-secondary mt-4">
+                Trusted by clients across Bangladesh for reliable, fast and
+                professional legal document services.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="afd-nav-btns" style="max-width:760px; margin-left:auto; margin-right:auto;">
-          <button class="btn-outline" onclick="afdGoTo(2)">Back</button>
-          <button class="btn-gold" onclick="afdGoTo(4)">Save &amp; Continue</button>
         </div>
       </div>
 
-      <!-- ===================== STEP 4 ===================== -->
-      <div class="afd-panel hidden" id="afdStep4">
-        <div class="page-head" style="text-align:center;">
-          <h1>Preview &amp; Verification</h1>
-          <p>Step 4 of 4</p>
-        </div>
-
-        <div class="afd-preview-body">
-          <!-- Left: summary -->
-          <div class="card">
-            <h3 style="margin-bottom:10px;">Summary</h3>
-            <div id="afdSummary"></div>
-            <div class="afd-checkbox-row" style="margin-top:16px;">
-              <input type="checkbox" id="afdDeclare" />
-              <label for="afdDeclare" style="font-weight:400; margin:0; font-size:12.5px;">I solemnly declare that the information provided is true and correct to the best of my knowledge and belief.</label>
+      <!-- SERVICE PROMISE -->
+      <div class="mt-5 bg-primary rounded-2xl px-5 md:px-8 py-5 text-white">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-gold">bolt</span>
+            <div>
+              <p class="text-sm font-bold">Fast &amp; Efficient</p>
+              <p class="text-[11px] text-slate-300">
+                Reduce unnecessary waiting
+              </p>
             </div>
           </div>
-
-          <!-- Right: stamp paper preview -->
-          <div class="afd-stamp-paper" id="afdStampPaper">
-            <div class="afd-watermark">JUSTIFI DEMO DRAFT — NOT FOR LEGAL USE</div>
-            <div class="afd-stamp-head">৳300 NON-JUDICIAL STAMP — Government of the People's Republic of Bangladesh</div>
-            <h4>AFFIDAVIT</h4>
-            <div id="afdPreviewBody" style="position:relative; z-index:2;"></div>
-            <div class="afd-sign-block">
-              <div class="afd-sign-line">Deponent's Signature</div>
-              <div class="afd-sign-line">Notary Public Seal</div>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-gold">gavel</span>
+            <div>
+              <p class="text-sm font-bold">Legal Support</p>
+              <p class="text-[11px] text-slate-300">
+                Professional document guidance
+              </p>
             </div>
           </div>
-        </div>
-
-        <div class="afd-nav-btns" style="max-width:100%;">
-          <button class="btn-outline" onclick="afdGoTo(3)">Back</button>
-          <button class="btn-gold" onclick="afdSubmit()">Submit for Processing</button>
-        </div>
-        <p class="afd-note" style="text-align:center;">After submission, JustiFi will process your affidavit through verified channels and deliver the final stamped version to your dashboard.</p>
-
-        <div class="success-box" id="afdSuccessBox">
-          <div class="tick">✅</div>
-          <p style="font-weight:600; margin:10px 0 4px;">Affidavit submitted for processing</p>
-          <p style="font-size:13px; color:var(--slate);">Our verified partner lawyer will review and prepare your final stamped document.</p>
-          <a href="dashboard.html" style="color:var(--gold); font-weight:600; margin-top:10px; display:inline-block;">View in My Dashboard</a>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-gold">encrypted</span>
+            <div>
+              <p class="text-sm font-bold">Secure Process</p>
+              <p class="text-[11px] text-slate-300">
+                Your information stays protected
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-gold">public</span>
+            <div>
+              <p class="text-sm font-bold">Bangladesh Focused</p>
+              <p class="text-[11px] text-slate-300">
+                Designed for local legal needs
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
+      <p
+        class="text-center text-xs text-secondary mt-4 max-w-3xl mx-auto leading-5"
+      >
+        <strong class="text-primary">Important:</strong> JustiFi helps reduce
+        the preparation and coordination burden before your required appearance.
+        Any physical appearance, identification, oath or signature remains
+        subject to the applicable legal process.
+      </p>
+    </section>
+
+    <!-- ====== STEPPER BAR (labels under circles) ====== -->
+    <div
+      id="stepperBar"
+      class="hidden max-w-container-max mx-auto px-4 md:px-8 mt-6 mb-8"
+    >
+      <div class="flex items-center justify-between" id="stepperDots">
+        <!-- Step 1 -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot active" data-step="1"><span>1</span></div>
+          <span class="step-label active" data-label="1">Affidavit Type</span>
+        </div>
+        <div class="step-line" data-line="1"></div>
+        <!-- Step 2 -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot" data-step="2"><span>2</span></div>
+          <span class="step-label inactive" data-label="2"
+            >Facts &amp; Purpose</span
+          >
+        </div>
+        <div class="step-line" data-line="2"></div>
+        <!-- Step 3 -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot" data-step="3"><span>3</span></div>
+          <span class="step-label inactive" data-label="3"
+            >Deponent Identity</span
+          >
+        </div>
+        <div class="step-line" data-line="3"></div>
+        <!-- Step 4 -->
+        <div class="flex flex-col items-center gap-1">
+          <div class="step-dot" data-step="4"><span>4</span></div>
+          <span class="step-label inactive" data-label="4"
+            >Preview &amp; Verify</span
+          >
+        </div>
+      </div>
     </div>
-  </main>
 
-  <div id="footerPlaceholder"></div>
+    <!-- ====== GENERATOR CONTAINER ====== -->
+    <div
+      id="generatorContainer"
+      class="hidden max-w-container-max mx-auto px-4 md:px-8 pb-10"
+    >
+      <!-- STEP 1: Affidavit Type (grid 6 columns: 4 for form, 2 for image) -->
+      <div id="step1" class="grid grid-cols-1 lg:grid-cols-6 gap-6 lg:gap-8">
+        <div class="lg:col-span-4">
+          <div class="form-card">
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="text-xl font-bold text-primary">
+                Create New Affidavit
+              </h2>
+              <span
+                class="text-xs text-secondary bg-surface-container-low px-3 py-1 rounded-full"
+                >Step 1 of 4</span
+              >
+            </div>
+            <p class="text-secondary text-sm mb-5">
+              Select the type of legal declaration you wish to generate. Our
+              system will guide you through the required facts.
+            </p>
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              id="typeGrid"
+            ></div>
+            <div
+              class="mt-6 pt-5 border-t border-[#eef1f4] flex flex-col-reverse sm:flex-row justify-between gap-3"
+            >
+              <button
+                onclick="backToAffidavitService()"
+                class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all flex items-center justify-center gap-2"
+              >
+                <span class="material-symbols-outlined text-lg"
+                  >arrow_back</span
+                >
+                Back
+              </button>
+              <button
+                onclick="goToStep(2)"
+                class="px-8 py-2.5 rounded-xl bg-gold text-white font-label-md text-sm hover:bg-gold-dark shadow-md transition-all flex items-center justify-center gap-2"
+              >
+                Next
+                <span class="material-symbols-outlined text-lg"
+                  >arrow_forward</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-2">
+          <div class="sticky top-24">
+            <div class="flex items-center justify-between mb-3">
+              <h3
+                class="font-label-md text-primary flex items-center gap-2 text-sm"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >visibility</span
+                >
+                Document Preview
+              </h3>
+              <span
+                class="text-[10px] text-gold-dark font-semibold px-2.5 py-1 bg-gold-light rounded-full"
+                >Sample</span
+              >
+            </div>
+            <div class="document-viewer">
+              <div class="viewer-header">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon"
+                    >description</span
+                  >
+                  Affidavit Sample
+                </span>
+                <span class="text-[10px] text-gold-dark font-semibold"
+                  >Step 1</span
+                >
+              </div>
+              <div class="viewer-body">
+                <img
+                  src="/images/image2.png"
+                  alt="Sample affidavit document"
+                  class="w-full h-auto"
+                  onerror="
+                    this.style.display = 'none';
+                    this.parentElement.innerHTML =
+                      '<div class=\'img-placeholder\'><span class=\'material-symbols-outlined text-4xl block mb-2\'>image_not_supported</span>Image not found: image2.png<br>Please place it in the /images/ folder</div>';
+                  "
+                />
+              </div>
+              <div class="viewer-footer">
+                Your final affidavit will look similar
+              </div>
+            </div>
+            <div
+              class="mt-4 bg-gold-light/30 rounded-xl p-3 flex items-center gap-3 border border-gold/20"
+            >
+              <span class="material-symbols-outlined text-gold text-xl"
+                >verified</span
+              >
+              <div>
+                <p class="text-xs font-bold text-primary">
+                  Trusted by Clients Across Bangladesh
+                </p>
+                <p class="text-[10px] text-secondary">
+                  Templates vetted by Supreme Court advocates
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/auth.js"></script>
-  <script src="js/partials.js"></script>
-  <script>
-    /* ===================== AFFIDAVIT GENERATOR LOGIC ===================== */
-    var AFD_TYPES = [
-      'Name Change / Title Correction Affidavit',
-      'Same Person Affidavit',
-      'Financial Support / Income Declaration Affidavit',
-      'Address / Passport / Visa Proof Affidavit',
-      'Unmarried / Marital Status Affidavit',
-      'Property / Land Ownership Affidavit',
-      'General Declaratory Affidavit'
-    ];
+      <!-- STEP 2: Facts & Purpose (full width) -->
+      <div id="step2" class="hidden">
+        <div class="form-card max-w-4xl mx-auto">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-primary">
+              Statement of Facts &amp; Purpose
+            </h2>
+            <span
+              class="text-xs text-secondary bg-surface-container-low px-3 py-1 rounded-full"
+              >Step 2 of 4</span
+            >
+          </div>
+          <p class="text-secondary text-sm mb-5">
+            Provide the specific reason and list the facts you wish to declare
+            under oath.
+          </p>
+          <div class="space-y-5">
+            <div>
+              <label class="block font-label-md text-primary text-sm mb-1.5"
+                >Specific Cause / Purpose
+                <span class="text-error">*</span></label
+              >
+              <textarea
+                id="afdPurpose"
+                class="w-full rounded-xl border-[#e2e8f0] p-3.5 text-sm transition-all resize-none"
+                placeholder="e.g., Correction of spelling in SSC Certificate"
+                rows="3"
+              ></textarea>
+            </div>
+            <div>
+              <label class="block font-label-md text-primary text-sm mb-1.5"
+                >Detailed Declaratory Points</label
+              >
+              <div id="pointsContainer" class="space-y-2.5"></div>
+              <button
+                type="button"
+                class="flex items-center gap-1.5 text-gold text-sm font-medium px-4 py-2 border-2 border-gold/40 rounded-xl hover:border-gold transition-all mt-3"
+                onclick="addPoint()"
+              >
+                <span class="material-symbols-outlined text-[18px]">add</span>
+                Add Point
+              </button>
+            </div>
+          </div>
+          <div class="mt-6 pt-5 border-t border-[#eef1f4] flex justify-between">
+            <button
+              class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
+              onclick="goToStep(1)"
+            >
+              ← Back
+            </button>
+            <button
+              class="px-8 py-2.5 rounded-xl bg-gold text-white font-label-md text-sm hover:bg-gold-dark shadow-md transition-all"
+              onclick="goToStep(3)"
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      </div>
 
-    var afdState = { type: AFD_TYPES[0], points: 1 };
-    var afdCurrentStep = 1;
+      <!-- STEP 3: Deponent Identity (full width) -->
+      <div id="step3" class="hidden">
+        <div class="form-card max-w-5xl mx-auto">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-primary">Deponent Identity</h2>
+            <span
+              class="text-xs text-secondary bg-surface-container-low px-3 py-1 rounded-full"
+              >Step 3 of 4</span
+            >
+          </div>
+          <p class="text-secondary text-sm mb-5">
+            Please provide accurate personal and identity details as they will
+            appear on the final affidavit.
+          </p>
 
-    // --- Step 1: type cards ---
-    document.getElementById('afdTypeGrid').innerHTML = AFD_TYPES.map(function (t, i) {
-      return '<div class="afd-type-card' + (i === 0 ? ' selected' : '') + '" onclick="afdSelectType(this,\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</div>';
-    }).join('');
+          <!-- Personal Information -->
+          <div class="mb-6">
+            <div class="section-title">
+              <span class="icon material-symbols-outlined text-lg"
+                >account_circle</span
+              >
+              Personal Information
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Full Name (English) <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdNameEn"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright uppercase text-sm"
+                  placeholder="MD. RAHMAN ISLAM"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Full Name (Bangla) <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdNameBn"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="মোঃ রহমান ইসলাম"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Father's / Husband's Name
+                  <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdFather"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Name of Father or Husband"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Mother's Name <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdMother"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Name of Mother"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Date of Birth <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdDob"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  type="date"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Age <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdAge"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="e.g., 30"
+                  type="number"
+                  oninput="updatePreview()"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Profession <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdProfession"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Service Holder, Business, Student, etc."
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+            </div>
+          </div>
 
-    function afdSelectType(el, type) {
-      afdState.type = type;
-      document.querySelectorAll('.afd-type-card').forEach(function (c) { c.classList.remove('selected'); });
-      el.classList.add('selected');
-    }
+          <!-- Identity Document -->
+          <div class="mb-6">
+            <div class="section-title">
+              <span class="icon material-symbols-outlined text-lg">badge</span>
+              Identity Document
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Document Type <span class="text-error">*</span></label
+                >
+                <select
+                  id="afdDocType"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  onchange="updatePreview()"
+                >
+                  <option value="NID (10 digit)">NID (10 digit)</option>
+                  <option value="NID (17 digit)">NID (17 digit)</option>
+                  <option value="Smart Card">Smart Card</option>
+                  <option value="Birth Registration Certificate (BRC)">
+                    BRC
+                  </option>
+                  <option value="Passport">Passport</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Document Number <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdDocNumber"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Enter document number"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+            </div>
+          </div>
 
-    // --- Step 2: dynamic points ---
-    function afdRenderPoints() {
-      var wrap = document.getElementById('afdPointsList');
-      var html = '';
-      for (var i = 1; i <= afdState.points; i++) {
-        html += '<div class="afd-point-row">' +
-          '<div class="afd-point-num">' + i + '</div>' +
-          '<textarea rows="2" id="afdPoint' + i + '" placeholder="Declaratory point ' + i + '"></textarea>' +
-          (afdState.points > 1 ? '<button type="button" class="afd-point-remove" onclick="afdRemovePoint(' + i + ')">✕</button>' : '') +
-          '</div>';
+          <!-- Address -->
+          <div class="mb-6">
+            <div class="section-title">
+              <span class="icon material-symbols-outlined text-lg"
+                >location_on</span
+              >
+              Address Details
+            </div>
+            <div class="mb-3">
+              <label
+                class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                >Permanent Address</label
+              >
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  id="afdPermHouse"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Village / House"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermRoad"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Road / Block"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermPost"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Office"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermCode"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Code"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermUpazila"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Upazila / Thana"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermDistrict"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="District"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-3 p-3 bg-surface rounded-xl border border-[#e2e8f0]/50 mb-3"
+            >
+              <input
+                class="w-4 h-4 rounded border-[#e2e8f0] text-gold"
+                id="sameAddress"
+                type="checkbox"
+                checked
+                onchange="
+                  togglePresentAddress();
+                  updatePreview();
+                "
+              />
+              <label
+                class="text-sm text-on-surface cursor-pointer select-none"
+                for="sameAddress"
+                >Present Address same as Permanent</label
+              >
+            </div>
+            <div
+              id="presentAddressContainer"
+              class="overflow-hidden transition-all duration-300"
+              style="max-height: 0; opacity: 0; pointer-events: none"
+            >
+              <label
+                class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                >Present Address</label
+              >
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input
+                  id="afdPresHouse"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Village / House"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresRoad"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Road / Block"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresPost"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Office"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresCode"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Code"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresUpazila"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Upazila / Thana"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresDistrict"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="District"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Other Information -->
+          <div class="mb-6">
+            <div class="section-title">
+              <span class="icon material-symbols-outlined text-lg">public</span>
+              Other Information
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Religion <span class="text-error">*</span></label
+                >
+                <select
+                  id="afdReligion"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  onchange="updatePreview()"
+                >
+                  <option value="Islam">Islam</option>
+                  <option value="Hinduism">Hinduism</option>
+                  <option value="Christianity">Christianity</option>
+                  <option value="Buddhism">Buddhism</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+              <div>
+                <label
+                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
+                  >Nationality <span class="text-error">*</span></label
+                >
+                <input
+                  id="afdNationality"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-container-low text-secondary font-bold text-sm"
+                  readonly
+                  type="text"
+                  value="Bangladeshi"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- File Upload -->
+          <div class="mb-4">
+            <div class="section-title">
+              <span class="icon material-symbols-outlined text-lg"
+                >cloud_upload</span
+              >
+              Supporting Documents
+            </div>
+            <p class="text-secondary text-sm mb-3">
+              Upload NID, certificates, or any documents that support your
+              affidavit.
+            </p>
+            <div
+              class="upload-zone"
+              onclick="document.getElementById('fileInput').click()"
+            >
+              <span
+                class="material-symbols-outlined text-4xl text-secondary block mx-auto"
+                >cloud_upload</span
+              >
+              <p class="font-medium text-primary mt-2">
+                Drop files here or
+                <span class="text-gold underline">browse</span>
+              </p>
+              <p class="text-caption text-secondary">
+                PDF, JPG, PNG · Max 10MB each
+              </p>
+              <input
+                type="file"
+                multiple
+                accept=".pdf,.jpg,.jpeg,.png"
+                class="hidden"
+                id="fileInput"
+                onchange="handleFileUpload(event)"
+              />
+              <button
+                class="mt-2 px-6 py-2 bg-gold text-white rounded-xl font-label-md text-sm hover:bg-gold-dark"
+              >
+                Choose Files
+              </button>
+            </div>
+            <div id="fileList" class="mt-3 space-y-2"></div>
+          </div>
+
+          <div class="mt-6 pt-5 border-t border-[#eef1f4] flex justify-between">
+            <button
+              class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
+              onclick="goToStep(2)"
+            >
+              ← Back
+            </button>
+            <button
+              class="px-8 py-2.5 rounded-xl bg-gold text-white font-label-md text-sm hover:bg-gold-dark shadow-md transition-all"
+              onclick="goToStep(4)"
+            >
+              Preview →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: Preview & Submit (grid 6 columns: 4 for form, 2 for image) -->
+      <div
+        id="step4"
+        class="hidden grid grid-cols-1 lg:grid-cols-6 gap-6 lg:gap-8"
+      >
+        <div class="lg:col-span-4">
+          <div class="form-card">
+            <div class="flex items-center justify-between mb-5">
+              <h2 class="text-xl font-bold text-primary">Review Information</h2>
+              <span
+                class="text-xs text-secondary bg-surface-container-low px-3 py-1 rounded-full"
+                >Step 4 of 4</span
+              >
+            </div>
+            <div class="bg-surface p-4 rounded-xl mb-5">
+              <h4 class="font-label-md text-primary text-sm mb-2">
+                Affidavit Details
+              </h4>
+              <div
+                id="afdSummary"
+                class="space-y-1 text-sm text-on-surface-variant"
+              ></div>
+            </div>
+            <div
+              class="flex items-start gap-3 p-4 bg-gold-light/30 rounded-xl border border-gold/30 mb-5"
+            >
+              <input
+                id="afdDeclare"
+                class="mt-1 w-4 h-4 rounded border-[#e2e8f0] text-gold"
+                type="checkbox"
+              />
+              <label
+                for="afdDeclare"
+                class="text-sm text-on-surface cursor-pointer"
+                >I solemnly declare that the information provided is true and
+                correct to the best of my knowledge and belief.</label
+              >
+            </div>
+
+            <!-- SUCCESS POPUP -->
+            <div
+              id="successMessage"
+              class="hidden success-popup p-6 bg-green-50 border-2 border-green-400 rounded-xl text-center mb-4 shadow-lg"
+            >
+              <span
+                class="material-symbols-outlined text-green-600 text-5xl block mx-auto"
+                >check_circle</span
+              >
+              <h3 class="text-xl font-bold text-green-800 mt-2">
+                Affidavit Submitted Successfully! 🎉
+              </h3>
+              <p class="text-sm text-green-700 mt-1 max-w-md mx-auto">
+                We will process your document and deliver the final stamped
+                copy.
+              </p>
+              <div
+                class="mt-3 p-3 bg-white/80 rounded-lg border border-green-200"
+              >
+                <p class="text-sm font-semibold text-primary">
+                  📁 Please check your
+                  <span class="text-gold">"Affidavit Vault"</span> in the
+                  dashboard to track the status.
+                </p>
+              </div>
+              <a
+                href="dashboard.html"
+                class="mt-4 inline-block px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-md"
+              >
+                Go to Dashboard
+              </a>
+            </div>
+
+            <div class="pt-5 border-t border-[#eef1f4] flex justify-between">
+              <button
+                class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
+                onclick="goToStep(3)"
+              >
+                ← Back
+              </button>
+              <button
+                id="submitBtn"
+                class="px-10 py-2.5 rounded-xl bg-primary text-white font-label-md text-sm hover:bg-primary/90 shadow-md transition-all"
+                onclick="submitAffidavit()"
+              >
+                Submit for Processing
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-2">
+          <div class="sticky top-24">
+            <div class="flex items-center justify-between mb-3">
+              <h3
+                class="font-label-md text-primary flex items-center gap-2 text-sm"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >visibility</span
+                >
+                Final Document Preview
+              </h3>
+              <span
+                class="text-[10px] text-gold-dark font-semibold px-2.5 py-1 bg-gold-light rounded-full"
+                >Sample</span
+              >
+            </div>
+            <div class="document-viewer">
+              <div class="viewer-header">
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined icon"
+                    >description</span
+                  >
+                  Final Affidavit
+                </span>
+                <span class="text-[10px] text-gold-dark font-semibold"
+                  >Step 4</span
+                >
+              </div>
+              <div class="viewer-body">
+                <img
+                  src="/images/image3.png"
+                  alt="Final affidavit sample"
+                  class="w-full h-auto"
+                  onerror="
+                    this.style.display = 'none';
+                    this.parentElement.innerHTML =
+                      '<div class=\'img-placeholder\'><span class=\'material-symbols-outlined text-4xl block mb-2\'>image_not_supported</span>Image not found: image3.png<br>Please place it in the /images/ folder</div>';
+                  "
+                />
+              </div>
+              <div class="viewer-footer">
+                Your completed affidavit will look like this
+              </div>
+            </div>
+            <div
+              class="mt-4 bg-gold-light/30 rounded-xl p-3 flex items-center gap-3 border border-gold/20"
+            >
+              <span class="material-symbols-outlined text-gold text-xl"
+                >verified</span
+              >
+              <div>
+                <p class="text-xs font-bold text-primary">
+                  Trusted by Clients Across Bangladesh
+                </p>
+                <p class="text-[10px] text-secondary">
+                  Final preview shows how your affidavit will appear
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shared Footer -->
+    <div id="footerPlaceholder"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/partials.js"></script>
+
+    <script>
+      // ============================================================
+      // 1. INTRO / GENERATOR TOGGLE
+      // ============================================================
+      function startGenerator() {
+        document.getElementById("introSection").style.display = "none";
+        document.getElementById("stepperBar").classList.remove("hidden");
+        document
+          .getElementById("generatorContainer")
+          .classList.remove("hidden");
+        goToStep(1);
       }
-      wrap.innerHTML = html;
-    }
-    function afdAddPoint() {
-      // preserve existing values before re-render
-      var vals = afdCollectPoints();
-      afdState.points++;
-      afdRenderPoints();
-      vals.forEach(function (v, idx) { var f = document.getElementById('afdPoint' + (idx + 1)); if (f) f.value = v; });
-    }
-    function afdRemovePoint(n) {
-      var vals = afdCollectPoints();
-      vals.splice(n - 1, 1);
-      afdState.points = Math.max(1, afdState.points - 1);
-      afdRenderPoints();
-      vals.forEach(function (v, idx) { var f = document.getElementById('afdPoint' + (idx + 1)); if (f) f.value = v; });
-    }
-    function afdCollectPoints() {
-      var out = [];
-      for (var i = 1; i <= afdState.points; i++) {
-        var f = document.getElementById('afdPoint' + i);
-        out.push(f ? f.value : '');
+
+      function backToAffidavitService() {
+        document.getElementById("generatorContainer").classList.add("hidden");
+        document.getElementById("stepperBar").classList.add("hidden");
+        document.getElementById("introSection").style.display = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
-      return out;
-    }
-    afdRenderPoints();
 
-    // --- Step 3: address toggle ---
-    function afdToggleAddress() {
-      var same = document.getElementById('afdSameAddr').checked;
-      document.getElementById('afdPresentAddrBlock').classList.toggle('hidden', same);
-    }
-
-    // --- Step navigation ---
-    function afdGoTo(step) {
-      afdCurrentStep = step;
-      for (var i = 1; i <= 4; i++) {
-        document.getElementById('afdStep' + i).classList.toggle('hidden', i !== step);
-      }
-      document.querySelectorAll('.afd-step').forEach(function (s) {
-        var n = parseInt(s.dataset.step, 10);
-        s.classList.toggle('done', n < step);
-        s.classList.toggle('active', n === step);
-      });
-      if (step === 4) afdBuildPreview();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function afdVal(id) { var e = document.getElementById(id); return e ? e.value : ''; }
-
-    function afdBuildPreview() {
-      var purpose = afdVal('afdPurpose');
-      var points = afdCollectPoints().filter(function (p) { return p.trim() !== ''; });
-      var nameEn = afdVal('afdNameEn');
-      var father = afdVal('afdFather');
-      var mother = afdVal('afdMother');
-      var docType = afdVal('afdDocType');
-      var docNumber = afdVal('afdDocNumber');
-      var permAddr = [afdVal('afdPermHouse'), afdVal('afdPermPost'), afdVal('afdPermUpazila'), afdVal('afdPermDistrict')].filter(Boolean).join(', ');
-      var sameAddr = document.getElementById('afdSameAddr').checked;
-      var presAddr = sameAddr ? permAddr : [afdVal('afdPresHouse'), afdVal('afdPresPost'), afdVal('afdPresUpazila'), afdVal('afdPresDistrict')].filter(Boolean).join(', ');
-      var religion = afdVal('afdReligion');
-      var nationality = afdVal('afdNationality');
-
-      // Summary (left panel)
-      var rows = [
-        ['Affidavit Type', afdState.type],
-        ['Purpose', purpose || '—'],
-        ['Declaratory Points', points.length + ' point(s)'],
-        ['Deponent Name', nameEn || '—'],
-        ["Father's/Husband's Name", father || '—'],
-        ["Mother's Name", mother || '—'],
-        ['Identity Document', (docType || '—') + (docNumber ? ' · ' + docNumber : '')],
-        ['Permanent Address', permAddr || '—'],
-        ['Present Address', presAddr || '—'],
-        ['Religion / Nationality', (religion || '—') + ' / ' + (nationality || '—')]
+      // ============================================================
+      // 2. DATA & STATE
+      // ============================================================
+      var AFFIDAVIT_TYPES = [
+        "Name Change / Title Correction Affidavit",
+        "Same Person Affidavit",
+        "Financial Support / Income Declaration Affidavit",
+        "Address / Passport / Visa Proof Affidavit",
+        "Unmarried / Marital Status Affidavit",
+        "Property / Land Ownership Affidavit",
+        "General Declaratory Affidavit",
       ];
-      document.getElementById('afdSummary').innerHTML = rows.map(function (r) {
-        return '<div class="afd-summary-row"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
-      }).join('');
 
-      // Stamp-paper style preview (right panel)
-      var pointsHtml = points.length
-        ? '<ol style="padding-left:18px;">' + points.map(function (p) { return '<li style="margin-bottom:6px;">' + p + '</li>'; }).join('') + '</ol>'
-        : '<p style="color:var(--slate);">No declaratory points added yet.</p>';
+      var currentStep = 1;
+      var points = [
+        'That my name is incorrectly spelled as "John Doe" in my SSC certificate.',
+        'That my actual and correct name according to my birth registration is "Jonathon Doe".',
+        'That "John Doe" and "Jonathon Doe" refer to one and the same person.',
+      ];
+      var selectedType = AFFIDAVIT_TYPES[0];
+      var uploadedFiles = [];
 
-      document.getElementById('afdPreviewBody').innerHTML =
-        '<p><strong>I, ' + (nameEn || '[DEPONENT NAME]') + '</strong>, ' +
-        (father ? 'son/daughter of ' + father + ', ' : '') +
-        (religion ? 'by faith ' + religion + ', ' : '') +
-        'by nationality ' + (nationality || 'Bangladeshi') + ', ' +
-        (docType ? 'holder of ' + docType + (docNumber ? ' No. ' + docNumber : '') + ', ' : '') +
-        'presently residing at ' + (presAddr || '[PRESENT ADDRESS]') + ', permanent address ' + (permAddr || '[PERMANENT ADDRESS]') +
-        ', do hereby solemnly affirm and declare as follows:</p>' +
-        '<p style="margin-top:10px;"><strong>Purpose:</strong> ' + (purpose || '[PURPOSE OF AFFIDAVIT]') + '</p>' +
-        '<div style="margin-top:10px;">' + pointsHtml + '</div>' +
-        '<p style="margin-top:12px;">The statements made above are true to the best of my knowledge and belief.</p>';
-    }
-
-    function afdSubmit() {
-      if (!document.getElementById('afdDeclare').checked) {
-        alert('Please confirm the declaration checkbox before submitting.');
-        return;
+      // ============================================================
+      // 3. STEP 1: TYPE SELECTION
+      // ============================================================
+      function renderTypes() {
+        var grid = document.getElementById("typeGrid");
+        var icons = [
+          "badge",
+          "person_check",
+          "payments",
+          "location_on",
+          "favorite",
+          "home_work",
+          "description",
+        ];
+        grid.innerHTML = AFFIDAVIT_TYPES.map(function (t, i) {
+          var sel = t === selectedType;
+          return (
+            '<button type="button" class="text-left p-3.5 border-2 rounded-xl transition-all ' +
+            (sel
+              ? "border-gold bg-gold-light/30"
+              : "border-[#e2e8f0] bg-white hover:border-gold/50") +
+            '" onclick="selectType(this, \'' +
+            t.replace(/'/g, "\\'") +
+            "')\">" +
+            '<span class="material-symbols-outlined text-' +
+            (sel ? "gold" : "secondary") +
+            ' text-sm block mb-1">' +
+            icons[i] +
+            "</span>" +
+            '<span class="text-sm font-semibold text-primary">' +
+            t +
+            "</span>" +
+            '<p class="text-xs text-secondary mt-0.5">' +
+            getTypeDescription(t) +
+            "</p>" +
+            "</button>"
+          );
+        }).join("");
       }
-      document.querySelectorAll('#afdStep4 .afd-preview-body, #afdStep4 .afd-nav-btns, #afdStep4 .afd-note').forEach(function (el) { el.style.display = 'none'; });
-      document.getElementById('afdSuccessBox').style.display = 'block';
-    }
 
-    afdGoTo(1);
-  </script>
-</body>
+      function getTypeDescription(type) {
+        var d = {
+          "Name Change / Title Correction Affidavit":
+            "Correct or clarify a name, title or spelling in official records.",
+          "Same Person Affidavit":
+            "Confirm that different names or records belong to the same person.",
+          "Financial Support / Income Declaration Affidavit":
+            "Declare income, financial support or dependency information.",
+          "Address / Passport / Visa Proof Affidavit":
+            "Provide a formal declaration supporting address or travel-document purposes.",
+          "Unmarried / Marital Status Affidavit":
+            "Make a formal declaration about your marital status.",
+          "Property / Land Ownership Affidavit":
+            "Declare relevant facts about property or land ownership.",
+          "General Declaratory Affidavit":
+            "Create a flexible affidavit for another lawful declaratory purpose.",
+        };
+        return (
+          d[type] ||
+          "Prepare a formal legal declaration for your stated purpose."
+        );
+      }
+
+      function selectType(el, type) {
+        selectedType = type;
+        document.querySelectorAll("#typeGrid button").forEach(function (b) {
+          b.classList.remove("border-gold", "bg-gold-light/30");
+          b.classList.add("border-[#e2e8f0]", "bg-white");
+          var icon = b.querySelector(".material-symbols-outlined");
+          if (icon) {
+            icon.classList.remove("text-gold");
+            icon.classList.add("text-secondary");
+          }
+        });
+        el.classList.remove("border-[#e2e8f0]", "bg-white");
+        el.classList.add("border-gold", "bg-gold-light/30");
+        var iconEl = el.querySelector(".material-symbols-outlined");
+        if (iconEl) {
+          iconEl.classList.remove("text-secondary");
+          iconEl.classList.add("text-gold");
+        }
+      }
+
+      // ============================================================
+      // 4. STEP 2: POINTS MANAGEMENT
+      // ============================================================
+      function renderPoints() {
+        var container = document.getElementById("pointsContainer");
+        if (!points.length) {
+          container.innerHTML =
+            '<p class="text-secondary text-sm italic">No declaratory points added yet.</p>';
+          return;
+        }
+        container.innerHTML = points
+          .map(function (p, idx) {
+            return (
+              '<div class="flex gap-3 items-start">' +
+              '<span class="mt-2.5 w-6 h-6 rounded-full bg-surface-container-low text-primary flex items-center justify-center text-xs font-bold shrink-0">' +
+              (idx + 1) +
+              "</span>" +
+              '<div class="relative flex-grow">' +
+              '<input class="w-full rounded-xl border-[#e2e8f0] p-2.5 text-sm pr-10" type="text" value="' +
+              p.replace(/"/g, "&quot;") +
+              '" placeholder="Point ' +
+              (idx + 1) +
+              '" onchange="updatePoint(' +
+              idx +
+              ', this.value)" />' +
+              '<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-error transition-colors" onclick="removePoint(' +
+              idx +
+              ')"><span class="material-symbols-outlined text-[18px]">delete</span></button>' +
+              "</div>" +
+              "</div>"
+            );
+          })
+          .join("");
+      }
+
+      function addPoint() {
+        points.push("");
+        renderPoints();
+        var inp = document.querySelectorAll("#pointsContainer input");
+        if (inp.length) inp[inp.length - 1].focus();
+      }
+      function removePoint(idx) {
+        points.splice(idx, 1);
+        renderPoints();
+      }
+      function updatePoint(idx, val) {
+        points[idx] = val;
+      }
+
+      // ============================================================
+      // 5. STEP 3: ADDRESS TOGGLE
+      // ============================================================
+      function togglePresentAddress() {
+        var checked = document.getElementById("sameAddress").checked;
+        var container = document.getElementById("presentAddressContainer");
+        if (checked) {
+          container.style.maxHeight = "0";
+          container.style.opacity = "0";
+          container.style.pointerEvents = "none";
+        } else {
+          container.style.maxHeight = "600px";
+          container.style.opacity = "1";
+          container.style.pointerEvents = "auto";
+        }
+      }
+
+      // ============================================================
+      // 6. FILE UPLOAD
+      // ============================================================
+      function handleFileUpload(e) {
+        var files = e.target.files;
+        for (var i = 0; i < files.length; i++) uploadedFiles.push(files[i]);
+        renderFileList();
+        e.target.value = "";
+      }
+
+      function renderFileList() {
+        var list = document.getElementById("fileList");
+        if (!uploadedFiles.length) {
+          list.innerHTML = "";
+          return;
+        }
+        list.innerHTML = uploadedFiles
+          .map(function (f, idx) {
+            return (
+              '<div class="flex items-center justify-between bg-surface p-2.5 rounded-xl text-sm">' +
+              '<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">description</span> ' +
+              f.name +
+              " (" +
+              (f.size / 1024).toFixed(1) +
+              " KB)</span>" +
+              '<button class="text-error hover:text-red-700" onclick="removeFile(' +
+              idx +
+              ')"><span class="material-symbols-outlined text-[18px]">delete</span></button>' +
+              "</div>"
+            );
+          })
+          .join("");
+      }
+
+      function removeFile(idx) {
+        uploadedFiles.splice(idx, 1);
+        renderFileList();
+      }
+
+      // ============================================================
+      // 7. NAVIGATION
+      // ============================================================
+      function goToStep(step) {
+        currentStep = step;
+
+        // Reset success message visibility when moving away from step 4
+        if (step !== 4) {
+          document.getElementById("successMessage").classList.add("hidden");
+          document.getElementById("submitBtn").classList.remove("hidden");
+        }
+
+        // Show/hide step containers
+        for (var i = 1; i <= 4; i++) {
+          var el = document.getElementById("step" + i);
+          if (el) el.classList.toggle("hidden", i !== step);
+        }
+
+        // Update stepper dots and labels
+        document.querySelectorAll(".step-dot").forEach(function (dot) {
+          var s = parseInt(dot.dataset.step, 10);
+          dot.classList.remove("active", "done");
+          if (s === step) dot.classList.add("active");
+          else if (s < step) dot.classList.add("done");
+        });
+
+        document.querySelectorAll(".step-label").forEach(function (label) {
+          var s = parseInt(label.dataset.label, 10);
+          label.classList.remove("active", "done", "inactive");
+          if (s === step) label.classList.add("active");
+          else if (s < step) label.classList.add("done");
+          else label.classList.add("inactive");
+        });
+
+        // Update step lines
+        document.querySelectorAll(".step-line").forEach(function (line) {
+          var s = parseInt(line.dataset.line, 10);
+          line.classList.toggle("done", s < step);
+        });
+
+        // If step 4, build the full preview
+        if (step === 4) buildPreview();
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      // ============================================================
+      // 8. HELPERS
+      // ============================================================
+      function getVal(id) {
+        var el = document.getElementById(id);
+        return el ? el.value : "";
+      }
+
+      // ============================================================
+      // 9. STEP 4 PREVIEW
+      // ============================================================
+      function buildPreview() {
+        var name = getVal("afdNameEn") || "[DEPONENT NAME]";
+        var father = getVal("afdFather") || "[FATHER'S NAME]";
+        var mother = getVal("afdMother") || "[MOTHER'S NAME]";
+        var profession = getVal("afdProfession") || "[PROFESSION]";
+        var docType = getVal("afdDocType") || "[DOCUMENT TYPE]";
+        var docNumber = getVal("afdDocNumber") || "[NUMBER]";
+        var permAddr =
+          [
+            getVal("afdPermHouse"),
+            getVal("afdPermRoad"),
+            getVal("afdPermPost"),
+            getVal("afdPermCode"),
+            getVal("afdPermUpazila"),
+            getVal("afdPermDistrict"),
+          ]
+            .filter(Boolean)
+            .join(", ") || "[PERMANENT ADDRESS]";
+        var same = document.getElementById("sameAddress").checked;
+        var presAddr = same
+          ? permAddr
+          : [
+              getVal("afdPresHouse"),
+              getVal("afdPresRoad"),
+              getVal("afdPresPost"),
+              getVal("afdPresCode"),
+              getVal("afdPresUpazila"),
+              getVal("afdPresDistrict"),
+            ]
+              .filter(Boolean)
+              .join(", ") || "[PRESENT ADDRESS]";
+        var religion = getVal("afdReligion") || "[RELIGION]";
+        var nationality = getVal("afdNationality") || "Bangladeshi";
+        var purpose = getVal("afdPurpose") || "[PURPOSE OF AFFIDAVIT]";
+
+        // Build summary table
+        var summary = document.getElementById("afdSummary");
+        var rows = [
+          ["Type", selectedType],
+          ["Purpose", purpose],
+          ["Points", points.length + " point(s)"],
+          ["Deponent", name],
+          ["Father/Husband", father],
+          ["Mother", mother],
+          ["Profession", profession],
+          [
+            "Document",
+            docType + (docNumber !== "[NUMBER]" ? " · " + docNumber : ""),
+          ],
+          ["Permanent Address", permAddr],
+          ["Present Address", presAddr],
+          ["Religion", religion],
+          ["Nationality", nationality],
+          ["Files", uploadedFiles.length + " file(s)"],
+        ];
+        summary.innerHTML = rows
+          .map(function (r) {
+            return (
+              '<div class="flex justify-between text-sm border-b border-[#e2e8f0]/50 py-1.5"><span class="text-secondary">' +
+              r[0] +
+              '</span><span class="font-medium">' +
+              r[1] +
+              "</span></div>"
+            );
+          })
+          .join("");
+      }
+
+      // ============================================================
+      // 10. SUBMIT - shows the success popup with dashboard link
+      // ============================================================
+      function submitAffidavit() {
+        if (!document.getElementById("afdDeclare").checked) {
+          alert("Please confirm the declaration before submitting.");
+          return;
+        }
+
+        // Hide the submit button and show the success message
+        document.getElementById("submitBtn").classList.add("hidden");
+        var successEl = document.getElementById("successMessage");
+        successEl.classList.remove("hidden");
+
+        // Optional: Scroll to the top of the success message
+        setTimeout(function () {
+          successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+      }
+
+      // ============================================================
+      // 11. INIT
+      // ============================================================
+      window.addEventListener("load", function () {
+        renderTypes();
+        renderPoints();
+        togglePresentAddress();
+      });
+    </script>
+  </body>
 </html>
