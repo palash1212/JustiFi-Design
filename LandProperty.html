@@ -1,0 +1,3343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Land &amp; Property Title Verification — JustiFi Bangladesh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      /* ============================================================
+       LAND & PROPERTY TITLE VERIFICATION
+    ============================================================ */
+
+      /* --- Page Layout --- */
+      .land-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      /* ============================================================
+       HERO SECTION
+    ============================================================ */
+      .land-hero {
+        background: linear-gradient(
+          135deg,
+          #041627 0%,
+          #0a2740 50%,
+          #0f3252 100%
+        );
+        border-radius: 0;
+        padding: 48px 28px 44px;
+        margin: 0;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .land-hero::before {
+        content: "";
+        position: absolute;
+        top: -40%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(197, 160, 89, 0.08) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .land-hero::after {
+        content: "";
+        position: absolute;
+        bottom: -30%;
+        left: -5%;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(197, 160, 89, 0.05) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .land-hero .hero-pattern {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        pointer-events: none;
+      }
+      .land-hero .hero-badge {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--gold);
+        background: rgba(197, 160, 89, 0.15);
+        padding: 5px 18px;
+        border-radius: 50px;
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 1;
+        border: 1px solid rgba(197, 160, 89, 0.15);
+      }
+      .land-hero h1 {
+        font-size: 28px;
+        font-weight: 900;
+        line-height: 1.15;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 1;
+        letter-spacing: -0.5px;
+      }
+      .land-hero h1 .gold {
+        color: var(--gold);
+      }
+      .land-hero p {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.8;
+        margin-bottom: 22px;
+        max-width: 580px;
+        position: relative;
+        z-index: 1;
+        font-weight: 400;
+      }
+      .land-hero .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+      }
+      .land-hero .hero-actions .btn-primary {
+        background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
+        color: var(--gold-dark);
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 16px rgba(197, 160, 89, 0.3);
+      }
+      .land-hero .hero-actions .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(197, 160, 89, 0.4);
+      }
+      .land-hero .hero-actions .btn-outline-light {
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 13px;
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .land-hero .hero-actions .btn-outline-light:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: rgba(197, 160, 89, 0.1);
+        transform: translateY(-2px);
+      }
+      .land-hero .hero-stats {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+        z-index: 1;
+      }
+      .land-hero .hero-stats .stat-num {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--gold);
+        letter-spacing: -0.5px;
+      }
+      .land-hero .hero-stats .stat-label {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.5;
+        font-weight: 400;
+      }
+      .land-hero .hero-stats .stat-icon {
+        font-size: 24px;
+        color: var(--gold);
+        opacity: 0.6;
+      }
+
+      /* ============================================================
+       VERIFICATION FORM
+    ============================================================ */
+      .verification-form {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: 0 8px 40px rgba(26, 43, 60, 0.06);
+        padding: 24px 22px 28px;
+        margin: 28px 0 32px;
+      }
+
+      .verification-form .form-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 2px;
+        letter-spacing: -0.3px;
+      }
+      .verification-form .form-title .gold {
+        color: var(--gold);
+      }
+      .verification-form .form-subtitle {
+        font-size: 13px;
+        color: var(--slate);
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      /* --- Form Stepper (Mobile Optimized) --- */
+      .form-stepper-land {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+        margin-bottom: 28px;
+        padding: 0 4px;
+        width: 100%;
+      }
+      .form-stepper-land .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        position: relative;
+      }
+      .form-stepper-land .step-dot {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2.5px solid var(--border);
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--slate);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        cursor: default;
+        position: relative;
+        z-index: 2;
+      }
+      .form-stepper-land .step-dot.active {
+        background: var(--navy);
+        border-color: var(--navy);
+        color: #fff;
+        box-shadow: 0 0 0 4px rgba(4, 22, 39, 0.1);
+      }
+      .form-stepper-land .step-dot.done {
+        background: var(--navy);
+        border-color: var(--navy);
+        color: #fff;
+      }
+      .form-stepper-land .step-dot.done::after {
+        content: "✓";
+        font-size: 13px;
+      }
+      .form-stepper-land .step-dot.done span {
+        display: none;
+      }
+      .form-stepper-land .step-label {
+        font-size: 8px;
+        color: var(--slate);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+        text-align: center;
+        line-height: 1.2;
+        max-width: 60px;
+      }
+      .form-stepper-land .step-label.active {
+        color: var(--navy);
+      }
+      .form-stepper-land .step-label.done {
+        color: var(--navy);
+      }
+      .form-stepper-land .step-line {
+        flex: 1;
+        height: 2.5px;
+        background: var(--border);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        margin: 0 2px;
+        margin-bottom: 18px;
+        min-width: 10px;
+        position: relative;
+        z-index: 1;
+      }
+      .form-stepper-land .step-line.done {
+        background: var(--navy);
+      }
+
+      /* --- Step Panels --- */
+      .step-panel-land {
+        display: none;
+      }
+      .step-panel-land.active {
+        display: block;
+      }
+
+      /* --- Form Fields --- */
+      .form-fields-land {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+      .field-group-land {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .field-group-land label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--navy);
+        line-height: 1.4;
+      }
+      .field-group-land label .optional {
+        font-weight: 400;
+        color: var(--slate);
+        font-size: 11px;
+      }
+      .field-group-land label .star {
+        color: #b91c1c;
+      }
+      .field-group-land label .bangla {
+        font-weight: 400;
+        color: var(--slate);
+        font-size: 11px;
+      }
+      .field-group-land input,
+      .field-group-land select,
+      .field-group-land textarea {
+        width: 100%;
+        padding: 9px 14px;
+        border-radius: 10px;
+        border: 1.5px solid var(--border);
+        font-size: 13px;
+        font-family: inherit;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+        color: var(--navy);
+      }
+      .field-group-land input:focus,
+      .field-group-land select:focus,
+      .field-group-land textarea:focus {
+        outline: none;
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
+        background: #fff;
+      }
+      .field-group-land input::placeholder,
+      .field-group-land textarea::placeholder {
+        color: #b0b8c4;
+        font-size: 12px;
+      }
+      .field-group-land select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+      }
+      .field-group-land textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      /* --- Field Row --- */
+      .field-row-land {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      /* --- Form Actions --- */
+      .form-actions-land {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 22px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+      }
+      .form-actions-land .btn-back {
+        background: transparent;
+        border: none;
+        color: var(--slate);
+        font-weight: 600;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        padding: 8px 4px;
+        transition: color 0.2s ease;
+      }
+      .form-actions-land .btn-back:hover {
+        color: var(--navy);
+      }
+      .form-actions-land .btn-continue {
+        background: var(--navy);
+        color: #fff;
+        padding: 10px 26px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(4, 22, 39, 0.2);
+      }
+      .form-actions-land .btn-continue:hover {
+        background: #0a2740;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(4, 22, 39, 0.3);
+      }
+      .form-actions-land .btn-continue:active {
+        transform: scale(0.97);
+      }
+      .form-actions-land .btn-submit {
+        background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
+        color: var(--gold-dark);
+        padding: 10px 32px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 13px;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(197, 160, 89, 0.25);
+      }
+      .form-actions-land .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(197, 160, 89, 0.35);
+      }
+      .form-actions-land .btn-submit:active {
+        transform: scale(0.97);
+      }
+
+      /* --- Checkbox & Radio Styles --- */
+      .checkbox-group-land {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding-top: 2px;
+      }
+      .checkbox-group-land label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--navy);
+        cursor: pointer;
+      }
+      .checkbox-group-land input[type="checkbox"],
+      .checkbox-group-land input[type="radio"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--gold);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      /* --- Service Option Cards (Step 3) --- */
+      .service-option-card {
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fff;
+      }
+      .service-option-card:hover {
+        border-color: rgba(197, 160, 89, 0.3);
+      }
+      .service-option-card.selected {
+        border-color: var(--gold);
+        background: rgba(197, 160, 89, 0.04);
+        box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.08);
+      }
+      .service-option-card .s-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        margin-bottom: 4px;
+      }
+      .service-option-card .s-header h5 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--navy);
+      }
+      .service-option-card .s-header .badge {
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 2px 8px;
+        border-radius: 20px;
+        letter-spacing: 0.3px;
+      }
+      .service-option-card .s-header .badge.recommended {
+        background: #faeeda;
+        color: var(--gold-dark);
+      }
+      .service-option-card .s-header .badge.essential {
+        background: rgba(239, 68, 68, 0.1);
+        color: #b91c1c;
+      }
+      .service-option-card .s-header .price {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--gold-dark);
+      }
+      .service-option-card p {
+        font-size: 12px;
+        color: var(--slate);
+        line-height: 1.6;
+        margin-bottom: 6px;
+      }
+      .service-option-card .s-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding-top: 6px;
+        border-top: 1px solid var(--border);
+      }
+      .service-option-card .s-tags span {
+        font-size: 10px;
+        color: var(--slate);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .service-option-card .s-tags span i {
+        color: var(--gold);
+        font-size: 12px;
+      }
+      .service-option-card input[type="checkbox"],
+      .service-option-card input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--gold);
+        cursor: pointer;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      /* --- Delivery Mode Cards (Step 3) --- */
+      .delivery-card {
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fff;
+      }
+      .delivery-card:hover {
+        border-color: rgba(197, 160, 89, 0.3);
+      }
+      .delivery-card.selected {
+        border-color: var(--gold);
+        background: rgba(197, 160, 89, 0.04);
+      }
+      .delivery-card .d-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        margin-bottom: 4px;
+      }
+      .delivery-card .d-header h5 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--navy);
+      }
+      .delivery-card .d-header .bangla {
+        font-size: 10px;
+        font-weight: 400;
+        color: var(--slate);
+      }
+      .delivery-card .d-header i {
+        font-size: 18px;
+        color: var(--gold);
+      }
+      .delivery-card p {
+        font-size: 12px;
+        color: var(--slate);
+        line-height: 1.6;
+      }
+      .delivery-card .d-meta {
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .delivery-card .d-meta i {
+        font-size: 13px;
+      }
+      .delivery-card input[type="radio"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--gold);
+        cursor: pointer;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      /* --- Review Cards (Step 4) --- */
+      .review-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        background: #f8fafc;
+      }
+      .review-card .r-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 6px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+      }
+      .review-card .r-header h4 {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: var(--navy);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .review-card .r-header h4 i {
+        color: var(--gold);
+      }
+      .review-card .r-header .edit-btn {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--gold-dark);
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .review-card .r-header .edit-btn:hover {
+        color: var(--gold);
+      }
+      .review-card .r-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .review-card .r-item {
+        background: #fff;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+      .review-card .r-item .label {
+        font-size: 9px;
+        color: var(--slate);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+      .review-card .r-item .value {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-top: 2px;
+      }
+      .review-card .r-item .value .sub {
+        font-weight: 400;
+        color: var(--slate);
+        font-size: 11px;
+      }
+      .review-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding-top: 4px;
+      }
+      .review-tags span {
+        background: var(--navy);
+        color: #fff;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .review-tags span i {
+        color: var(--gold);
+        font-size: 12px;
+      }
+
+      /* --- Pricing Section (Step 4) --- */
+      .pricing-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 0;
+        font-size: 12px;
+      }
+      .pricing-row .label {
+        color: var(--slate);
+      }
+      .pricing-row .amount {
+        font-weight: 700;
+        color: var(--navy);
+      }
+      .pricing-total {
+        border-top: 1px solid var(--border);
+        padding-top: 8px;
+        margin-top: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .pricing-total .total-label {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--navy);
+      }
+      .pricing-total .total-amount {
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--gold-dark);
+      }
+      .pricing-total .total-sub {
+        font-size: 10px;
+        color: var(--slate);
+        display: block;
+        text-align: right;
+      }
+
+      /* --- Payment Options (Step 4) --- */
+      .payment-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .payment-option {
+        border: 2px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #fff;
+      }
+      .payment-option:hover {
+        border-color: rgba(197, 160, 89, 0.3);
+      }
+      .payment-option.selected {
+        border-color: var(--gold);
+        background: rgba(197, 160, 89, 0.06);
+      }
+      .payment-option .p-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--navy);
+      }
+      .payment-option .p-sub {
+        font-size: 9px;
+        color: var(--slate);
+      }
+      .payment-option .p-check {
+        color: var(--gold);
+        font-size: 11px;
+        font-weight: 600;
+        display: none;
+      }
+      .payment-option.selected .p-check {
+        display: block;
+      }
+      .payment-option input[type="radio"] {
+        display: none;
+      }
+
+      /* --- File Upload --- */
+      .file-upload-area {
+        border: 2px dashed var(--border);
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+      }
+      .file-upload-area:hover {
+        border-color: var(--gold);
+        background: rgba(197, 160, 89, 0.04);
+      }
+      .file-upload-area .icon {
+        font-size: 32px;
+        color: var(--gold);
+        display: block;
+        margin-bottom: 6px;
+      }
+      .file-upload-area p {
+        font-size: 12px;
+        color: var(--slate);
+      }
+      .file-upload-area .sub {
+        font-size: 10px;
+        color: var(--slate);
+      }
+      .file-upload-area input[type="file"] {
+        display: none;
+      }
+
+      /* ============================================================
+       STREAMLINED VERIFICATION PROCESS
+    ============================================================ */
+      .process-section {
+        margin: 32px 0 24px;
+      }
+      .process-section .process-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--navy);
+        text-align: center;
+        margin-bottom: 6px;
+        letter-spacing: -0.3px;
+      }
+      .process-section .process-title .gold {
+        color: var(--gold);
+      }
+      .process-section .process-sub {
+        text-align: center;
+        color: var(--slate);
+        font-size: 14px;
+        margin-bottom: 24px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.7;
+      }
+      .process-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .process-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 18px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      .process-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(26, 43, 60, 0.07);
+        border-color: var(--gold);
+      }
+      .process-card .step-num {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
+        color: var(--gold-dark);
+        font-weight: 800;
+        font-size: 15px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 8px;
+        box-shadow: 0 4px 12px rgba(197, 160, 89, 0.25);
+      }
+      .process-card h4 {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 4px;
+      }
+      .process-card p {
+        font-size: 13px;
+        color: var(--slate);
+        line-height: 1.6;
+      }
+
+      /* ============================================================
+       TRUST BADGES SECTION
+    ============================================================ */
+      .trust-section {
+        margin: 24px 0 40px;
+      }
+      .trust-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .trust-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 18px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      .trust-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(26, 43, 60, 0.07);
+        border-color: var(--gold);
+      }
+      .trust-card .trust-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--navy);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin: 0 auto 10px;
+        transition: all 0.3s ease;
+      }
+      .trust-card:hover .trust-icon {
+        background: var(--gold);
+        color: var(--gold-dark);
+      }
+      .trust-card h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 4px;
+      }
+      .trust-card p {
+        font-size: 13px;
+        color: var(--slate);
+        line-height: 1.7;
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      /* ============================================================
+       SUCCESS MESSAGE
+    ============================================================ */
+      .success-message {
+        display: none;
+        text-align: center;
+        padding: 32px 20px;
+      }
+      .success-message.show {
+        display: block;
+      }
+      .success-message .success-icon {
+        font-size: 56px;
+        color: var(--gold);
+        margin-bottom: 12px;
+      }
+      .success-message h3 {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 6px;
+      }
+      .success-message p {
+        font-size: 14px;
+        color: var(--slate);
+        max-width: 400px;
+        margin: 0 auto;
+        line-height: 1.7;
+      }
+
+      /* ============================================================
+       RESPONSIVE BREAKPOINTS
+    ============================================================ */
+
+      @media (min-width: 500px) {
+        .process-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .trust-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (min-width: 600px) {
+        .land-hero {
+          padding: 56px 36px 48px;
+        }
+        .land-hero h1 {
+          font-size: 34px;
+        }
+        .land-hero p {
+          font-size: 15px;
+        }
+        .land-hero .hero-actions .btn-primary,
+        .land-hero .hero-actions .btn-outline-light {
+          padding: 14px 32px;
+          font-size: 14px;
+        }
+        .land-hero .hero-stats .stat-num {
+          font-size: 26px;
+        }
+
+        .verification-form {
+          padding: 28px 26px 32px;
+          margin: 32px 0 36px;
+        }
+        .verification-form .form-title {
+          font-size: 22px;
+        }
+
+        .field-row-land {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .form-stepper-land .step-dot {
+          width: 48px;
+          height: 48px;
+          font-size: 17px;
+        }
+        .form-stepper-land .step-label {
+          font-size: 10px;
+          max-width: 80px;
+        }
+        .form-stepper-land .step-line {
+          min-width: 20px;
+        }
+
+        .process-section .process-title {
+          font-size: 26px;
+        }
+        .process-grid {
+          gap: 18px;
+        }
+        .process-card {
+          padding: 22px 18px;
+        }
+
+        .trust-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+        .trust-card {
+          padding: 22px 18px;
+        }
+
+        .review-card .r-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .payment-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (min-width: 992px) {
+        .land-hero {
+          padding: 64px 48px 56px;
+        }
+        .land-hero h1 {
+          font-size: 42px;
+        }
+        .land-hero p {
+          font-size: 16px;
+        }
+        .land-hero .hero-stats .stat-num {
+          font-size: 30px;
+        }
+
+        .verification-form {
+          padding: 34px 32px 38px;
+          margin: 36px 0 44px;
+        }
+        .verification-form .form-title {
+          font-size: 26px;
+        }
+
+        .form-stepper-land .step-dot {
+          width: 56px;
+          height: 56px;
+          font-size: 20px;
+          border-width: 3px;
+        }
+        .form-stepper-land .step-label {
+          font-size: 12px;
+          max-width: 100px;
+        }
+        .form-stepper-land .step-line {
+          min-width: 30px;
+          height: 3px;
+        }
+        .form-stepper-land {
+          margin-bottom: 32px;
+        }
+
+        .process-section .process-title {
+          font-size: 30px;
+        }
+        .process-grid {
+          gap: 22px;
+        }
+
+        .trust-grid {
+          gap: 22px;
+        }
+        .trust-card {
+          padding: 28px 24px;
+        }
+        .trust-card .trust-icon {
+          width: 60px;
+          height: 60px;
+          font-size: 28px;
+        }
+        .trust-card h4 {
+          font-size: 18px;
+        }
+        .trust-card p {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 499px) {
+        .form-stepper-land .step-dot {
+          width: 32px;
+          height: 32px;
+          font-size: 11px;
+          border-width: 2px;
+        }
+        .form-stepper-land .step-label {
+          font-size: 7px;
+          max-width: 44px;
+          letter-spacing: 0.1px;
+        }
+        .form-stepper-land .step-line {
+          min-width: 6px;
+          margin-bottom: 14px;
+        }
+        .form-stepper-land .step-item {
+          gap: 4px;
+        }
+        .form-stepper-land {
+          margin-bottom: 20px;
+          padding: 0 2px;
+        }
+
+        .service-option-card {
+          padding: 10px 12px;
+        }
+        .service-option-card .s-header h5 {
+          font-size: 12px;
+        }
+        .service-option-card p {
+          font-size: 11px;
+        }
+        .service-option-card .s-tags span {
+          font-size: 9px;
+        }
+
+        .delivery-card {
+          padding: 10px 12px;
+        }
+        .delivery-card .d-header h5 {
+          font-size: 12px;
+        }
+        .delivery-card p {
+          font-size: 11px;
+        }
+
+        .review-card .r-grid {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+        .review-card .r-item {
+          padding: 6px 8px;
+        }
+        .review-card .r-item .value {
+          font-size: 11px;
+        }
+
+        .payment-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+        }
+        .payment-option {
+          padding: 8px 6px;
+        }
+        .payment-option .p-name {
+          font-size: 11px;
+        }
+        .payment-option .p-sub {
+          font-size: 8px;
+        }
+
+        .pricing-total .total-amount {
+          font-size: 17px;
+        }
+
+        .form-actions-land .btn-continue,
+        .form-actions-land .btn-submit {
+          padding: 8px 16px;
+          font-size: 12px;
+        }
+        .form-actions-land .btn-back {
+          font-size: 12px;
+          padding: 6px 2px;
+        }
+
+        .land-hero {
+          padding: 28px 16px 24px;
+        }
+        .land-hero h1 {
+          font-size: 22px;
+        }
+        .land-hero p {
+          font-size: 13px;
+        }
+        .land-hero .hero-actions .btn-primary,
+        .land-hero .hero-actions .btn-outline-light {
+          padding: 10px 18px;
+          font-size: 12px;
+          width: 100%;
+          justify-content: center;
+        }
+        .land-hero .hero-actions {
+          flex-direction: column;
+        }
+
+        .verification-form {
+          padding: 16px 14px 20px;
+          margin: 20px 0 24px;
+        }
+        .verification-form .form-title {
+          font-size: 17px;
+        }
+        .verification-form .form-subtitle {
+          font-size: 12px;
+        }
+
+        .process-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+        }
+        .process-card {
+          padding: 14px 12px;
+        }
+        .process-card .step-num {
+          width: 30px;
+          height: 30px;
+          font-size: 13px;
+          line-height: 30px;
+          margin-bottom: 6px;
+        }
+        .process-card h4 {
+          font-size: 13px;
+        }
+        .process-card p {
+          font-size: 12px;
+        }
+        .process-section .process-title {
+          font-size: 20px;
+        }
+        .process-section .process-sub {
+          font-size: 12px;
+          margin-bottom: 18px;
+        }
+
+        .trust-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        .trust-card {
+          padding: 16px 14px;
+        }
+        .trust-card .trust-icon {
+          width: 44px;
+          height: 44px;
+          font-size: 20px;
+        }
+        .trust-card h4 {
+          font-size: 14px;
+        }
+        .trust-card p {
+          font-size: 12px;
+        }
+
+        .file-upload-area {
+          padding: 14px;
+        }
+        .file-upload-area .icon {
+          font-size: 24px;
+        }
+        .file-upload-area p {
+          font-size: 11px;
+        }
+      }
+
+      /* --- Utility --- */
+      .land-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+      @media (min-width: 600px) {
+        .land-page {
+          padding: 0 24px;
+        }
+      }
+      @media (min-width: 992px) {
+        .land-page {
+          padding: 0 32px;
+        }
+      }
+
+      .main-content {
+        padding: 16px 0 24px;
+      }
+      @media (min-width: 600px) {
+        .main-content {
+          padding: 20px 0 32px;
+        }
+      }
+      @media (min-width: 992px) {
+        .main-content {
+          padding: 28px 0 40px;
+        }
+      }
+    </style>
+  </head>
+  <body data-page="land" data-requires-auth="0">
+    <div id="navbarPlaceholder"></div>
+
+    <main class="main-content">
+      <div class="land-page">
+        <!-- ============================================================
+           HERO SECTION
+      ============================================================ -->
+        <div class="land-hero">
+          <div class="hero-pattern"></div>
+          <div class="hero-badge">✦ Property Law Services</div>
+          <h1>
+            Land &amp; Property <span class="gold">Title Verification</span>
+          </h1>
+          <p>
+            Verify CS, SA, RS, BS Khatian records, mutation status, and deed
+            authenticity with verified Advocates across Bangladesh. Protect your
+            investment with legally binding due diligence.
+          </p>
+          <div class="hero-actions">
+            <a href="#verification-form" class="btn-primary">
+              Start Verification Request <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#process-section" class="btn-outline-light">
+              <i class="fas fa-info-circle"></i> How It Works
+            </a>
+          </div>
+          <div class="hero-stats">
+            <span class="stat-icon"><i class="fas fa-file-alt"></i></span>
+            <span class="stat-num">500+</span>
+            <span class="stat-label"
+              >Properties verified<br />by our advocates</span
+            >
+          </div>
+        </div>
+
+        <!-- ============================================================
+           VERIFICATION FORM
+      ============================================================ -->
+        <div class="verification-form" id="verification-form">
+          <div class="form-title">
+            Property <span class="gold">Verification</span>
+          </div>
+          <div class="form-subtitle">
+            Enter property details to begin the verification process.
+          </div>
+
+          <!-- Stepper -->
+          <div class="form-stepper-land">
+            <div class="step-item">
+              <div class="step-dot active" data-step="1"><span>1</span></div>
+              <span class="step-label active">Property Details</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item">
+              <div class="step-dot" data-step="2"><span>2</span></div>
+              <span class="step-label">Ownership &amp; Docs</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item">
+              <div class="step-dot" data-step="3"><span>3</span></div>
+              <span class="step-label">Verification Scope</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step-item">
+              <div class="step-dot" data-step="4"><span>4</span></div>
+              <span class="step-label">Review &amp; Submit</span>
+            </div>
+          </div>
+
+          <!-- ============================================================
+           STEP 1: PROPERTY DETAILS
+        ============================================================ -->
+          <div class="step-panel-land active" data-panel="1">
+            <form id="step1FormLand">
+              <div class="form-fields-land">
+                <div class="field-row-land">
+                  <div class="field-group-land">
+                    <label
+                      >Division
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ বিভাগ</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <select id="division" required>
+                      <option value="">Select Division</option>
+                      <option>Dhaka</option>
+                      <option>Chittagong</option>
+                      <option>Rajshahi</option>
+                      <option>Khulna</option>
+                      <option>Barishal</option>
+                      <option>Sylhet</option>
+                      <option>Rangpur</option>
+                      <option>Mymensingh</option>
+                    </select>
+                  </div>
+                  <div class="field-group-land">
+                    <label
+                      >District
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ জেলা</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <select id="district" required>
+                      <option value="">Select District</option>
+                      <option>Dhaka</option>
+                      <option>Gazipur</option>
+                      <option>Narayanganj</option>
+                      <option>Munshiganj</option>
+                      <option>Manikganj</option>
+                      <option>Narsingdi</option>
+                      <option>Tangail</option>
+                      <option>Kishoreganj</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-row-land">
+                  <div class="field-group-land">
+                    <label
+                      >Upazila
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ উপজেলা</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="upazila"
+                      placeholder="e.g. Kaliakair"
+                      required
+                    />
+                  </div>
+                  <div class="field-group-land">
+                    <label
+                      >Mouza
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ মৌজা</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="mouza"
+                      placeholder="e.g. Borichala"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="field-row-land">
+                  <div class="field-group-land">
+                    <label
+                      >Khatiyan No.
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ খতিয়ান নং</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="khatiyan"
+                      placeholder="e.g. 1245"
+                      required
+                    />
+                  </div>
+                  <div class="field-group-land">
+                    <label
+                      >Dag No.
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ দাগ নং</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="dag"
+                      placeholder="e.g. 89"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions-land">
+                <span></span>
+                <button type="button" class="btn-continue next-step-land">
+                  Next Step <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ============================================================
+           STEP 2: OWNERSHIP & DOCUMENTS
+        ============================================================ -->
+          <div class="step-panel-land" data-panel="2">
+            <form id="step2FormLand">
+              <div class="form-fields-land">
+                <!-- Ownership Details -->
+                <div class="field-row-land">
+                  <div class="field-group-land">
+                    <label
+                      >Primary Owner Name
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ মালিকের নাম</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="ownerName"
+                      placeholder="e.g. Md. Kamrul Hasan"
+                      required
+                    />
+                  </div>
+                  <div class="field-group-land">
+                    <label
+                      >Father / Husband Name
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ পিতা বা স্বামীর নাম</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="fatherName"
+                      placeholder="e.g. Late Rafiqul Islam"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="field-row-land">
+                  <div class="field-group-land">
+                    <label
+                      >Owner NID Number
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ জাতীয় পরিচয়পত্র নং</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="nidNumber"
+                      placeholder="e.g. 19842691234567890"
+                      required
+                    />
+                  </div>
+                  <div class="field-group-land">
+                    <label
+                      >Your Relationship to Owner
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ আবেদনকারীর সম্পর্ক</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <select id="relationship" required>
+                      <option value="">Select Relationship</option>
+                      <option value="Prospective Buyer / সম্ভাব্য ক্রেতা">
+                        Prospective Buyer / সম্ভাব্য ক্রেতা
+                      </option>
+                      <option value="Self / নিজে">Self / নিজে</option>
+                      <option value="Legal Heir / ওয়ারিশ">
+                        Legal Heir / ওয়ারিশ
+                      </option>
+                      <option
+                        value="Authorized Representative / ক্ষমতাপ্রাপ্ত প্রতিনিধি"
+                      >
+                        Authorized Representative / ক্ষমতাপ্রাপ্ত প্রতিনিধি
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Document Upload Section -->
+                <div
+                  style="
+                    border-top: 1px solid var(--border);
+                    padding-top: 16px;
+                    margin-top: 4px;
+                  "
+                >
+                  <h4
+                    style="
+                      font-size: 15px;
+                      font-weight: 700;
+                      color: var(--navy);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    Required Document Uploads
+                    <span
+                      style="
+                        font-weight: 400;
+                        color: var(--slate);
+                        font-size: 13px;
+                      "
+                      >/ প্রয়োজনীয় ডকুমেন্ট আপলোড</span
+                    >
+                  </h4>
+                  <p
+                    style="
+                      font-size: 12px;
+                      color: var(--slate);
+                      margin-bottom: 12px;
+                    "
+                  >
+                    Upload clear photocopies or digital scanned copies (PDF,
+                    JPG, PNG up to 15MB each).
+                  </p>
+                </div>
+
+                <!-- Khatian & Porcha Copy -->
+                <div
+                  style="
+                    border: 2px solid var(--border);
+                    border-radius: 12px;
+                    padding: 16px 18px;
+                    background: #f8fafc;
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: flex-start;
+                      flex-wrap: wrap;
+                      gap: 8px;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <div>
+                      <h5
+                        style="
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: var(--navy);
+                        "
+                      >
+                        Khatian &amp; Porcha Copy
+                        <span
+                          style="
+                            background: rgba(239, 68, 68, 0.1);
+                            color: #b91c1c;
+                            font-size: 9px;
+                            font-weight: 700;
+                            padding: 2px 10px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                            margin-left: 6px;
+                          "
+                          >Compulsory</span
+                        >
+                      </h5>
+                      <p style="font-size: 11px; color: var(--slate)">
+                        খতিয়ান ও পর্চা (CS, SA, RS, or BS copy)
+                      </p>
+                    </div>
+                    <i
+                      class="fas fa-file-alt"
+                      style="color: var(--gold); font-size: 20px"
+                    ></i>
+                  </div>
+                  <div id="khatianFileContainer">
+                    <div
+                      style="
+                        background: #fff;
+                        border: 1px solid var(--border);
+                        border-radius: 8px;
+                        padding: 10px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        flex-wrap: wrap;
+                        gap: 8px;
+                      "
+                    >
+                      <div
+                        style="display: flex; align-items: center; gap: 10px"
+                      >
+                        <i
+                          class="fas fa-check-circle"
+                          style="color: #10b981"
+                        ></i>
+                        <div>
+                          <p
+                            style="
+                              font-size: 12px;
+                              font-weight: 600;
+                              color: var(--navy);
+                            "
+                            id="khatianFileName"
+                          >
+                            BS_Khatian_Demra_1245.pdf
+                          </p>
+                          <p
+                            style="font-size: 10px; color: var(--slate)"
+                            id="khatianFileSize"
+                          >
+                            2.4 MB • Uploaded
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        class="remove-file"
+                        style="
+                          background: none;
+                          border: none;
+                          color: var(--slate);
+                          cursor: pointer;
+                        "
+                        onclick="removeFile('khatian')"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="file-upload-area"
+                    style="margin-top: 8px"
+                    onclick="
+                      document.getElementById('khatianFileInput').click()
+                    "
+                  >
+                    <span class="icon"
+                      ><i class="fas fa-cloud-upload-alt"></i
+                    ></span>
+                    <p>Click to upload or drag &amp; drop</p>
+                    <span class="sub">PDF, JPG, PNG up to 15MB</span>
+                    <input
+                      type="file"
+                      id="khatianFileInput"
+                      accept=".pdf,.jpg,.png"
+                      onchange="handleFileUpload('khatian', this)"
+                    />
+                  </div>
+                </div>
+
+                <!-- Registered Title Deed -->
+                <div
+                  style="
+                    border: 2px solid var(--border);
+                    border-radius: 12px;
+                    padding: 16px 18px;
+                    background: #f8fafc;
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: flex-start;
+                      flex-wrap: wrap;
+                      gap: 8px;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <div>
+                      <h5
+                        style="
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: var(--navy);
+                        "
+                      >
+                        Registered Title Deed
+                        <span
+                          style="
+                            background: rgba(239, 68, 68, 0.1);
+                            color: #b91c1c;
+                            font-size: 9px;
+                            font-weight: 700;
+                            padding: 2px 10px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                            margin-left: 6px;
+                          "
+                          >Compulsory</span
+                        >
+                      </h5>
+                      <p style="font-size: 11px; color: var(--slate)">
+                        বায়া দলিল বা মূল রেজিস্ট্রি দলিল (Certified Deed)
+                      </p>
+                    </div>
+                    <i
+                      class="fas fa-folder-open"
+                      style="color: var(--gold); font-size: 20px"
+                    ></i>
+                  </div>
+                  <div id="deedFileContainer">
+                    <div
+                      style="
+                        background: #fff;
+                        border: 1px solid var(--border);
+                        border-radius: 8px;
+                        padding: 10px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        flex-wrap: wrap;
+                        gap: 8px;
+                      "
+                    >
+                      <div
+                        style="display: flex; align-items: center; gap: 10px"
+                      >
+                        <i
+                          class="fas fa-check-circle"
+                          style="color: #10b981"
+                        ></i>
+                        <div>
+                          <p
+                            style="
+                              font-size: 12px;
+                              font-weight: 600;
+                              color: var(--navy);
+                            "
+                            id="deedFileName"
+                          >
+                            Registered_Deed_4018.pdf
+                          </p>
+                          <p
+                            style="font-size: 10px; color: var(--slate)"
+                            id="deedFileSize"
+                          >
+                            4.1 MB • Uploaded
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        class="remove-file"
+                        style="
+                          background: none;
+                          border: none;
+                          color: var(--slate);
+                          cursor: pointer;
+                        "
+                        onclick="removeFile('deed')"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="file-upload-area"
+                    style="margin-top: 8px"
+                    onclick="document.getElementById('deedFileInput').click()"
+                  >
+                    <span class="icon"
+                      ><i class="fas fa-cloud-upload-alt"></i
+                    ></span>
+                    <p>Click to upload or drag &amp; drop</p>
+                    <span class="sub">PDF, JPG, PNG up to 15MB</span>
+                    <input
+                      type="file"
+                      id="deedFileInput"
+                      accept=".pdf,.jpg,.png"
+                      onchange="handleFileUpload('deed', this)"
+                    />
+                  </div>
+                </div>
+
+                <!-- DCR / Tax Receipt (Optional) -->
+                <div
+                  style="
+                    border: 2px dashed var(--border);
+                    border-radius: 12px;
+                    padding: 16px 18px;
+                    background: #f8fafc;
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      flex-wrap: wrap;
+                      align-items: center;
+                      justify-content: space-between;
+                      gap: 12px;
+                    "
+                  >
+                    <div>
+                      <h5
+                        style="
+                          font-size: 13px;
+                          font-weight: 700;
+                          color: var(--navy);
+                        "
+                      >
+                        Duplicate Carbon Receipt (DCR) / খাজনা দাখিলা
+                        <span
+                          style="
+                            background: var(--border);
+                            color: var(--slate);
+                            font-size: 9px;
+                            font-weight: 600;
+                            padding: 2px 10px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                            margin-left: 6px;
+                          "
+                          >Optional</span
+                        >
+                      </h5>
+                      <p style="font-size: 11px; color: var(--slate)">
+                        Mutation DCR copy &amp; latest Land Development Tax
+                        receipt (up-to-date খাজনা রশিদ)
+                      </p>
+                    </div>
+                    <div
+                      onclick="document.getElementById('dcrFileInput').click()"
+                      style="
+                        border: 1.5px solid var(--gold);
+                        background: #fff;
+                        color: var(--gold-dark);
+                        padding: 8px 18px;
+                        border-radius: 8px;
+                        font-size: 12px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                      "
+                    >
+                      <i class="fas fa-cloud-upload-alt"></i> Browse DCR / Tax
+                      Receipt
+                    </div>
+                    <input
+                      type="file"
+                      id="dcrFileInput"
+                      accept=".pdf,.jpg,.png"
+                      style="display: none"
+                      onchange="handleFileUpload('dcr', this)"
+                    />
+                  </div>
+                  <div
+                    id="dcrFileContainer"
+                    style="margin-top: 8px; display: none"
+                  >
+                    <div
+                      style="
+                        background: #fff;
+                        border: 1px solid var(--border);
+                        border-radius: 8px;
+                        padding: 10px 14px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        flex-wrap: wrap;
+                        gap: 8px;
+                      "
+                    >
+                      <div
+                        style="display: flex; align-items: center; gap: 10px"
+                      >
+                        <i
+                          class="fas fa-check-circle"
+                          style="color: #10b981"
+                        ></i>
+                        <div>
+                          <p
+                            style="
+                              font-size: 12px;
+                              font-weight: 600;
+                              color: var(--navy);
+                            "
+                            id="dcrFileName"
+                          >
+                            -
+                          </p>
+                          <p
+                            style="font-size: 10px; color: var(--slate)"
+                            id="dcrFileSize"
+                          >
+                            -
+                          </p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        class="remove-file"
+                        style="
+                          background: none;
+                          border: none;
+                          color: var(--slate);
+                          cursor: pointer;
+                        "
+                        onclick="removeFile('dcr')"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions-land">
+                <button type="button" class="btn-back prev-step-land">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn-continue next-step-land">
+                  Next Step <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ============================================================
+           STEP 3: VERIFICATION SCOPE
+        ============================================================ -->
+          <div class="step-panel-land" data-panel="3">
+            <form id="step3FormLand">
+              <div class="form-fields-land">
+                <!-- Verification Scope Section -->
+                <div
+                  style="
+                    border-bottom: 1px solid var(--border);
+                    padding-bottom: 14px;
+                    margin-bottom: 14px;
+                  "
+                >
+                  <h3
+                    style="
+                      font-size: 16px;
+                      font-weight: 700;
+                      color: var(--navy);
+                      margin-bottom: 2px;
+                    "
+                  >
+                    Verification Scope &amp; Delivery Mode
+                  </h3>
+                  <p style="font-size: 13px; color: var(--slate)">
+                    Select legal audit parameters and consultation format for
+                    this verification.
+                  </p>
+                </div>
+
+                <!-- Due Diligence Packages -->
+                <div>
+                  <h4
+                    style="
+                      font-size: 14px;
+                      font-weight: 700;
+                      color: var(--navy);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    Select Due Diligence Packages &amp; Checks
+                    <span
+                      style="
+                        font-weight: 400;
+                        color: var(--slate);
+                        font-size: 13px;
+                      "
+                      >/ যাচাইকরণ প্যাকেজ নির্বাচন করুন</span
+                    >
+                  </h4>
+                  <p
+                    style="
+                      font-size: 12px;
+                      color: var(--slate);
+                      margin-bottom: 12px;
+                    "
+                  >
+                    Multi-select available for customized legal audit tailored
+                    to your property risk profile.
+                  </p>
+                </div>
+
+                <!-- Option 1: Title Chain -->
+                <div class="service-option-card selected">
+                  <div
+                    style="display: flex; align-items: flex-start; gap: 12px"
+                  >
+                    <input
+                      type="checkbox"
+                      class="service-check"
+                      checked
+                      data-service="Title Chain &amp; CS-to-BS Record Tracing"
+                    />
+                    <div style="flex: 1">
+                      <div class="s-header">
+                        <h5>
+                          Title Chain &amp; CS-to-BS Record Tracing
+                          <span
+                            style="
+                              font-weight: 400;
+                              font-size: 10px;
+                              color: var(--slate);
+                            "
+                            >/ মালিকানার ইতিহাস</span
+                          >
+                        </h5>
+                        <span class="badge recommended">Recommended</span>
+                        <span
+                          style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--gold-dark);
+                          "
+                          >Included</span
+                        >
+                      </div>
+                      <p>
+                        Comprehensive genealogical audit from historic CS, SA,
+                        RS up to current City/BS records with chain deed
+                        cross-matching.
+                      </p>
+                      <div class="s-tags">
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          CS/SA/RS/BS Khatians</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Certified Deed Registry</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Heirship Genealogy</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Option 2: Encumbrance -->
+                <div class="service-option-card selected">
+                  <div
+                    style="display: flex; align-items: flex-start; gap: 12px"
+                  >
+                    <input
+                      type="checkbox"
+                      class="service-check"
+                      checked
+                      data-service="Encumbrance &amp; Bank Lien Verification"
+                    />
+                    <div style="flex: 1">
+                      <div class="s-header">
+                        <h5>
+                          Encumbrance &amp; Bank Lien Verification
+                          <span
+                            style="
+                              font-weight: 400;
+                              font-size: 10px;
+                              color: var(--slate);
+                            "
+                            >/ বাধা ও ব্যাংক ঋণ যাচাই</span
+                          >
+                        </h5>
+                        <span class="badge essential">Essential</span>
+                        <span
+                          style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--gold-dark);
+                          "
+                          >Included</span
+                        >
+                      </div>
+                      <p>
+                        Sub-registry search to verify Nil Encumbrance
+                        Certificate (NEC), ensure no active mortgages, bank
+                        liens, or court attachments.
+                      </p>
+                      <div class="s-tags">
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Sub-Registry 12-Year Search</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          CIB &amp; Bank Mortgage Clearance</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Nil Encumbrance Certificate</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Option 3: Mutation & DCR -->
+                <div class="service-option-card selected">
+                  <div
+                    style="display: flex; align-items: flex-start; gap: 12px"
+                  >
+                    <input
+                      type="checkbox"
+                      class="service-check"
+                      checked
+                      data-service="AC Land Mutation &amp; DCR Status Check"
+                    />
+                    <div style="flex: 1">
+                      <div class="s-header">
+                        <h5>
+                          AC Land Mutation &amp; DCR Status Check
+                          <span
+                            style="
+                              font-weight: 400;
+                              font-size: 10px;
+                              color: var(--slate);
+                            "
+                            >/ মিউটেশন ও ডিসিআর যাচাই</span
+                          >
+                        </h5>
+                        <span
+                          style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--gold-dark);
+                          "
+                          >Included</span
+                        >
+                      </div>
+                      <p>
+                        Direct verification of digital e-Namjari ledger,
+                        Duplicate Carbon Receipt (DCR), holding registration
+                        validity, and up-to-date land tax (Khajna).
+                      </p>
+                      <div class="s-tags">
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Assistant Commissioner (Land) Record</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Online e-Namjari Ledger</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-check-circle"
+                            style="color: #10b981"
+                          ></i>
+                          Latest Khajna Dakhila</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Option 4: Physical Inspection (Optional) -->
+                <div
+                  class="service-option-card"
+                  style="border-color: var(--border)"
+                >
+                  <div
+                    style="display: flex; align-items: flex-start; gap: 12px"
+                  >
+                    <input
+                      type="checkbox"
+                      class="service-check physical-inspection"
+                      data-service="Physical Boundary &amp; Mouza Map Inspection"
+                    />
+                    <div style="flex: 1">
+                      <div class="s-header">
+                        <h5>
+                          Physical Boundary &amp; Mouza Map Inspection
+                          <span
+                            style="
+                              font-weight: 400;
+                              font-size: 10px;
+                              color: var(--slate);
+                            "
+                            >/ ভৌত সীমানা জরিপ</span
+                          >
+                        </h5>
+                        <span
+                          style="
+                            background: var(--border);
+                            color: var(--slate);
+                            font-size: 9px;
+                            font-weight: 700;
+                            padding: 2px 10px;
+                            border-radius: 20px;
+                            text-transform: uppercase;
+                          "
+                          >Optional</span
+                        >
+                        <span
+                          style="
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--gold-dark);
+                          "
+                          >+ BDT 4,500</span
+                        >
+                      </div>
+                      <p>
+                        On-ground spot check against Amin cadastral survey map
+                        to verify plot demarcations, road frontage clearances,
+                        and local easement conflicts.
+                      </p>
+                      <div class="s-tags">
+                        <span
+                          ><i
+                            class="fas fa-map"
+                            style="color: var(--slate)"
+                          ></i>
+                          Mouza Cadastral Sheet</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-location-dot"
+                            style="color: var(--slate)"
+                          ></i>
+                          Physical Plot Dimensions</span
+                        >
+                        <span
+                          ><i
+                            class="fas fa-share"
+                            style="color: var(--slate)"
+                          ></i>
+                          Right-of-Way &amp; Easements</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Delivery & Advisory Format -->
+                <div
+                  style="
+                    border-top: 1px solid var(--border);
+                    padding-top: 16px;
+                    margin-top: 8px;
+                  "
+                >
+                  <h4
+                    style="
+                      font-size: 14px;
+                      font-weight: 700;
+                      color: var(--navy);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    Delivery &amp; Advisory Format
+                    <span
+                      style="
+                        font-weight: 400;
+                        color: var(--slate);
+                        font-size: 13px;
+                      "
+                      >/ ডেলিভারি ও পরামর্শ ফরম্যাট</span
+                    >
+                  </h4>
+                  <p
+                    style="
+                      font-size: 12px;
+                      color: var(--slate);
+                      margin-bottom: 12px;
+                    "
+                  >
+                    Choose how you want to receive legal insights and interact
+                    with the reviewing advocate.
+                  </p>
+                </div>
+
+                <!-- Delivery Option 1: PDF Report -->
+                <div class="delivery-card selected">
+                  <div
+                    style="display: flex; align-items: flex-start; gap: 12px"
+                  >
+                    <input
+                      type="radio"
+                      name="delivery_mode"
+                      class="delivery-radio"
+                      checked
+                      value="Certified Written Report (PDF)"
+                    />
+                    <div style="flex: 1">
+                      <div class="d-header">
+                        <h5>
+                          Certified Written Report (PDF)
+                          <span class="bangla">/ প্রতিবেদন পিডিএফ</span>
+                        </h5>
+                        <i class="fas fa-file-alt"></i>
+                      </div>
+                      <p>
+                        Digitally signed, Bar Council advocate-vetted legal
+                        opinion certificate with color-coded risk assessment
+                        matrix. Delivered in 48-72 hours.
+                      </p>
+                      <div class="d-meta" style="color: #10b981">
+                        <i class="fas fa-bolt"></i> Standard Turnaround (48-72h)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Delivery Option 2: Report + Video Consultation -->
+                <div class="delivery-card">
+                  <div
+                    style="display: flex; align-items: flex-start; gap: 12px"
+                  >
+                    <input
+                      type="radio"
+                      name="delivery_mode"
+                      class="delivery-radio"
+                      value="Report + 30-Min Video Consultation"
+                    />
+                    <div style="flex: 1">
+                      <div class="d-header">
+                        <h5>
+                          Report + 30-Min Video Consultation
+                          <span class="bangla"
+                            >/ প্রতিবেদন + ভিডিও পরামর্শ</span
+                          >
+                        </h5>
+                        <i class="fas fa-video"></i>
+                      </div>
+                      <p>
+                        Full written legal report plus direct 1-on-1 virtual
+                        conference with a Supreme Court advocate for deed
+                        queries and negotiation strategy.
+                      </p>
+                      <div class="d-meta" style="color: var(--gold-dark)">
+                        <i class="fas fa-plus-circle"></i> + 30 Mins Virtual
+                        Advisory
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Additional Notes -->
+                <div
+                  style="
+                    border-top: 1px solid var(--border);
+                    padding-top: 14px;
+                    margin-top: 8px;
+                  "
+                >
+                  <div class="field-group-land">
+                    <label
+                      >Specific Concerns or Disputed History
+                      <span class="optional">(Optional)</span>
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ বিশেষ উদ্বেগ বা বিরোধপূর্ণ ইতিহাস</span
+                      >
+                    </label>
+                    <textarea
+                      id="additionalNotes"
+                      rows="3"
+                      placeholder="e.g. Any known boundary disputes, inheritance complexities, power-of-attorney details, or prior civil court suits..."
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-actions-land">
+                <button type="button" class="btn-back prev-step-land">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn-continue next-step-land">
+                  Next Step <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- ============================================================
+           STEP 4: REVIEW & SUBMIT (Dynamic Pricing)
+        ============================================================ -->
+          <div class="step-panel-land" data-panel="4">
+            <form id="step4FormLand">
+              <div class="form-fields-land">
+                <!-- Review Section -->
+                <div
+                  style="
+                    border-bottom: 1px solid var(--border);
+                    padding-bottom: 10px;
+                    margin-bottom: 14px;
+                  "
+                >
+                  <h3
+                    style="
+                      font-size: 16px;
+                      font-weight: 700;
+                      color: var(--navy);
+                    "
+                  >
+                    Review &amp; Submission
+                  </h3>
+                  <p style="font-size: 13px; color: var(--slate)">
+                    Step 4 of 4: Review Details &amp; Confirm Submission
+                  </p>
+                </div>
+
+                <!-- Property & Location Record -->
+                <div class="review-card">
+                  <div class="r-header">
+                    <h4>
+                      <i class="fas fa-home"></i> Property &amp; Location Record
+                    </h4>
+                    <button
+                      type="button"
+                      class="edit-btn"
+                      onclick="goToStep(1)"
+                    >
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                  </div>
+                  <div class="r-grid">
+                    <div class="r-item">
+                      <div class="label">Location &amp; Mouza</div>
+                      <div class="value" id="reviewLocation">—</div>
+                    </div>
+                    <div class="r-item">
+                      <div class="label">Plot &amp; Schedule Identifiers</div>
+                      <div class="value" id="reviewPlot">—</div>
+                    </div>
+                    <div class="r-item">
+                      <div class="label">Ownership Information</div>
+                      <div class="value" id="reviewOwnerInfo">—</div>
+                    </div>
+                    <div class="r-item">
+                      <div class="label">Attached Documents</div>
+                      <div
+                        class="value"
+                        id="reviewDocuments"
+                        style="font-size: 12px"
+                      >
+                        —
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Selected Verification Scope -->
+                <div class="review-card">
+                  <div class="r-header">
+                    <h4>
+                      <i class="fas fa-gavel"></i> Selected Verification Scope
+                    </h4>
+                    <span
+                      style="
+                        background: rgba(197, 160, 89, 0.15);
+                        color: var(--gold-dark);
+                        padding: 4px 14px;
+                        border-radius: 20px;
+                        font-size: 11px;
+                        font-weight: 600;
+                      "
+                      >Turnaround: 48–72 Hours</span
+                    >
+                  </div>
+                  <div class="review-tags" id="reviewServicesTags">
+                    <!-- Dynamic tags will be inserted here -->
+                  </div>
+                  <div
+                    style="
+                      background: #f8fafc;
+                      border-radius: 8px;
+                      padding: 12px 14px;
+                      margin-top: 10px;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      flex-wrap: wrap;
+                      gap: 10px;
+                    "
+                  >
+                    <div style="display: flex; align-items: center; gap: 10px">
+                      <div
+                        style="
+                          width: 36px;
+                          height: 36px;
+                          border-radius: 50%;
+                          background: var(--navy);
+                          color: #fff;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          font-weight: 700;
+                          font-size: 12px;
+                        "
+                      >
+                        SC
+                      </div>
+                      <div>
+                        <p
+                          style="
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: var(--navy);
+                          "
+                        >
+                          Supreme Court Chamber, High Court Division
+                        </p>
+                        <p style="font-size: 10px; color: var(--slate)">
+                          Assigned Empanelled Council &amp; Certified Land
+                          Specialists
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      style="font-size: 11px; font-weight: 600; color: #10b981"
+                      ><i class="fas fa-check-circle"></i> Bar Council
+                      Verified</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Pricing & Payment -->
+                <div
+                  style="display: grid; grid-template-columns: 1fr; gap: 14px"
+                >
+                  <!-- Pricing -->
+                  <div class="review-card">
+                    <div class="r-header">
+                      <h4>
+                        <i class="fas fa-receipt"></i> Pricing &amp; Statutory
+                        Fee Breakdown
+                      </h4>
+                    </div>
+                    <div id="pricingContainer">
+                      <div class="pricing-row">
+                        <span class="label"
+                          >Supreme Court Chamber Title Audit Fee</span
+                        ><span class="amount">৳ 4,500</span>
+                      </div>
+                      <div class="pricing-row">
+                        <span class="label"
+                          >District Sub-Registry &amp; Tahsil Search
+                          Filing</span
+                        ><span class="amount">৳ 1,000</span>
+                      </div>
+                      <div class="pricing-row">
+                        <span class="label"
+                          >Digital Secure Vault &amp; Certified Advocate
+                          Seal</span
+                        ><span class="amount">৳ 500</span>
+                      </div>
+                      <div
+                        id="physicalInspectionRow"
+                        class="pricing-row"
+                        style="display: none"
+                      >
+                        <span class="label"
+                          >Physical Boundary &amp; Mouza Map Inspection</span
+                        >
+                        <span class="amount">+ ৳ 4,500</span>
+                      </div>
+                      <div class="pricing-total">
+                        <span class="total-label">Total Payable</span>
+                        <div style="text-align: right">
+                          <span class="total-amount" id="totalAmount"
+                            >৳ 6,000</span
+                          >
+                          <span class="total-sub"
+                            >Includes statutory fees &amp; VAT</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Payment Gateway -->
+                  <div class="review-card">
+                    <div class="r-header">
+                      <h4>
+                        <i class="fas fa-wallet"></i> Select Payment Gateway
+                      </h4>
+                    </div>
+                    <div class="payment-grid">
+                      <div
+                        class="payment-option selected"
+                        onclick="selectPayment(this)"
+                      >
+                        <input
+                          type="radio"
+                          name="payment_gateway"
+                          value="bKash"
+                          checked
+                        />
+                        <div class="p-name">bKash</div>
+                        <div class="p-sub">Mobile Wallet</div>
+                        <div class="p-check">
+                          <i class="fas fa-check-circle"></i> Selected
+                        </div>
+                      </div>
+                      <div class="payment-option" onclick="selectPayment(this)">
+                        <input
+                          type="radio"
+                          name="payment_gateway"
+                          value="Nagad"
+                        />
+                        <div class="p-name">Nagad</div>
+                        <div class="p-sub">Instant Pay</div>
+                        <div class="p-check">
+                          <i class="fas fa-check-circle"></i> Selected
+                        </div>
+                      </div>
+                      <div class="payment-option" onclick="selectPayment(this)">
+                        <input
+                          type="radio"
+                          name="payment_gateway"
+                          value="Card"
+                        />
+                        <div class="p-name">
+                          <i class="fas fa-credit-card"></i> Card / Debit
+                        </div>
+                        <div class="p-sub">Visa / Mastercard</div>
+                        <div class="p-check">
+                          <i class="fas fa-check-circle"></i> Selected
+                        </div>
+                      </div>
+                      <div class="payment-option" onclick="selectPayment(this)">
+                        <input
+                          type="radio"
+                          name="payment_gateway"
+                          value="Bank Transfer"
+                        />
+                        <div class="p-name">
+                          <i class="fas fa-university"></i> Bank Transfer
+                        </div>
+                        <div class="p-sub">BEFTN / NPSB</div>
+                        <div class="p-check">
+                          <i class="fas fa-check-circle"></i> Selected
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Declaration -->
+                <div class="field-group-land">
+                  <label
+                    style="
+                      display: flex;
+                      align-items: flex-start;
+                      gap: 10px;
+                      font-weight: 400;
+                      cursor: pointer;
+                      font-size: 13px;
+                    "
+                  >
+                    <input
+                      type="checkbox"
+                      id="declarationLand"
+                      style="
+                        width: 18px;
+                        height: 18px;
+                        accent-color: var(--gold);
+                        margin-top: 2px;
+                        flex-shrink: 0;
+                      "
+                      required
+                    />
+                    <span style="line-height: 1.6"
+                      >I hereby solemnly declare that all provided land schedule
+                      parameters, plot numbers, and copies of registered title
+                      instruments are genuine and accurate to the best of my
+                      knowledge. I authorize JustiFi empanelled Advocates to
+                      inspect records from relevant District Sub-Registry and
+                      DLRS.</span
+                    >
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-actions-land">
+                <button type="button" class="btn-back prev-step-land">
+                  <i class="fas fa-arrow-left"></i> Back
+                </button>
+                <button type="submit" class="btn-submit" id="submitButton">
+                  <i class="fas fa-lock"></i> Confirm &amp; Pay
+                  <span id="submitTotal">৳ 6,000</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Success Message -->
+          <div class="success-message" id="successMessageLand">
+            <div class="success-icon">✅</div>
+            <h3>Verification Request Submitted!</h3>
+            <p>
+              Thank you! A property law specialist will review your details and
+              contact you within 24 hours.
+            </p>
+          </div>
+        </div>
+
+        <!-- ============================================================
+           STREAMLINED VERIFICATION PROCESS
+      ============================================================ -->
+        <section class="process-section" id="process-section">
+          <h2 class="process-title">
+            A Streamlined <span class="gold">Verification Process</span>
+          </h2>
+          <p class="process-sub">
+            From document submission to expert legal opinion, we handle the
+            complexities of land office bureaucracy for you.
+          </p>
+
+          <div class="process-grid">
+            <div class="process-card">
+              <div class="step-num">1</div>
+              <h4>Submit Details</h4>
+              <p>
+                Provide plot numbers, location, and owner information through
+                our secure form.
+              </p>
+            </div>
+            <div class="process-card">
+              <div class="step-num">2</div>
+              <h4>Upload Docs</h4>
+              <p>
+                Upload scanned copies of Khatians, Deeds, and Mutation
+                certificates.
+              </p>
+            </div>
+            <div class="process-card">
+              <div class="step-num">3</div>
+              <h4>Advocate Review</h4>
+              <p>
+                An expert land lawyer cross-references records with physical
+                land office data.
+              </p>
+            </div>
+            <div class="process-card">
+              <div class="step-num">4</div>
+              <h4>Detailed Report</h4>
+              <p>
+                Receive a certified digital report and legal opinion on the
+                property's validity.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+           TRUST BADGES SECTION
+      ============================================================ -->
+        <section class="trust-section">
+          <div class="trust-grid">
+            <div class="trust-card">
+              <div class="trust-icon"><i class="fas fa-gavel"></i></div>
+              <h4>Supreme Court Advocates</h4>
+              <p>
+                All verifications are performed by licensed land-specialist
+                advocates with verified bar council IDs.
+              </p>
+            </div>
+            <div class="trust-card">
+              <div class="trust-icon"><i class="fas fa-sitemap"></i></div>
+              <h4>Khatian Chain Analysis</h4>
+              <p>
+                We don't just check the current status; we trace the entire
+                ownership history from CS to the latest BS records.
+              </p>
+            </div>
+            <div class="trust-card">
+              <div class="trust-icon"><i class="fas fa-lock"></i></div>
+              <h4>Confidential Handling</h4>
+              <p>
+                Your property documents are handled with extreme confidentiality
+                and stored in an encrypted secure vault.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div id="footerPlaceholder"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/partials.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        // --- DOM refs ---
+        var dots = document.querySelectorAll(".form-stepper-land .step-dot");
+        var lines = document.querySelectorAll(".form-stepper-land .step-line");
+        var labels = document.querySelectorAll(
+          ".form-stepper-land .step-label",
+        );
+        var panels = document.querySelectorAll(".step-panel-land");
+        var currentStep = 1;
+
+        // --- File upload tracking ---
+        var uploadedFiles = {
+          khatian: { name: "BS_Khatian_Demra_1245.pdf", size: "2.4 MB" },
+          deed: { name: "Registered_Deed_4018.pdf", size: "4.1 MB" },
+          dcr: null,
+        };
+
+        // --- Base price ---
+        var BASE_PRICE = 6000;
+        var PHYSICAL_INSPECTION_PRICE = 4500;
+
+        // --- File upload handler ---
+        window.handleFileUpload = function (type, input) {
+          var file = input.files[0];
+          if (!file) return;
+
+          var fileSize = (file.size / 1024 / 1024).toFixed(1) + " MB";
+          var fileName = file.name;
+
+          uploadedFiles[type] = { name: fileName, size: fileSize };
+
+          var nameEl = document.getElementById(type + "FileName");
+          var sizeEl = document.getElementById(type + "FileSize");
+          if (nameEl) nameEl.textContent = fileName;
+          if (sizeEl) sizeEl.textContent = fileSize + " • Uploaded";
+
+          if (type === "dcr") {
+            document.getElementById("dcrFileContainer").style.display = "block";
+          }
+        };
+
+        // --- Remove file ---
+        window.removeFile = function (type) {
+          uploadedFiles[type] = null;
+
+          if (type === "khatian") {
+            document.getElementById("khatianFileName").textContent =
+              "No file uploaded";
+            document.getElementById("khatianFileSize").textContent = "—";
+            document.getElementById("khatianFileInput").value = "";
+          } else if (type === "deed") {
+            document.getElementById("deedFileName").textContent =
+              "No file uploaded";
+            document.getElementById("deedFileSize").textContent = "—";
+            document.getElementById("deedFileInput").value = "";
+          } else if (type === "dcr") {
+            document.getElementById("dcrFileName").textContent = "-";
+            document.getElementById("dcrFileSize").textContent = "-";
+            document.getElementById("dcrFileInput").value = "";
+            document.getElementById("dcrFileContainer").style.display = "none";
+          }
+        };
+
+        // --- Payment selection ---
+        window.selectPayment = function (el) {
+          document.querySelectorAll(".payment-option").forEach(function (p) {
+            p.classList.remove("selected");
+          });
+          el.classList.add("selected");
+          var radio = el.querySelector('input[type="radio"]');
+          if (radio) radio.checked = true;
+        };
+
+        // --- Update pricing based on physical inspection selection ---
+        function updatePricing() {
+          var physicalCheckbox = document.querySelector(".physical-inspection");
+          var isChecked = physicalCheckbox && physicalCheckbox.checked;
+          var physicalRow = document.getElementById("physicalInspectionRow");
+          var totalAmount = document.getElementById("totalAmount");
+          var submitTotal = document.getElementById("submitTotal");
+
+          if (isChecked) {
+            physicalRow.style.display = "flex";
+            var total = BASE_PRICE + PHYSICAL_INSPECTION_PRICE;
+            totalAmount.textContent = "৳ " + total.toLocaleString();
+            if (submitTotal)
+              submitTotal.textContent = "৳ " + total.toLocaleString();
+          } else {
+            physicalRow.style.display = "none";
+            totalAmount.textContent = "৳ " + BASE_PRICE.toLocaleString();
+            if (submitTotal)
+              submitTotal.textContent = "৳ " + BASE_PRICE.toLocaleString();
+          }
+        }
+
+        // --- Step navigation ---
+        window.goToStep = function (step) {
+          if (step < 1 || step > 4) return;
+
+          dots.forEach(function (dot, i) {
+            var num = parseInt(dot.dataset.step);
+            dot.classList.remove("active", "done");
+            if (num < step) dot.classList.add("done");
+            else if (num === step) dot.classList.add("active");
+          });
+
+          lines.forEach(function (line, i) {
+            line.classList.toggle("done", i < step - 1);
+          });
+
+          labels.forEach(function (label, i) {
+            var num = i + 1;
+            label.classList.remove("active", "done");
+            if (num < step) label.classList.add("done");
+            else if (num === step) label.classList.add("active");
+          });
+
+          panels.forEach(function (panel) {
+            panel.classList.remove("active");
+            if (parseInt(panel.dataset.panel) === step) {
+              panel.classList.add("active");
+            }
+          });
+
+          currentStep = step;
+
+          if (step === 4) {
+            updateReviewData();
+            updatePricing();
+          }
+
+          document.querySelector(".verification-form").scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        };
+
+        // --- Update review data from Steps 1, 2, 3 ---
+        function updateReviewData() {
+          var division = document.getElementById("division");
+          var district = document.getElementById("district");
+          var upazila = document.getElementById("upazila");
+          var mouza = document.getElementById("mouza");
+          var khatiyan = document.getElementById("khatiyan");
+          var dag = document.getElementById("dag");
+
+          var locationText =
+            (division && division.value ? division.value : "—") +
+            ", " +
+            (district && district.value ? district.value : "—") +
+            ", " +
+            (upazila && upazila.value ? upazila.value : "—");
+          var plotText =
+            "Khatian No. " +
+            (khatiyan && khatiyan.value ? khatiyan.value : "—") +
+            " • Dag No. " +
+            (dag && dag.value ? dag.value : "—");
+
+          document.getElementById("reviewLocation").textContent = locationText;
+          document.getElementById("reviewPlot").textContent = plotText;
+
+          var ownerName = document.getElementById("ownerName");
+          var relationship = document.getElementById("relationship");
+          var ownerInfoText =
+            ownerName && ownerName.value ? ownerName.value : "—";
+          if (relationship && relationship.value) {
+            ownerInfoText += " • " + relationship.value;
+          }
+          document.getElementById("reviewOwnerInfo").textContent =
+            ownerInfoText;
+
+          var docCount = 0;
+          var docNames = [];
+          if (uploadedFiles.khatian) {
+            docCount++;
+            docNames.push("Khatian");
+          }
+          if (uploadedFiles.deed) {
+            docCount++;
+            docNames.push("Deed");
+          }
+          if (uploadedFiles.dcr) {
+            docCount++;
+            docNames.push("DCR");
+          }
+          document.getElementById("reviewDocuments").textContent =
+            docCount + " document(s): " + docNames.join(", ") || "—";
+
+          var selectedServices = [];
+          document
+            .querySelectorAll(".service-check:checked")
+            .forEach(function (cb) {
+              selectedServices.push(cb.dataset.service);
+            });
+
+          var servicesHtml = "";
+          if (selectedServices.length > 0) {
+            selectedServices.forEach(function (s) {
+              servicesHtml +=
+                '<span><i class="fas fa-check-circle"></i> ' + s + "</span>";
+            });
+          } else {
+            servicesHtml =
+              '<span style="background:transparent; color:var(--slate);">No services selected</span>';
+          }
+          document.getElementById("reviewServicesTags").innerHTML =
+            servicesHtml;
+        }
+
+        // --- Next/Prev buttons ---
+        document.querySelectorAll(".next-step-land").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (currentStep === 4) return;
+            goToStep(currentStep + 1);
+          });
+        });
+
+        document.querySelectorAll(".prev-step-land").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            if (currentStep === 1) return;
+            goToStep(currentStep - 1);
+          });
+        });
+
+        // --- Service option card toggle ---
+        document
+          .querySelectorAll('.service-option-card input[type="checkbox"]')
+          .forEach(function (cb) {
+            cb.addEventListener("change", function () {
+              var card = this.closest(".service-option-card");
+              if (this.checked) {
+                card.classList.add("selected");
+              } else {
+                card.classList.remove("selected");
+              }
+              // Update pricing if this is the physical inspection checkbox
+              if (this.classList.contains("physical-inspection")) {
+                updatePricing();
+              }
+            });
+          });
+
+        // --- Delivery card selection ---
+        document
+          .querySelectorAll('.delivery-card input[type="radio"]')
+          .forEach(function (radio) {
+            radio.addEventListener("change", function () {
+              document.querySelectorAll(".delivery-card").forEach(function (c) {
+                c.classList.remove("selected");
+              });
+              if (this.checked) {
+                this.closest(".delivery-card").classList.add("selected");
+              }
+            });
+          });
+
+        // --- Form submission ---
+        document
+          .getElementById("step4FormLand")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            var declaration = document.getElementById("declarationLand");
+            if (!declaration.checked) {
+              alert("Please confirm the declaration before submitting.");
+              return;
+            }
+
+            document.querySelectorAll(".step-panel-land").forEach(function (p) {
+              p.classList.remove("active");
+            });
+            document.getElementById("successMessageLand").classList.add("show");
+
+            dots.forEach(function (dot) {
+              dot.classList.remove("active");
+              dot.classList.add("done");
+            });
+            lines.forEach(function (line) {
+              line.classList.add("done");
+            });
+            labels.forEach(function (label) {
+              label.classList.remove("active");
+              label.classList.add("done");
+            });
+          });
+
+        // --- Initialize ---
+        goToStep(1);
+
+        // --- Smooth scroll for anchor links ---
+        document
+          .querySelector(".land-hero .btn-primary")
+          ?.addEventListener("click", function (e) {
+            var target = document.querySelector(this.getAttribute("href"));
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+
+        document
+          .querySelector(".land-hero .btn-outline-light")
+          ?.addEventListener("click", function (e) {
+            var target = document.querySelector(this.getAttribute("href"));
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+      })();
+    </script>
+  </body>
+</html>
