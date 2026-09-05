@@ -137,6 +137,7 @@
         background: #fff;
         color: #94a3b8;
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        flex-shrink: 0;
       }
       .step-dot.active {
         border-color: #c5a059;
@@ -158,12 +159,14 @@
         display: none;
       }
       .step-line {
-        height: 2.5px;
+        height: 3px;
         background: #e2e8f0;
         flex: 1;
-        margin: 0 12px;
+        min-width: 16px;
+        margin: 0 8px;
         border-radius: 2px;
         transition: background 0.4s;
+        flex-shrink: 0;
       }
       .step-line.done {
         background: #041627;
@@ -175,6 +178,7 @@
         text-align: center;
         margin-top: 4px;
         transition: color 0.3s;
+        white-space: nowrap;
       }
       .step-label.active {
         color: #c5a059;
@@ -184,6 +188,13 @@
       }
       .step-label.inactive {
         color: #94a3b8;
+      }
+      .step-item {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
       }
 
       input:focus,
@@ -311,6 +322,13 @@
           width: 34px;
           height: 34px;
           font-size: 13px;
+        }
+        .step-line {
+          margin: 0 4px;
+          min-width: 12px;
+        }
+        .step-label {
+          font-size: 8px;
         }
       }
     </style>
@@ -578,13 +596,13 @@
     >
       <div class="flex items-center justify-between" id="stepperDots">
         <!-- Step 1 -->
-        <div class="flex flex-col items-center gap-1">
+        <div class="step-item">
           <div class="step-dot active" data-step="1"><span>1</span></div>
           <span class="step-label active" data-label="1">Affidavit Type</span>
         </div>
         <div class="step-line" data-line="1"></div>
         <!-- Step 2 -->
-        <div class="flex flex-col items-center gap-1">
+        <div class="step-item">
           <div class="step-dot" data-step="2"><span>2</span></div>
           <span class="step-label inactive" data-label="2"
             >Facts &amp; Purpose</span
@@ -592,7 +610,7 @@
         </div>
         <div class="step-line" data-line="2"></div>
         <!-- Step 3 -->
-        <div class="flex flex-col items-center gap-1">
+        <div class="step-item">
           <div class="step-dot" data-step="3"><span>3</span></div>
           <span class="step-label inactive" data-label="3"
             >Deponent Identity</span
@@ -600,7 +618,7 @@
         </div>
         <div class="step-line" data-line="3"></div>
         <!-- Step 4 -->
-        <div class="flex flex-col items-center gap-1">
+        <div class="step-item">
           <div class="step-dot" data-step="4"><span>4</span></div>
           <span class="step-label inactive" data-label="4"
             >Preview &amp; Verify</span
@@ -649,7 +667,7 @@
               </button>
               <button
                 onclick="goToStep(2)"
-                class="px-8 py-2.5 rounded-xl bg-gold text-white font-label-md text-sm hover:bg-gold-dark shadow-md transition-all flex items-center justify-center gap-2"
+                class="px-8 py-2.5 rounded-xl bg-black text-white font-label-md text-sm hover:bg-gray-800 shadow-md transition-all flex items-center justify-center gap-2"
               >
                 Next
                 <span class="material-symbols-outlined text-lg"
@@ -724,7 +742,7 @@
 
       <!-- STEP 2: Facts & Purpose (full width) -->
       <div id="step2" class="hidden">
-        <div class="form-card max-w-4xl mx-auto">
+        <div class="form-card max-w-7xl mx-auto">
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xl font-bold text-primary">
               Statement of Facts &amp; Purpose
@@ -740,21 +758,22 @@
           </p>
           <div class="space-y-5">
             <div>
-              <label class="block font-label-md text-primary text-sm mb-1.5"
-                >Specific Cause / Purpose
-                <span class="text-error">*</span></label
-              >
+              <label class="block font-label-md text-primary text-sm mb-1.5 whitespace-nowrap">
+                Specific Cause / Purpose
+                <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ বিশেষ কারণ / উদ্দেশ্য</span>
+                <span class="text-error text-xs">*</span>
+              </label>
               <textarea
                 id="afdPurpose"
                 class="w-full rounded-xl border-[#e2e8f0] p-3.5 text-sm transition-all resize-none"
-                placeholder="e.g., Correction of spelling in SSC Certificate"
                 rows="3"
               ></textarea>
             </div>
             <div>
-              <label class="block font-label-md text-primary text-sm mb-1.5"
-                >Detailed Declaratory Points</label
-              >
+              <label class="block font-label-md text-primary text-sm mb-1.5 whitespace-nowrap">
+                Detailed Declaratory Points
+                <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ বিস্তারিত ঘোষণামূলক পয়েন্ট</span>
+              </label>
               <div id="pointsContainer" class="space-y-2.5"></div>
               <button
                 type="button"
@@ -774,7 +793,7 @@
               ← Back
             </button>
             <button
-              class="px-8 py-2.5 rounded-xl bg-gold text-white font-label-md text-sm hover:bg-gold-dark shadow-md transition-all"
+              class="px-8 py-2.5 rounded-xl bg-black text-white font-label-md text-sm hover:bg-gray-800 shadow-md transition-all"
               onclick="goToStep(3)"
             >
               Next →
@@ -785,7 +804,7 @@
 
       <!-- STEP 3: Deponent Identity (full width) -->
       <div id="step3" class="hidden">
-        <div class="form-card max-w-5xl mx-auto">
+        <div class="form-card max-w-7xl mx-auto">
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xl font-bold text-primary">Deponent Identity</h2>
             <span
@@ -804,67 +823,67 @@
               <span class="icon material-symbols-outlined text-lg"
                 >account_circle</span
               >
-              Personal Information
+              Personal Information / ব্যক্তিগত তথ্য
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Full Name (English) <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Full Name
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সম্পূর্ণ নাম</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdNameEn"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright uppercase text-sm"
-                  placeholder="MD. RAHMAN ISLAM"
                   type="text"
                   oninput="updatePreview()"
                 />
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Full Name (Bangla) <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Full Name (Bangla)
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সম্পূর্ণ নাম (বাংলা)</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdNameBn"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="মোঃ রহমান ইসলাম"
                   type="text"
                   oninput="updatePreview()"
                 />
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Father's / Husband's Name
-                  <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Father's / Husband's Name
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পিতা / স্বামীর নাম</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdFather"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Name of Father or Husband"
                   type="text"
                   oninput="updatePreview()"
                 />
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Mother's Name <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Mother's Name
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ মাতার নাম</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdMother"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Name of Mother"
                   type="text"
                   oninput="updatePreview()"
                 />
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Date of Birth <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Date of Birth
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জন্ম তারিখ</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdDob"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
@@ -873,27 +892,27 @@
                 />
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Age <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Age
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ বয়স</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdAge"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="e.g., 30"
                   type="number"
                   oninput="updatePreview()"
                 />
               </div>
               <div class="md:col-span-2">
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Profession <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Profession
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পেশা</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdProfession"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Service Holder, Business, Student, etc."
                   type="text"
                   oninput="updatePreview()"
                 />
@@ -905,14 +924,15 @@
           <div class="mb-6">
             <div class="section-title">
               <span class="icon material-symbols-outlined text-lg">badge</span>
-              Identity Document
+              Identity Document / পরিচয় নথি
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Document Type <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Document Type
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ নথির ধরন</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <select
                   id="afdDocType"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
@@ -928,14 +948,14 @@
                 </select>
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Document Number <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Document Number
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ নথি নম্বর</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdDocNumber"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Enter document number"
                   type="text"
                   oninput="updatePreview()"
                 />
@@ -949,56 +969,85 @@
               <span class="icon material-symbols-outlined text-lg"
                 >location_on</span
               >
-              Address Details
+              Address Details / ঠিকানা বিবরণ
             </div>
             <div class="mb-3">
-              <label
-                class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                >Permanent Address</label
+              <label class="font-label-md text-primary text-sm block mb-2"
+                >Permanent Address / স্থায়ী ঠিকানা</label
               >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  id="afdPermHouse"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Village / House"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPermRoad"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Road / Block"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPermPost"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Post Office"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPermCode"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Post Code"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPermUpazila"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Upazila / Thana"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPermDistrict"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="District"
-                  type="text"
-                  oninput="updatePreview()"
-                />
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Village / House
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ গ্রাম / বাড়ি</span>
+                  </label>
+                  <input
+                    id="afdPermHouse"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Road / Block
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সড়ক / ব্লক</span>
+                  </label>
+                  <input
+                    id="afdPermRoad"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Post Office
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ ডাকঘর</span>
+                  </label>
+                  <input
+                    id="afdPermPost"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Post Code
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পোস্ট কোড</span>
+                  </label>
+                  <input
+                    id="afdPermCode"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Upazila / Thana
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ উপজেলা / থানা</span>
+                  </label>
+                  <input
+                    id="afdPermUpazila"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    District
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জেলা</span>
+                  </label>
+                  <input
+                    id="afdPermDistrict"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -1017,7 +1066,7 @@
               <label
                 class="text-sm text-on-surface cursor-pointer select-none"
                 for="sameAddress"
-                >Present Address same as Permanent</label
+                >Present Address same as Permanent / বর্তমান ঠিকানা স্থায়ী ঠিকানার মতো</label
               >
             </div>
             <div
@@ -1025,53 +1074,82 @@
               class="overflow-hidden transition-all duration-300"
               style="max-height: 0; opacity: 0; pointer-events: none"
             >
-              <label
-                class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                >Present Address</label
+              <label class="font-label-md text-primary text-sm block mb-2"
+                >Present Address / বর্তমান ঠিকানা</label
               >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  id="afdPresHouse"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Village / House"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPresRoad"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Road / Block"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPresPost"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Post Office"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPresCode"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Post Code"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPresUpazila"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="Upazila / Thana"
-                  type="text"
-                  oninput="updatePreview()"
-                />
-                <input
-                  id="afdPresDistrict"
-                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                  placeholder="District"
-                  type="text"
-                  oninput="updatePreview()"
-                />
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Village / House
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ গ্রাম / বাড়ি</span>
+                  </label>
+                  <input
+                    id="afdPresHouse"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Road / Block
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সড়ক / ব্লক</span>
+                  </label>
+                  <input
+                    id="afdPresRoad"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Post Office
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ ডাকঘর</span>
+                  </label>
+                  <input
+                    id="afdPresPost"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Post Code
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পোস্ট কোড</span>
+                  </label>
+                  <input
+                    id="afdPresCode"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    Upazila / Thana
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ উপজেলা / থানা</span>
+                  </label>
+                  <input
+                    id="afdPresUpazila"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
+                <div>
+                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
+                    District
+                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জেলা</span>
+                  </label>
+                  <input
+                    id="afdPresDistrict"
+                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                    type="text"
+                    oninput="updatePreview()"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -1080,14 +1158,15 @@
           <div class="mb-6">
             <div class="section-title">
               <span class="icon material-symbols-outlined text-lg">public</span>
-              Other Information
+              Other Information / অন্যান্য তথ্য
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Religion <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Religion
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ ধর্ম</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <select
                   id="afdReligion"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
@@ -1101,10 +1180,11 @@
                 </select>
               </div>
               <div>
-                <label
-                  class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1"
-                  >Nationality <span class="text-error">*</span></label
-                >
+                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
+                  Nationality
+                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জাতীয়তা</span>
+                  <span class="text-error text-xs">*</span>
+                </label>
                 <input
                   id="afdNationality"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-container-low text-secondary font-bold text-sm"
@@ -1122,7 +1202,7 @@
               <span class="icon material-symbols-outlined text-lg"
                 >cloud_upload</span
               >
-              Supporting Documents
+              Supporting Documents / সহায়ক নথি
             </div>
             <p class="text-secondary text-sm mb-3">
               Upload NID, certificates, or any documents that support your
@@ -1137,8 +1217,7 @@
                 >cloud_upload</span
               >
               <p class="font-medium text-primary mt-2">
-                Drop files here or
-                <span class="text-gold underline">browse</span>
+                Drop files here or <span class="text-gold underline">browse</span>
               </p>
               <p class="text-caption text-secondary">
                 PDF, JPG, PNG · Max 10MB each
@@ -1168,7 +1247,7 @@
               ← Back
             </button>
             <button
-              class="px-8 py-2.5 rounded-xl bg-gold text-white font-label-md text-sm hover:bg-gold-dark shadow-md transition-all"
+              class="px-8 py-2.5 rounded-xl bg-black text-white font-label-md text-sm hover:bg-gray-800 shadow-md transition-all"
               onclick="goToStep(4)"
             >
               Preview →
@@ -1211,9 +1290,13 @@
               <label
                 for="afdDeclare"
                 class="text-sm text-on-surface cursor-pointer"
-                >I solemnly declare that the information provided is true and
-                correct to the best of my knowledge and belief.</label
               >
+                I solemnly declare that the information provided is true and
+                correct to the best of my knowledge and belief.
+                <span class="text-secondary font-normal text-xs block sm:inline sm:ml-1"
+                  >/ আমি দৃঢ়ভাবে ঘোষণা করছি যে প্রদত্ত তথ্য সত্য এবং সঠিক।</span
+                >
+              </label>
             </div>
 
             <!-- SUCCESS POPUP -->
@@ -1227,10 +1310,16 @@
               >
               <h3 class="text-xl font-bold text-green-800 mt-2">
                 Affidavit Submitted Successfully! 🎉
+                <span class="text-lg font-normal text-green-700 block"
+                  >/ হলফনামা সফলভাবে জমা দেওয়া হয়েছে!</span
+                >
               </h3>
               <p class="text-sm text-green-700 mt-1 max-w-md mx-auto">
                 We will process your document and deliver the final stamped
                 copy.
+                <span class="text-secondary font-normal text-xs block"
+                  >/ আমরা আপনার নথি প্রক্রিয়া করব এবং চূড়ান্ত স্ট্যাম্পযুক্ত কপি সরবরাহ করব।</span
+                >
               </p>
               <div
                 class="mt-3 p-3 bg-white/80 rounded-lg border border-green-200"
@@ -1238,27 +1327,30 @@
                 <p class="text-sm font-semibold text-primary">
                   📁 Please check your
                   <span class="text-gold">"Affidavit Vault"</span> in the
-                  dashboard to track the status.
+                  dashboard for dynamic process tracking.
+                  <span class="text-secondary font-normal text-xs block"
+                    >/ ড্যাশবোর্ডে আপনার "Affidavit Vault" চেক করুন ডায়নামিক প্রক্রিয়া ট্র্যাকিংয়ের জন্য।</span
+                  >
                 </p>
               </div>
               <a
                 href="dashboard.html"
                 class="mt-4 inline-block px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-md"
               >
-                Go to Dashboard
+                Go to Dashboard / ড্যাশবোর্ডে যান
               </a>
             </div>
 
-            <div class="pt-5 border-t border-[#eef1f4] flex justify-between">
+            <div class="pt-5 border-t border-[#eef1f4] flex justify-between gap-3">
               <button
-                class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
+                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
                 onclick="goToStep(3)"
               >
                 ← Back
               </button>
               <button
                 id="submitBtn"
-                class="px-10 py-2.5 rounded-xl bg-primary text-white font-label-md text-sm hover:bg-primary/90 shadow-md transition-all"
+                class="px-6 sm:px-10 py-2 sm:py-2.5 rounded-xl bg-gold text-black font-label-md text-sm hover:bg-gold-dark shadow-md transition-all"
                 onclick="submitAffidavit()"
               >
                 Submit for Processing
