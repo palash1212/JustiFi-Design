@@ -3,7 +3,9 @@
     <span></span><span></span><span></span>
   </button>
 
-  <a href="index.html" class="brand"> <span class="scale">⚖</span>JustiFi </a>
+  <a href="index.html" class="brand">
+    <span class="scale">⚖</span>JustiFi
+  </a>
 
   <div class="nav-links">
     <a href="index.html" data-nav="home">Home</a>
@@ -17,8 +19,13 @@
         <a href="VatTax.html">Corporate &amp; Tax Advisory</a>
       </div>
     </div>
+<<<<<<< HEAD
     <a href="legal_insights.html" data-nav="insights">Legal Insights</a>
     <a href="contact.html" data-nav="contact">Contact</a>
+=======
+    <a href="#" data-nav="insights">Legal Insights</a>
+    <a href="#" data-nav="contact">Contact</a>
+>>>>>>> piash
   </div>
 
   <div class="nav-right">
@@ -27,9 +34,9 @@
     <button id="navSignin" class="btn-gold" onclick="login()">Login</button>
     <!-- Logged in -->
     <span id="navBell" class="bell hidden">🔔</span>
-    <div id="navAvatar" class="avatar-circle hidden" style="position: relative">
+    <div id="navAvatar" class="avatar-circle hidden" style="position:relative;">
       M
-      <div class="avatar-dropdown">
+      <div class="avatar-dropdown" id="avatarDropdown">
         <a href="dashboard.html">Dashboard</a>
         <a href="profile.html">Settings</a>
         <div class="divider"></div>
@@ -57,31 +64,13 @@
       <a href="VatTax.html">Corporate &amp; Tax</a>
     </div>
   </div>
-  <a href="legal_insights.html" class="drawer-link">📖 Legal Insights</a>
+  <a href="#" class="drawer-link">📖 Legal Insights</a>
   <a href="#" class="drawer-link">📞 Contact</a>
   <div class="drawer-divider"></div>
-  <a href="#" class="drawer-link" style="color: var(--slate)">🌐 EN | বাং</a>
-  <a
-    href="#"
-    class="drawer-link"
-    id="drawerSignin"
-    onclick="login()"
-    style="color: var(--gold); font-weight: 600"
-    >🔑 Login</a
-  >
+  <a href="#" class="drawer-link" style="color:var(--slate);">🌐 EN | বাং</a>
+  <a href="#" class="drawer-link" id="drawerSignin" onclick="login()" style="color:var(--gold); font-weight:600;">🔑 Login</a>
   <div id="drawerLoggedin" class="hidden">
-    <a
-      href="profile.html"
-      class="drawer-link"
-      style="color: var(--gold); font-weight: 600"
-      >👤 My Account</a
-    >
-    <a
-      href="#"
-      class="drawer-link"
-      onclick="logout()"
-      style="color: var(--slate)"
-      >↪ Logout</a
-    >
+    <a href="profile.html" class="drawer-link" style="color:var(--gold); font-weight:600;">👤 My Account</a>
+    <a href="#" class="drawer-link" onclick="logout()" style="color:var(--slate);">↪ Logout</a>
   </div>
 </nav>
