@@ -1,4 +1,14 @@
+/* ==========================================================
+   js/partials.js — loads the shared navbar/footer/sidebar/
+   bottom-nav fragments into every page and wires up the
+   interactive bits (hamburger drawer, avatar dropdown,
+   bottom-nav "more" popup, active-link highlighting).
 
+   NOTE: because this uses fetch() to pull in the .html
+   partials, the site must be served over http(s), e.g.:
+     python -m http.server 8000
+   Opening the files directly via file:// will block fetch().
+========================================================== */
 (function () {
   var page = document.body.dataset.page || '';
   var needsSidebar = document.body.dataset.requiresAuth === '1';
@@ -23,6 +33,7 @@
       if (a.dataset.nav === page) a.classList.add('active');
     });
 
+    // Hamburger drawer toggle
     var hamburger = document.getElementById('hamburgerBtn');
     var drawer = document.getElementById('mobileDrawer');
     var overlay = document.getElementById('drawerOverlay');
@@ -39,25 +50,30 @@
         hamburger.classList.remove('active');
       });
     }
-    // inside initNavbar() after the existing code
-var servicesDrop = document.querySelector('.services-drop');
-if (servicesDrop) {
-  var servicesLink = servicesDrop.querySelector('a');
-  if (servicesLink) {
-    servicesLink.addEventListener('click', function(e) {
-      e.preventDefault();          // prevent hash navigation
-      servicesDrop.classList.toggle('open');
-    });
-    // Close dropdown when clicking outside it
-    document.addEventListener('click', function(e) {
-      if (!servicesDrop.contains(e.target)) {
-        servicesDrop.classList.remove('open');
-      }
-    });
-  }
-}
-    applyAuthUI();
 
+    // ---- Avatar dropdown: hover (desktop) + click (any) ----
+    var avatarCircle = document.getElementById('navAvatar');
+    var avatarDropdown = document.getElementById('avatarDropdown');
+    if (avatarCircle && avatarDropdown) {
+      // Click toggles the dropdown on any device
+      avatarCircle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        avatarDropdown.classList.toggle('show');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!avatarCircle.contains(e.target)) {
+          avatarDropdown.classList.remove('show');
+        }
+      });
+
+      // Also support hover (desktop) via CSS (we keep the CSS hover rule)
+      // But we also prevent hover from interfering with click toggling
+      // The CSS will handle hover + .show class
+    }
+
+    applyAuthUI();
   }
 
   function initSidebar() {

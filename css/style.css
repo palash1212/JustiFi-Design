@@ -1808,3 +1808,32 @@ button {
   margin-top: 10px;
   line-height: 1.6;
 }
+/* A. NAVBAR – FIXED AT TOP */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+}
+
+/* Add padding to body to account for fixed navbar */
+body {
+  padding-top: 72px;
+  font-family: 'Inter', -apple-system, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--navy);
+  padding-bottom: 0;
+}
+/* Avatar dropdown – visible on hover or .show */
+.avatar-circle:hover .avatar-dropdown,
+.avatar-dropdown.show {
+  display: block;
+}
