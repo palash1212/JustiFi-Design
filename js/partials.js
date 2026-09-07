@@ -51,11 +51,27 @@
       });
     }
 
-    // ---- Avatar dropdown: hover (desktop) + click (any) ----
+    // ---- Services dropdown: click to toggle (mobile) + hover (desktop) ----
+    var servicesDrop = document.querySelector('.services-drop');
+    var servicesLink = servicesDrop ? servicesDrop.querySelector('a') : null;
+    if (servicesDrop && servicesLink) {
+      servicesLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        servicesDrop.classList.toggle('open');
+      });
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!servicesDrop.contains(e.target)) {
+          servicesDrop.classList.remove('open');
+        }
+      });
+    }
+
+    // ---- Avatar dropdown: click to toggle (mobile) + hover (desktop) ----
     var avatarCircle = document.getElementById('navAvatar');
     var avatarDropdown = document.getElementById('avatarDropdown');
     if (avatarCircle && avatarDropdown) {
-      // Click toggles the dropdown on any device
+      // Click toggles the dropdown
       avatarCircle.addEventListener('click', function (e) {
         e.stopPropagation();
         avatarDropdown.classList.toggle('show');
@@ -67,10 +83,6 @@
           avatarDropdown.classList.remove('show');
         }
       });
-
-      // Also support hover (desktop) via CSS (we keep the CSS hover rule)
-      // But we also prevent hover from interfering with click toggling
-      // The CSS will handle hover + .show class
     }
 
     applyAuthUI();
