@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Affidavit Vault — JustiFi</title>
+
+  <!-- Existing project assets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Tailwind + Material Symbols -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#041627",
+            secondary: "#505f76",
+            gold: "#C5A059",
+            "gold-light": "#f5e8c8",
+            "gold-dark": "#a07d3a",
+            surface: "#f7f9fb",
+            "surface-container": "#eceef0",
+            "surface-container-low": "#f2f4f6",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e6e8ea",
+            "on-surface": "#191c1e",
+            "on-surface-variant": "#44474c",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#8192a7",
+            "primary-container": "#1a2b3c",
+            outline: "#74777d",
+            "outline-variant": "#c4c6cd",
+            error: "#ba1a1a",
+            success: "#16a34a",
+            warning: "#f59e0b",
+            background: "#f8fafc",
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "12px",
+            "2xl": "16px",
+            full: "9999px",
+          },
+          spacing: {
+            "stack-sm": "8px",
+            "stack-md": "16px",
+            "stack-lg": "32px",
+            gutter: "24px",
+            "container-max": "1280px",
+          },
+          fontFamily: {
+            body: ["Inter"],
+          },
+          fontSize: {
+            "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "700" }],
+            "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+            "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.05em", fontWeight: "600" }],
+            caption: ["12px", { lineHeight: "16px", fontWeight: "400" }],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+    }
+    .legal-soft-shadow {
+      box-shadow: 0 4px 24px rgba(4, 22, 39, 0.05);
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-pending .dot { background: #f59e0b; }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-processing .dot { background: #3b82f6; }
+    .status-processing { background: #dbeafe; color: #1e40af; }
+    .status-completed .dot { background: #22c55e; }
+    .status-completed { background: #dcfce7; color: #166534; }
+    .status-cancelled .dot { background: #6b7280; }
+    .status-cancelled { background: #f3f4f6; color: #4b5563; }
+    .status-rejected .dot { background: #ef4444; }
+    .status-rejected { background: #fee2e2; color: #991b1b; }
+
+    .affidavit-card {
+      transition: all 0.3s;
+      border: 1px solid #eef1f4;
+    }
+    .affidavit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(4, 22, 39, 0.08);
+      border-color: #C5A059;
+    }
+    .filter-chip {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      color: #505f76;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-chip:hover {
+      border-color: #C5A059;
+    }
+    .filter-chip.active {
+      background: #041627;
+      color: #fff;
+      border-color: #041627;
+    }
+    .filter-chip.active:hover {
+      background: #1a2b3c;
+    }
+    .btn-outline-sm {
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: 1.5px solid #041627;
+      color: #041627;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      background: transparent;
+      cursor: pointer;
+    }
+    .btn-outline-sm:hover {
+      background: #041627;
+      color: #fff;
+    }
+    .btn-gold-sm {
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: #C5A059;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-gold-sm:hover {
+      background: #a07d3a;
+    }
+    .btn-primary-sm {
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: #041627;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary-sm:hover {
+      background: #1a2b3c;
+    }
+    .btn-danger-sm {
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 1.5px solid #fecaca;
+    }
+    .btn-danger-sm:hover {
+      background: #fecaca;
+    }
+    .btn-cancelled-sm {
+      padding: 6px 16px;
+      border-radius: 8px;
+      background: #f3f4f6;
+      color: #4b5563;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 1.5px solid #d1d5db;
+    }
+    .btn-cancelled-sm:hover {
+      background: #e5e7eb;
+    }
+
+    /* Modal overlays */
+    .modal-overlay {
+      background: rgba(4, 22, 39, 0.6);
+      backdrop-filter: blur(4px);
+    }
+    .modal-card {
+      animation: slideUp 0.35s ease forwards;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ===== MODAL / FLASHCARD SYSTEM – NO BORDER RADIUS ===== */
+    .detail-modal-wrapper {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px 24px 28px;
+      overflow-y: auto;
+      box-sizing: border-box;
+      z-index: 2;
+    }
+
+    .flash-card {
+      background: #ffffff;
+      border: 1px solid #eef1f4;
+      box-shadow: 0 20px 60px rgba(4, 22, 39, 0.16);
+      width: min(920px, 100%);
+      max-width: 920px;
+      max-height: calc(100vh - 120px);
+      padding: 36px 44px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      animation: slideUp 0.35s ease forwards;
+      box-sizing: border-box;
+      border-radius: 0 !important;
+    }
+
+    .flash-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #C5A059, #f5e8c8);
+      border-radius: 0 !important;
+    }
+
+    .flash-card > .flex.justify-between.items-start {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #ffffff;
+      padding-top: 4px;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* Stepper inside modal */
+    .progress-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 8px 0;
+      position: relative;
+    }
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+      z-index: 2;
+    }
+    .progress-step .dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      border: 2px solid #e2e8f0;
+      background: #fff;
+      color: #94a3b8;
+      transition: all 0.3s;
+    }
+    .progress-step.done .dot {
+      background: #041627;
+      border-color: #041627;
+      color: #fff;
+    }
+    .progress-step.done .dot::after {
+      content: "✓";
+      font-size: 12px;
+    }
+    .progress-step.done .dot span { display: none; }
+    .progress-step.active .dot {
+      background: #C5A059;
+      border-color: #C5A059;
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.2);
+    }
+    .progress-step .label {
+      font-size: 9px;
+      color: #94a3b8;
+      text-align: center;
+      margin-top: 6px;
+      max-width: 70px;
+      font-weight: 500;
+    }
+    .progress-step.done .label,
+    .progress-step.active .label {
+      color: #041627;
+      font-weight: 600;
+    }
+    .progress-line {
+      height: 2px;
+      background: #e2e8f0;
+      flex: 1;
+      margin: 0 4px;
+      border-radius: 2px;
+      z-index: 1;
+    }
+    .progress-line.done {
+      background: #041627;
+    }
+
+    /* Draft preview */
+    .draft-preview {
+      background: #fcfcf9;
+      border: 1px solid #e8e4de;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Georgia', serif;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #1a202c;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .draft-preview .stamp {
+      border-bottom: 1px dashed #d5d0c8;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      text-align: center;
+      font-size: 11px;
+      color: #9a9690;
+      letter-spacing: 0.5px;
+    }
+    .draft-preview .stamp strong {
+      display: block;
+      font-size: 14px;
+      color: #041627;
+    }
+    .draft-preview .content {
+      white-space: pre-wrap;
+    }
+
+    /* Court presence info */
+    .court-info {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .court-info .item {
+      display: flex;
+      flex-direction: column;
+    }
+    .court-info .item .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      color: #64748b;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .court-info .item .value {
+      font-weight: 600;
+      color: #041627;
+    }
+
+    /* Online copy */
+    .online-copy {
+      background: #fcfcf9;
+      border: 1px solid #e8e4de;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-family: 'Georgia', serif;
+      font-size: 13px;
+      line-height: 1.8;
+      color: #1a202c;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .online-copy .watermark {
+      font-size: 10px;
+      color: #94a3b8;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 10px;
+      margin-top: 14px;
+    }
+
+    /* Uploaded files list */
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border: 1px solid #eef1f4;
+      font-size: 13px;
+    }
+    .file-item .file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .file-item .file-info .name {
+      font-weight: 500;
+      color: #041627;
+    }
+    .file-item .file-info .meta {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+    .file-item .file-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .file-item .file-actions button {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 2px 4px;
+      transition: color 0.2s;
+    }
+    .file-item .file-actions button:hover {
+      color: #C5A059;
+    }
+
+    .flash-card::-webkit-scrollbar,
+    .modal-card::-webkit-scrollbar {
+      width: 7px;
+    }
+    .flash-card::-webkit-scrollbar-track,
+    .modal-card::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    .flash-card::-webkit-scrollbar-thumb,
+    .modal-card::-webkit-scrollbar-thumb {
+      background: #C5A059;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .detail-modal-wrapper {
+        top: 72px;
+        padding: 14px 12px 20px;
+      }
+      .flash-card {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100vh - 100px);
+        padding: 26px 20px;
+        border-radius: 0 !important;
+      }
+      .progress-step .label { font-size: 7px; max-width: 50px; }
+      .progress-step .dot { width: 24px; height: 24px; font-size: 10px; }
+      .court-info { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface" data-page="affidavit" data-requires-auth="1">
+
+  <!-- Shared Navbar -->
+  <div id="navbarPlaceholder"></div>
+
+  <div class="app-shell" id="appShell">
+    <div id="sidebarPlaceholder"></div>
+
+    <main class="main-content">
+      <div class="max-w-[1200px] mx-auto">
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-primary tracking-tight">Affidavit Vault</h1>
+            <p class="text-secondary text-sm mt-1">Track and manage all your affidavit applications</p>
+          </div>
+          <a href="affidavit.html" class="px-5 py-2.5 bg-gold text-white rounded-xl font-medium text-sm hover:bg-gold-dark transition-all flex items-center gap-2 shadow-md shadow-gold/20">
+            <span class="material-symbols-outlined text-[18px]">add</span>
+            New Affidavit
+          </a>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="bg-white rounded-xl p-4 md:p-6 legal-soft-shadow border border-surface-container mb-6">
+          <div class="flex flex-col md:flex-row gap-4">
+            <!-- Search -->
+            <div class="relative flex-1">
+              <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+              <input
+                id="searchAffidavit"
+                oninput="filterAffidavits()"
+                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-outline-variant bg-surface focus:border-gold focus:ring-gold transition-all text-sm"
+                placeholder="Search by affidavit name, purpose, or lawyer..."
+              />
+            </div>
+            <!-- Status Filter -->
+            <div class="flex flex-wrap gap-2 items-center" id="statusFilters">
+              <button class="filter-chip active" data-status="all" onclick="setStatusFilter('all', this)">All</button>
+              <button class="filter-chip" data-status="pending" onclick="setStatusFilter('pending', this)">Pending</button>
+              <button class="filter-chip" data-status="processing" onclick="setStatusFilter('processing', this)">Processing</button>
+              <button class="filter-chip" data-status="ready" onclick="setStatusFilter('ready', this)">Ready for Signature</button>
+              <button class="filter-chip" data-status="completed" onclick="setStatusFilter('completed', this)">Completed</button>
+              <button class="filter-chip" data-status="cancelled" onclick="setStatusFilter('cancelled', this)">Cancelled</button>
+              <button class="filter-chip" data-status="rejected" onclick="setStatusFilter('rejected', this)">Rejected</button>
+            </div>
+          </div>
+          <!-- Date Filter -->
+          <div class="flex flex-wrap items-center gap-3 mt-4 pt-4 border-t border-surface-container">
+            <span class="text-sm font-medium text-secondary">Date:</span>
+            <input type="date" id="dateFrom" onchange="filterAffidavits()" class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-sm focus:border-gold focus:ring-gold" />
+            <span class="text-secondary text-sm">to</span>
+            <input type="date" id="dateTo" onchange="filterAffidavits()" class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-sm focus:border-gold focus:ring-gold" />
+            <button onclick="document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value=''; filterAffidavits();" class="text-sm text-gold font-medium hover:underline">Clear</button>
+          </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-sm text-secondary">Showing <span id="resultCount" class="font-bold text-primary">0</span> affidavits</span>
+          <select id="sortSelect" onchange="filterAffidavits()" class="border-none bg-transparent text-sm font-medium text-primary focus:ring-0 cursor-pointer">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="status">Sort by status</option>
+          </select>
+        </div>
+
+        <!-- Affidavits Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="affidavitGrid">
+          <!-- Rendered by JavaScript -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16">
+          <span class="material-symbols-outlined text-6xl text-outline-variant block mx-auto">inbox</span>
+          <h3 class="text-xl font-bold text-primary mt-4">No affidavits found</h3>
+          <p class="text-secondary text-sm mt-2">Try adjusting your filters or search terms.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ===== DETAIL MODAL – FLASH CARD ===== -->
+  <div id="detailModal" class="fixed inset-0 z-[1200] hidden">
+    <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+    <div class="detail-modal-wrapper">
+      <div class="flash-card">
+        <div class="flex justify-between items-start mb-6">
+          <h2 class="text-2xl md:text-3xl font-bold text-primary" id="modalTitle">Affidavit Details</h2>
+          <button onclick="closeModal()" class="text-secondary hover:text-primary transition-colors p-2">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div id="modalContent">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CANCEL FLASHCARD ===== -->
+  <div id="cancelModal" class="fixed inset-0 z-[1200] hidden">
+    <div class="modal-overlay absolute inset-0" onclick="closeCancelModal()"></div>
+    <div class="relative flex items-center justify-center min-h-screen p-4">
+      <div class="modal-card bg-white shadow-2xl" style="border-radius:0; max-width:600px; width:100%; padding:36px 44px; max-height:80vh; overflow-y:auto;">
+        <div class="flex justify-between items-start mb-4">
+          <h2 class="text-2xl font-bold text-error" id="cancelModalTitle">Cancel Affidavit</h2>
+          <button onclick="closeCancelModal()" class="text-secondary hover:text-primary transition-colors">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div id="cancelModalContent">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Footer -->
+  <div id="footerPlaceholder"></div>
+  <div id="bottomNavPlaceholder"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/partials.js"></script>
+
+  <script>
+    // ============================================================
+    // 1. MOCK DATA – Affidavits (pending: no lawyer assigned)
+    // ============================================================
+    var AFFIDAVITS = [];
+
+    function generateAffidavits() {
+      if (typeof LAWYERS === 'undefined') {
+        return getFallbackAffidavits();
+      }
+
+      var statuses = ['pending', 'processing', 'ready', 'completed', 'cancelled', 'rejected'];
+      var types = [
+        'Name Change / Title Correction',
+        'Same Person Affidavit',
+        'Financial Support / Income Declaration',
+        'Address / Passport / Visa Proof',
+        'Unmarried / Marital Status',
+        'Property / Land Ownership'
+      ];
+      var purposes = [
+        'Correction of spelling in SSC certificate',
+        'Declaring multiple names belong to same person',
+        'Income proof for visa application',
+        'Address verification for passport',
+        'Marital status declaration for marriage registration',
+        'Land ownership verification for bank loan'
+      ];
+      var lawyerNames = LAWYERS.map(l => l.name);
+      var lawyerImgs = LAWYERS.map(l => l.img);
+      var initials = LAWYERS.map(l => l.init);
+      var dates = ['2026-09-10', '2026-09-15', '2026-08-20', '2026-08-25', '2026-09-20', '2026-10-05'];
+      var times = ['4:30 PM', '11:00 AM', '2:00 PM', '10:30 AM', '3:00 PM', '9:00 AM'];
+      var progressSteps = ['Submitted', 'Info Received', 'Drafting', 'Ready for Signature', 'Completed'];
+
+      var uploadedFiles = [
+        [
+          { name: 'NID_Front.jpg', size: '245 KB', uploadedAt: '2026-09-10' },
+          { name: 'SSC_Certificate.pdf', size: '1.2 MB', uploadedAt: '2026-09-10' }
+        ],
+        [
+          { name: 'NID_Front.jpg', size: '245 KB', uploadedAt: '2026-09-15' },
+          { name: 'Birth_Certificate.pdf', size: '856 KB', uploadedAt: '2026-09-15' }
+        ],
+        [
+          { name: 'Title_Deed.pdf', size: '2.4 MB', uploadedAt: '2026-08-20' },
+          { name: 'Tax_Receipt.pdf', size: '125 KB', uploadedAt: '2026-08-20' }
+        ],
+        [
+          { name: 'Trade_License.pdf', size: '1.8 MB', uploadedAt: '2026-08-25' }
+        ],
+        [
+          { name: 'NID_Front.jpg', size: '245 KB', uploadedAt: '2026-09-20' }
+        ],
+        [
+          { name: 'Land_Records.pdf', size: '3.1 MB', uploadedAt: '2026-10-05' }
+        ]
+      ];
+
+      var result = [];
+      var count = Math.min(LAWYERS.length, 6);
+
+      for (var i = 0; i < count; i++) {
+        var status = statuses[i] || 'pending';
+        var isCompleted = status === 'completed';
+        var isCancelled = status === 'cancelled';
+        var isRejected = status === 'rejected';
+        var isReady = status === 'ready';
+        var isProcessing = status === 'processing';
+        var isPending = status === 'pending';
+
+        var currentStep = 0;
+        if (isPending) currentStep = 0;
+        else if (isProcessing) currentStep = 1;
+        else if (isReady) currentStep = 2;
+        else if (isCompleted) currentStep = 4;
+        else if (isRejected) currentStep = 1;
+        else if (isCancelled) currentStep = 1;
+
+        var lawyerName = isPending ? null : (lawyerNames[i] || 'Adv. Farhana Rahman');
+        var lawyerImg = isPending ? null : (lawyerImgs[i] || '');
+        var init = isPending ? '?' : (initials[i] || 'FR');
+
+        var lawyerNotes = '';
+        if (isPending) lawyerNotes = 'We are reviewing your submission. A lawyer will be assigned shortly.';
+        else if (isProcessing) lawyerNotes = 'We have received your information. The draft is being prepared by our legal team.';
+        else if (isReady) lawyerNotes = 'Your affidavit is ready for signature. Please visit the court at the scheduled time.';
+        else if (isCompleted) lawyerNotes = 'Your affidavit has been completed. You can download the final copy below.';
+        else if (isRejected) lawyerNotes = 'Your affidavit request was rejected. Please review the reason and resubmit.';
+        else if (isCancelled) lawyerNotes = 'You cancelled this affidavit request.';
+
+        var draftOverview = '';
+        if (isProcessing || isReady || isCompleted) {
+          draftOverview = 'This affidavit is drafted to correct the name spelling in official records. The deponent, [Deponent Name], son of [Father Name], by profession [Profession], by faith [Religion], by nationality Bangladeshi, residing at [Address], declares that the name recorded as "[Incorrect Name]" in the SSC certificate is incorrect, and the correct name is "[Correct Name]". The deponent affirms that all information provided is true and correct.';
+        }
+
+        var courtInfo = null;
+        if (isReady) {
+          courtInfo = {
+            courtName: 'High Court Division, Supreme Court of Bangladesh',
+            chamber: 'Room 304, Bar Council Bhaban, Dhaka',
+            presenceTime: '10:30 AM - 11:30 AM',
+            date: dates[i],
+            contactPerson: 'Mr. Rafiq (Court Liaison)',
+            contactPhone: '+880 1711 000 000',
+            additionalNotes: 'Please bring your original NID and two passport-sized photographs.'
+          };
+        }
+
+        result.push({
+          id: i + 1,
+          type: types[i % types.length],
+          purpose: purposes[i % purposes.length],
+          lawyerName: lawyerName,
+          lawyerImg: lawyerImg,
+          init: init,
+          date: dates[i] || '2026-09-10',
+          time: times[i] || '4:30 PM',
+          status: status,
+          progressSteps: progressSteps,
+          currentStep: currentStep,
+          lawyerNotes: lawyerNotes,
+          draftOverview: draftOverview,
+          courtInfo: courtInfo,
+          rejectionNote: isRejected ? 'The submitted documents are incomplete. Please provide the updated NID copy and the correct spelling as per your birth certificate.' : null,
+          cancelledNote: isCancelled ? 'You cancelled this affidavit on 2026-09-18.' : null,
+          createdAt: new Date(Date.now() - (i * 86400000)).toISOString(),
+          updatedAt: new Date().toISOString(),
+          billingInvoice: 'INV-AFF-2026-00' + (i + 1),
+          fee: '৳' + (1500 + i * 200),
+          platformCharge: 150,
+          total: 1500 + i * 200 + 150,
+          uploadedFiles: uploadedFiles[i] || [],
+          onlineCopy: isCompleted ? 'AFFIDAVIT\n\nI, [Deponent Name], son of [Father Name], by profession [Profession], by faith [Religion], by nationality Bangladeshi, residing at [Address], do hereby solemnly affirm and declare as follows:\n\n1. That my name has been incorrectly recorded as "[Incorrect Name]" in my SSC certificate.\n\n2. That my actual and correct name is "[Correct Name]" as per my National Identity Card.\n\n3. That this affidavit is made to declare my correct name for all future official purposes.\n\nThe statements made above are true to the best of my knowledge and belief.\n\n---\n\nDeponent Signature: _______________________\nNotary Public Seal: _______________________\nDate: ' + formatDate(dates[i]) : null
+        });
+      }
+      return result;
+    }
+
+    function getFallbackAffidavits() {
+      return [
+        { id: 1, type: 'Name Change / Title Correction', purpose: 'Correction of spelling in SSC certificate', lawyerName: null, lawyerImg: null, init: '?', date: '2026-09-10', time: '4:30 PM', status: 'pending', progressSteps: ['Submitted', 'Info Received', 'Drafting', 'Ready for Signature', 'Completed'], currentStep: 0, lawyerNotes: 'We are reviewing your submission. A lawyer will be assigned shortly.', draftOverview: '', courtInfo: null, rejectionNote: null, cancelledNote: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), billingInvoice: 'INV-AFF-2026-001', fee: '৳1,500', platformCharge: 150, total: 1650, uploadedFiles: [], onlineCopy: null }
+      ];
+    }
+
+    AFFIDAVITS = generateAffidavits();
+
+    // ============================================================
+    // 2. STATE
+    // ============================================================
+    var currentStatusFilter = "all";
+    var filteredData = [];
+
+    // ============================================================
+    // 3. RENDER FUNCTIONS
+    // ============================================================
+    function getStatusConfig(status) {
+      var map = {
+        pending: { label: "Pending", cls: "status-pending", icon: "hourglass_empty" },
+        processing: { label: "Processing", cls: "status-processing", icon: "progress_activity" },
+        ready: { label: "Ready for Signature", cls: "status-processing", icon: "check_circle" },
+        completed: { label: "Completed", cls: "status-completed", icon: "done_all" },
+        cancelled: { label: "Cancelled", cls: "status-cancelled", icon: "block" },
+        rejected: { label: "Rejected", cls: "status-rejected", icon: "cancel" },
+      };
+      return map[status] || map.pending;
+    }
+
+    function formatDate(dateStr) {
+      var d = new Date(dateStr + "T00:00:00");
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function formatDateFull(dateStr) {
+      var d = new Date(dateStr + "T00:00:00");
+      return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function renderAffidavitCard(a) {
+      var status = getStatusConfig(a.status);
+
+      // For pending, show a waiting icon (hourglass_empty)
+      var photoHtml;
+      if (a.status === 'pending') {
+        photoHtml = '<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary border-2 border-gold p-0.5"><span class="material-symbols-outlined text-xl">hourglass_empty</span></div>';
+      } else if (a.lawyerImg) {
+        photoHtml = '<img src="' + a.lawyerImg + '" alt="' + a.lawyerName + '" class="w-10 h-10 rounded-full object-cover border-2 border-gold p-0.5" />';
+      } else {
+        photoHtml = '<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-sm font-bold text-secondary border-2 border-gold p-0.5">' + a.init + '</div>';
+      }
+
+      var processedBy = a.lawyerName ? a.lawyerName : 'Waiting for lawyer assignment';
+
+      var actionButtons = '';
+      if (a.status === 'pending' || a.status === 'processing') {
+        actionButtons = `
+          <button onclick="openModal(${a.id})" class="btn-outline-sm">View</button>
+          <button onclick="openCancelModal(${a.id})" class="btn-danger-sm">Cancel</button>
+        `;
+      } else if (a.status === 'ready') {
+        actionButtons = `
+          <button onclick="openModal(${a.id})" class="btn-outline-sm">View</button>
+        `;
+      } else if (a.status === 'completed') {
+        actionButtons = `
+          <button onclick="openModal(${a.id})" class="btn-outline-sm">View</button>
+          <button onclick="downloadAffidavit(${a.id})" class="btn-primary-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Download</button>
+        `;
+      } else if (a.status === 'rejected' || a.status === 'cancelled') {
+        actionButtons = `
+          <button onclick="openModal(${a.id})" class="btn-cancelled-sm">View Details</button>
+          ${a.status === 'rejected' ? `<button onclick="rebookAffidavit(${a.id})" class="btn-gold-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">refresh</span> Rebook</button>` : ''}
+        `;
+      }
+
+      return `
+        <div class="affidavit-card bg-white rounded-xl p-4 md:p-5 flex flex-col gap-3">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              ${photoHtml}
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-primary text-sm md:text-base truncate">${a.type}</h4>
+                <p class="text-xs text-secondary">Submitted: ${formatDate(a.date)}</p>
+                <p class="text-xs text-secondary">Processed by: ${processedBy}</p>
+              </div>
+            </div>
+            <span class="status-badge ${status.cls} flex-shrink-0">
+              <span class="dot"></span>
+              ${status.label}
+            </span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-surface-container">
+            ${actionButtons}
+          </div>
+        </div>
+      `;
+    }
+
+    function filterAffidavits() {
+      var searchTerm = document.getElementById('searchAffidavit').value.toLowerCase().trim();
+      var dateFrom = document.getElementById('dateFrom').value;
+      var dateTo = document.getElementById('dateTo').value;
+
+      filteredData = AFFIDAVITS.filter(function(a) {
+        if (currentStatusFilter !== 'all' && a.status !== currentStatusFilter) return false;
+        if (searchTerm) {
+          var match = a.type.toLowerCase().includes(searchTerm) ||
+                      a.purpose.toLowerCase().includes(searchTerm) ||
+                      (a.lawyerName ? a.lawyerName.toLowerCase().includes(searchTerm) : false) ||
+                      (a.status === 'pending' ? 'waiting for lawyer assignment'.includes(searchTerm) : false);
+          if (!match) return false;
+        }
+        if (dateFrom && a.date < dateFrom) return false;
+        if (dateTo && a.date > dateTo) return false;
+        return true;
+      });
+
+      var sortBy = document.getElementById('sortSelect').value;
+      if (sortBy === 'newest') {
+        filteredData.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+      } else if (sortBy === 'oldest') {
+        filteredData.sort(function(a, b) { return new Date(a.createdAt) - new Date(b.createdAt); });
+      } else if (sortBy === 'status') {
+        var order = { pending: 0, processing: 1, ready: 2, completed: 3, rejected: 4, cancelled: 5 };
+        filteredData.sort(function(a, b) { return (order[a.status] || 6) - (order[b.status] || 6); });
+      }
+
+      document.getElementById('resultCount').textContent = filteredData.length;
+      var grid = document.getElementById('affidavitGrid');
+      var empty = document.getElementById('emptyState');
+
+      if (filteredData.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        grid.innerHTML = filteredData.map(renderAffidavitCard).join('');
+      }
+    }
+
+    function setStatusFilter(status, el) {
+      currentStatusFilter = status;
+      document.querySelectorAll('#statusFilters .filter-chip').forEach(function(chip) {
+        chip.classList.toggle('active', chip.dataset.status === status);
+      });
+      filterAffidavits();
+    }
+
+    // ============================================================
+    // 4. DETAIL MODAL
+    // ============================================================
+    var currentModalId = null;
+
+    function openModal(id) {
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a) return;
+      currentModalId = id;
+      document.getElementById('modalTitle').textContent = 'Affidavit Details';
+      document.getElementById('detailModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+
+      var status = getStatusConfig(a.status);
+      var content = '';
+
+      // Progress Stepper
+      var stepsHtml = '';
+      var totalSteps = a.progressSteps.length;
+      for (var i = 0; i < totalSteps; i++) {
+        var stepClass = '';
+        if (i < a.currentStep) stepClass = 'done';
+        else if (i === a.currentStep) stepClass = 'active';
+        var isLast = (i === totalSteps - 1);
+        stepsHtml += `
+          <div class="progress-step ${stepClass}">
+            <div class="dot"><span>${i + 1}</span></div>
+            <span class="label">${a.progressSteps[i]}</span>
+          </div>
+          ${!isLast ? `<div class="progress-line ${i < a.currentStep ? 'done' : ''}"></div>` : ''}
+        `;
+      }
+
+      content += `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="bg-surface p-5 rounded-xl">
+            <p class="text-xs text-secondary uppercase tracking-wider">Affidavit Type</p>
+            <p class="font-semibold text-primary text-lg">${a.type}</p>
+          </div>
+          <div class="bg-surface p-5 rounded-xl">
+            <p class="text-xs text-secondary uppercase tracking-wider">Purpose</p>
+            <p class="font-semibold text-primary text-lg">${a.purpose}</p>
+          </div>
+          <div class="bg-surface p-5 rounded-xl">
+            <p class="text-xs text-secondary uppercase tracking-wider">Assigned Lawyer</p>
+            ${a.lawyerName ? `<p class="font-semibold text-primary text-lg">${a.lawyerName}</p>` : `<p class="font-semibold text-secondary text-lg">Not yet assigned</p>`}
+            ${a.status === 'pending' ? '<p class="text-xs text-warning mt-1">⏳ A lawyer will be assigned shortly.</p>' : ''}
+          </div>
+          <div class="bg-surface p-5 rounded-xl">
+            <p class="text-xs text-secondary uppercase tracking-wider">Status</p>
+            <span class="status-badge ${status.cls} mt-1 text-sm">
+              <span class="dot"></span>
+              ${status.label}
+            </span>
+            ${a.status === 'pending' ? '<p class="text-xs text-warning mt-1">⏳ Awaiting review from our legal team.</p>' : ''}
+            ${a.status === 'processing' ? '<p class="text-xs text-warning mt-1">⚖️ Draft is being prepared.</p>' : ''}
+            ${a.status === 'ready' ? '<p class="text-xs text-success mt-1">✅ Ready for your signature at court.</p>' : ''}
+            ${a.status === 'rejected' ? '<p class="text-xs text-error mt-1">❌ Rejected by the lawyer.</p>' : ''}
+            ${a.status === 'cancelled' ? '<p class="text-xs text-secondary mt-1">🚫 Cancelled by you.</p>' : ''}
+          </div>
+        </div>
+      `;
+
+      // Progress Stepper
+      content += `
+        <div class="bg-surface rounded-xl p-5 mb-6">
+          <h4 class="font-bold text-primary text-sm mb-4">Progress Tracker</h4>
+          <div class="progress-stepper">
+            ${stepsHtml}
+          </div>
+          <p class="text-xs text-secondary mt-4 text-center">
+            ${a.currentStep < a.progressSteps.length ? 'Current step: ' + a.progressSteps[a.currentStep] : 'Completed'}
+          </p>
+        </div>
+      `;
+
+      // ---- SECTION: SUBMITTED DETAILS & FILES ----
+      var filesHtml = '';
+      if (a.uploadedFiles && a.uploadedFiles.length > 0) {
+        filesHtml = `
+          <div class="file-list">
+            ${a.uploadedFiles.map(function(f) {
+              return `
+                <div class="file-item">
+                  <div class="file-info">
+                    <span class="material-symbols-outlined text-[20px] text-secondary">description</span>
+                    <span class="name">${f.name}</span>
+                    <span class="meta">${f.size} · Uploaded ${f.uploadedAt}</span>
+                  </div>
+                  <div class="file-actions">
+                    <button onclick="alert('Viewing ${f.name}')" title="View"><span class="material-symbols-outlined text-[18px]">visibility</span></button>
+                    <button onclick="alert('Downloading ${f.name}')" title="Download"><span class="material-symbols-outlined text-[18px]">download</span></button>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      } else {
+        filesHtml = '<p class="text-xs text-secondary italic">No files uploaded yet.</p>';
+      }
+
+      content += `
+        <div class="bg-surface rounded-xl p-5 mb-6">
+          <h4 class="font-bold text-primary text-sm mb-3">📋 Submitted Details & Files</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <p class="text-xs text-secondary uppercase tracking-wider">Affidavit Type</p>
+              <p class="text-sm font-medium text-primary">${a.type}</p>
+            </div>
+            <div>
+              <p class="text-xs text-secondary uppercase tracking-wider">Purpose</p>
+              <p class="text-sm font-medium text-primary">${a.purpose}</p>
+            </div>
+            <div>
+              <p class="text-xs text-secondary uppercase tracking-wider">Submitted On</p>
+              <p class="text-sm font-medium text-primary">${formatDateFull(a.date)}</p>
+            </div>
+            <div>
+              <p class="text-xs text-secondary uppercase tracking-wider">Assigned Lawyer</p>
+              <p class="text-sm font-medium text-primary">${a.lawyerName ? a.lawyerName : 'Not yet assigned'}</p>
+            </div>
+          </div>
+          <div class="border-t border-outline-variant/30 pt-4 mt-2">
+            <p class="text-xs text-secondary uppercase tracking-wider mb-2">Uploaded Files (${a.uploadedFiles ? a.uploadedFiles.length : 0})</p>
+            ${filesHtml}
+          </div>
+        </div>
+      `;
+
+      // ---- SECTION: NOTES & FILE UPLOAD ----
+      content += `
+        <div class="bg-surface rounded-xl p-5 mb-6">
+          <h4 class="font-bold text-primary text-sm mb-3">📝 Notes & Documents</h4>
+          ${a.lawyerNotes ? `<div class="bg-white rounded-lg p-4 mb-4 border border-outline-variant/30"><p class="text-sm text-secondary">${a.lawyerNotes}</p></div>` : ''}
+          <div class="mb-4">
+            <label class="block text-xs font-medium text-secondary uppercase tracking-wider mb-1">Your Comments (optional)</label>
+            <textarea id="clientComment" rows="2" class="w-full rounded-lg border border-outline-variant p-3 text-sm focus:border-gold focus:ring-gold" placeholder="Add any additional information for the lawyer..."></textarea>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-secondary uppercase tracking-wider mb-1">Upload Document (optional)</label>
+            <input type="file" class="w-full text-sm text-secondary file:mr-2 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gold file:text-white hover:file:bg-gold-dark" onchange="uploadFile(${a.id}, this)" />
+          </div>
+        </div>
+      `;
+
+      // ---- SECTION: DRAFT OVERVIEW (if processing, ready, or completed) ----
+      if (a.status === 'processing' || a.status === 'ready' || a.status === 'completed') {
+        content += `
+          <div class="bg-surface rounded-xl p-5 mb-6">
+            <h4 class="font-bold text-primary text-sm mb-3">📄 Draft Overview</h4>
+            <div class="draft-preview">
+              <div class="stamp">
+                <strong>AFFIDAVIT DRAFT</strong>
+                JustiFi Legal · Prepared by ${a.lawyerName || 'Legal Team'}
+              </div>
+              <div class="content">${a.draftOverview || 'Draft is being prepared by the lawyer.'}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      // ---- SECTION: COURT INFO (if ready) ----
+      if (a.courtInfo) {
+        content += `
+          <div class="bg-surface rounded-xl p-5 mb-6">
+            <h4 class="font-bold text-primary text-sm mb-3">🏛️ Court Presence Details</h4>
+            <div class="court-info">
+              <div class="item"><span class="label">Court</span><span class="value">${a.courtInfo.courtName}</span></div>
+              <div class="item"><span class="label">Chamber / Room</span><span class="value">${a.courtInfo.chamber}</span></div>
+              <div class="item"><span class="label">Presence Time</span><span class="value">${a.courtInfo.presenceTime}</span></div>
+              <div class="item"><span class="label">Date</span><span class="value">${formatDateFull(a.courtInfo.date)}</span></div>
+              <div class="item"><span class="label">Contact Person</span><span class="value">${a.courtInfo.contactPerson}</span></div>
+              <div class="item"><span class="label">Contact Phone</span><span class="value">${a.courtInfo.contactPhone}</span></div>
+            </div>
+            ${a.courtInfo.additionalNotes ? `<p class="text-xs text-secondary mt-3">📌 ${a.courtInfo.additionalNotes}</p>` : ''}
+          </div>
+        `;
+      }
+
+      // ---- SECTION: ONLINE COPY (if completed) ----
+      if (a.status === 'completed' && a.onlineCopy) {
+        content += `
+          <div class="bg-surface rounded-xl p-5 mb-6">
+            <h4 class="font-bold text-primary text-sm mb-3">📄 Online Copy</h4>
+            <div class="online-copy">
+              <div class="content" style="white-space:pre-wrap;">${a.onlineCopy}</div>
+              <div class="watermark">Digitally generated copy · JustiFi</div>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button onclick="downloadAffidavit(${a.id})" class="btn-primary-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Download PDF</button>
+              <button onclick="viewOnlineCopy(${a.id})" class="btn-outline-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">visibility</span> View Full</button>
+            </div>
+          </div>
+        `;
+      }
+
+      // ---- BILLING STATEMENT ----
+      var billingHtml = '';
+      var isPaid = (a.status === 'pending' || a.status === 'processing' || a.status === 'ready' || a.status === 'completed');
+      var isRefunded = (a.status === 'rejected');
+      var isCancelled = (a.status === 'cancelled');
+
+      if (isPaid) {
+        billingHtml = `
+          <div class="bg-primary/5 rounded-xl p-5 mb-4">
+            <h4 class="font-bold text-primary text-sm mb-2">💰 Billing Statement — Paid</h4>
+            <div class="space-y-1 text-sm">
+              <div class="flex justify-between py-1"><span class="text-secondary">Affidavit Fee</span><span class="font-medium">${a.fee}</span></div>
+              <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${a.platformCharge}</span></div>
+              <div class="flex justify-between border-t border-outline-variant/50 pt-2 font-bold"><span>Total Paid</span><span class="text-gold">৳${a.total}</span></div>
+              ${a.billingInvoice ? `<div class="flex justify-between text-xs text-secondary"><span>Invoice</span><span>${a.billingInvoice}</span></div>` : ''}
+            </div>
+            ${a.status === 'completed' ? `<button onclick="downloadInvoice(${a.id})" class="mt-2 text-gold text-sm font-medium hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Download Invoice</button>` : ''}
+          </div>
+        `;
+      } else if (isRefunded) {
+        billingHtml = `
+          <div class="bg-red-50 rounded-xl p-5 mb-4 border border-red-200">
+            <h4 class="font-bold text-red-800 text-sm mb-2">💰 Billing Statement — Refunded</h4>
+            <div class="space-y-1 text-sm">
+              <div class="flex justify-between py-1"><span class="text-secondary">Affidavit Fee</span><span class="font-medium">${a.fee}</span></div>
+              <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${a.platformCharge}</span></div>
+              <div class="flex justify-between border-t border-red-200 pt-2 font-bold"><span>Total Refunded</span><span class="text-red-700">৳${a.total}</span></div>
+              ${a.billingInvoice ? `<div class="flex justify-between text-xs text-secondary"><span>Invoice</span><span>${a.billingInvoice}</span></div>` : ''}
+            </div>
+            <button onclick="downloadInvoice(${a.id})" class="mt-2 text-gold text-sm font-medium hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Download Refund Invoice</button>
+          </div>
+        `;
+      } else if (isCancelled) {
+        var refundAmt = Math.round(a.total * 0.5);
+        var penalty = a.total - refundAmt;
+        billingHtml = `
+          <div class="bg-yellow-50 rounded-xl p-5 mb-4 border border-yellow-200">
+            <h4 class="font-bold text-yellow-800 text-sm mb-2">💰 Billing Statement — Cancelled</h4>
+            <div class="space-y-1 text-sm">
+              <div class="flex justify-between py-1"><span class="text-secondary">Affidavit Fee</span><span class="font-medium">${a.fee}</span></div>
+              <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${a.platformCharge}</span></div>
+              <div class="flex justify-between border-t border-yellow-200 pt-2"><span class="text-secondary">Client Paid</span><span class="font-medium">৳${a.total}</span></div>
+              <div class="flex justify-between text-error py-1"><span>Cancellation Penalty</span><span class="font-medium">- ৳${penalty}</span></div>
+              <div class="flex justify-between border-t border-yellow-200 pt-2 font-bold text-success"><span>Partial Refunded</span><span class="text-gold">+ ৳${refundAmt}</span></div>
+              ${a.billingInvoice ? `<div class="flex justify-between text-xs text-secondary"><span>Invoice</span><span>${a.billingInvoice}</span></div>` : ''}
+            </div>
+            <button onclick="downloadInvoice(${a.id})" class="mt-2 text-gold text-sm font-medium hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Download Cancellation Invoice</button>
+          </div>
+        `;
+      }
+
+      content += billingHtml;
+
+      // Cancel button (for active affidavits except ready)
+      if (a.status === 'pending' || a.status === 'processing') {
+        content += `
+          <button onclick="openCancelModal(${a.id})" class="w-full py-3 rounded-xl bg-error/10 text-error font-medium text-sm hover:bg-error/20 transition-all">
+            Cancel Affidavit
+          </button>
+        `;
+      }
+
+      content += `
+        <div class="mt-6 pt-4 border-t border-surface-container">
+          <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-surface text-primary font-medium text-sm hover:bg-surface-container transition-all">
+            Close
+          </button>
+        </div>
+      `;
+
+      document.getElementById('modalContent').innerHTML = content;
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // ============================================================
+    // 5. CANCEL FLASHCARD
+    // ============================================================
+    var cancelTargetId = null;
+
+    function openCancelModal(id) {
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a) return;
+      cancelTargetId = id;
+
+      var currentStepName = a.progressSteps[a.currentStep] || 'Unknown';
+      var penaltyMsg = 'If you cancel now, you will receive a 50% refund. The remaining amount will be deducted as processing fee.';
+
+      var content = `
+        <p class="text-secondary mb-4">Are you sure you want to cancel this affidavit request?</p>
+        <div class="bg-surface rounded-xl p-4 mb-6">
+          <div class="flex justify-between text-sm py-1">
+            <span class="text-secondary">Affidavit</span>
+            <span class="font-medium">${a.type}</span>
+          </div>
+          <div class="flex justify-between text-sm py-1 border-t border-outline-variant/30">
+            <span class="text-secondary">Current Step</span>
+            <span class="font-medium text-warning">${currentStepName}</span>
+          </div>
+          <div class="flex justify-between text-sm py-1 border-t border-outline-variant/30">
+            <span class="text-secondary">Cancellation Penalty</span>
+            <span class="font-medium text-error">50% of total fee</span>
+          </div>
+          <div class="flex justify-between text-sm py-1 border-t border-outline-variant/30">
+            <span class="text-secondary">Refund Amount</span>
+            <span class="font-medium text-success">৳${Math.round(a.total * 0.5)}</span>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button onclick="confirmCancel()" class="flex-1 px-6 py-3 bg-error text-white rounded-xl font-bold hover:bg-red-700 transition-all">
+            Yes, Cancel
+          </button>
+          <button onclick="closeCancelModal()" class="flex-1 px-6 py-3 border-2 border-primary text-primary rounded-xl font-bold hover:bg-primary/5 transition-all">
+            No, Keep It
+          </button>
+        </div>
+      `;
+
+      document.getElementById('cancelModalContent').innerHTML = content;
+      document.getElementById('cancelModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCancelModal() {
+      document.getElementById('cancelModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function confirmCancel() {
+      var id = cancelTargetId;
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a) return;
+
+      a.status = 'cancelled';
+      a.cancelledNote = 'You cancelled this affidavit on ' + new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + '.';
+      a.currentStep = 1;
+      closeCancelModal();
+      filterAffidavits();
+      if (currentModalId === id) closeModal();
+      alert('Affidavit cancelled successfully.');
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeCancelModal();
+    });
+
+    // ============================================================
+    // 6. ACTIONS
+    // ============================================================
+    function rebookAffidavit(id) {
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a) return;
+      window.location.href = 'affidavit.html';
+    }
+
+    function downloadAffidavit(id) {
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a) return;
+      alert('Downloading affidavit: ' + a.type + ' (PDF)');
+    }
+
+    function viewOnlineCopy(id) {
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a || !a.onlineCopy) return;
+      alert('Viewing full online copy:\n\n' + a.onlineCopy);
+    }
+
+    function downloadInvoice(id) {
+      var a = AFFIDAVITS.find(function(item) { return item.id === id; });
+      if (!a) return;
+      alert('Downloading invoice: ' + a.billingInvoice + '\nTotal: ৳' + a.total);
+    }
+
+    function uploadFile(id, input) {
+      var file = input.files[0];
+      if (!file) return;
+      alert('File "' + file.name + '" uploaded successfully for affidavit #' + id);
+      input.value = '';
+    }
+
+    // ============================================================
+    // 7. INIT
+    // ============================================================
+    filterAffidavits();
+
+    // Expose functions globally
+    window.filterAffidavits = filterAffidavits;
+    window.setStatusFilter = setStatusFilter;
+    window.openModal = openModal;
+    window.closeModal = closeModal;
+    window.openCancelModal = openCancelModal;
+    window.closeCancelModal = closeCancelModal;
+    window.confirmCancel = confirmCancel;
+    window.rebookAffidavit = rebookAffidavit;
+    window.downloadAffidavit = downloadAffidavit;
+    window.viewOnlineCopy = viewOnlineCopy;
+    window.downloadInvoice = downloadInvoice;
+    window.uploadFile = uploadFile;
+  </script>
+
+</body>
+</html>
