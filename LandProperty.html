@@ -1366,6 +1366,14 @@
           padding: 28px 0 40px;
         }
       }
+
+      /* --- Hide sections when in steps 2, 3, 4 --- */
+      .hide-on-form-steps {
+        transition: opacity 0.3s ease;
+      }
+      .hide-on-form-steps.hidden {
+        display: none !important;
+      }
     </style>
   </head>
   <body data-page="land" data-requires-auth="0">
@@ -1439,7 +1447,7 @@
           </div>
 
           <!-- ============================================================
-           STEP 1: PROPERTY DETAILS
+           STEP 1: PROPERTY DETAILS (WITH LOCATION & PROPERTY TYPE)
         ============================================================ -->
           <div class="step-panel-land active" data-panel="1">
             <form id="step1FormLand">
@@ -1580,6 +1588,54 @@
                       placeholder="e.g. 89"
                       required
                     />
+                  </div>
+                </div>
+
+                <!-- NEW: Location Field -->
+                <div class="field-row-land">
+                  <div class="field-group-land">
+                    <label
+                      >Location
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ অবস্থান</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <input
+                      type="text"
+                      id="location"
+                      placeholder="e.g. Purbachal Sector 4, Dhaka"
+                      required
+                    />
+                  </div>
+                  <div class="field-group-land">
+                    <label
+                      >Property Type
+                      <span
+                        style="
+                          font-weight: 400;
+                          color: var(--slate);
+                          font-size: 11px;
+                        "
+                        >/ সম্পত্তির ধরন</span
+                      >
+                      <span class="star">*</span></label
+                    >
+                    <select id="propertyType" required>
+                      <option value="">Select Property Type</option>
+                      <option>Residential Plot</option>
+                      <option>Commercial Space</option>
+                      <option>Agricultural Land</option>
+                      <option>Industrial Plot</option>
+                      <option>Flat / Apartment</option>
+                      <option>Mixed Use Property</option>
+                      <option>Other</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -2615,7 +2671,7 @@
           </div>
 
           <!-- ============================================================
-           STEP 4: REVIEW & SUBMIT (Dynamic Pricing)
+           STEP 4: REVIEW & SUBMIT (Dynamic Pricing with UPDATED TEXT)
         ============================================================ -->
           <div class="step-panel-land" data-panel="4">
             <form id="step4FormLand">
@@ -2642,7 +2698,7 @@
                   </p>
                 </div>
 
-                <!-- Property & Location Record -->
+                <!-- Property & Location Record (UPDATED with Location & Property Type) -->
                 <div class="review-card">
                   <div class="r-header">
                     <h4>
@@ -2658,16 +2714,24 @@
                   </div>
                   <div class="r-grid">
                     <div class="r-item">
-                      <div class="label">Location &amp; Mouza</div>
+                      <div class="label">Location</div>
                       <div class="value" id="reviewLocation">—</div>
                     </div>
                     <div class="r-item">
-                      <div class="label">Plot &amp; Schedule Identifiers</div>
-                      <div class="value" id="reviewPlot">—</div>
+                      <div class="label">Property Type</div>
+                      <div class="value" id="reviewPropertyType">—</div>
                     </div>
                     <div class="r-item">
-                      <div class="label">Ownership Information</div>
-                      <div class="value" id="reviewOwnerInfo">—</div>
+                      <div class="label">Division / District</div>
+                      <div class="value" id="reviewDivisionDistrict">—</div>
+                    </div>
+                    <div class="r-item">
+                      <div class="label">Upazila / Mouza</div>
+                      <div class="value" id="reviewUpazilaMouza">—</div>
+                    </div>
+                    <div class="r-item">
+                      <div class="label">Khatian / Dag No.</div>
+                      <div class="value" id="reviewKhatianDag">—</div>
                     </div>
                     <div class="r-item">
                       <div class="label">Attached Documents</div>
@@ -2682,7 +2746,7 @@
                   </div>
                 </div>
 
-                <!-- Selected Verification Scope -->
+                <!-- Selected Verification Scope (UPDATED text) -->
                 <div class="review-card">
                   <div class="r-header">
                     <h4>
@@ -2731,7 +2795,7 @@
                           font-size: 12px;
                         "
                       >
-                        SC
+                        JF
                       </div>
                       <div>
                         <p
@@ -2741,18 +2805,16 @@
                             color: var(--navy);
                           "
                         >
-                          Supreme Court Chamber, High Court Division
+                          JustiFi
                         </p>
                         <p style="font-size: 10px; color: var(--slate)">
-                          Assigned Empanelled Council &amp; Certified Land
-                          Specialists
+                          Assigned Certified Land Specialists
                         </p>
                       </div>
                     </div>
                     <span
                       style="font-size: 11px; font-weight: 600; color: #10b981"
-                      ><i class="fas fa-check-circle"></i> Bar Council
-                      Verified</span
+                      ><i class="fas fa-check-circle"></i> Verified</span
                     >
                   </div>
                 </div>
@@ -2939,9 +3001,12 @@
         </div>
 
         <!-- ============================================================
-           STREAMLINED VERIFICATION PROCESS
+           STREAMLINED VERIFICATION PROCESS (Hidden in steps 2, 3, 4)
       ============================================================ -->
-        <section class="process-section" id="process-section">
+        <section
+          class="process-section hide-on-form-steps"
+          id="process-section"
+        >
           <h2 class="process-title">
             A Streamlined <span class="gold">Verification Process</span>
           </h2>
@@ -2987,9 +3052,9 @@
         </section>
 
         <!-- ============================================================
-           TRUST BADGES SECTION
+           TRUST BADGES SECTION (Hidden in steps 2, 3, 4)
       ============================================================ -->
-        <section class="trust-section">
+        <section class="trust-section hide-on-form-steps" id="trust-section">
           <div class="trust-grid">
             <div class="trust-card">
               <div class="trust-icon"><i class="fas fa-gavel"></i></div>
@@ -3037,6 +3102,9 @@
         );
         var panels = document.querySelectorAll(".step-panel-land");
         var currentStep = 1;
+
+        // --- Sections to hide/show ---
+        var hideableSections = document.querySelectorAll(".hide-on-form-steps");
 
         // --- File upload tracking ---
         var uploadedFiles = {
@@ -3154,6 +3222,17 @@
 
           currentStep = step;
 
+          // Show/hide process and trust sections based on current step
+          if (step === 1) {
+            hideableSections.forEach(function (section) {
+              section.classList.remove("hidden");
+            });
+          } else {
+            hideableSections.forEach(function (section) {
+              section.classList.add("hidden");
+            });
+          }
+
           if (step === 4) {
             updateReviewData();
             updatePricing();
@@ -3173,32 +3252,36 @@
           var mouza = document.getElementById("mouza");
           var khatiyan = document.getElementById("khatiyan");
           var dag = document.getElementById("dag");
+          var location = document.getElementById("location");
+          var propertyType = document.getElementById("propertyType");
 
-          var locationText =
-            (division && division.value ? division.value : "—") +
-            ", " +
-            (district && district.value ? district.value : "—") +
-            ", " +
-            (upazila && upazila.value ? upazila.value : "—");
-          var plotText =
-            "Khatian No. " +
-            (khatiyan && khatiyan.value ? khatiyan.value : "—") +
-            " • Dag No. " +
-            (dag && dag.value ? dag.value : "—");
+          // Location
+          document.getElementById("reviewLocation").textContent =
+            location && location.value ? location.value : "—";
 
-          document.getElementById("reviewLocation").textContent = locationText;
-          document.getElementById("reviewPlot").textContent = plotText;
+          // Property Type
+          document.getElementById("reviewPropertyType").textContent =
+            propertyType && propertyType.value ? propertyType.value : "—";
 
-          var ownerName = document.getElementById("ownerName");
-          var relationship = document.getElementById("relationship");
-          var ownerInfoText =
-            ownerName && ownerName.value ? ownerName.value : "—";
-          if (relationship && relationship.value) {
-            ownerInfoText += " • " + relationship.value;
-          }
-          document.getElementById("reviewOwnerInfo").textContent =
-            ownerInfoText;
+          // Division / District
+          var divisionText = division && division.value ? division.value : "—";
+          var districtText = district && district.value ? district.value : "—";
+          document.getElementById("reviewDivisionDistrict").textContent =
+            divisionText + " / " + districtText;
 
+          // Upazila / Mouza
+          var upazilaText = upazila && upazila.value ? upazila.value : "—";
+          var mouzaText = mouza && mouza.value ? mouza.value : "—";
+          document.getElementById("reviewUpazilaMouza").textContent =
+            upazilaText + " / " + mouzaText;
+
+          // Khatian / Dag
+          var khatiyanText = khatiyan && khatiyan.value ? khatiyan.value : "—";
+          var dagText = dag && dag.value ? dag.value : "—";
+          document.getElementById("reviewKhatianDag").textContent =
+            "Khatian: " + khatiyanText + " / Dag: " + dagText;
+
+          // Documents
           var docCount = 0;
           var docNames = [];
           if (uploadedFiles.khatian) {
@@ -3216,6 +3299,7 @@
           document.getElementById("reviewDocuments").textContent =
             docCount + " document(s): " + docNames.join(", ") || "—";
 
+          // Services
           var selectedServices = [];
           document
             .querySelectorAll(".service-check:checked")
@@ -3263,7 +3347,6 @@
               } else {
                 card.classList.remove("selected");
               }
-              // Update pricing if this is the physical inspection checkbox
               if (this.classList.contains("physical-inspection")) {
                 updatePricing();
               }
@@ -3311,6 +3394,11 @@
             labels.forEach(function (label) {
               label.classList.remove("active");
               label.classList.add("done");
+            });
+
+            // Hide sections when form is submitted
+            hideableSections.forEach(function (section) {
+              section.classList.add("hidden");
             });
           });
 

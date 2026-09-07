@@ -334,6 +334,7 @@
         border-radius: 16px;
         box-shadow: 0 8px 40px rgba(26, 43, 60, 0.06);
         padding: 22px 22px 28px;
+        overflow: hidden;
       }
 
       /* Official badge (no language toggle) */
@@ -383,6 +384,7 @@
         margin-bottom: 28px;
         padding: 0 4px;
         width: 100%;
+        overflow: visible;
       }
       .form-stepper .step-item {
         display: flex;
@@ -390,6 +392,7 @@
         align-items: center;
         gap: 8px;
         flex: 1;
+        min-width: 0;
       }
       .form-stepper .step-dot {
         width: 44px;
@@ -431,6 +434,7 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         white-space: nowrap;
+        text-align: center;
       }
       .form-stepper .step-label.active {
         color: var(--navy);
@@ -446,7 +450,8 @@
         transition: all 0.3s ease;
         margin: 0 4px;
         margin-bottom: 22px;
-        min-width: 30px;
+        min-width: 20px;
+        flex-shrink: 1;
       }
       .form-stepper .step-line.done {
         background: var(--navy);
@@ -458,6 +463,7 @@
         grid-template-columns: 1fr 1fr;
         gap: 12px;
         margin-top: 4px;
+        width: 100%;
       }
       .service-option {
         display: flex;
@@ -469,6 +475,8 @@
         cursor: pointer;
         transition: all 0.25s ease;
         background: #fff;
+        min-width: 0;
+        overflow: hidden;
       }
       .service-option:hover {
         border-color: rgba(197, 160, 89, 0.3);
@@ -482,6 +490,7 @@
       .service-option .s-icon {
         width: 36px;
         height: 36px;
+        min-width: 36px;
         border-radius: 10px;
         background: #eef2f7;
         display: flex;
@@ -496,21 +505,28 @@
         background: var(--gold);
         color: #fff;
       }
+      .service-option .s-body {
+        flex: 1;
+        min-width: 0;
+      }
       .service-option .s-body h4 {
         font-size: 13px;
         font-weight: 700;
         color: var(--navy);
         margin-bottom: 2px;
+        word-wrap: break-word;
       }
       .service-option .s-body p {
         font-size: 12px;
         color: var(--slate);
         line-height: 1.5;
+        word-wrap: break-word;
       }
       .service-option .s-check {
         margin-left: auto;
         width: 20px;
         height: 20px;
+        min-width: 20px;
         border-radius: 50%;
         border: 2px solid var(--border);
         display: flex;
@@ -555,6 +571,7 @@
         font-size: 14px;
         font-weight: 600;
         color: var(--navy);
+        word-wrap: break-word;
       }
       .review-card .r-value .sub {
         font-weight: 400;
@@ -599,11 +616,13 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 14px;
+        width: 100%;
       }
       .field-group {
         display: flex;
         flex-direction: column;
         gap: 3px;
+        min-width: 0;
       }
       .field-group label {
         font-size: 12px;
@@ -629,6 +648,7 @@
         background: #f8fafc;
         transition: all 0.3s ease;
         color: var(--navy);
+        box-sizing: border-box;
       }
       .field-group input:focus,
       .field-group select:focus {
@@ -654,6 +674,7 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 14px;
+        width: 100%;
       }
 
       /* --- Checkbox Group --- */
@@ -683,6 +704,7 @@
       /* --- Step Panels (show/hide) --- */
       .step-panel {
         display: none;
+        width: 100%;
       }
       .step-panel.active {
         display: block;
@@ -698,6 +720,7 @@
         padding-top: 16px;
         border-top: 1px solid var(--border);
         flex-wrap: wrap;
+        width: 100%;
       }
       .form-actions .btn-back {
         background: transparent;
@@ -729,6 +752,7 @@
         gap: 8px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 16px rgba(4, 22, 39, 0.2);
+        flex-shrink: 0;
       }
       .form-actions .btn-continue-dark:hover {
         background: #0a2740;
@@ -752,6 +776,7 @@
         gap: 8px;
         transition: all 0.3s ease;
         box-shadow: 0 4px 16px rgba(197, 160, 89, 0.25);
+        flex-shrink: 0;
       }
       .form-actions .btn-submit:hover {
         transform: translateY(-2px);
@@ -931,7 +956,168 @@
         }
       }
 
-      @media (max-width: 399px) {
+      @media (max-width: 767px) {
+        .main-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+          margin: 20px 0 16px;
+        }
+
+        .why-section .why-title {
+          font-size: 18px;
+        }
+
+        .intake-form {
+          padding: 16px 14px 20px;
+        }
+        .intake-form .form-title {
+          font-size: 17px;
+        }
+        .intake-form .form-subtitle {
+          font-size: 12px;
+          margin-bottom: 14px;
+        }
+
+        .field-row {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+
+        .form-fields {
+          gap: 10px;
+        }
+
+        .form-stepper .step-dot {
+          width: 34px;
+          height: 34px;
+          font-size: 13px;
+          border-width: 2px;
+        }
+        .form-stepper .step-label {
+          font-size: 8px;
+          letter-spacing: 0.2px;
+        }
+        .form-stepper .step-line {
+          min-width: 12px;
+          margin-bottom: 16px;
+          height: 2px;
+        }
+        .form-stepper {
+          margin-bottom: 18px;
+          padding: 0 2px;
+          gap: 2px;
+        }
+        .form-stepper .step-item {
+          gap: 4px;
+        }
+
+        .services-grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        .service-option {
+          padding: 12px 14px;
+          gap: 10px;
+        }
+        .service-option .s-icon {
+          width: 32px;
+          height: 32px;
+          min-width: 32px;
+          font-size: 14px;
+        }
+        .service-option .s-body h4 {
+          font-size: 12px;
+        }
+        .service-option .s-body p {
+          font-size: 11px;
+        }
+        .service-option .s-check {
+          width: 18px;
+          height: 18px;
+          min-width: 18px;
+        }
+        .service-option.selected .s-check::after {
+          font-size: 10px;
+        }
+
+        .review-row {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .review-card {
+          padding: 12px 14px;
+        }
+        .review-card .r-value {
+          font-size: 13px;
+        }
+
+        .form-actions {
+          flex-direction: row;
+          gap: 8px;
+          padding-top: 12px;
+          margin-top: 16px;
+        }
+        .form-actions .btn-back {
+          font-size: 12px;
+          padding: 6px 2px;
+        }
+        .form-actions .btn-continue-dark,
+        .form-actions .btn-submit {
+          padding: 8px 16px;
+          font-size: 12px;
+          flex: 1;
+          justify-content: center;
+        }
+
+        .declaration-box {
+          padding: 12px 14px;
+        }
+        .declaration-box label {
+          font-size: 12px;
+        }
+
+        .why-card {
+          padding: 12px 14px;
+          gap: 10px;
+        }
+        .why-card .why-icon {
+          width: 36px;
+          height: 36px;
+          font-size: 14px;
+          min-width: 36px;
+        }
+        .why-card .why-body h3 {
+          font-size: 13px;
+        }
+        .why-card .why-body p {
+          font-size: 12px;
+        }
+
+        .need-help-box {
+          padding: 16px 16px 18px;
+        }
+        .need-help-box h3 {
+          font-size: 15px;
+        }
+        .need-help-box p {
+          font-size: 12px;
+        }
+        .need-help-box .btn-help {
+          font-size: 12px;
+          padding: 8px 18px;
+        }
+
+        .trust-badges {
+          gap: 16px;
+          padding: 12px 0;
+        }
+        .trust-badges .badge {
+          font-size: 10px;
+        }
+        .trust-badges .badge i {
+          font-size: 14px;
+        }
+
         .corp-hero {
           padding: 28px 16px 24px;
         }
@@ -951,75 +1137,46 @@
         .corp-hero .hero-actions {
           flex-direction: column;
         }
-
-        .why-card {
-          padding: 14px;
-        }
-        .why-section .why-title {
+        .corp-hero .hero-stats .stat-num {
           font-size: 18px;
         }
+        .corp-hero .hero-stats .stat-label {
+          font-size: 11px;
+        }
+      }
 
+      @media (max-width: 399px) {
         .intake-form {
-          padding: 18px 14px 22px;
-        }
-        .intake-form .form-title {
-          font-size: 17px;
-        }
-        .intake-form .form-subtitle {
-          font-size: 12px;
-        }
-
-        .form-actions .btn-continue-dark,
-        .form-actions .btn-submit {
-          padding: 9px 18px;
-          font-size: 12px;
-        }
-
-        .form-stepper {
-          flex-wrap: nowrap;
-          gap: 4px;
-          padding: 0 2px;
-        }
-        .form-stepper .step-line {
-          min-width: 16px;
-          margin-bottom: 18px;
+          padding: 12px 10px 16px;
         }
         .form-stepper .step-dot {
-          width: 34px;
-          height: 34px;
-          font-size: 13px;
-        }
-        .form-stepper .step-label {
-          font-size: 8px;
-        }
-
-        .services-grid {
-          grid-template-columns: 1fr;
-        }
-        .service-option {
-          padding: 12px 14px;
-        }
-
-        .review-row {
-          grid-template-columns: 1fr;
-        }
-        .review-card {
-          padding: 12px 14px;
-        }
-
-        .need-help-box {
-          padding: 18px 16px 20px;
-        }
-
-        .trust-badges {
-          gap: 14px;
-          padding: 12px 0;
-        }
-        .trust-badges .badge {
+          width: 28px;
+          height: 28px;
           font-size: 10px;
         }
-        .trust-badges .badge i {
-          font-size: 14px;
+        .form-stepper .step-label {
+          font-size: 7px;
+        }
+        .form-stepper .step-line {
+          min-width: 8px;
+          margin-bottom: 12px;
+        }
+        .service-option {
+          padding: 10px 12px;
+        }
+        .service-option .s-body h4 {
+          font-size: 11px;
+        }
+        .service-option .s-body p {
+          font-size: 10px;
+        }
+        .form-actions .btn-continue-dark,
+        .form-actions .btn-submit {
+          padding: 7px 12px;
+          font-size: 11px;
+        }
+        .form-actions .btn-back {
+          font-size: 11px;
         }
       }
 
@@ -1358,7 +1515,7 @@
               <div class="why-grid">
                 <div class="why-card">
                   <div class="why-icon">
-                    <i class="fas fa-city"></i>
+                    <i class="fas fa-building-columns"></i>
                   </div>
                   <div class="why-body">
                     <h3>Company Incorporation</h3>
@@ -1370,7 +1527,7 @@
                 </div>
                 <div class="why-card">
                   <div class="why-icon">
-                    <i class="fas fa-file-contract"></i>
+                    <i class="fas fa-shield-halved"></i>
                   </div>
                   <div class="why-body">
                     <h3>Tax &amp; VAT Compliance</h3>
@@ -1580,9 +1737,6 @@
             goToStep(currentStep - 1);
           });
         });
-
-        // --- Stepper dot click (disabled - cursor default) ---
-        // No click event listeners added to stepper dots
 
         // --- Form submission ---
         document
