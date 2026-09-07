@@ -1,8 +1,5 @@
 /* ===================================================================
    JustiFi — Shared Design System & Global Styles
-   Extracted verbatim from the original single-file prototype.
-   Existing rules are UNCHANGED — new rules for new modules
-   (Affidavit stepper, etc.) are appended at the very bottom.
 =================================================================== */
 :root {
   --navy: #1A2B3C;
@@ -26,6 +23,7 @@ body {
   font-family: 'Inter', -apple-system, Arial, sans-serif;
   background: var(--bg);
   color: var(--navy);
+  padding-top: 72px; /* fixed navbar height */
   padding-bottom: 0;
 }
 a {
@@ -94,10 +92,12 @@ button {
   display: inline-block;
 }
 
-/* A. NAVBAR */
+/* ===== A. NAVBAR – FIXED AT TOP ===== */
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1100;
   background: #fff;
   border-bottom: 1px solid var(--border);
@@ -209,7 +209,9 @@ button {
   padding: 6px 0;
   z-index: 1200;
 }
-.avatar-circle:hover .avatar-dropdown {
+/* Show on hover (desktop) OR when .show is added (click) */
+.avatar-circle:hover .avatar-dropdown,
+.avatar-dropdown.show {
   display: block;
 }
 .avatar-dropdown a {
@@ -253,7 +255,7 @@ button {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* B. APP SHELL */
+/* ===== B. APP SHELL ===== */
 .app-shell {
   display: none;
 }
@@ -349,7 +351,7 @@ button {
   }
 }
 
-/* C. MOBILE DRAWER */
+/* ===== C. MOBILE DRAWER ===== */
 .drawer-overlay {
   display: none;
   position: fixed;
@@ -470,7 +472,7 @@ button {
   }
 }
 
-/* D. BOTTOM NAV */
+/* ===== D. BOTTOM NAV ===== */
 .bottom-nav {
   display: none;
   position: fixed;
@@ -554,7 +556,7 @@ button {
   }
 }
 
-/* E. HOMEPAGE */
+/* ===== E. HOMEPAGE ===== */
 .hero {
   background: linear-gradient(rgba(15, 25, 38, 0.82), rgba(15, 25, 38, 0.88)), var(--navy);
   color: #fff;
@@ -862,7 +864,7 @@ button {
   color: var(--gold);
 }
 
-/* F. DASHBOARD */
+/* ===== F. DASHBOARD ===== */
 .dash-head {
   display: flex;
   justify-content: space-between;
@@ -1204,7 +1206,7 @@ button {
   margin-top: 2px;
 }
 
-/* G. BOOKING FLOW */
+/* ===== G. BOOKING FLOW ===== */
 .page-head h1 {
   font-size: 24px;
   font-weight: 700;
@@ -1392,7 +1394,7 @@ button {
   font-size: 40px;
 }
 
-/* FOOTER */
+/* ===== FOOTER ===== */
 .footer {
   background: var(--navy);
   color: rgba(255, 255, 255, 0.8);
@@ -1453,7 +1455,7 @@ button {
   color: var(--gold);
 }
 
-/* RESPONSIVE OVERRIDES */
+/* ===== RESPONSIVE OVERRIDES ===== */
 @media (max-width: 1024px) {
   .nav-links {
     display: none;
@@ -1535,9 +1537,7 @@ button {
   }
 }
 
-/* ===================================================================
-   NEW (added, nothing above changed): Affidavit Generator module
-=================================================================== */
+/* ===== AFFIDAVIT GENERATOR MODULE ===== */
 .afd-stepper {
   display: flex;
   align-items: center;
@@ -1807,33 +1807,4 @@ button {
   color: var(--slate);
   margin-top: 10px;
   line-height: 1.6;
-}
-/* A. NAVBAR – FIXED AT TOP */
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1100;
-  background: #fff;
-  border-bottom: 1px solid var(--border);
-  padding: 14px 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 72px;
-}
-
-/* Add padding to body to account for fixed navbar */
-body {
-  padding-top: 72px;
-  font-family: 'Inter', -apple-system, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--navy);
-  padding-bottom: 0;
-}
-/* Avatar dropdown – visible on hover or .show */
-.avatar-circle:hover .avatar-dropdown,
-.avatar-dropdown.show {
-  display: block;
 }
