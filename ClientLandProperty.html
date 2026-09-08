@@ -1512,6 +1512,56 @@
           </div>
         `;
 
+          // ---- PROGRESS TRACKER (MOVED TO TOP) ----
+          const progressIndex = data.status === "Completed" ? 5 : data.progress;
+
+          content += `
+          <div class="bg-surface p-4 rounded-xl mb-5">
+            <h4 class="font-bold text-primary text-sm mb-4 flex items-center gap-2">
+              <span class="material-symbols-outlined text-warm-gold text-lg">timeline</span> Progress Tracker
+            </h4>
+            <div class="flex items-start w-full">
+              ${stepLabels
+                .map((label, idx) => {
+                  const isDone =
+                    progressIndex === 5 ? true : idx < progressIndex;
+                  const isActive =
+                    progressIndex === 5 ? false : idx === progressIndex;
+                  const isCompleted = progressIndex === 5 && idx === 4;
+                  let circleColor = "#d0d3d8";
+                  let bgColor = "white";
+                  let textColor = "#9ca3af";
+                  let labelColor = "#6b7280";
+                  if (isDone || isCompleted) {
+                    circleColor = "#10b981";
+                    bgColor = "#10b981";
+                    textColor = "white";
+                    labelColor = "#10b981";
+                  } else if (isActive) {
+                    circleColor = "#C5A059";
+                    bgColor = "#C5A059";
+                    textColor = "white";
+                    labelColor = "#041627";
+                  }
+                  const lineDone = isDone || (isCompleted && idx === 3);
+                  const isLast = idx === stepLabels.length - 1;
+                  return `
+                  <div class="progress-step ${isDone ? "done" : ""} ${isActive ? "active" : ""}" style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;min-width:0;">
+                    <div class="step-circle" style="width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:2px solid ${circleColor};background:${bgColor};color:${textColor};flex-shrink:0;">${idx + 1}</div>
+                    <div class="step-label" style="margin-top:4px;font-size:9px;font-weight:500;color:${labelColor};text-align:center;line-height:1.2;word-break:break-word;">${label}</div>
+                  </div>
+                  ${!isLast ? `<div class="progress-line ${lineDone ? "done" : ""} ${isActive ? "active" : ""}" style="height:3px;flex:1;background:${lineDone ? "#10b981" : isActive ? "#C5A059" : "#d0d3d8"};margin:0 2px;align-self:flex-start;margin-top:16px;min-width:8px;"></div>` : ""}
+                `;
+                })
+                .join("")}
+            </div>
+            <div class="mt-4 p-3 bg-white rounded-lg border border-outline-variant/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <p class="text-sm text-secondary">Current status: <span class="font-semibold text-primary">${data.status === "Completed" ? "Completed" : stepLabels[progressIndex < 5 ? progressIndex : 4]}</span> — ${data.status === "Completed" ? "5" : progressIndex + 1} of 5 steps done</p>
+              <span class="text-xs text-secondary bg-surface px-3 py-1 rounded-full">Last updated: Today</span>
+            </div>
+          </div>
+        `;
+
           // 2-column grid for property details
           content += `
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
@@ -1723,56 +1773,6 @@
             </div>
           `;
           }
-
-          // Progress Tracker
-          const progressIndex = data.status === "Completed" ? 5 : data.progress;
-
-          content += `
-          <div class="bg-surface p-4 rounded-xl">
-            <h4 class="font-bold text-primary text-sm mb-4 flex items-center gap-2">
-              <span class="material-symbols-outlined text-warm-gold text-lg">timeline</span> Progress Tracker
-            </h4>
-            <div class="flex items-start w-full">
-              ${stepLabels
-                .map((label, idx) => {
-                  const isDone =
-                    progressIndex === 5 ? true : idx < progressIndex;
-                  const isActive =
-                    progressIndex === 5 ? false : idx === progressIndex;
-                  const isCompleted = progressIndex === 5 && idx === 4;
-                  let circleColor = "#d0d3d8";
-                  let bgColor = "white";
-                  let textColor = "#9ca3af";
-                  let labelColor = "#6b7280";
-                  if (isDone || isCompleted) {
-                    circleColor = "#10b981";
-                    bgColor = "#10b981";
-                    textColor = "white";
-                    labelColor = "#10b981";
-                  } else if (isActive) {
-                    circleColor = "#C5A059";
-                    bgColor = "#C5A059";
-                    textColor = "white";
-                    labelColor = "#041627";
-                  }
-                  const lineDone = isDone || (isCompleted && idx === 3);
-                  const isLast = idx === stepLabels.length - 1;
-                  return `
-                  <div class="progress-step ${isDone ? "done" : ""} ${isActive ? "active" : ""}" style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;min-width:0;">
-                    <div class="step-circle" style="width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:2px solid ${circleColor};background:${bgColor};color:${textColor};flex-shrink:0;">${idx + 1}</div>
-                    <div class="step-label" style="margin-top:4px;font-size:9px;font-weight:500;color:${labelColor};text-align:center;line-height:1.2;word-break:break-word;">${label}</div>
-                  </div>
-                  ${!isLast ? `<div class="progress-line ${lineDone ? "done" : ""} ${isActive ? "active" : ""}" style="height:3px;flex:1;background:${lineDone ? "#10b981" : isActive ? "#C5A059" : "#d0d3d8"};margin:0 2px;align-self:flex-start;margin-top:16px;min-width:8px;"></div>` : ""}
-                `;
-                })
-                .join("")}
-            </div>
-            <div class="mt-4 p-3 bg-white rounded-lg border border-outline-variant/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-              <p class="text-sm text-secondary">Current status: <span class="font-semibold text-primary">${data.status === "Completed" ? "Completed" : stepLabels[progressIndex < 5 ? progressIndex : 4]}</span> — ${data.status === "Completed" ? "5" : progressIndex + 1} of 5 steps done</p>
-              <span class="text-xs text-secondary bg-surface px-3 py-1 rounded-full">Last updated: Today</span>
-            </div>
-          </div>
-        `;
 
           // Close button
           content += `
