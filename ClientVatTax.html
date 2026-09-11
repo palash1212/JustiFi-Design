@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Land &amp; Property · JustiFi</title>
+    <title>My Tax and Vat · JustiFi</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
@@ -169,6 +169,10 @@
       .status-badge.cancelled {
         background: #f3f4f6;
         color: #4b5563;
+      }
+      .status-badge.pending {
+        background: #dbeafe;
+        color: #1e40af;
       }
       .modal-overlay {
         background: rgba(4, 22, 39, 0.5);
@@ -476,7 +480,7 @@
       }
     </style>
   </head>
-  <body data-page="land-client" data-requires-auth="1">
+  <body data-page="client-dashboard" data-requires-auth="1">
     <div id="navbarPlaceholder"></div>
     <div class="app-shell" id="appShell">
       <div id="sidebarPlaceholder"></div>
@@ -488,29 +492,32 @@
           <div
             class="max-w-[1280px] mx-auto w-full flex flex-col gap-4 sm:gap-stack-lg"
           >
+            <!-- PAGE HEADER -->
             <div
               class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
             >
               <div>
                 <h1 class="text-2xl sm:text-3xl font-bold text-primary">
-                  Land &amp; Property
+                  Corporate & Tax
                 </h1>
                 <p class="text-on-surface-variant mt-1 text-sm sm:text-base">
-                  Track your property verification requests and reports
+                  Track all your legal, tax, and property service requests in
+                  one place
                 </p>
               </div>
               <button
-                onclick="window.location.href = 'LandProperty.html'"
+                onclick="window.location.href = 'VatTax.html'"
                 class="bg-warm-gold text-on-primary px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold shadow-legal-soft hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-warm-gold text-sm sm:text-base cursor-pointer"
               >
                 <span
                   class="material-symbols-outlined text-[18px] sm:text-[20px]"
                   >add</span
                 >
-                New Verification Request
+                New Service Request
               </button>
             </div>
 
+            <!-- STAT CARDS -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-gutter">
               <div
                 class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-warm-gold transition-colors group"
@@ -528,7 +535,9 @@
                     >
                   </div>
                 </div>
-                <h3 class="text-primary text-xl sm:text-3xl">05</h3>
+                <h3 class="text-primary text-xl sm:text-3xl" id="totalCount">
+                  05
+                </h3>
               </div>
               <div
                 class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-warm-gold transition-colors group"
@@ -548,16 +557,14 @@
                   class="text-primary text-xl sm:text-3xl"
                   id="underReviewCount"
                 >
-                  01
+                  02
                 </h3>
               </div>
               <div
                 class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-emerald-green transition-colors group"
               >
                 <div class="flex justify-between items-start">
-                  <p class="text-secondary text-xs sm:text-sm">
-                    Completed Reports
-                  </p>
+                  <p class="text-secondary text-xs sm:text-sm">Completed</p>
                   <div
                     class="p-1.5 sm:p-2 bg-surface-container rounded-lg text-primary group-hover:bg-emerald-green/20"
                   >
@@ -567,7 +574,12 @@
                     >
                   </div>
                 </div>
-                <h3 class="text-primary text-xl sm:text-3xl">02</h3>
+                <h3
+                  class="text-primary text-xl sm:text-3xl"
+                  id="completedCount"
+                >
+                  02
+                </h3>
               </div>
               <div
                 class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-error transition-colors group"
@@ -585,10 +597,16 @@
                     >
                   </div>
                 </div>
-                <h3 class="text-primary text-xl sm:text-3xl">00</h3>
+                <h3
+                  class="text-primary text-xl sm:text-3xl"
+                  id="pendingActionCount"
+                >
+                  01
+                </h3>
               </div>
             </div>
 
+            <!-- SEARCH + FILTERS -->
             <div class="flex flex-col gap-3 sm:gap-stack-md mt-2">
               <div
                 class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4"
@@ -599,10 +617,10 @@
                     >search</span
                   >
                   <input
-                    id="searchProperty"
-                    oninput="filterProperties()"
+                    id="searchRequest"
+                    oninput="filterRequests()"
                     class="search-input w-full pl-10 pr-4 py-2.5 rounded-xl border border-outline-variant bg-white focus:border-warm-gold focus:ring-warm-gold transition-all text-sm"
-                    placeholder="Search by property name, khatian, or location..."
+                    placeholder="Search by service, title, or reference ID..."
                   />
                 </div>
                 <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
@@ -612,21 +630,21 @@
                   <input
                     type="date"
                     id="dateFrom"
-                    onchange="filterProperties()"
+                    onchange="filterRequests()"
                     class="px-2 sm:px-3 py-1 rounded-lg border border-outline-variant bg-white text-xs sm:text-sm focus:border-warm-gold"
                   />
                   <span class="text-secondary text-xs">to</span>
                   <input
                     type="date"
                     id="dateTo"
-                    onchange="filterProperties()"
+                    onchange="filterRequests()"
                     class="px-2 sm:px-3 py-1 rounded-lg border border-outline-variant bg-white text-xs sm:text-sm focus:border-warm-gold"
                   />
                   <button
                     onclick="
                       document.getElementById('dateFrom').value = '';
                       document.getElementById('dateTo').value = '';
-                      filterProperties();
+                      filterRequests();
                     "
                     class="text-xs sm:text-sm text-warm-gold font-medium hover:underline"
                   >
@@ -670,19 +688,84 @@
                 </button>
               </div>
 
+              <!-- REQUEST LIST -->
               <div id="requestList">
-                <!-- Card 1 -->
+                <!-- Card 1: Corporate Tax — Under Review -->
                 <div
                   class="request-card"
-                  data-status="completed"
+                  data-status="under-review"
                   data-id="1"
-                  data-title="Residential Plot, Purbachal Sector 4"
-                  data-khatian="SA-1240"
-                  data-location="Purbachal Sector 4, Dhaka"
+                  data-service="corporate-tax"
+                  data-title="Corporate Income Tax Return — Acme Solutions Ltd"
+                  data-ref="CTX-2026-001"
+                  data-location="Gulshan-2, Dhaka"
                   data-date="2023-10-12"
                 >
                   <div class="card-top">
                     <span class="submitted-date">Oct 12, 2023</span>
+                    <span class="status-badge under-review">Under Review</span>
+                  </div>
+                  <div class="card-inner-top">
+                    <div class="icon-wrap">
+                      <span
+                        class="material-symbols-outlined text-[22px] text-secondary"
+                        >account_balance</span
+                      >
+                    </div>
+                    <div class="title-wrap">
+                      <h4
+                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
+                      >
+                        Corporate Income Tax Return — Acme Solutions Ltd
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="meta-wrap">
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >confirmation_number</span
+                      >
+                      Ref: CTX-2026-001</span
+                    >
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >location_on</span
+                      >
+                      Gulshan-2, Dhaka</span
+                    >
+                  </div>
+                  <div class="footer-actions">
+                    <button
+                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      class="cancel-request-btn px-3 py-1.5 rounded-lg bg-error/10 text-error border border-error/30 text-xs sm:text-sm font-medium transition-colors hover:bg-error/20"
+                      data-id="1"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 2: Land Verification — Completed -->
+                <div
+                  class="request-card"
+                  data-status="completed"
+                  data-id="2"
+                  data-service="land-property"
+                  data-title="Land Verification — Purbachal Sector 4"
+                  data-ref="LND-2026-118"
+                  data-location="Purbachal Sector 4, Dhaka"
+                  data-date="2023-10-05"
+                >
+                  <div class="card-top">
+                    <span class="submitted-date">Oct 05, 2023</span>
                     <span class="status-badge completed">Completed</span>
                   </div>
                   <div class="card-inner-top">
@@ -696,7 +779,7 @@
                       <h4
                         class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
                       >
-                        Residential Plot, Purbachal Sector 4
+                        Land Verification — Purbachal Sector 4
                       </h4>
                     </div>
                   </div>
@@ -705,17 +788,17 @@
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >description</span
+                        >confirmation_number</span
                       >
-                      Khatian: SA-1240</span
+                      Ref: LND-2026-118</span
                     >
                     <span
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >map</span
+                        >location_on</span
                       >
-                      Dag: 542</span
+                      Purbachal Sector 4, Dhaka</span
                     >
                   </div>
                   <div class="footer-actions">
@@ -734,14 +817,16 @@
                     </button>
                   </div>
                 </div>
-                <!-- Card 2 -->
+
+                <!-- Card 3: Lawyer Consultancy — Under Review -->
                 <div
                   class="request-card"
                   data-status="under-review"
-                  data-id="2"
-                  data-title="Commercial Space, Banani Road 11"
-                  data-khatian="RS-882"
-                  data-location="Banani Road 11, Dhaka"
+                  data-id="4"
+                  data-service="lawyer-consultancy"
+                  data-title="Property Dispute Consultation — Uttara Plot"
+                  data-ref="LAW-2026-207"
+                  data-location="Uttara, Dhaka"
                   data-date="2023-10-20"
                 >
                   <div class="card-top">
@@ -752,14 +837,14 @@
                     <div class="icon-wrap">
                       <span
                         class="material-symbols-outlined text-[22px] text-secondary"
-                        >storefront</span
+                        >gavel</span
                       >
                     </div>
                     <div class="title-wrap">
                       <h4
                         class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
                       >
-                        Commercial Space, Banani Road 11
+                        Property Dispute Consultation — Uttara Plot
                       </h4>
                     </div>
                   </div>
@@ -768,17 +853,17 @@
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >description</span
+                        >confirmation_number</span
                       >
-                      Khatian: RS-882</span
+                      Ref: LAW-2026-207</span
                     >
                     <span
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >map</span
+                        >location_on</span
                       >
-                      Dag: 1201</span
+                      Uttara, Dhaka</span
                     >
                   </div>
                   <div class="footer-actions">
@@ -789,38 +874,40 @@
                     </button>
                     <button
                       class="cancel-request-btn px-3 py-1.5 rounded-lg bg-error/10 text-error border border-error/30 text-xs sm:text-sm font-medium transition-colors hover:bg-error/20"
-                      data-id="2"
+                      data-id="4"
                     >
                       Cancel
                     </button>
                   </div>
                 </div>
-                <!-- Card 3 -->
+
+                <!-- Card 4: VAT & BIN — Completed -->
                 <div
                   class="request-card"
                   data-status="completed"
-                  data-id="3"
-                  data-title="Residential Land, Mirpur DOHS"
-                  data-khatian="SA-982"
-                  data-location="Mirpur DOHS, Dhaka"
-                  data-date="2023-11-02"
+                  data-id="5"
+                  data-service="vat-bin"
+                  data-title="BIN Registration — Rahman Traders"
+                  data-ref="VAT-2026-089"
+                  data-location="Motijheel, Dhaka"
+                  data-date="2023-09-28"
                 >
                   <div class="card-top">
-                    <span class="submitted-date">Nov 02, 2023</span>
+                    <span class="submitted-date">Sep 28, 2023</span>
                     <span class="status-badge completed">Completed</span>
                   </div>
                   <div class="card-inner-top">
                     <div class="icon-wrap">
                       <span
                         class="material-symbols-outlined text-[22px] text-secondary"
-                        >house</span
+                        >receipt_long</span
                       >
                     </div>
                     <div class="title-wrap">
                       <h4
                         class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
                       >
-                        Residential Land, Mirpur DOHS
+                        BIN Registration — Rahman Traders
                       </h4>
                     </div>
                   </div>
@@ -829,17 +916,17 @@
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >description</span
+                        >confirmation_number</span
                       >
-                      Khatian: SA-982</span
+                      Ref: VAT-2026-089</span
                     >
                     <span
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >map</span
+                        >location_on</span
                       >
-                      Dag: 311</span
+                      Motijheel, Dhaka</span
                     >
                   </div>
                   <div class="footer-actions">
@@ -854,36 +941,38 @@
                       <span class="material-symbols-outlined text-[14px]"
                         >download</span
                       >
-                      Report
+                      Certificate
                     </button>
                   </div>
                 </div>
-                <!-- Card 4 -->
+
+                <!-- Card 5: Individual Tax — Rejected -->
                 <div
                   class="request-card"
                   data-status="rejected"
-                  data-id="4"
-                  data-title="Commercial Plot, Gulshan 2"
-                  data-khatian="RS-441"
-                  data-location="Gulshan 2, Dhaka"
-                  data-date="2023-09-28"
+                  data-id="6"
+                  data-service="individual-tax"
+                  data-title="Individual Tax Return 2022-23 — Ms. Nasrin Sultana"
+                  data-ref="ITX-2026-031"
+                  data-location="Sylhet"
+                  data-date="2023-09-15"
                 >
                   <div class="card-top">
-                    <span class="submitted-date">Sep 28, 2023</span>
+                    <span class="submitted-date">Sep 15, 2023</span>
                     <span class="status-badge rejected">Rejected</span>
                   </div>
                   <div class="card-inner-top">
                     <div class="icon-wrap">
                       <span
                         class="material-symbols-outlined text-[22px] text-secondary"
-                        >business_center</span
+                        >person</span
                       >
                     </div>
                     <div class="title-wrap">
                       <h4
                         class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
                       >
-                        Commercial Plot, Gulshan 2
+                        Individual Tax Return 2022-23 — Ms. Nasrin Sultana
                       </h4>
                     </div>
                   </div>
@@ -892,72 +981,17 @@
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >description</span
+                        >confirmation_number</span
                       >
-                      Khatian: RS-441</span
+                      Ref: ITX-2026-031</span
                     >
                     <span
                       class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
                       ><span
                         class="material-symbols-outlined text-[14px] text-outline"
-                        >map</span
+                        >location_on</span
                       >
-                      Dag: 908</span
-                    >
-                  </div>
-                  <div class="footer-actions">
-                    <button
-                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
-                    >
-                      View Details
-                    </button>
-                  </div>
-                </div>
-                <!-- Card 5 -->
-                <div
-                  class="request-card"
-                  data-status="cancelled"
-                  data-id="5"
-                  data-title="Residential Property, Uttara"
-                  data-khatian="SA-756"
-                  data-location="Uttara, Dhaka"
-                  data-date="2023-10-05"
-                >
-                  <div class="card-top">
-                    <span class="submitted-date">Oct 05, 2023</span>
-                    <span class="status-badge cancelled">Cancelled</span>
-                  </div>
-                  <div class="card-inner-top">
-                    <div class="icon-wrap">
-                      <span
-                        class="material-symbols-outlined text-[22px] text-secondary"
-                        >home</span
-                      >
-                    </div>
-                    <div class="title-wrap">
-                      <h4
-                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
-                      >
-                        Residential Property, Uttara
-                      </h4>
-                    </div>
-                  </div>
-                  <div class="meta-wrap">
-                    <span
-                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
-                      ><span
-                        class="material-symbols-outlined text-[14px] text-outline"
-                        >description</span
-                      >
-                      Khatian: SA-756</span
-                    >
-                    <span
-                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
-                      ><span
-                        class="material-symbols-outlined text-[14px] text-outline"
-                        >map</span
-                      >
-                      Dag: 223</span
+                      Sylhet</span
                     >
                   </div>
                   <div class="footer-actions">
@@ -970,13 +1004,14 @@
                 </div>
               </div>
 
+              <!-- EMPTY STATE -->
               <div id="emptyState" class="hidden text-center py-12">
                 <span
                   class="material-symbols-outlined text-6xl text-outline-variant block mx-auto"
                   >inbox</span
                 >
                 <h3 class="text-xl font-bold text-primary mt-4">
-                  No properties found
+                  No requests found
                 </h3>
                 <p class="text-secondary text-sm mt-2">
                   Try adjusting your filters or search terms.
@@ -991,6 +1026,7 @@
     <div id="footerPlaceholder"></div>
     <div id="bottomNavPlaceholder"></div>
 
+    <!-- DETAIL MODAL -->
     <div id="detailModal" class="fixed inset-0 z-[1200] hidden">
       <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
       <div class="detail-modal-wrapper">
@@ -1001,7 +1037,7 @@
                 class="text-xl sm:text-2xl font-bold text-primary"
                 id="modalTitle"
               >
-                Property Details
+                Request Details
               </h2>
               <button
                 onclick="closeModal()"
@@ -1016,6 +1052,7 @@
       </div>
     </div>
 
+    <!-- CANCEL MODAL -->
     <div id="cancelModal" class="fixed inset-0 z-[1300] hidden">
       <div
         class="modal-overlay absolute inset-0"
@@ -1043,30 +1080,82 @@
 
     <script>
       (function () {
-        const propertyData = {
+        /* ==========================================================
+           REQUEST DATA — Affidavit (id: 3) removed
+        ========================================================== */
+        const requestData = {
           1: {
-            title: "Residential Plot, Purbachal Sector 4",
-            icon: "home_work",
-            status: "Completed",
-            statusClass: "completed",
+            title: "Corporate Income Tax Return — Acme Solutions Ltd",
+            icon: "account_balance",
+            service: "Corporate & Tax",
+            serviceKey: "corporate-tax",
+            status: "Under Review",
+            statusClass: "under-review",
             submitted: "Oct 12, 2023",
             submittedDate: "2023-10-12",
-            division: "Dhaka",
-            district: "Dhaka",
-            upazila: "Purbachal",
-            mouza: "Purbachal Mouza",
-            khatian: "SA-1240",
-            dag: "542",
-            type: "Residential",
-            location: "Purbachal Sector 4, Dhaka",
-            owner: "Md. Ariful Islam",
-            ownershipStatus: "Prospective Buyer (সম্ভাব্য ক্রেতা)",
-            docs: [
-              "NID Copy",
-              "Khatian Copy",
-              "Mutation Certificate",
-              "Tax Receipt",
+            referenceId: "CTX-2026-001",
+            location: "Gulshan-2, Dhaka",
+            fee: "15,000",
+            platformCharge: 150,
+            total: 15150,
+            billingInvoice: "INV-2026-101",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              "Tax Year": "2024–2025",
+              "Entity Type": "Private Limited",
+              "Annual Turnover": "1 crore – 5 crore",
+              "Registration No": "C-123456",
+              "Assigned Specialist": "Md. Kamal Hossain (ITP)",
+            },
+            scope: [
+              { text: "Document collection & review", done: true },
+              { text: "Tax computation & reconciliation", done: true },
+              { text: "Draft return preparation", done: false },
+              { text: "Client review & e-filing", done: false },
             ],
+            specialist: {
+              name: "Md. Kamal Hossain",
+              designation: "Income Tax Practitioner (ITP)",
+              experience: "12 years experience",
+            },
+            progress: 2,
+          },
+          2: {
+            title: "Land Verification — Purbachal Sector 4",
+            icon: "home_work",
+            service: "Land & Property",
+            serviceKey: "land-property",
+            status: "Completed",
+            statusClass: "completed",
+            submitted: "Oct 05, 2023",
+            submittedDate: "2023-10-05",
+            referenceId: "LND-2026-118",
+            location: "Purbachal Sector 4, Dhaka",
+            fee: "1,500",
+            platformCharge: 150,
+            total: 1650,
+            billingInvoice: "INV-2026-102",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              Khatian: "SA-1240",
+              Dag: "542",
+              "Property Type": "Residential",
+              Mouza: "Purbachal Mouza",
+              "Assigned Specialist":
+                "Md. Kamal Hossain (Senior Land Specialist)",
+            },
             scope: [
               { text: "Title Chain & CS-to-BS Record Tracing", done: true },
               { text: "Encumbrance & Bank Lien Verification", done: true },
@@ -1079,197 +1168,133 @@
               experience: "12 years experience",
             },
             progress: 5,
-            fee: "1,500",
-            platformCharge: 150,
-            total: 1650,
-            billingInvoice: "INV-2026-001",
-            isPaid: true,
-            isRefunded: false,
-            isCancelled: false,
-            rejectionNote: null,
-            cancelledNote: null,
-            refundPercentage: null,
-            refundAmount: null,
           },
-          2: {
-            title: "Commercial Space, Banani Road 11",
-            icon: "storefront",
+          4: {
+            title: "Property Dispute Consultation — Uttara Plot",
+            icon: "gavel",
+            service: "Lawyer Consultancy",
+            serviceKey: "lawyer-consultancy",
             status: "Under Review",
             statusClass: "under-review",
             submitted: "Oct 20, 2023",
             submittedDate: "2023-10-20",
-            division: "Dhaka",
-            district: "Dhaka",
-            upazila: "Banani",
-            mouza: "Banani Mouza",
-            khatian: "RS-882",
-            dag: "1201",
-            type: "Commercial",
-            location: "Banani Road 11, Dhaka",
-            owner: "Mr. Kamal Hossain",
-            ownershipStatus: "Self (নিজে)",
-            docs: ["Trade License", "NID Copy", "Khatian Copy", "Tax Receipt"],
+            referenceId: "LAW-2026-207",
+            location: "Uttara, Dhaka",
+            fee: "2,000",
+            platformCharge: 150,
+            total: 2150,
+            billingInvoice: "INV-2026-104",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              "Matter Category": "Property / Land",
+              Urgency: "Urgent (within 48 hours)",
+              "Opposing Party": "Mr. Abdul Karim",
+              Court: "Dhaka Judge Court",
+              "Assigned Specialist": "Reviewing — matching specialist",
+            },
             scope: [
-              { text: "Title Chain & CS-to-BS Record Tracing", done: true },
-              { text: "Encumbrance & Bank Lien Verification", done: false },
-              { text: "AC Land Mutation & DCR Status Check", done: false },
-              { text: "Physical Survey & Boundary Confirmation", done: false },
+              { text: "Case intake & document review", done: true },
+              { text: "Specialist matching", done: false },
+              { text: "Initial consultation call", done: false },
+              { text: "Legal opinion & next steps", done: false },
+            ],
+            specialist: {
+              name: "Pending assignment",
+              designation: "Matching in progress",
+              experience: "—",
+            },
+            progress: 1,
+          },
+          5: {
+            title: "BIN Registration — Rahman Traders",
+            icon: "receipt_long",
+            service: "VAT & BIN",
+            serviceKey: "vat-bin",
+            status: "Completed",
+            statusClass: "completed",
+            submitted: "Sep 28, 2023",
+            submittedDate: "2023-09-28",
+            referenceId: "VAT-2026-089",
+            location: "Motijheel, Dhaka",
+            fee: "4,000",
+            platformCharge: 150,
+            total: 4150,
+            billingInvoice: "INV-2026-105",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              "Business Name": "Rahman Traders",
+              "Trade License": "TRAD/DSCC/012345",
+              "Annual Turnover": "1 crore – 5 crore",
+              Activity: "Trading (Wholesale)",
+              "Assigned Specialist": "Mr. Rafiqul Islam (VAT Consultant)",
+            },
+            scope: [
+              { text: "Document collection & verification", done: true },
+              { text: "BIN application preparation", done: true },
+              { text: "NBR submission & follow-up", done: true },
+              { text: "BIN certificate delivery", done: true },
             ],
             specialist: {
               name: "Mr. Rafiqul Islam",
-              designation: "Land Verification Officer",
+              designation: "Licensed VAT Consultant",
               experience: "6 years experience",
             },
-            progress: 2,
-            fee: "2,500",
-            platformCharge: 150,
-            total: 2650,
-            billingInvoice: "INV-2026-002",
-            isPaid: true,
-            isRefunded: false,
-            isCancelled: false,
-            rejectionNote: null,
-            cancelledNote: null,
-            refundPercentage: null,
-            refundAmount: null,
-          },
-          3: {
-            title: "Residential Land, Mirpur DOHS",
-            icon: "house",
-            status: "Completed",
-            statusClass: "completed",
-            submitted: "Nov 02, 2023",
-            submittedDate: "2023-11-02",
-            division: "Dhaka",
-            district: "Dhaka",
-            upazila: "Mirpur",
-            mouza: "Mirpur Mouza",
-            khatian: "SA-982",
-            dag: "311",
-            type: "Residential",
-            location: "Mirpur DOHS, Dhaka",
-            owner: "Ms. Fatima Begum",
-            ownershipStatus: "Legal Heir (ওয়ারিশ)",
-            docs: [
-              "Succession Certificate",
-              "NID Copy",
-              "Khatian Copy",
-              "Mutation Certificate",
-            ],
-            scope: [
-              { text: "Title Chain & CS-to-BS Record Tracing", done: true },
-              { text: "Encumbrance & Bank Lien Verification", done: true },
-              { text: "AC Land Mutation & DCR Status Check", done: true },
-              { text: "Physical Survey & Boundary Confirmation", done: true },
-            ],
-            specialist: {
-              name: "Ms. Sabrina Akhter",
-              designation: "Land Verification Officer",
-              experience: "8 years experience",
-            },
             progress: 5,
-            fee: "1,800",
-            platformCharge: 150,
-            total: 1950,
-            billingInvoice: "INV-2026-003",
-            isPaid: true,
-            isRefunded: false,
-            isCancelled: false,
-            rejectionNote: null,
-            cancelledNote: null,
-            refundPercentage: null,
-            refundAmount: null,
           },
-          4: {
-            title: "Commercial Plot, Gulshan 2",
-            icon: "business_center",
+          6: {
+            title: "Individual Tax Return 2022-23 — Ms. Nasrin Sultana",
+            icon: "person",
+            service: "Individual Tax",
+            serviceKey: "individual-tax",
             status: "Rejected",
             statusClass: "rejected",
-            submitted: "Sep 28, 2023",
-            submittedDate: "2023-09-28",
-            division: "Dhaka",
-            district: "Dhaka",
-            upazila: "Gulshan",
-            mouza: "Gulshan Mouza",
-            khatian: "RS-441",
-            dag: "908",
-            type: "Commercial",
-            location: "Gulshan 2, Dhaka",
-            owner: "Mr. Rashed Khan",
-            ownershipStatus:
-              "Authorized Representative (ক্ষমতাপ্রাপ্ত প্রতিনিধি)",
-            docs: [
-              "Power of Attorney",
-              "NID Copy",
-              "Khatian Copy",
-              "Tax Receipt",
-            ],
-            scope: [
-              { text: "Title Chain & CS-to-BS Record Tracing", done: false },
-              { text: "Encumbrance & Bank Lien Verification", done: false },
-              { text: "AC Land Mutation & DCR Status Check", done: false },
-              { text: "Physical Survey & Boundary Confirmation", done: false },
-            ],
-            specialist: {
-              name: "Mr. Kamal Hossain",
-              designation: "Senior Land Specialist",
-              experience: "12 years experience",
-            },
-            progress: 0,
+            submitted: "Sep 15, 2023",
+            submittedDate: "2023-09-15",
+            referenceId: "ITX-2026-031",
+            location: "Sylhet",
             fee: "3,000",
             platformCharge: 150,
             total: 3150,
-            billingInvoice: "INV-2026-004",
+            billingInvoice: "INV-2026-106",
             isPaid: false,
             isRefunded: true,
             isCancelled: false,
             rejectionNote:
-              "This is not possible within this tight deadline.It is recommended to submit a new request with a more realistic timeline.",
+              "Unable to process this request — NID copy submitted was expired. Please re-submit with a valid NID and updated income documents.",
             cancelledNote: null,
             refundPercentage: 100,
             refundAmount: 3150,
-          },
-          5: {
-            title: "Residential Property, Uttara",
-            icon: "home",
-            status: "Cancelled",
-            statusClass: "cancelled",
-            submitted: "Oct 05, 2023",
-            submittedDate: "2023-10-05",
-            division: "Dhaka",
-            district: "Dhaka",
-            upazila: "Uttara",
-            mouza: "Uttara Mouza",
-            khatian: "SA-756",
-            dag: "223",
-            type: "Residential",
-            location: "Uttara, Dhaka",
-            owner: "Ms. Nasrin Sultana",
-            ownershipStatus: "Self (নিজে)",
-            docs: ["NID Copy", "Khatian Copy", "Mutation Certificate"],
+            details: {
+              "Tax Year": "2022–2023",
+              Residency: "Resident Bangladeshi",
+              "Income Sources": "Salary, Investment",
+              "Previous Filing": "Filed last year",
+              "Assigned Specialist": "—",
+            },
             scope: [
-              { text: "Title Chain & CS-to-BS Record Tracing", done: false },
-              { text: "Encumbrance & Bank Lien Verification", done: false },
-              { text: "AC Land Mutation & DCR Status Check", done: false },
-              { text: "Physical Survey & Boundary Confirmation", done: false },
+              { text: "Document collection & review", done: false },
+              { text: "Tax computation", done: false },
+              { text: "Return preparation", done: false },
+              { text: "e-Filing", done: false },
             ],
             specialist: {
-              name: "Ms. Sabrina Akhter",
-              designation: "Land Verification Officer",
-              experience: "8 years experience",
+              name: "—",
+              designation: "Request rejected",
+              experience: "—",
             },
             progress: 0,
-            fee: "1,500",
-            platformCharge: 150,
-            total: 1650,
-            billingInvoice: "INV-2026-005",
-            isPaid: true,
-            isRefunded: false,
-            isCancelled: true,
-            rejectionNote: null,
-            cancelledNote: "Cancelled on " + new Date().toLocaleDateString(),
-            refundPercentage: 50,
-            refundAmount: 825,
           },
         };
 
@@ -1280,24 +1305,28 @@
         const cancelModalContent =
           document.getElementById("cancelModalContent");
         const stepLabels = [
-          "File Submitted",
-          "Info Received",
-          "Preparing Draft",
-          "User Review",
+          "Submitted",
+          "In Progress",
+          "Preparing",
+          "Review",
           "Completed",
         ];
         let cancelTargetId = null;
 
+        /* ==========================================================
+           CANCEL MODAL
+        ========================================================== */
         function openCancelModal(id) {
-          const data = propertyData[id];
+          const data = requestData[id];
           if (!data) return;
           cancelTargetId = id;
           const refundAmount = Math.round((data.total * 50) / 100);
           const penalty = data.total - refundAmount;
           cancelModalContent.innerHTML = `
-            <p class="text-secondary mb-4">Cancel verification for <strong>${data.title}</strong>?</p>
+            <p class="text-secondary mb-4">Cancel request for <strong>${data.title}</strong>?</p>
             <div class="bg-surface rounded-xl p-4 mb-6">
               <div class="flex justify-between text-sm py-1"><span class="text-secondary">Submitted</span><span class="font-medium">${data.submitted}</span></div>
+              <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Ref ID</span><span class="font-medium">${data.referenceId}</span></div>
               <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Refund Policy</span><span class="font-medium">50% refund</span></div>
               <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Refund Amount</span><span class="font-medium text-success">৳${refundAmount}</span></div>
               <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Penalty</span><span class="font-medium text-error">- ৳${penalty}</span></div>
@@ -1316,7 +1345,7 @@
         }
         function confirmCancel() {
           if (cancelTargetId === null) return;
-          const data = propertyData[cancelTargetId];
+          const data = requestData[cancelTargetId];
           if (data) {
             data.status = "Cancelled";
             data.statusClass = "cancelled";
@@ -1340,31 +1369,59 @@
             updateStats();
           }
           closeCancelModal();
-          filterProperties();
+          filterRequests();
         }
 
+        /* ==========================================================
+           STATS
+        ========================================================== */
         function updateStats() {
-          let underReviewCount = 0;
-          document.querySelectorAll(".request-card").forEach((card) => {
-            if (card.dataset.status === "under-review") underReviewCount++;
+          let underReview = 0;
+          let completed = 0;
+          let pendingAction = 0;
+          const cards = document.querySelectorAll(".request-card");
+          cards.forEach((card) => {
+            const status = card.dataset.status;
+            if (status === "under-review") underReview++;
+            else if (status === "completed") completed++;
+            else if (status === "rejected" || status === "cancelled")
+              pendingAction++;
           });
-          const countEl = document.getElementById("underReviewCount");
-          if (countEl)
-            countEl.textContent = String(underReviewCount).padStart(2, "0");
+          document.getElementById("totalCount").textContent = String(
+            cards.length,
+          ).padStart(2, "0");
+          document.getElementById("underReviewCount").textContent = String(
+            underReview,
+          ).padStart(2, "0");
+          document.getElementById("completedCount").textContent = String(
+            completed,
+          ).padStart(2, "0");
+          document.getElementById("pendingActionCount").textContent = String(
+            pendingAction,
+          ).padStart(2, "0");
         }
 
+        /* ==========================================================
+           DETAIL MODAL
+        ========================================================== */
         function renderModal(id) {
-          const data = propertyData[id];
+          const data = requestData[id];
           if (!data) return;
           modalTitle.textContent = data.title;
           const progressIndex = data.status === "Completed" ? 5 : data.progress;
+
           let content = `
-            <div class="flex items-center gap-3 mb-5">
+            <div class="flex flex-wrap items-center gap-3 mb-5">
               <span class="status-badge ${data.statusClass}">${data.status}</span>
+              <span class="text-sm text-secondary">• ${data.service}</span>
               <span class="text-sm text-secondary">• Submitted: ${data.submitted}</span>
             </div>
+
             <div class="bg-surface p-4 rounded-xl mb-5">
-              <h4 class="font-bold text-primary text-sm mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-warm-gold text-lg">timeline</span> Progress Tracker</h4>
+              <h4 class="font-bold text-primary text-sm mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-warm-gold text-lg">timeline</span>
+                Progress Tracker
+              </h4>
               <div class="flex items-start w-full">
                 ${stepLabels
                   .map((label, idx) => {
@@ -1390,44 +1447,134 @@
                         : "#6b7280";
                     const lineDone =
                       isDone || (progressIndex === 5 && idx === 3);
-                    return `<div class="progress-step ${isDone ? "done" : ""} ${isActive ? "active" : ""}" style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;min-width:0;"><div class="step-circle" style="width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:2px solid ${circleColor};background:${bgColor};color:${textColor};">${idx + 1}</div><div class="step-label" style="margin-top:4px;font-size:9px;font-weight:500;color:${labelColor};text-align:center;line-height:1.2;">${label}</div></div>${idx < stepLabels.length - 1 ? `<div class="progress-line ${lineDone ? "done" : ""} ${isActive ? "active" : ""}" style="height:3px;flex:1;background:${lineDone ? "#10b981" : isActive ? "#C5A059" : "#d0d3d8"};margin:0 2px;align-self:flex-start;margin-top:16px;min-width:8px;"></div>` : ""}`;
+                    return `<div class="progress-step ${isDone ? "done" : ""} ${isActive ? "active" : ""}" style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;min-width:0;">
+                      <div class="step-circle" style="width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:2px solid ${circleColor};background:${bgColor};color:${textColor};">${idx + 1}</div>
+                      <div class="step-label" style="margin-top:4px;font-size:9px;font-weight:500;color:${labelColor};text-align:center;line-height:1.2;">${label}</div>
+                    </div>${
+                      idx < stepLabels.length - 1
+                        ? `<div class="progress-line ${lineDone ? "done" : ""} ${isActive ? "active" : ""}" style="height:3px;flex:1;background:${lineDone ? "#10b981" : isActive ? "#C5A059" : "#d0d3d8"};margin:0 2px;align-self:flex-start;margin-top:16px;min-width:8px;"></div>`
+                        : ""
+                    }`;
                   })
                   .join("")}
               </div>
-              <div class="mt-4 p-3 bg-white rounded-lg border border-outline-variant/30 flex justify-between items-center"><p class="text-sm text-secondary">Current: <span class="font-semibold text-primary">${data.status === "Completed" ? "Completed" : stepLabels[progressIndex < 5 ? progressIndex : 4]}</span> — ${data.status === "Completed" ? 5 : progressIndex + 1}/5</p><span class="text-xs text-secondary bg-surface px-3 py-1 rounded-full">Updated: Today</span></div>
+              <div class="mt-4 p-3 bg-white rounded-lg border border-outline-variant/30 flex justify-between items-center">
+                <p class="text-sm text-secondary">
+                  Current:
+                  <span class="font-semibold text-primary">
+                    ${data.status === "Completed" ? "Completed" : stepLabels[progressIndex < 5 ? progressIndex : 4]}
+                  </span>
+                  — ${data.status === "Completed" ? 5 : progressIndex + 1}/5
+                </p>
+                <span class="text-xs text-secondary bg-surface px-3 py-1 rounded-full">Updated: Today</span>
+              </div>
             </div>
-            <div class="property-grid mb-4">
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">Division</p><p class="font-medium text-primary">${data.division}</p></div>
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">District</p><p class="font-medium text-primary">${data.district}</p></div>
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">Upazila</p><p class="font-medium text-primary">${data.upazila}</p></div>
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">Mouza</p><p class="font-medium text-primary">${data.mouza}</p></div>
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">Khatian</p><p class="font-medium text-primary">${data.khatian}</p></div>
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">Dag No</p><p class="font-medium text-primary">${data.dag}</p></div>
-              <div class="bg-surface p-4 rounded-xl"><p class="text-xs text-secondary uppercase">Property Type</p><p class="font-medium text-primary">${data.type}</p></div>
-              <div class="bg-surface p-4 rounded-xl location-item"><p class="text-xs text-secondary uppercase">Location</p><p class="font-medium text-primary">${data.location}</p></div>
-            </div>
-            <div class="bg-surface p-4 rounded-xl mb-4">
-              <h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-warm-gold text-lg">assignment</span> Ownership & Docs</h4>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div><p class="text-xs text-secondary uppercase">Primary Owner</p><p class="font-medium text-primary">${data.owner}</p></div><div><p class="text-xs text-secondary uppercase">Ownership Status</p><p class="font-medium text-primary">${data.ownershipStatus}</p></div></div>
-              <div class="mt-3"><p class="text-xs text-secondary uppercase mb-1">Documents</p><ul class="flex flex-wrap gap-2">${data.docs.map((d) => `<li class="flex items-center gap-1 text-sm text-primary bg-white px-3 py-1 rounded-full border"><span class="material-symbols-outlined text-emerald-green text-sm">check_circle</span> ${d}</li>`).join("")}</ul></div>
-            </div>
-            <div class="bg-surface p-4 rounded-xl mb-4"><h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-warm-gold text-lg">verified</span> Scope</h4><ul class="space-y-2">${data.scope.map((item) => `<li class="flex items-start gap-2 p-2 rounded-lg bg-white border"><span class="material-symbols-outlined ${item.done ? "text-emerald-green" : "text-gray-400"} text-sm">${item.done ? "check_circle" : "pending"}</span> <span class="text-primary font-medium text-sm">${item.text}</span></li>`).join("")}</ul></div>
-            <div class="bg-surface p-4 rounded-xl mb-4"><h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2"><span class="material-symbols-outlined text-warm-gold text-lg">person</span> Specialist</h4><div class="flex items-start gap-3 p-3 rounded-lg bg-white border"><div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center"><span class="material-symbols-outlined">person</span></div><div><p class="font-semibold text-primary">${data.specialist.name}</p><p class="text-sm text-secondary">${data.specialist.designation}</p><p class="text-xs text-secondary">${data.specialist.experience}</p></div></div></div>`;
 
-          if (data.isPaid && !data.isRefunded && !data.isCancelled)
-            content += `<div class="bg-primary/5 rounded-xl p-4 mb-4"><h4 class="font-bold text-primary text-sm mb-2">Payment Summary</h4><div class="space-y-1 text-sm"><div class="flex justify-between py-1"><span class="text-secondary">Verification Fee</span><span class="font-medium">৳${data.fee}</span></div><div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${data.platformCharge}</span></div><div class="flex justify-between border-t pt-2 font-bold"><span>Total Paid</span><span class="text-warm-gold">৳${data.total}</span></div><div class="flex justify-between text-xs text-secondary"><span>Invoice</span><span>${data.billingInvoice}</span></div></div></div>`;
-          else if (data.isRefunded)
-            content += `<div class="bg-red-50 rounded-xl p-4 mb-4 border border-red-200"><h4 class="font-bold text-red-800 text-sm mb-2">Payment — Refunded</h4><div class="space-y-1 text-sm"><div class="flex justify-between py-1"><span class="text-secondary">Verification Fee</span><span class="font-medium">৳${data.fee}</span></div><div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${data.platformCharge}</span></div><div class="flex justify-between border-t pt-2 font-bold"><span>Total Refunded</span><span class="text-red-700">৳${data.total}</span></div>${data.rejectionNote ? `<div class="rejection-note mt-3 text-xs">${data.rejectionNote}</div>` : ""}</div></div>`;
-          else if (data.isCancelled)
-            content += `<div class="bg-yellow-50 rounded-xl p-4 mb-4 border border-yellow-200"><h4 class="font-bold text-yellow-800 text-sm mb-2">Payment — Cancelled</h4><div class="space-y-1 text-sm"><div class="flex justify-between py-1"><span class="text-secondary">Client Paid</span><span class="font-medium">৳${data.total}</span></div><div class="flex justify-between text-error py-1"><span>Penalty</span><span class="font-medium">- ৳${data.total - data.refundAmount}</span></div><div class="flex justify-between border-t pt-2 font-bold"><span>Partial Refund</span><span class="text-warm-gold">+ ৳${data.refundAmount}</span></div>${data.cancelledNote ? `<div class="cancelled-note mt-3 text-xs">${data.cancelledNote}</div>` : ""}</div></div>`;
-          if (data.status === "Under Review")
-            content += `<div class="bg-surface p-4 rounded-xl mb-4 border"><h4 class="font-bold text-primary text-sm mb-2">Submit Documents</h4><div class="flex gap-2"><input type="file" class="text-sm" onchange="alert('uploaded')"/><button class="px-4 py-1.5 bg-warm-gold text-white rounded-lg text-sm">Submit</button></div></div>`;
-          content += `<div class="mt-5 pt-4 border-t"><button onclick="closeModal()" class="w-full py-3 rounded-xl bg-surface text-primary font-medium hover:bg-surface-container">Close</button></div>`;
+            <div class="property-grid mb-4">
+              ${Object.entries(data.details)
+                .map(
+                  ([k, v], i, arr) => `
+                    <div class="bg-surface p-4 rounded-xl ${i === arr.length - 1 ? "location-item" : ""}">
+                      <p class="text-xs text-secondary uppercase">${k}</p>
+                      <p class="font-medium text-primary">${v}</p>
+                    </div>`,
+                )
+                .join("")}
+            </div>
+
+            <div class="bg-surface p-4 rounded-xl mb-4">
+              <h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-warm-gold text-lg">verified</span>
+                Scope of Work
+              </h4>
+              <ul class="space-y-2">
+                ${data.scope
+                  .map(
+                    (item) => `
+                    <li class="flex items-start gap-2 p-2 rounded-lg bg-white border">
+                      <span class="material-symbols-outlined ${item.done ? "text-emerald-green" : "text-gray-400"} text-sm">${item.done ? "check_circle" : "pending"}</span>
+                      <span class="text-primary font-medium text-sm">${item.text}</span>
+                    </li>`,
+                  )
+                  .join("")}
+              </ul>
+            </div>
+
+            <div class="bg-surface p-4 rounded-xl mb-4">
+              <h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-warm-gold text-lg">person</span>
+                Assigned Specialist
+              </h4>
+              <div class="flex items-start gap-3 p-3 rounded-lg bg-white border">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined">person</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-primary">${data.specialist.name}</p>
+                  <p class="text-sm text-secondary">${data.specialist.designation}</p>
+                  <p class="text-xs text-secondary">${data.specialist.experience}</p>
+                </div>
+              </div>
+            </div>`;
+
+          if (data.isPaid && !data.isRefunded && !data.isCancelled) {
+            content += `
+              <div class="bg-primary/5 rounded-xl p-4 mb-4">
+                <h4 class="font-bold text-primary text-sm mb-2">Payment Summary</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between py-1"><span class="text-secondary">Service Fee</span><span class="font-medium">৳${data.fee}</span></div>
+                  <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${data.platformCharge}</span></div>
+                  <div class="flex justify-between border-t pt-2 font-bold"><span>Total Paid</span><span class="text-warm-gold">৳${data.total}</span></div>
+                  <div class="flex justify-between text-xs text-secondary"><span>Invoice</span><span>${data.billingInvoice}</span></div>
+                </div>
+              </div>`;
+          } else if (data.isRefunded) {
+            content += `
+              <div class="bg-red-50 rounded-xl p-4 mb-4 border border-red-200">
+                <h4 class="font-bold text-red-800 text-sm mb-2">Payment — Refunded</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between py-1"><span class="text-secondary">Service Fee</span><span class="font-medium">৳${data.fee}</span></div>
+                  <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${data.platformCharge}</span></div>
+                  <div class="flex justify-between border-t pt-2 font-bold"><span>Total Refunded</span><span class="text-red-700">৳${data.total}</span></div>
+                  ${data.rejectionNote ? `<div class="rejection-note mt-3 text-xs">${data.rejectionNote}</div>` : ""}
+                </div>
+              </div>`;
+          } else if (data.isCancelled) {
+            content += `
+              <div class="bg-yellow-50 rounded-xl p-4 mb-4 border border-yellow-200">
+                <h4 class="font-bold text-yellow-800 text-sm mb-2">Payment — Cancelled</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between py-1"><span class="text-secondary">Client Paid</span><span class="font-medium">৳${data.total}</span></div>
+                  <div class="flex justify-between text-error py-1"><span>Penalty</span><span class="font-medium">- ৳${data.total - data.refundAmount}</span></div>
+                  <div class="flex justify-between border-t pt-2 font-bold"><span>Partial Refund</span><span class="text-warm-gold">+ ৳${data.refundAmount}</span></div>
+                  ${data.cancelledNote ? `<div class="cancelled-note mt-3 text-xs">${data.cancelledNote}</div>` : ""}
+                </div>
+              </div>`;
+          }
+
+          if (data.status === "Under Review") {
+            content += `
+              <div class="bg-surface p-4 rounded-xl mb-4 border">
+                <h4 class="font-bold text-primary text-sm mb-2">Submit Additional Documents</h4>
+                <div class="flex gap-2">
+                  <input type="file" class="text-sm" onchange="alert('uploaded')"/>
+                  <button class="px-4 py-1.5 bg-warm-gold text-white rounded-lg text-sm">Submit</button>
+                </div>
+              </div>`;
+          }
+
+          content += `
+            <div class="mt-5 pt-4 border-t">
+              <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-surface text-primary font-medium hover:bg-surface-container">
+                Close
+              </button>
+            </div>`;
+
           modalContent.innerHTML = content;
         }
 
         function openModal(id) {
-          if (!propertyData[id]) return;
+          if (!requestData[id]) return;
           modal.classList.remove("hidden");
           document.body.style.overflow = "hidden";
           renderModal(id);
@@ -1437,32 +1584,40 @@
           document.body.style.overflow = "";
         }
 
+        /* ==========================================================
+           FILTERS
+        ========================================================== */
         let currentFilter = "all";
-        function filterProperties() {
+        function filterRequests() {
           const searchTerm = document
-            .getElementById("searchProperty")
+            .getElementById("searchRequest")
             .value.toLowerCase()
             .trim();
           const dateFrom = document.getElementById("dateFrom").value;
           const dateTo = document.getElementById("dateTo").value;
           const cards = document.querySelectorAll(".request-card");
           let visibleCount = 0;
+
           cards.forEach((card) => {
             const status = card.dataset.status;
             const title = (card.dataset.title || "").toLowerCase();
-            const khatian = (card.dataset.khatian || "").toLowerCase();
+            const ref = (card.dataset.ref || "").toLowerCase();
             const location = (card.dataset.location || "").toLowerCase();
+            const service = (card.dataset.service || "").toLowerCase();
             const cardDate = card.dataset.date || "";
+
             const matchesFilter =
               currentFilter === "all" || status === currentFilter;
             const matchesSearch =
               !searchTerm ||
               title.includes(searchTerm) ||
-              khatian.includes(searchTerm) ||
-              location.includes(searchTerm);
+              ref.includes(searchTerm) ||
+              location.includes(searchTerm) ||
+              service.includes(searchTerm);
             const matchesDate =
               (!dateFrom || cardDate >= dateFrom) &&
               (!dateTo || cardDate <= dateTo);
+
             if (matchesFilter && matchesSearch && matchesDate) {
               card.classList.remove("hidden-card");
               visibleCount++;
@@ -1470,19 +1625,25 @@
               card.classList.add("hidden-card");
             }
           });
+
           document
             .getElementById("emptyState")
             .classList.toggle("hidden", visibleCount !== 0);
         }
 
+        /* ==========================================================
+           EVENT BINDING
+        ========================================================== */
         document.querySelectorAll(".view-details-btn").forEach((btn) =>
-          btn.addEventListener("click", function () {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
             const card = this.closest(".request-card");
             if (card) openModal(card.dataset.id);
           }),
         );
         document.querySelectorAll(".cancel-request-btn").forEach((btn) =>
-          btn.addEventListener("click", function () {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
             openCancelModal(this.dataset.id);
           }),
         );
@@ -1493,7 +1654,7 @@
               .forEach((b) => b.classList.remove("active"));
             this.classList.add("active");
             currentFilter = this.dataset.filter;
-            filterProperties();
+            filterRequests();
           }),
         );
         document.addEventListener("keydown", (e) => {
@@ -1509,14 +1670,18 @@
           }),
         );
 
-        filterProperties();
+        /* ==========================================================
+           INIT
+        ========================================================== */
+        filterRequests();
         updateStats();
+
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.openCancelModal = openCancelModal;
         window.closeCancelModal = closeCancelModal;
         window.confirmCancel = confirmCancel;
-        window.filterProperties = filterProperties;
+        window.filterRequests = filterRequests;
       })();
     </script>
   </body>
