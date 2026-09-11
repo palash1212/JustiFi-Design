@@ -3,37 +3,95 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Corporate &amp; Tax Advisory — JustiFi Bangladesh</title>
+    <title>JustiFi — Trusted Legal Guidance in Bangladesh</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    />
     <link rel="stylesheet" href="css/style.css" />
 
     <style>
       /* ============================================================
-       CORPORATE & TAX ADVISORY — ALL 3 STEPS
-       COMPANY | SERVICES | SUBMIT
+       DESIGN TOKENS  (kept exactly as original)
     ============================================================ */
+      :root {
+        --navy: #041627;
+        --navy-light: #0a2740;
+        --navy-mid: #0f3252;
+        --gold: #c5a059;
+        --gold-dark: #8a6d2f;
+        --gold-soft: #f5edd8;
+        --slate: #64748b;
+        --slate-light: #94a3b8;
+        --border: #e2e8f0;
+        --border-soft: #eef2f7;
+        --bg-soft: #f8fafc;
+        --white: #ffffff;
+        --danger: #b91c1c;
+        --success: #059669;
+        --success-soft: #ecfdf5;
+        --info: #0369a1;
+        --info-soft: #eff6ff;
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --radius-xl: 20px;
+        --shadow-sm: 0 2px 8px rgba(26, 43, 60, 0.04);
+        --shadow-md: 0 4px 16px rgba(26, 43, 60, 0.06);
+        --shadow-lg: 0 12px 32px rgba(26, 43, 60, 0.1);
+        --shadow-gold: 0 4px 16px rgba(197, 160, 89, 0.3);
+      }
 
-      /* --- Page Layout --- */
-      .corp-page {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 16px;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family:
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: #f1f5f9;
+        color: var(--navy);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+      }
+      button {
+        font-family: inherit;
       }
 
       /* ============================================================
-       HERO SECTION — NO MARGIN, NO BORDER-RADIUS
+       PAGE SHELL — no top padding, header flush to top
+    ============================================================ */
+      .main-content {
+        padding: 0 0 40px;
+      }
+      @media (min-width: 768px) {
+        .main-content {
+          padding: 0 0 48px;
+        }
+      }
+      @media (min-width: 992px) {
+        .main-content {
+          padding: 0 0 56px;
+        }
+      }
+
+      /* ============================================================
+       HERO — FULL-BLEED, NO BORDER RADIUS, NO TOP GAP
     ============================================================ */
       .corp-hero {
         background: linear-gradient(
@@ -42,14 +100,31 @@
           #0a2740 50%,
           #0f3252 100%
         );
-        border-radius: 0;
-        padding: 40px 28px 36px;
+        padding: 48px 24px;
         margin: 0;
         color: #fff;
         position: relative;
         overflow: hidden;
+        border-radius: 0;
         box-shadow: 0 20px 60px rgba(4, 22, 39, 0.25);
+        width: 100%;
       }
+      @media (min-width: 768px) {
+        .corp-hero {
+          padding: 56px 40px;
+        }
+      }
+      @media (min-width: 992px) {
+        .corp-hero {
+          padding: 72px 64px;
+        }
+      }
+
+      .hero-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+      }
+
       .corp-hero::before {
         content: "";
         position: absolute;
@@ -92,56 +167,66 @@
       }
       .corp-hero .hero-badge {
         display: inline-block;
-        font-size: 10px;
+        font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 2.2px;
         color: var(--gold);
         background: rgba(197, 160, 89, 0.15);
-        padding: 5px 18px;
+        padding: 6px 20px;
         border-radius: 50px;
-        margin-bottom: 14px;
+        margin-bottom: 18px;
         position: relative;
         z-index: 1;
         border: 1px solid rgba(197, 160, 89, 0.15);
       }
       .corp-hero h1 {
-        font-size: 28px;
+        font-size: 32px;
         font-weight: 900;
         line-height: 1.15;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
         position: relative;
         z-index: 1;
-        letter-spacing: -0.5px;
+        letter-spacing: -0.6px;
+      }
+      @media (min-width: 992px) {
+        .corp-hero h1 {
+          font-size: 48px;
+        }
       }
       .corp-hero h1 .gold {
         color: var(--gold);
       }
       .corp-hero p {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.8;
-        margin-bottom: 22px;
-        max-width: 580px;
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.85;
+        margin-bottom: 26px;
+        max-width: 660px;
         position: relative;
         z-index: 1;
         font-weight: 400;
       }
+      @media (min-width: 992px) {
+        .corp-hero p {
+          font-size: 17px;
+        }
+      }
       .corp-hero .hero-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
-        margin-bottom: 20px;
+        gap: 14px;
+        margin-bottom: 0;
         position: relative;
         z-index: 1;
       }
       .corp-hero .hero-actions .btn-primary {
         background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
         color: var(--gold-dark);
-        padding: 12px 28px;
+        padding: 14px 32px;
         border-radius: 10px;
         font-weight: 700;
-        font-size: 13px;
+        font-size: 14px;
         border: none;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -149,7 +234,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        box-shadow: 0 4px 16px rgba(197, 160, 89, 0.3);
+        box-shadow: var(--shadow-gold);
       }
       .corp-hero .hero-actions .btn-primary:hover {
         transform: translateY(-2px);
@@ -158,10 +243,10 @@
       .corp-hero .hero-actions .btn-outline-light {
         background: rgba(255, 255, 255, 0.06);
         color: #fff;
-        padding: 12px 28px;
+        padding: 14px 32px;
         border-radius: 10px;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 14px;
         border: 1.5px solid rgba(255, 255, 255, 0.2);
         cursor: pointer;
         transition: all 0.3s ease;
@@ -176,642 +261,310 @@
         background: rgba(197, 160, 89, 0.1);
         transform: translateY(-2px);
       }
-      .corp-hero .hero-stats {
-        display: flex;
+
+      .corp-hero .back-link {
+        display: inline-flex;
         align-items: center;
-        gap: 14px;
-        padding-top: 18px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.72);
+        text-decoration: none;
+        margin-top: 22px;
+        padding: 10px 16px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         position: relative;
         z-index: 1;
+        transition: all 0.25s ease;
       }
-      .corp-hero .hero-stats .stat-num {
-        font-size: 22px;
-        font-weight: 900;
+      .corp-hero .back-link:hover {
         color: var(--gold);
-        letter-spacing: -0.5px;
-      }
-      .corp-hero .hero-stats .stat-label {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.6);
-        line-height: 1.5;
-        font-weight: 400;
-      }
-      .corp-hero .hero-stats .stat-icon {
-        font-size: 24px;
-        color: var(--gold);
-        opacity: 0.6;
+        border-color: rgba(197, 160, 89, 0.4);
+        background: rgba(197, 160, 89, 0.08);
       }
 
       /* ============================================================
-       MAIN TWO-COLUMN LAYOUT — SWAPPED: Form Left, Why Choose Right
+       SECTION HEADINGS
     ============================================================ */
-      .main-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-        margin: 28px 0 24px;
-        align-items: start;
+      .section-head {
+        text-align: center;
+        margin: 40px 0 8px;
       }
-
-      /* --- Right Column: Why Choose JustiFi --- */
-      .why-col {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-      }
-
-      .why-section .why-title {
-        font-size: 20px;
+      .section-head h2 {
+        font-size: 24px;
         font-weight: 800;
         color: var(--navy);
-        margin-bottom: 4px;
-        letter-spacing: -0.3px;
+        letter-spacing: -0.4px;
       }
-      .why-section .why-title .gold {
+      .section-head h2 .gold {
         color: var(--gold);
+      }
+      .section-head p {
+        font-size: 14px;
+        color: var(--slate);
+        max-width: 560px;
+        margin: 8px auto 0;
+        line-height: 1.7;
+      }
+      @media (min-width: 992px) {
+        .section-head {
+          margin: 56px 0 12px;
+        }
+        .section-head h2 {
+          font-size: 32px;
+        }
+      }
+
+      /* ============================================================
+       CONTENT WRAPPER (below hero)
+    ============================================================ */
+      .content-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+      @media (min-width: 768px) {
+        .content-inner {
+          padding: 0 24px;
+        }
+      }
+      @media (min-width: 992px) {
+        .content-inner {
+          padding: 0 32px;
+        }
+      }
+
+      /* ============================================================
+       SERVICES CATALOG
+    ============================================================ */
+      .services-catalog {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin: 40px 0 24px;
+      }
+      @media (min-width: 640px) {
+        .services-catalog {
+          grid-template-columns: 1fr 1fr;
+          gap: 18px;
+        }
+      }
+      @media (min-width: 1200px) {
+        .services-catalog {
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 20px;
+        }
+      }
+
+      .catalog-card {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px 22px;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.25s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+      .catalog-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+      }
+      .catalog-card:hover::before {
+        transform: scaleX(1);
+      }
+      .catalog-card:hover {
+        border-color: rgba(197, 160, 89, 0.4);
+        box-shadow: var(--shadow-lg);
+        transform: translateY(-3px);
+      }
+      .catalog-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 14px;
+        background: #eef2f7;
+        color: var(--navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 16px;
+        transition: all 0.25s ease;
+      }
+      .catalog-card:hover .catalog-icon {
+        background: var(--gold);
+        color: #fff;
+        transform: scale(1.05);
+      }
+      .catalog-card h3 {
+        font-size: 17px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 6px;
+        letter-spacing: -0.2px;
+      }
+      .catalog-card p {
+        font-size: 13px;
+        color: var(--slate);
+        line-height: 1.6;
+        margin-bottom: 18px;
+        flex-grow: 1;
+      }
+      .catalog-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 12px;
+        margin-bottom: 12px;
+        border-top: 1px dashed var(--border);
+        font-size: 11.5px;
+        color: var(--slate);
+      }
+      .catalog-meta .meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 600;
+      }
+      .catalog-meta .meta-item i {
+        color: var(--gold);
+        font-size: 11px;
+      }
+      .catalog-cta {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--gold-dark);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: gap 0.2s ease;
+      }
+      .catalog-card:hover .catalog-cta {
+        gap: 10px;
+      }
+
+      /* ============================================================
+       WHY CHOOSE
+    ============================================================ */
+      .why-choose-section {
+        background: linear-gradient(
+          135deg,
+          #041627 0%,
+          #0a2740 50%,
+          #0f3252 100%
+        );
+        border-radius: var(--radius-xl);
+        padding: 44px 32px;
+        margin: 40px 0 32px;
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+      }
+      @media (min-width: 992px) {
+        .why-choose-section {
+          padding: 64px 56px;
+        }
+      }
+      .why-choose-section::before {
+        content: "";
+        position: absolute;
+        top: -30%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(197, 160, 89, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+      .why-choose-section .section-head {
+        margin-top: 0;
+        position: relative;
+        z-index: 1;
+      }
+      .why-choose-section .section-head h2 {
+        color: #fff;
+      }
+      .why-choose-section .section-head p {
+        color: rgba(255, 255, 255, 0.7);
       }
       .why-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 32px;
+        position: relative;
+        z-index: 1;
+      }
+      @media (min-width: 640px) {
+        .why-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (min-width: 1200px) {
+        .why-grid {
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          gap: 18px;
+        }
       }
       .why-card {
-        display: flex;
-        align-items: flex-start;
-        gap: 14px;
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 16px 16px;
-        box-shadow: 0 4px 16px rgba(26, 43, 60, 0.04);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-md);
+        padding: 24px 22px;
         transition: all 0.25s ease;
+        backdrop-filter: blur(8px);
       }
       .why-card:hover {
-        border-color: rgba(197, 160, 89, 0.4);
-        box-shadow: 0 8px 24px rgba(26, 43, 60, 0.08);
-        transform: translateY(-1px);
+        background: rgba(255, 255, 255, 0.07);
+        border-color: rgba(197, 160, 89, 0.35);
+        transform: translateY(-3px);
       }
       .why-card .why-icon {
-        width: 42px;
-        height: 42px;
+        width: 46px;
+        height: 46px;
         border-radius: 11px;
-        background: #eef2f7;
-        color: var(--navy);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 17px;
-        flex-shrink: 0;
-      }
-      .why-card .why-body h3 {
-        font-size: 14.5px;
-        font-weight: 700;
-        color: var(--navy);
-        margin-bottom: 3px;
-      }
-      .why-card .why-body p {
-        font-size: 12.5px;
-        color: var(--slate);
-        line-height: 1.55;
-      }
-
-      /* --- Need Help card (now inside right column) --- */
-      .need-help-box {
-        background: linear-gradient(135deg, #041627 0%, #0a2740 100%);
-        border-radius: 16px;
-        padding: 22px 20px 24px;
-        color: #fff;
-        margin-top: 4px;
-      }
-      .need-help-box .help-icon-circle {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(197, 160, 89, 0.18);
+        background: rgba(197, 160, 89, 0.15);
         color: var(--gold);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 14px;
-        margin-bottom: 10px;
+        font-size: 19px;
+        margin-bottom: 16px;
+        transition: all 0.25s ease;
       }
-      .need-help-box h3 {
-        font-size: 16px;
-        font-weight: 800;
+      .why-card:hover .why-icon {
+        background: var(--gold);
+        color: var(--navy);
+      }
+      .why-card h3 {
+        font-size: 15px;
+        font-weight: 700;
+        color: #fff;
         margin-bottom: 6px;
       }
-      .need-help-box p {
+      .why-card p {
         font-size: 12.5px;
-        color: rgba(255, 255, 255, 0.72);
+        color: rgba(255, 255, 255, 0.65);
         line-height: 1.6;
-        margin-bottom: 16px;
-      }
-      .need-help-box .btn-help {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
-        color: var(--gold-dark);
-        padding: 10px 22px;
-        border-radius: 9px;
-        font-weight: 700;
-        font-size: 12.5px;
-        text-decoration: none;
-        box-shadow: 0 4px 14px rgba(197, 160, 89, 0.25);
-        transition: all 0.3s ease;
-      }
-      .need-help-box .btn-help:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(197, 160, 89, 0.35);
-      }
-
-      /* --- Left Column: Corporate Advisory Request Form --- */
-      .intake-form {
-        background: #ffffff;
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        box-shadow: 0 8px 40px rgba(26, 43, 60, 0.06);
-        padding: 22px 22px 28px;
-        overflow: hidden;
-      }
-
-      /* Official badge (no language toggle) */
-      .form-header-row {
-        display: flex;
-        align-items: center;
-        margin-bottom: 16px;
-      }
-      .form-official-badge {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 10.5px;
-        font-weight: 700;
-        color: var(--slate);
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-      }
-      .form-official-badge i {
-        color: var(--gold);
-        font-size: 12px;
-      }
-
-      .intake-form .form-title {
-        font-size: 20px;
-        font-weight: 800;
-        color: var(--navy);
-        margin-bottom: 2px;
-        letter-spacing: -0.3px;
-      }
-      .intake-form .form-title .gold {
-        color: var(--gold);
-      }
-      .intake-form .form-subtitle {
-        font-size: 13px;
-        color: var(--slate);
-        margin-bottom: 20px;
-        line-height: 1.6;
-      }
-
-      /* --- Form Stepper (HORIZONTALLY INCREASED) --- */
-      .form-stepper {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0;
-        margin-bottom: 28px;
-        padding: 0 4px;
-        width: 100%;
-        overflow: visible;
-      }
-      .form-stepper .step-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        flex: 1;
-        min-width: 0;
-      }
-      .form-stepper .step-dot {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        border: 2.5px solid var(--border);
-        background: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--slate);
-        transition: all 0.3s ease;
-        flex-shrink: 0;
-        cursor: default;
-      }
-      .form-stepper .step-dot.active {
-        background: var(--navy);
-        border-color: var(--navy);
-        color: #fff;
-      }
-      .form-stepper .step-dot.done {
-        background: var(--navy);
-        border-color: var(--navy);
-        color: #fff;
-      }
-      .form-stepper .step-dot.done::after {
-        content: "✓";
-        font-size: 14px;
-      }
-      .form-stepper .step-dot.done span {
-        display: none;
-      }
-      .form-stepper .step-label {
-        font-size: 11px;
-        color: var(--slate);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        white-space: nowrap;
-        text-align: center;
-      }
-      .form-stepper .step-label.active {
-        color: var(--navy);
-      }
-      .form-stepper .step-label.done {
-        color: var(--navy);
-      }
-      .form-stepper .step-line {
-        flex: 1;
-        height: 2.5px;
-        background: var(--border);
-        border-radius: 2px;
-        transition: all 0.3s ease;
-        margin: 0 4px;
-        margin-bottom: 22px;
-        min-width: 20px;
-        flex-shrink: 1;
-      }
-      .form-stepper .step-line.done {
-        background: var(--navy);
-      }
-
-      /* --- STEP 2: SERVICES --- */
-      .services-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 4px;
-        width: 100%;
-      }
-      .service-option {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 14px 16px;
-        border: 1.5px solid var(--border);
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.25s ease;
-        background: #fff;
-        min-width: 0;
-        overflow: hidden;
-      }
-      .service-option:hover {
-        border-color: rgba(197, 160, 89, 0.3);
-        background: #f8fafc;
-      }
-      .service-option.selected {
-        border-color: var(--gold);
-        background: rgba(197, 160, 89, 0.06);
-        box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.08);
-      }
-      .service-option .s-icon {
-        width: 36px;
-        height: 36px;
-        min-width: 36px;
-        border-radius: 10px;
-        background: #eef2f7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        color: var(--navy);
-        flex-shrink: 0;
-        transition: all 0.25s ease;
-      }
-      .service-option.selected .s-icon {
-        background: var(--gold);
-        color: #fff;
-      }
-      .service-option .s-body {
-        flex: 1;
-        min-width: 0;
-      }
-      .service-option .s-body h4 {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--navy);
-        margin-bottom: 2px;
-        word-wrap: break-word;
-      }
-      .service-option .s-body p {
-        font-size: 12px;
-        color: var(--slate);
-        line-height: 1.5;
-        word-wrap: break-word;
-      }
-      .service-option .s-check {
-        margin-left: auto;
-        width: 20px;
-        height: 20px;
-        min-width: 20px;
-        border-radius: 50%;
-        border: 2px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        transition: all 0.25s ease;
-      }
-      .service-option.selected .s-check {
-        background: var(--gold);
-        border-color: var(--gold);
-        color: #fff;
-      }
-      .service-option.selected .s-check::after {
-        content: "✓";
-        font-size: 12px;
-        font-weight: 700;
-      }
-
-      /* --- STEP 3: SUBMIT (Review & Confirm) --- */
-      .review-section {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        margin-top: 4px;
-      }
-      .review-card {
-        background: #f8fafc;
-        border-radius: 12px;
-        padding: 16px 18px;
-        border: 1px solid var(--border);
-      }
-      .review-card .r-label {
-        font-size: 10px;
-        font-weight: 700;
-        color: var(--slate);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-bottom: 4px;
-      }
-      .review-card .r-value {
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--navy);
-        word-wrap: break-word;
-      }
-      .review-card .r-value .sub {
-        font-weight: 400;
-        color: var(--slate);
-        font-size: 13px;
-      }
-      .review-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      .declaration-box {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 16px 18px;
-        background: #f8fafc;
-        border-radius: 12px;
-        border: 1px solid var(--border);
-        margin-top: 4px;
-      }
-      .declaration-box input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: var(--gold);
-        margin-top: 2px;
-        flex-shrink: 0;
-        cursor: pointer;
-      }
-      .declaration-box label {
-        font-size: 13px;
-        color: var(--navy);
-        line-height: 1.6;
-        cursor: pointer;
-      }
-      .declaration-box label strong {
-        color: var(--gold-dark);
-      }
-
-      /* --- Form Fields --- */
-      .form-fields {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 14px;
-        width: 100%;
-      }
-      .field-group {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        min-width: 0;
-      }
-      .field-group label {
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--navy);
-      }
-      .field-group label .optional {
-        font-weight: 400;
-        color: var(--slate);
-        font-size: 11px;
-      }
-      .field-group label .star {
-        color: #b91c1c;
-      }
-      .field-group input,
-      .field-group select {
-        width: 100%;
-        padding: 9px 14px;
-        border-radius: 10px;
-        border: 1.5px solid var(--border);
-        font-size: 13px;
-        font-family: inherit;
-        background: #f8fafc;
-        transition: all 0.3s ease;
-        color: var(--navy);
-        box-sizing: border-box;
-      }
-      .field-group input:focus,
-      .field-group select:focus {
-        outline: none;
-        border-color: var(--gold);
-        box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
-        background: #fff;
-      }
-      .field-group input::placeholder {
-        color: #b0b8c4;
-        font-size: 12px;
-      }
-      .field-group select {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 14px center;
-        padding-right: 36px;
-      }
-
-      /* --- Field row (two columns for name/industry, reg/location) --- */
-      .field-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 14px;
-        width: 100%;
-      }
-
-      /* --- Checkbox Group --- */
-      .checkbox-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        padding-top: 2px;
-      }
-      .checkbox-group label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        font-weight: 400;
-        color: var(--navy);
-        cursor: pointer;
-      }
-      .checkbox-group input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        accent-color: var(--gold);
-        cursor: pointer;
-        flex-shrink: 0;
-      }
-
-      /* --- Step Panels (show/hide) --- */
-      .step-panel {
-        display: none;
-        width: 100%;
-      }
-      .step-panel.active {
-        display: block;
-      }
-
-      /* --- Form Actions --- */
-      .form-actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-top: 22px;
-        padding-top: 16px;
-        border-top: 1px solid var(--border);
-        flex-wrap: wrap;
-        width: 100%;
-      }
-      .form-actions .btn-back {
-        background: transparent;
-        border: none;
-        color: var(--slate);
-        font-weight: 600;
-        font-size: 13px;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        padding: 8px 4px;
-        transition: color 0.2s ease;
-      }
-      .form-actions .btn-back:hover {
-        color: var(--navy);
-      }
-      .form-actions .btn-continue-dark {
-        background: var(--navy);
-        color: #fff;
-        padding: 10px 26px;
-        border-radius: 10px;
-        font-weight: 700;
-        font-size: 13px;
-        border: none;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 16px rgba(4, 22, 39, 0.2);
-        flex-shrink: 0;
-      }
-      .form-actions .btn-continue-dark:hover {
-        background: #0a2740;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(4, 22, 39, 0.3);
-      }
-      .form-actions .btn-continue-dark:active {
-        transform: scale(0.97);
-      }
-      .form-actions .btn-submit {
-        background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
-        color: var(--gold-dark);
-        padding: 10px 32px;
-        border-radius: 10px;
-        font-weight: 700;
-        font-size: 13px;
-        border: none;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 16px rgba(197, 160, 89, 0.25);
-        flex-shrink: 0;
-      }
-      .form-actions .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 28px rgba(197, 160, 89, 0.35);
-      }
-      .form-actions .btn-submit:active {
-        transform: scale(0.97);
-      }
-
-      /* --- Success Message --- */
-      .success-message {
-        display: none;
-        text-align: center;
-        padding: 32px 20px;
-      }
-      .success-message.show {
-        display: block;
-      }
-      .success-message .success-icon {
-        font-size: 56px;
-        color: var(--gold);
-        margin-bottom: 12px;
-      }
-      .success-message h3 {
-        font-size: 22px;
-        font-weight: 800;
-        color: var(--navy);
-        margin-bottom: 6px;
-      }
-      .success-message p {
-        font-size: 14px;
-        color: var(--slate);
-        max-width: 400px;
-        margin: 0 auto;
-        line-height: 1.7;
       }
 
       /* ============================================================
@@ -822,7 +575,7 @@
         justify-content: center;
         gap: 32px;
         flex-wrap: wrap;
-        margin: 0 0 32px;
+        margin: 24px 0 8px;
         padding: 16px 0;
         border-top: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
@@ -842,273 +595,970 @@
       }
 
       /* ============================================================
-       RESPONSIVE BREAKPOINTS
+       INTAKE — wider form, balanced layout
     ============================================================ */
-
+      .intake-shell {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
       @media (min-width: 768px) {
-        .main-grid {
-          grid-template-columns: 1fr 1fr;
-          gap: 28px;
-          margin: 32px 0 28px;
+        .intake-shell {
+          padding: 0 24px;
         }
-
-        .why-section .why-title {
-          font-size: 22px;
-        }
-
-        .intake-form {
-          padding: 28px 26px 30px;
-        }
-        .intake-form .form-title {
-          font-size: 22px;
-        }
-
-        .field-row {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        .form-stepper .step-dot {
-          width: 50px;
-          height: 50px;
-          font-size: 18px;
-        }
-        .form-stepper .step-label {
-          font-size: 12px;
-        }
-        .form-stepper .step-line {
-          min-width: 40px;
-        }
-
-        .services-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        .review-row {
-          grid-template-columns: 1fr 1fr;
-        }
-
-        .trust-badges {
-          gap: 48px;
-          padding: 20px 0;
+      }
+      @media (min-width: 992px) {
+        .intake-shell {
+          padding: 0 32px;
         }
       }
 
+      .intake-form {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-md);
+        padding: 32px 24px 36px;
+        position: relative;
+        margin-top: 40px;
+      }
+      @media (min-width: 768px) {
+        .intake-form {
+          padding: 44px 40px 48px;
+        }
+      }
+      @media (min-width: 1200px) {
+        .intake-form {
+          padding: 52px 56px 56px;
+        }
+      }
+
+      .form-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .form-official-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--slate);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        background: var(--bg-soft);
+        padding: 6px 12px;
+        border-radius: 50px;
+        border: 1px solid var(--border);
+      }
+      .form-official-badge i {
+        color: var(--gold);
+        font-size: 11px;
+      }
+      .form-secure-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--success);
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+      .form-secure-badge i {
+        font-size: 11px;
+      }
+
+      .intake-form .form-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 4px;
+        letter-spacing: -0.3px;
+      }
       @media (min-width: 992px) {
-        .corp-hero {
-          padding: 56px 48px 48px;
-        }
-        .corp-hero h1 {
-          font-size: 42px;
-        }
-        .corp-hero p {
-          font-size: 16px;
-        }
-        .corp-hero .hero-stats .stat-num {
+        .intake-form .form-title {
           font-size: 30px;
         }
+      }
+      .intake-form .form-title .gold {
+        color: var(--gold);
+      }
+      .intake-form .form-subtitle {
+        font-size: 14px;
+        color: var(--slate);
+        margin-bottom: 28px;
+        line-height: 1.6;
+        max-width: 720px;
+      }
 
-        .main-grid {
-          gap: 36px;
-          margin: 36px 0 32px;
-        }
+      /* Progress bar + stepper constrained for wide screens */
+      .progress-track {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .progress-bar {
+        flex: 1;
+        height: 6px;
+        background: var(--border-soft);
+        border-radius: 50px;
+        overflow: hidden;
+        position: relative;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--gold) 0%, #d4af5e 100%);
+        border-radius: 50px;
+        width: 25%;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .progress-text {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--slate);
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
 
-        .why-section .why-title {
-          font-size: 26px;
-        }
-        .why-grid {
-          gap: 16px;
-        }
+      .form-stepper {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0;
+        margin-bottom: 32px;
+        padding: 0;
+        width: 100%;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .form-stepper .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        position: relative;
+      }
+      .form-stepper .step-dot {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--slate-light);
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+        cursor: default;
+        position: relative;
+        z-index: 2;
+      }
+      .form-stepper .step-dot.active {
+        background: var(--navy);
+        border-color: var(--navy);
+        color: #fff;
+        box-shadow: 0 0 0 4px rgba(4, 22, 39, 0.08);
+      }
+      .form-stepper .step-dot.done {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: #fff;
+      }
+      .form-stepper .step-dot.done::after {
+        content: "✓";
+        font-size: 15px;
+      }
+      .form-stepper .step-dot.done span {
+        display: none;
+      }
+      .form-stepper .step-label {
+        font-size: 11.5px;
+        color: var(--slate-light);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        transition: color 0.3s ease;
+      }
+      .form-stepper .step-label.active,
+      .form-stepper .step-label.done {
+        color: var(--navy);
+      }
+      .form-stepper .step-line {
+        position: absolute;
+        top: 22px;
+        left: 50%;
+        right: -50%;
+        height: 2px;
+        background: var(--border);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        z-index: 1;
+      }
+      .form-stepper .step-line.done {
+        background: var(--gold);
+      }
 
-        .intake-form {
-          padding: 34px 32px 36px;
-        }
-        .intake-form .form-title {
-          font-size: 26px;
-        }
-
-        .form-stepper .step-dot {
-          width: 56px;
-          height: 56px;
-          font-size: 20px;
-          border-width: 3px;
-        }
-        .form-stepper .step-label {
-          font-size: 13px;
-        }
-        .form-stepper .step-line {
-          min-width: 50px;
-          height: 3px;
-        }
-        .form-stepper {
-          margin-bottom: 32px;
-        }
-
+      /* Service cards — 2 columns, 3 only on very wide */
+      .services-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 4px;
+      }
+      @media (min-width: 640px) {
         .services-grid {
-          gap: 16px;
+          grid-template-columns: 1fr 1fr;
         }
-        .service-option {
-          padding: 16px 20px;
-        }
+      }
+      .service-option {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 18px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.25s ease;
+        background: #fff;
+        position: relative;
+      }
+      .service-option:hover {
+        border-color: rgba(197, 160, 89, 0.4);
+        background: var(--bg-soft);
+        transform: translateY(-1px);
+      }
+      .service-option.selected {
+        border-color: var(--gold);
+        background: rgba(197, 160, 89, 0.06);
+        box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+      }
+      .service-option .s-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .service-option .s-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: var(--border-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        color: var(--navy);
+        flex-shrink: 0;
+        transition: all 0.25s ease;
+      }
+      .service-option.selected .s-icon {
+        background: var(--gold);
+        color: #fff;
+      }
+      .service-option .s-body {
+        flex: 1;
+        min-width: 0;
+      }
+      .service-option .s-body h4 {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--navy);
+        margin-bottom: 3px;
+      }
+      .service-option .s-body p {
+        font-size: 12.5px;
+        color: var(--slate);
+        line-height: 1.5;
+      }
+      .service-option .s-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.25s ease;
+        margin-top: 2px;
+      }
+      .service-option.selected .s-check {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: #fff;
+      }
+      .service-option.selected .s-check::after {
+        content: "✓";
+        font-size: 11px;
+        font-weight: 700;
+      }
 
-        .trust-badges {
-          gap: 64px;
-          padding: 24px 0;
+      .service-fee-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px dashed var(--border);
+        font-size: 12px;
+      }
+      .service-fee-row .fee-label {
+        color: var(--slate);
+        font-weight: 500;
+        font-size: 11.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .service-fee-row .fee-label i {
+        font-size: 10px;
+        color: var(--slate-light);
+      }
+      .service-fee {
+        font-weight: 800;
+        font-size: 13px;
+        color: var(--navy);
+        letter-spacing: -0.2px;
+        white-space: nowrap;
+      }
+      .service-fee.fixed {
+        color: var(--gold-dark);
+      }
+      .service-fee.quote {
+        color: var(--info);
+        font-size: 12px;
+        background: var(--info-soft);
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .service-fee.retainer {
+        color: var(--success);
+        font-size: 12px;
+        background: var(--success-soft);
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .service-fee-note {
+        font-size: 10.5px;
+        color: var(--slate-light);
+        margin-top: 4px;
+        font-style: italic;
+      }
+
+      .live-total-bar {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 22px;
+        padding: 18px 22px;
+        background: linear-gradient(135deg, #041627 0%, #0a2740 100%);
+        border-radius: var(--radius-md);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(4, 22, 39, 0.2);
+        animation: fadeInUp 0.3s ease;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .live-total-bar.show {
+        display: flex;
+      }
+      .live-total-bar .lt-left {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .live-total-bar .lt-label {
+        font-size: 10.5px;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .live-total-bar .lt-count {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 500;
+      }
+      .live-total-bar .lt-right {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+      .live-total-bar .lt-amount {
+        font-size: 24px;
+        font-weight: 900;
+        color: var(--gold);
+        letter-spacing: -0.5px;
+      }
+      .live-total-bar .lt-plus {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        font-weight: 500;
+      }
+
+      .review-section {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 4px;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .review-card {
+        background: var(--bg-soft);
+        border-radius: var(--radius-md);
+        padding: 16px 18px;
+        border: 1px solid var(--border);
+      }
+      .review-card .r-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--slate);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+      .review-card .r-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--navy);
+        word-break: break-word;
+      }
+      .review-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 480px) {
+        .review-row {
+          grid-template-columns: 1fr;
         }
       }
 
-      @media (max-width: 767px) {
-        .main-grid {
-          grid-template-columns: 1fr;
-          gap: 20px;
-          margin: 20px 0 16px;
-        }
+      .pricing-block {
+        background: #fff;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 22px;
+        margin-top: 4px;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .pricing-block .pb-title {
+        font-size: 12px;
+        font-weight: 800;
+        color: var(--navy);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .pricing-block .pb-title i {
+        color: var(--gold);
+        font-size: 14px;
+      }
+      .pricing-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px dashed var(--border);
+        font-size: 13px;
+      }
+      .pricing-line:last-child {
+        border-bottom: none;
+      }
+      .pricing-line .pl-name {
+        color: var(--navy);
+        font-weight: 600;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        flex: 1;
+        min-width: 0;
+      }
+      .pricing-line .pl-name i {
+        color: var(--gold);
+        font-size: 12px;
+        margin-top: 3px;
+        flex-shrink: 0;
+      }
+      .pricing-line .pl-name-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .pricing-line .pl-name-text .pl-sub {
+        font-size: 11px;
+        color: var(--slate-light);
+        font-weight: 400;
+      }
+      .pricing-line .pl-amount {
+        font-weight: 800;
+        color: var(--navy);
+        white-space: nowrap;
+        font-size: 13.5px;
+      }
+      .pricing-line .pl-amount.quote {
+        color: var(--info);
+        font-size: 12px;
+        background: var(--info-soft);
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .pricing-line .pl-amount.retainer {
+        color: var(--success);
+        font-size: 12px;
+        background: var(--success-soft);
+        padding: 3px 10px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-        .why-section .why-title {
-          font-size: 18px;
-        }
+      .pricing-summary {
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 2px solid var(--border);
+      }
+      .pricing-summary .ps-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        padding: 5px 0;
+      }
+      .pricing-summary .ps-row .ps-label {
+        color: var(--slate);
+        font-weight: 500;
+      }
+      .pricing-summary .ps-row .ps-value {
+        font-weight: 700;
+        color: var(--navy);
+      }
+      .pricing-summary .ps-row.total {
+        margin-top: 8px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        font-size: 16px;
+      }
+      .pricing-summary .ps-row.total .ps-label {
+        color: var(--navy);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 12px;
+      }
+      .pricing-summary .ps-row.total .ps-value {
+        color: var(--gold-dark);
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: -0.5px;
+      }
+      .pricing-summary .ps-note {
+        margin-top: 12px;
+        padding: 10px 12px;
+        background: var(--info-soft);
+        border-radius: var(--radius-sm);
+        font-size: 11.5px;
+        color: var(--info);
+        line-height: 1.6;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .pricing-summary .ps-note i {
+        font-size: 12px;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+      .pricing-summary .ps-note strong {
+        font-weight: 700;
+      }
 
+      .declaration-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 18px 20px;
+        background: var(--gold-soft);
+        border-radius: var(--radius-md);
+        border: 1px solid rgba(197, 160, 89, 0.3);
+        margin-top: 4px;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .declaration-box input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--gold);
+        margin-top: 2px;
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+      .declaration-box label {
+        font-size: 13.5px;
+        color: var(--navy);
+        line-height: 1.6;
+        cursor: pointer;
+      }
+      .declaration-box label strong {
+        color: var(--gold-dark);
+      }
+
+      .form-fields {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      /* Balanced field row — equal columns, no orphans */
+      .field-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      @media (min-width: 640px) {
+        .field-row {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .field-group label {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .field-group label .optional {
+        font-weight: 400;
+        color: var(--slate-light);
+        font-size: 11px;
+      }
+      .field-group label .star {
+        color: var(--danger);
+      }
+      .field-group .hint {
+        font-size: 11px;
+        color: var(--slate-light);
+        font-weight: 400;
+        margin-top: 1px;
+      }
+      .field-group input,
+      .field-group select,
+      .field-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 10px;
+        border: 1.5px solid var(--border);
+        font-size: 14px;
+        font-family: inherit;
+        background: #fff;
+        transition: all 0.25s ease;
+        color: var(--navy);
+      }
+      .field-group textarea {
+        resize: vertical;
+        min-height: 90px;
+      }
+      .field-group input:focus,
+      .field-group select:focus,
+      .field-group textarea:focus {
+        outline: none;
+        border-color: var(--gold);
+        box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.12);
+      }
+      .field-group input::placeholder,
+      .field-group textarea::placeholder {
+        color: #b0b8c4;
+        font-size: 13px;
+      }
+      .field-group select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        padding-right: 36px;
+        cursor: pointer;
+      }
+      .field-group input.error,
+      .field-group select.error,
+      .field-group textarea.error {
+        border-color: var(--danger);
+        background: #fef2f2;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding-top: 2px;
+      }
+      .checkbox-group label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--navy);
+        cursor: pointer;
+        padding: 8px 14px;
+        border: 1.5px solid var(--border);
+        border-radius: 50px;
+        background: #fff;
+        transition: all 0.2s ease;
+      }
+      .checkbox-group label:hover {
+        border-color: rgba(197, 160, 89, 0.4);
+        background: var(--bg-soft);
+      }
+      .checkbox-group label:has(input:checked) {
+        border-color: var(--gold);
+        background: rgba(197, 160, 89, 0.08);
+        color: var(--gold-dark);
+      }
+      .checkbox-group input[type="checkbox"] {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--gold);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .step-panel {
+        display: none;
+      }
+      .step-panel.active {
+        display: block;
+        animation: fadeInUp 0.35s ease;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 22px;
+        border-top: 1px solid var(--border);
+        flex-wrap: wrap;
+        max-width: 880px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .form-actions .btn-back {
+        background: transparent;
+        border: none;
+        color: var(--slate);
+        font-weight: 600;
+        font-size: 13.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        padding: 10px 14px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+      }
+      .form-actions .btn-back:hover {
+        color: var(--navy);
+        background: var(--bg-soft);
+      }
+      .form-actions .btn-continue-dark {
+        background: var(--navy);
+        color: #fff;
+        padding: 13px 32px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px rgba(4, 22, 39, 0.2);
+      }
+      .form-actions .btn-continue-dark:hover {
+        background: var(--navy-light);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(4, 22, 39, 0.3);
+      }
+      .form-actions .btn-continue-dark:active {
+        transform: scale(0.98);
+      }
+      .form-actions .btn-submit {
+        background: linear-gradient(135deg, var(--gold) 0%, #d4af5e 100%);
+        color: var(--gold-dark);
+        padding: 13px 36px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-gold);
+      }
+      .form-actions .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(197, 160, 89, 0.4);
+      }
+      .form-actions .btn-submit:active {
+        transform: scale(0.98);
+      }
+
+      .success-message {
+        display: none;
+        text-align: center;
+        padding: 56px 24px;
+      }
+      .success-message.show {
+        display: block;
+        animation: fadeInUp 0.4s ease;
+      }
+      .success-message .success-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(197, 160, 89, 0.12);
+        color: var(--gold);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        margin-bottom: 22px;
+      }
+      .success-message h3 {
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--navy);
+        margin-bottom: 8px;
+      }
+      .success-message p {
+        font-size: 14.5px;
+        color: var(--slate);
+        max-width: 440px;
+        margin: 0 auto 26px;
+        line-height: 1.7;
+      }
+      .success-message .btn-back-catalog {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--navy);
+        color: #fff;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.25s ease;
+      }
+      .success-message .btn-back-catalog:hover {
+        background: var(--navy-light);
+        transform: translateY(-2px);
+      }
+
+      /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+      @media (max-width: 399px) {
+        .corp-hero {
+          padding: 28px 18px;
+        }
+        .corp-hero h1 {
+          font-size: 24px;
+        }
+        .corp-hero p {
+          font-size: 13.5px;
+        }
+        .corp-hero .hero-actions {
+          flex-direction: column;
+        }
+        .corp-hero .hero-actions .btn-primary,
+        .corp-hero .hero-actions .btn-outline-light {
+          padding: 11px 20px;
+          font-size: 12.5px;
+          width: 100%;
+          justify-content: center;
+        }
         .intake-form {
-          padding: 16px 14px 20px;
+          padding: 22px 18px 26px;
         }
         .intake-form .form-title {
-          font-size: 17px;
-        }
-        .intake-form .form-subtitle {
-          font-size: 12px;
-          margin-bottom: 14px;
-        }
-
-        .field-row {
-          grid-template-columns: 1fr;
-          gap: 10px;
-        }
-
-        .form-fields {
-          gap: 10px;
-        }
-
-        .form-stepper .step-dot {
-          width: 34px;
-          height: 34px;
-          font-size: 13px;
-          border-width: 2px;
-        }
-        .form-stepper .step-label {
-          font-size: 8px;
-          letter-spacing: 0.2px;
-        }
-        .form-stepper .step-line {
-          min-width: 12px;
-          margin-bottom: 16px;
-          height: 2px;
-        }
-        .form-stepper {
-          margin-bottom: 18px;
-          padding: 0 2px;
-          gap: 2px;
-        }
-        .form-stepper .step-item {
-          gap: 4px;
-        }
-
-        .services-grid {
-          grid-template-columns: 1fr;
-          gap: 10px;
-        }
-        .service-option {
-          padding: 12px 14px;
-          gap: 10px;
-        }
-        .service-option .s-icon {
-          width: 32px;
-          height: 32px;
-          min-width: 32px;
-          font-size: 14px;
-        }
-        .service-option .s-body h4 {
-          font-size: 12px;
-        }
-        .service-option .s-body p {
-          font-size: 11px;
-        }
-        .service-option .s-check {
-          width: 18px;
-          height: 18px;
-          min-width: 18px;
-        }
-        .service-option.selected .s-check::after {
-          font-size: 10px;
-        }
-
-        .review-row {
-          grid-template-columns: 1fr;
-          gap: 8px;
-        }
-        .review-card {
-          padding: 12px 14px;
-        }
-        .review-card .r-value {
-          font-size: 13px;
-        }
-
-        .form-actions {
-          flex-direction: row;
-          gap: 8px;
-          padding-top: 12px;
-          margin-top: 16px;
-        }
-        .form-actions .btn-back {
-          font-size: 12px;
-          padding: 6px 2px;
+          font-size: 20px;
         }
         .form-actions .btn-continue-dark,
         .form-actions .btn-submit {
-          padding: 8px 16px;
-          font-size: 12px;
-          flex: 1;
-          justify-content: center;
+          padding: 11px 22px;
+          font-size: 12.5px;
         }
-
-        .declaration-box {
-          padding: 12px 14px;
-        }
-        .declaration-box label {
-          font-size: 12px;
-        }
-
-        .why-card {
-          padding: 12px 14px;
-          gap: 10px;
-        }
-        .why-card .why-icon {
+        .form-stepper .step-dot {
           width: 36px;
           height: 36px;
-          font-size: 14px;
-          min-width: 36px;
-        }
-        .why-card .why-body h3 {
           font-size: 13px;
         }
-        .why-card .why-body p {
-          font-size: 12px;
+        .form-stepper .step-label {
+          font-size: 9.5px;
         }
-
-        .need-help-box {
-          padding: 16px 16px 18px;
+        .form-stepper .step-line {
+          top: 18px;
         }
-        .need-help-box h3 {
-          font-size: 15px;
-        }
-        .need-help-box p {
-          font-size: 12px;
-        }
-        .need-help-box .btn-help {
-          font-size: 12px;
-          padding: 8px 18px;
-        }
-
         .trust-badges {
-          gap: 16px;
+          gap: 14px;
           padding: 12px 0;
         }
         .trust-badges .badge {
@@ -1117,674 +1567,1914 @@
         .trust-badges .badge i {
           font-size: 14px;
         }
-
-        .corp-hero {
-          padding: 28px 16px 24px;
-        }
-        .corp-hero h1 {
-          font-size: 22px;
-        }
-        .corp-hero p {
-          font-size: 13px;
-        }
-        .corp-hero .hero-actions .btn-primary,
-        .corp-hero .hero-actions .btn-outline-light {
-          padding: 10px 18px;
-          font-size: 12px;
-          width: 100%;
-          justify-content: center;
-        }
-        .corp-hero .hero-actions {
-          flex-direction: column;
-        }
-        .corp-hero .hero-stats .stat-num {
-          font-size: 18px;
-        }
-        .corp-hero .hero-stats .stat-label {
-          font-size: 11px;
+        .live-total-bar .lt-amount {
+          font-size: 20px;
         }
       }
 
-      @media (max-width: 399px) {
-        .intake-form {
-          padding: 12px 10px 16px;
-        }
-        .form-stepper .step-dot {
-          width: 28px;
-          height: 28px;
-          font-size: 10px;
-        }
-        .form-stepper .step-label {
-          font-size: 7px;
-        }
-        .form-stepper .step-line {
-          min-width: 8px;
-          margin-bottom: 12px;
-        }
-        .service-option {
-          padding: 10px 12px;
-        }
-        .service-option .s-body h4 {
-          font-size: 11px;
-        }
-        .service-option .s-body p {
-          font-size: 10px;
-        }
-        .form-actions .btn-continue-dark,
-        .form-actions .btn-submit {
-          padding: 7px 12px;
-          font-size: 11px;
-        }
-        .form-actions .btn-back {
-          font-size: 11px;
-        }
+      .page-view {
+        display: none;
       }
-
-      /* --- Utility --- */
-      .corp-page {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 16px;
-      }
-      @media (min-width: 768px) {
-        .corp-page {
-          padding: 0 24px;
-        }
-      }
-      @media (min-width: 992px) {
-        .corp-page {
-          padding: 0 32px;
-        }
-      }
-
-      .main-content {
-        padding: 16px 0 24px;
-      }
-      @media (min-width: 768px) {
-        .main-content {
-          padding: 20px 0 32px;
-        }
-      }
-      @media (min-width: 992px) {
-        .main-content {
-          padding: 28px 0 40px;
-        }
+      .page-view.active {
+        display: block;
       }
     </style>
   </head>
-  <body data-page="corporate" data-requires-auth="0">
+
+  <body data-page="services">
+    <!-- NAVBAR (injected by partials.js) -->
     <div id="navbarPlaceholder"></div>
 
-    <main class="main-content">
-      <div class="corp-page">
-        <!-- ============================================================
-           HERO SECTION — NO MARGIN, NO BORDER-RADIUS
-      ============================================================ -->
-        <div class="corp-hero">
-          <div class="hero-pattern"></div>
-          <div class="hero-badge">✦ Corporate &amp; Compliance</div>
-          <h1>Corporate &amp; Tax / <span class="gold">VAT Advisory</span></h1>
-          <p>
-            Simplify your business journey in Bangladesh. From RJSC
-            incorporation and Trade Licenses to complex VAT compliance and Tax
-            dispute resolution—our experts ensure your entity stays resilient
-            and legally sound.
-          </p>
-          <div class="hero-actions">
-            <a href="#main-section" class="btn-primary">
-              Start Advisory Request <i class="fas fa-arrow-right"></i>
-            </a>
-            <a href="#" class="btn-outline-light">
-              <i class="fas fa-file-alt"></i> View Service Packages
-            </a>
-          </div>
-          <div class="hero-stats">
-            <span class="stat-icon"><i class="fas fa-building"></i></span>
-            <span class="stat-num">1,500+</span>
-            <span class="stat-label"
-              >Businesses incorporated<br />and compliant in 2023.</span
-            >
-          </div>
-        </div>
+    <div class="app-shell" id="appShell">
+      <!-- SIDEBAR (injected by partials.js) -->
+      <div id="sidebarPlaceholder"></div>
 
-        <!-- ============================================================
-           MAIN TWO-COLUMN SECTION — SWAPPED: Form Left, Why Choose Right
-      ============================================================ -->
-        <div class="main-grid" id="main-section">
-          <!-- LEFT COLUMN: Corporate Advisory Request Form -->
-          <div class="intake-form">
-            <div class="form-header-row">
-              <span class="form-official-badge">
-                <i class="fas fa-file-shield"></i> Official Intake Form
-              </span>
-            </div>
-
-            <div class="form-title">
-              Corporate <span class="gold">Advisory Request</span>
-            </div>
-            <div class="form-subtitle">
-              Provide your business details to receive a customized legal
-              roadmap and fee estimate.
-            </div>
-
-            <!-- Stepper -->
-            <div class="form-stepper">
-              <div class="step-item">
-                <div class="step-dot active" data-step="1"><span>1</span></div>
-                <span class="step-label active">COMPANY</span>
-              </div>
-              <div class="step-line"></div>
-              <div class="step-item">
-                <div class="step-dot" data-step="2"><span>2</span></div>
-                <span class="step-label">SERVICES</span>
-              </div>
-              <div class="step-line"></div>
-              <div class="step-item">
-                <div class="step-dot" data-step="3"><span>3</span></div>
-                <span class="step-label">SUBMIT</span>
-              </div>
-            </div>
-
-            <!-- ============================================================
-               STEP 1: COMPANY
-            ============================================================ -->
-            <div class="step-panel active" data-panel="1">
-              <form id="step1Form">
-                <div class="form-fields">
-                  <div class="field-row">
-                    <div class="field-group">
-                      <label>Company Name <span class="star">*</span></label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Acme Solutions Ltd"
-                        required
-                      />
-                    </div>
-
-                    <div class="field-group">
-                      <label>Industry Type <span class="star">*</span></label>
-                      <select required>
-                        <option value="">Select Industry</option>
-                        <option>Technology</option>
-                        <option>Manufacturing</option>
-                        <option>Real Estate</option>
-                        <option>Healthcare</option>
-                        <option>Education</option>
-                        <option>Financial Services</option>
-                        <option>Retail &amp; E-commerce</option>
-                        <option>Transport &amp; Logistics</option>
-                        <option>Construction</option>
-                        <option>Hospitality</option>
-                        <option>Other</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="field-row">
-                    <div class="field-group">
-                      <label
-                        >Registration Number
-                        <span class="optional">(if any)</span></label
-                      >
-                      <input type="text" placeholder="C-XXXXXX" />
-                    </div>
-
-                    <div class="field-group">
-                      <label
-                        >Head Office Location <span class="star">*</span></label
-                      >
-                      <input
-                        type="text"
-                        placeholder="e.g. Gulshan, Dhaka"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div class="field-group">
-                    <label
-                      >Business Legal Structure
-                      <span class="star">*</span></label
-                    >
-                    <div class="checkbox-group">
-                      <label><input type="checkbox" /> Private Ltd</label>
-                      <label><input type="checkbox" /> Public Ltd</label>
-                      <label><input type="checkbox" /> Proprietorship</label>
-                      <label><input type="checkbox" /> Partnership</label>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <span></span>
-                  <button type="button" class="btn-continue-dark next-step">
-                    Continue <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- ============================================================
-               STEP 2: SERVICES
-            ============================================================ -->
-            <div class="step-panel" data-panel="2">
-              <form id="step2Form">
-                <div class="services-grid">
-                  <div
-                    class="service-option selected"
-                    data-service="incorporation"
-                  >
-                    <div class="s-icon"><i class="fas fa-building"></i></div>
-                    <div class="s-body">
-                      <h4>Company Incorporation</h4>
-                      <p>RJSC registration, trade license, TIN/BIN setup</p>
-                    </div>
-                    <div class="s-check"></div>
-                  </div>
-
-                  <div class="service-option" data-service="tax">
-                    <div class="s-icon">
-                      <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <div class="s-body">
-                      <h4>Tax &amp; VAT Compliance</h4>
-                      <p>Yearly filing, VAT registration, tax planning</p>
-                    </div>
-                    <div class="s-check"></div>
-                  </div>
-
-                  <div class="service-option" data-service="contract">
-                    <div class="s-icon">
-                      <i class="fas fa-file-contract"></i>
-                    </div>
-                    <div class="s-body">
-                      <h4>Contract &amp; Legal Audit</h4>
-                      <p>Drafting, vetting, and regulatory audits</p>
-                    </div>
-                    <div class="s-check"></div>
-                  </div>
-
-                  <div class="service-option" data-service="fdi">
-                    <div class="s-icon"><i class="fas fa-globe-asia"></i></div>
-                    <div class="s-body">
-                      <h4>FDI &amp; Investment</h4>
-                      <p>BIDA registration and foreign investment advisory</p>
-                    </div>
-                    <div class="s-check"></div>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="button" class="btn-back prev-step">
-                    <i class="fas fa-arrow-left"></i> Back
-                  </button>
-                  <button type="button" class="btn-continue-dark next-step">
-                    Continue <i class="fas fa-arrow-right"></i>
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- ============================================================
-               STEP 3: SUBMIT
-            ============================================================ -->
-            <div class="step-panel" data-panel="3">
-              <form id="step3Form">
-                <div class="review-section">
-                  <div class="review-row">
-                    <div class="review-card">
-                      <div class="r-label">Company Name</div>
-                      <div class="r-value" id="reviewCompany">
-                        Acme Solutions Ltd
-                      </div>
-                    </div>
-                    <div class="review-card">
-                      <div class="r-label">Industry Type</div>
-                      <div class="r-value" id="reviewIndustry">Technology</div>
-                    </div>
-                  </div>
-
-                  <div class="review-row">
-                    <div class="review-card">
-                      <div class="r-label">Registration Number</div>
-                      <div class="r-value" id="reviewReg">C-123456</div>
-                    </div>
-                    <div class="review-card">
-                      <div class="r-label">Head Office</div>
-                      <div class="r-value" id="reviewLocation">
-                        Gulshan, Dhaka
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="review-card">
-                    <div class="r-label">Business Legal Structure</div>
-                    <div class="r-value" id="reviewStructure">Private Ltd</div>
-                  </div>
-
-                  <div class="review-card">
-                    <div class="r-label">Selected Services</div>
-                    <div class="r-value" id="reviewServices">
-                      <span class="sub"
-                        >Company Incorporation, Tax &amp; VAT Compliance</span
-                      >
-                    </div>
-                  </div>
-
-                  <div class="declaration-box">
-                    <input type="checkbox" id="declaration" required />
-                    <label for="declaration">
-                      I confirm that all the information provided above is
-                      <strong>true and accurate</strong> to the best of my
-                      knowledge.
-                    </label>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="button" class="btn-back prev-step">
-                    <i class="fas fa-arrow-left"></i> Back
-                  </button>
-                  <button type="submit" class="btn-submit">
-                    Submit Request <i class="fas fa-paper-plane"></i>
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- ============================================================
-               SUCCESS MESSAGE
-            ============================================================ -->
-            <div class="success-message" id="successMessage">
-              <div class="success-icon">✅</div>
-              <h3>Request Submitted Successfully!</h3>
+      <main class="main-content">
+        <!-- PAGE 1: CATALOG -->
+        <section id="catalogView" class="page-view active">
+          <!-- HEADER — same on every page -->
+          <div class="corp-hero">
+            <div class="hero-pattern"></div>
+            <div class="hero-inner">
+              <div class="hero-badge">✦ Legal &amp; Compliance Services</div>
+              <h1>All <span class="gold">Services</span></h1>
               <p>
-                Thank you for your submission. A corporate advisor will review
-                your details and contact you within 24 hours.
+                Choose a service to begin. Each service has a guided intake form
+                so our experts can prepare an accurate quote for you.
               </p>
+              <div class="hero-actions">
+                <a href="#service=corporate-tax" class="btn-primary">
+                  Start with Corporate Tax <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#service=lawyer-consultancy" class="btn-outline-light">
+                  <i class="fas fa-gavel"></i> Talk to a Lawyer
+                </a>
+              </div>
             </div>
           </div>
 
-          <!-- RIGHT COLUMN: Why Choose JustiFi + Need Help -->
-          <div class="why-col">
-            <div class="why-section">
-              <h2 class="why-title">
-                Why Choose <span class="gold">JustiFi</span>?
-              </h2>
+          <!-- CONTENT -->
+          <div class="content-inner">
+            <div class="services-catalog" id="servicesCatalog"></div>
 
-              <div class="why-grid">
-                <div class="why-card">
-                  <div class="why-icon">
-                    <i class="fas fa-building-columns"></i>
-                  </div>
-                  <div class="why-body">
-                    <h3>Company Incorporation</h3>
-                    <p>
-                      Full assistance with RJSC registration, trade licenses,
-                      and TIN/BIN setup.
-                    </p>
-                  </div>
-                </div>
-                <div class="why-card">
-                  <div class="why-icon">
-                    <i class="fas fa-shield-halved"></i>
-                  </div>
-                  <div class="why-body">
-                    <h3>Tax &amp; VAT Compliance</h3>
-                    <p>
-                      Yearly tax filing, VAT registration, and strategic tax
-                      planning.
-                    </p>
-                  </div>
-                </div>
-                <div class="why-card">
-                  <div class="why-icon">
-                    <i class="fas fa-file-contract"></i>
-                  </div>
-                  <div class="why-body">
-                    <h3>Contract &amp; Legal Audit</h3>
-                    <p>
-                      Drafting and vetting of commercial contracts and
-                      regulatory audits.
-                    </p>
-                  </div>
-                </div>
-                <div class="why-card">
-                  <div class="why-icon"><i class="fas fa-city"></i></div>
-                  <div class="why-body">
-                    <h3>FDI &amp; Investment</h3>
-                    <p>
-                      BIDA registration and foreign direct investment advisory.
-                    </p>
-                  </div>
-                </div>
+            <div class="why-choose-section">
+              <div class="section-head">
+                <h2>Why Choose <span class="gold">JustiFi</span>?</h2>
+                <p>
+                  Bangladesh's trusted platform for legal, tax, and compliance
+                  services — built for individuals and businesses alike.
+                </p>
               </div>
+              <div class="why-grid" id="globalWhyGrid"></div>
             </div>
 
-            <!-- Need Help — now stacked inside the right column -->
-            <div class="need-help-box">
-              <div class="help-icon-circle">
-                <i class="fas fa-question"></i>
-              </div>
-              <h3>Need Help?</h3>
-              <p>
-                Not sure which service fits your company? Schedule a 15-minute
-                quick consultation with our corporate specialists.
-              </p>
-              <a href="booking.html" class="btn-help">
-                Book Discovery Call <i class="fas fa-arrow-right"></i>
-              </a>
+            <div class="trust-badges">
+              <span class="badge"
+                ><i class="fas fa-shield-alt"></i> SECURE DATA</span
+              >
+              <span class="badge"
+                ><i class="fas fa-globe"></i> GLOBAL STANDARDS</span
+              >
+              <span class="badge"
+                ><i class="fas fa-user-check"></i> VERIFIED EXPERTS</span
+              >
             </div>
           </div>
-        </div>
+        </section>
 
-        <!-- ============================================================
-           TRUST BADGES
-      ============================================================ -->
-        <div class="trust-badges">
-          <span class="badge"
-            ><i class="fas fa-shield-alt"></i> SECURE DATA</span
-          >
-          <span class="badge"
-            ><i class="fas fa-globe"></i> GLOBAL STANDARDS</span
-          >
-          <span class="badge"
-            ><i class="fas fa-user-check"></i> VERIFIED EXPERTS</span
-          >
-        </div>
-      </div>
-    </main>
+        <!-- PAGE 2: INTAKE -->
+        <section id="intakeView" class="page-view">
+          <!-- HEADER — same style as catalog -->
+          <div class="corp-hero">
+            <div class="hero-pattern"></div>
+            <div class="hero-inner" id="intakeHero"></div>
+          </div>
 
+          <!-- CONTENT — wider form -->
+          <div class="intake-shell">
+            <div class="intake-form">
+              <div class="form-header-row">
+                <span class="form-official-badge">
+                  <i class="fas fa-file-shield"></i> Official Intake Form
+                </span>
+                <span class="form-secure-badge">
+                  <i class="fas fa-lock"></i> Secure &amp; Confidential
+                </span>
+              </div>
+
+              <div class="form-title" id="formTitle"></div>
+              <div class="form-subtitle" id="formSubtitle"></div>
+
+              <div class="progress-track">
+                <div class="progress-bar">
+                  <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span class="progress-text" id="progressText">Step 1</span>
+              </div>
+
+              <div class="form-stepper" id="formStepper"></div>
+
+              <div id="stepPanels"></div>
+
+              <div class="live-total-bar" id="liveTotalBar">
+                <div class="lt-left">
+                  <span class="lt-label">Estimated Total</span>
+                  <span class="lt-count" id="liveTotalCount"></span>
+                </div>
+                <div class="lt-right">
+                  <span class="lt-amount" id="liveTotalAmount">৳ 0</span>
+                  <span class="lt-plus" id="liveTotalPlus"></span>
+                </div>
+              </div>
+
+              <div class="success-message" id="successMessage">
+                <div class="success-icon">
+                  <i class="fas fa-check"></i>
+                </div>
+                <h3>Request Submitted Successfully!</h3>
+                <p>
+                  Thank you for your submission. A specialist will review your
+                  details and contact you within 24 hours.
+                </p>
+                <a href="#/" class="btn-back-catalog">
+                  <i class="fas fa-arrow-left"></i> Back to All Services
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- FOOTER + BOTTOM NAV (injected by partials.js) -->
     <div id="footerPlaceholder"></div>
+    <div id="bottomNavPlaceholder"></div>
 
+    <!-- Shared app scripts (exact order from reference) -->
     <script src="js/data.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/partials.js"></script>
+
+    <!-- Page-specific logic (unchanged) -->
     <script>
-      (function () {
-        "use strict";
+      /* ============================================================
+       HELPERS
+    ============================================================ */
+      const formatBDT = (n) =>
+        "৳ " + Number(n).toLocaleString("en-IN", { maximumFractionDigits: 0 });
 
-        // --- DOM refs ---
-        var stepperDots = document.querySelectorAll(".form-stepper .step-dot");
-        var stepLines = document.querySelectorAll(".form-stepper .step-line");
-        var stepLabels = document.querySelectorAll(".form-stepper .step-label");
-        var panels = document.querySelectorAll(".step-panel");
-        var currentStep = 1;
+      /* ============================================================
+       SERVICE CONFIG
+    ============================================================ */
+      const SERVICE_CONFIG = {
+        "corporate-tax": {
+          catalog: {
+            icon: "fas fa-building",
+            title: "Corporate & Tax / VAT",
+            desc: "RJSC, Trade License, Corporate Tax, VAT, TDS/VDS, Appeals",
+            startingFee: 5000,
+          },
+          hero: {
+            badge: "Corporate & Compliance",
+            title: "Corporate & Tax / <span class='gold'>VAT Advisory</span>",
+            description:
+              "End-to-end corporate tax, VAT, and legal advisory — from RJSC incorporation to NBR notice defense. Verified ITPs, VAT consultants, and advocates.",
+          },
+          formTitle: "Corporate <span class='gold'>Advisory Request</span>",
+          formSubtitle:
+            "Provide your entity and tax-year details so we can assign the right ITP or VAT consultant.",
+          steps: [
+            {
+              label: "ENTITY",
+              fields: [
+                {
+                  type: "text",
+                  name: "companyName",
+                  label: "Registered Company Name",
+                  required: true,
+                  placeholder: "As per RJSC certificate",
+                  hint: "Must match your RJSC registration exactly.",
+                },
+                {
+                  type: "select",
+                  name: "entityType",
+                  label: "Entity Type",
+                  required: true,
+                  options: [
+                    "Private Limited (Pvt Ltd)",
+                    "Public Limited (PLC)",
+                    "One Person Company (OPC)",
+                    "Partnership Firm",
+                    "Sole Proprietorship",
+                    "Branch / Liaison Office",
+                    "NGO / Trust / Society",
+                  ],
+                },
+                {
+                  type: "text",
+                  name: "rjscRegNo",
+                  label: "RJSC Registration Number",
+                  optional: true,
+                  placeholder: "C-XXXXXX / 12345",
+                  hint: "Leave blank if not yet incorporated.",
+                },
+                {
+                  type: "text",
+                  name: "tin",
+                  label: "Corporate TIN",
+                  optional: true,
+                  placeholder: "12-digit TIN",
+                  hint: "e-TIN issued by NBR.",
+                },
+                {
+                  type: "text",
+                  name: "bin",
+                  label: "BIN (VAT Registration)",
+                  optional: true,
+                  placeholder: "13-digit BIN",
+                  hint: "Leave blank if not VAT-registered.",
+                },
+                {
+                  type: "text",
+                  name: "location",
+                  label: "Registered Office Address",
+                  required: true,
+                  placeholder: "e.g. Gulshan-2, Dhaka-1212",
+                },
+              ],
+            },
+            {
+              label: "FISCAL",
+              fields: [
+                {
+                  type: "select",
+                  name: "taxYear",
+                  label: "Tax Year (Assessment Year)",
+                  required: true,
+                  options: [
+                    "2024–2025",
+                    "2023–2024",
+                    "2022–2023",
+                    "2021–2022",
+                    "Earlier year",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "turnoverSlab",
+                  label: "Annual Turnover (BDT)",
+                  required: true,
+                  options: [
+                    "Below 50 lakh",
+                    "50 lakh – 1 crore",
+                    "1 crore – 5 crore",
+                    "5 crore – 20 crore",
+                    "20 crore – 100 crore",
+                    "Above 100 crore",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "accountingMethod",
+                  label: "Accounting Method",
+                  required: true,
+                  options: ["Accrual basis", "Cash basis", "Mixed", "Not sure"],
+                },
+                {
+                  type: "checkbox-group",
+                  name: "complianceStatus",
+                  label: "Current Compliance Status",
+                  options: [
+                    "TIN active",
+                    "BIN active",
+                    "VAT returns up-to-date",
+                    "Income tax returns up-to-date",
+                    "NBR notice received",
+                    "Under audit",
+                  ],
+                },
+                {
+                  type: "checkbox-group",
+                  name: "specialFlags",
+                  label: "Special Situations (if any)",
+                  options: [
+                    "Import / Export",
+                    "Foreign shareholding",
+                    "Related-party transactions",
+                    "Tax holiday / exemption",
+                    "Business restructuring",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "SERVICES",
+              type: "service-cards",
+              options: [
+                {
+                  id: "incorporation",
+                  icon: "fas fa-building",
+                  title: "Company Incorporation",
+                  desc: "RJSC registration, trade license, TIN/BIN setup",
+                  fee: 25000,
+                  feeType: "fixed",
+                  feeNote: "Excludes government fees",
+                },
+                {
+                  id: "corp-tax",
+                  icon: "fas fa-file-invoice-dollar",
+                  title: "Corporate Income Tax Return",
+                  desc: "Return preparation, computation, and e-filing",
+                  fee: 15000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "vat",
+                  icon: "fas fa-receipt",
+                  title: "VAT / Mushak Compliance",
+                  desc: "Monthly return, Mushak 9.1, input-output reconciliation",
+                  fee: 5000,
+                  feeType: "retainer",
+                  feeNote: "Billed monthly",
+                },
+                {
+                  id: "tds-vds",
+                  icon: "fas fa-file-invoice",
+                  title: "TDS / VDS Compliance",
+                  desc: "Withholding calculation, documentation, and return",
+                  fee: 3000,
+                  feeType: "retainer",
+                  feeNote: "Billed monthly",
+                },
+                {
+                  id: "audit",
+                  icon: "fas fa-search-dollar",
+                  title: "Tax / VAT Audit Support",
+                  desc: "Documentation, representation, and defense",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "notice",
+                  icon: "fas fa-envelope-open-text",
+                  title: "NBR Notice & Assessment",
+                  desc: "Reply, hearing representation, and assessment support",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "appeal",
+                  icon: "fas fa-gavel",
+                  title: "Tax / VAT Appeal",
+                  desc: "Appeal drafting and representation at Tribunal",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "advisory",
+                  icon: "fas fa-lightbulb",
+                  title: "Tax Planning & Advisory",
+                  desc: "Restructuring, exemption, and cross-border advice",
+                  fee: 10000,
+                  feeType: "fixed",
+                  feeNote: "Per consultation session",
+                },
+              ],
+            },
+            {
+              label: "SUBMIT",
+              type: "review",
+              declaration:
+                "I confirm that all the information provided above is <strong>true and accurate</strong> to the best of my knowledge, and I understand that this request does not create a client–professional relationship until a formal engagement is signed.",
+            },
+          ],
+        },
 
-        // --- Service selection ---
-        var serviceOptions = document.querySelectorAll(".service-option");
-        var selectedServices = [];
+        "individual-tax": {
+          catalog: {
+            icon: "fas fa-user",
+            title: "Individual Income Tax",
+            desc: "e-TIN, Return Filing, Tax Calculation, e-Return, Certificate",
+            startingFee: 1500,
+          },
+          hero: {
+            badge: "Individual Taxpayer",
+            title: "Individual <span class='gold'>Income Tax</span>",
+            description:
+              "File your return with confidence. e-TIN, tax calculation, e-Return filing, and NBR notice support — handled by licensed ITPs.",
+          },
+          formTitle: "Individual Tax <span class='gold'>Intake</span>",
+          formSubtitle:
+            "Tell us about your income sources so we can prepare your return accurately.",
+          steps: [
+            {
+              label: "PERSONAL",
+              fields: [
+                {
+                  type: "text",
+                  name: "fullName",
+                  label: "Full Name (as per NID)",
+                  required: true,
+                  placeholder: "Your full legal name",
+                  hint: "Must match your NID exactly.",
+                },
+                {
+                  type: "text",
+                  name: "nid",
+                  label: "NID Number",
+                  required: true,
+                  placeholder: "10, 13, or 17-digit NID",
+                },
+                {
+                  type: "text",
+                  name: "tin",
+                  label: "TIN (if already registered)",
+                  optional: true,
+                  placeholder: "12-digit TIN",
+                },
+                {
+                  type: "text",
+                  name: "mobile",
+                  label: "Mobile Number",
+                  required: true,
+                  placeholder: "01XXXXXXXXX",
+                },
+                {
+                  type: "text",
+                  name: "email",
+                  label: "Email Address",
+                  required: true,
+                  placeholder: "you@example.com",
+                },
+                {
+                  type: "select",
+                  name: "residency",
+                  label: "Residency Status",
+                  required: true,
+                  options: [
+                    "Resident Bangladeshi",
+                    "Non-Resident Bangladeshi (NRB)",
+                    "Foreign national residing in BD",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "taxYear",
+                  label: "Tax Year (Assessment Year)",
+                  required: true,
+                  options: [
+                    "2024–2025",
+                    "2023–2024",
+                    "2022–2023",
+                    "2021–2022",
+                    "Earlier year",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "INCOME",
+              fields: [
+                {
+                  type: "checkbox-group",
+                  name: "incomeSources",
+                  label: "Income Sources (select all that apply)",
+                  required: true,
+                  options: [
+                    "Salary / Employment",
+                    "Business / Profession",
+                    "Rental / House Property",
+                    "Capital Gain / Investment",
+                    "Foreign / Remittance",
+                    "Agricultural",
+                    "Interest / Dividend",
+                    "Other",
+                  ],
+                },
+                {
+                  type: "checkbox-group",
+                  name: "deductions",
+                  label: "Deductions You Want to Claim",
+                  options: [
+                    "Investment tax rebate (Sec 78)",
+                    "Life insurance premium",
+                    "DPS / Savings certificate",
+                    "Donation to approved fund",
+                    "House rent allowance",
+                    "Medical allowance",
+                    "Zakat fund",
+                    "Others",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "priorReturnStatus",
+                  label: "Previous Return Filing Status",
+                  required: true,
+                  options: [
+                    "Never filed before",
+                    "Filed last year",
+                    "Filed 2+ years ago",
+                    "Filed but need correction",
+                    "Received NBR notice",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "serviceUrgency",
+                  label: "How soon do you need this?",
+                  required: true,
+                  options: [
+                    "Standard (7–10 days)",
+                    "Priority (3–5 days)",
+                    "Urgent (within 48 hours)",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "SERVICES",
+              type: "service-cards",
+              options: [
+                {
+                  id: "e-tin",
+                  icon: "fas fa-id-card",
+                  title: "e-TIN Registration",
+                  desc: "New TIN or correction of existing TIN",
+                  fee: 1000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "return",
+                  icon: "fas fa-file-invoice",
+                  title: "Income Tax Return",
+                  desc: "Annual return preparation and e-filing",
+                  fee: 3000,
+                  feeType: "fixed",
+                  feeNote: "For salaried individuals",
+                },
+                {
+                  id: "calc",
+                  icon: "fas fa-calculator",
+                  title: "Tax Calculation Only",
+                  desc: "Detailed computation with deductions",
+                  fee: 1500,
+                  feeType: "fixed",
+                },
+                {
+                  id: "certificate",
+                  icon: "fas fa-certificate",
+                  title: "Tax Certificate / Acknowledgement",
+                  desc: "e-Return acknowledgement or tax clearance",
+                  fee: 2000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "notice",
+                  icon: "fas fa-envelope-open-text",
+                  title: "NBR Notice Response",
+                  desc: "Reply, hearing, and representation",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "foreign",
+                  icon: "fas fa-globe",
+                  title: "Foreign Income / NRB Advisory",
+                  desc: "Remittance, double taxation, and residency advice",
+                  fee: 5000,
+                  feeType: "fixed",
+                },
+              ],
+            },
+            {
+              label: "SUBMIT",
+              type: "review",
+              declaration:
+                "I confirm the information provided is <strong>true and accurate</strong>. I understand that false information may lead to penalties under the Income Tax Act 2023.",
+            },
+          ],
+        },
 
-        serviceOptions.forEach(function (option) {
-          option.addEventListener("click", function () {
-            this.classList.toggle("selected");
-            updateSelectedServices();
-          });
+        "vat-bin": {
+          catalog: {
+            icon: "fas fa-file-invoice-dollar",
+            title: "VAT & BIN",
+            desc: "BIN Registration, Mushak 9.1, Monthly VAT Return, VDS",
+            startingFee: 4000,
+          },
+          hero: {
+            badge: "Business VAT",
+            title: "VAT & <span class='gold'>BIN Services</span>",
+            description:
+              "Register, file, and stay compliant. BIN registration, Mushak 9.1, monthly returns, and VDS — handled by licensed VAT consultants.",
+          },
+          formTitle: "VAT & BIN <span class='gold'>Request</span>",
+          formSubtitle:
+            "Tell us about your business so we can recommend the right VAT service.",
+          steps: [
+            {
+              label: "BUSINESS",
+              fields: [
+                {
+                  type: "text",
+                  name: "businessName",
+                  label: "Business / Trade Name",
+                  required: true,
+                  placeholder: "As per Trade License",
+                },
+                {
+                  type: "text",
+                  name: "bin",
+                  label: "BIN (if already registered)",
+                  optional: true,
+                  placeholder: "13-digit BIN",
+                },
+                {
+                  type: "text",
+                  name: "tradeLicense",
+                  label: "Trade License Number",
+                  required: true,
+                  placeholder: "e.g. TRAD/DSCC/012345",
+                },
+                {
+                  type: "text",
+                  name: "tin",
+                  label: "Business TIN",
+                  optional: true,
+                  placeholder: "12-digit TIN",
+                },
+                {
+                  type: "select",
+                  name: "activity",
+                  label: "Business Activity",
+                  required: true,
+                  options: [
+                    "Trading (Retail)",
+                    "Trading (Wholesale)",
+                    "Manufacturing",
+                    "Service Provider",
+                    "Importer",
+                    "Exporter",
+                    "E-commerce",
+                    "Construction / Works",
+                    "Restaurant / Food",
+                    "Other",
+                  ],
+                },
+                {
+                  type: "text",
+                  name: "location",
+                  label: "Business Location",
+                  required: true,
+                  placeholder: "e.g. Motijheel, Dhaka",
+                },
+              ],
+            },
+            {
+              label: "VAT PROFILE",
+              fields: [
+                {
+                  type: "select",
+                  name: "turnoverSlab",
+                  label: "Annual Turnover (BDT)",
+                  required: true,
+                  options: [
+                    "Below 30 lakh (Turnover Tax)",
+                    "30 lakh – 1 crore",
+                    "1 crore – 5 crore",
+                    "5 crore – 20 crore",
+                    "Above 20 crore",
+                  ],
+                  hint: "VAT registration required if turnover exceeds 3 crore (or 50 lakh for service providers).",
+                },
+                {
+                  type: "select",
+                  name: "mushakStatus",
+                  label: "Mushak 6.1 (Purchase Record) Availability",
+                  required: true,
+                  options: [
+                    "Maintained regularly",
+                    "Partially maintained",
+                    "Not maintained",
+                    "Not sure",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "returnStatus",
+                  label: "Current VAT Return Status",
+                  required: true,
+                  options: [
+                    "All returns filed up-to-date",
+                    "Missed 1–2 months",
+                    "Missed 3+ months",
+                    "Never filed",
+                    "Under audit",
+                  ],
+                },
+                {
+                  type: "checkbox-group",
+                  name: "vatFlags",
+                  label: "Special VAT Situations",
+                  options: [
+                    "Import / Export",
+                    "Multiple branches",
+                    "Input tax rebate claim",
+                    "VDS applicable",
+                    "Zero-rated supply",
+                    "Exempt goods/services",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "SERVICES",
+              type: "service-cards",
+              options: [
+                {
+                  id: "bin-reg",
+                  icon: "fas fa-id-card",
+                  title: "BIN Registration",
+                  desc: "New VAT registration or turnover enlistment",
+                  fee: 4000,
+                  feeType: "fixed",
+                  feeNote: "Excludes government fees",
+                },
+                {
+                  id: "monthly",
+                  icon: "fas fa-calendar-check",
+                  title: "Monthly VAT Return",
+                  desc: "Mushak 9.1 preparation and submission",
+                  fee: 3500,
+                  feeType: "retainer",
+                  feeNote: "Billed monthly",
+                },
+                {
+                  id: "vds",
+                  icon: "fas fa-file-invoice",
+                  title: "VDS / TDS Compliance",
+                  desc: "Calculation, documentation, and return",
+                  fee: 2500,
+                  feeType: "retainer",
+                  feeNote: "Billed monthly",
+                },
+                {
+                  id: "rebate",
+                  icon: "fas fa-undo-alt",
+                  title: "Input Tax Rebate Claim",
+                  desc: "Rebate application and documentation",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "audit",
+                  icon: "fas fa-search-dollar",
+                  title: "VAT Audit Support",
+                  desc: "Documentation and representation during audit",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "cancel",
+                  icon: "fas fa-ban",
+                  title: "BIN Cancellation / Closure",
+                  desc: "Business closure and BIN deactivation",
+                  fee: 5000,
+                  feeType: "fixed",
+                },
+              ],
+            },
+            {
+              label: "SUBMIT",
+              type: "review",
+              declaration:
+                "I confirm the information provided is <strong>true and accurate</strong>. I understand that VAT evasion is a punishable offence under the VAT & Supplementary Duty Act 2012.",
+            },
+          ],
+        },
+
+        "land-property": {
+          catalog: {
+            icon: "fas fa-home",
+            title: "Land & Property",
+            desc: "Deed, Mutation, Verification, Registration, Transfer",
+            startingFee: 3000,
+          },
+          hero: {
+            badge: "Land & Property",
+            title: "Land & <span class='gold'>Property Services</span>",
+            description:
+              "Verify, register, and transfer property with confidence. Deed drafting, mutation, and legal verification — handled end-to-end.",
+          },
+          formTitle: "Property <span class='gold'>Service Request</span>",
+          formSubtitle: "Tell us about the property and the service you need.",
+          steps: [
+            {
+              label: "PROPERTY",
+              fields: [
+                {
+                  type: "text",
+                  name: "applicantName",
+                  label: "Applicant / Owner Name",
+                  required: true,
+                  placeholder: "Your full legal name",
+                },
+                {
+                  type: "select",
+                  name: "ownershipType",
+                  label: "Ownership Type",
+                  required: true,
+                  options: [
+                    "Single owner",
+                    "Joint ownership",
+                    "Inherited (warish)",
+                    "Company-owned",
+                    "Trust / Wakf",
+                  ],
+                },
+                {
+                  type: "text",
+                  name: "propertyLocation",
+                  label: "Property Location",
+                  required: true,
+                  placeholder: "Village/Area, Mouza, Upazila, District",
+                },
+                {
+                  type: "text",
+                  name: "dagNo",
+                  label: "Dag Number",
+                  required: true,
+                  placeholder: "e.g. 1234",
+                  hint: "As per CS / RS / BS khatian.",
+                },
+                {
+                  type: "text",
+                  name: "khatianNo",
+                  label: "Khatian Number",
+                  required: true,
+                  placeholder: "e.g. 5678",
+                },
+                {
+                  type: "text",
+                  name: "landArea",
+                  label: "Land Area",
+                  required: true,
+                  placeholder: "e.g. 5 katha / 10 decimal / 3 bigha",
+                },
+                {
+                  type: "select",
+                  name: "documentType",
+                  label: "Current Document Status",
+                  required: true,
+                  options: [
+                    "Registered deed available",
+                    "Unregistered / baina only",
+                    "Inherited — no partition yet",
+                    "Under litigation",
+                    "Not sure",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "STATUS",
+              fields: [
+                {
+                  type: "select",
+                  name: "mutationStatus",
+                  label: "Mutation (Namjari) Status",
+                  required: true,
+                  options: [
+                    "Mutation completed",
+                    "Mutation pending",
+                    "Mutation not applied",
+                    "Not sure",
+                  ],
+                },
+                {
+                  type: "checkbox-group",
+                  name: "encumbrances",
+                  label: "Known Encumbrances",
+                  options: [
+                    "Mortgage / Bank loan",
+                    "Lease / Tenancy",
+                    "Court injunction",
+                    "Government acquisition",
+                    "None known",
+                  ],
+                },
+                {
+                  type: "checkbox-group",
+                  name: "disputes",
+                  label: "Dispute Flags",
+                  options: [
+                    "Boundary dispute",
+                    "Ownership dispute",
+                    "Inheritance dispute",
+                    "Government notice received",
+                    "None",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "urgency",
+                  label: "Urgency",
+                  required: true,
+                  options: [
+                    "Standard (7–15 days)",
+                    "Priority (3–7 days)",
+                    "Urgent (within 48 hours)",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "SERVICES",
+              type: "service-cards",
+              options: [
+                {
+                  id: "verification",
+                  icon: "fas fa-search",
+                  title: "Land Verification",
+                  desc: "Ownership, mutation, and encumbrance check",
+                  fee: 3000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "deed",
+                  icon: "fas fa-file-contract",
+                  title: "Deed Drafting",
+                  desc: "Sale, gift, partition, or mortgage deed",
+                  fee: 8000,
+                  feeType: "fixed",
+                  feeNote: "Excludes stamp duty",
+                },
+                {
+                  id: "mutation",
+                  icon: "fas fa-exchange-alt",
+                  title: "Mutation (Namjari)",
+                  desc: "Record transfer in government register",
+                  fee: 12000,
+                  feeType: "fixed",
+                  feeNote: "Excludes government fees",
+                },
+                {
+                  id: "registration",
+                  icon: "fas fa-stamp",
+                  title: "Property Registration",
+                  desc: "Sub-registry registration and stamp duty",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "tax",
+                  icon: "fas fa-file-invoice-dollar",
+                  title: "Property Tax Consultation",
+                  desc: "Capital gain, TDS, and rental income tax",
+                  fee: 5000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "dispute",
+                  icon: "fas fa-gavel",
+                  title: "Property Dispute Support",
+                  desc: "Legal notice, partition suit, or title suit",
+                  fee: null,
+                  feeType: "quote",
+                },
+              ],
+            },
+            {
+              label: "SUBMIT",
+              type: "review",
+              declaration:
+                "I confirm the information provided is <strong>true and accurate</strong>. I understand that land documents may be subject to verification before any service is confirmed.",
+            },
+          ],
+        },
+
+        "lawyer-consultancy": {
+          catalog: {
+            icon: "fas fa-gavel",
+            title: "Lawyer Consultancy",
+            desc: "Civil, Criminal, Family, Corporate, Tax legal support",
+            startingFee: 2000,
+          },
+          hero: {
+            badge: "Legal Consultation",
+            title: "Lawyer <span class='gold'>Consultancy</span>",
+            description:
+              "Connect with verified advocates for civil, criminal, family, corporate, and tax legal matters. Transparent fees, fast matching.",
+          },
+          formTitle: "Consultation <span class='gold'>Request</span>",
+          formSubtitle:
+            "Tell us about your legal matter so we can match you with the right advocate.",
+          steps: [
+            {
+              label: "CLIENT",
+              fields: [
+                {
+                  type: "text",
+                  name: "clientName",
+                  label: "Your Full Name",
+                  required: true,
+                  placeholder: "Your full legal name",
+                },
+                {
+                  type: "text",
+                  name: "mobile",
+                  label: "Mobile Number",
+                  required: true,
+                  placeholder: "01XXXXXXXXX",
+                },
+                {
+                  type: "text",
+                  name: "email",
+                  label: "Email Address",
+                  required: true,
+                  placeholder: "you@example.com",
+                },
+                {
+                  type: "select",
+                  name: "clientType",
+                  label: "You are contacting as",
+                  required: true,
+                  options: [
+                    "Individual",
+                    "Business owner",
+                    "Company representative",
+                    "NGO / Organization",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "MATTER",
+              fields: [
+                {
+                  type: "select",
+                  name: "matterCategory",
+                  label: "Legal Matter Category",
+                  required: true,
+                  options: [
+                    "Civil",
+                    "Criminal",
+                    "Family / Matrimonial",
+                    "Corporate / Commercial",
+                    "Tax / VAT",
+                    "Property / Land",
+                    "Labour / Employment",
+                    "Constitutional / Writ",
+                    "Other",
+                  ],
+                },
+                {
+                  type: "text",
+                  name: "opposingParty",
+                  label: "Opposing Party (if any)",
+                  optional: true,
+                  placeholder: "Name of person / company",
+                },
+                {
+                  type: "text",
+                  name: "courtName",
+                  label: "Court / Tribunal (if applicable)",
+                  optional: true,
+                  placeholder: "e.g. Dhaka Judge Court, VAT Appellate Tribunal",
+                },
+                {
+                  type: "textarea",
+                  name: "matterSummary",
+                  label: "Brief Summary of the Matter",
+                  required: true,
+                  placeholder:
+                    "Describe your issue in 3–5 sentences. Include key dates and any prior legal action.",
+                },
+                {
+                  type: "select",
+                  name: "priorLegalAction",
+                  label: "Prior Legal Action",
+                  required: true,
+                  options: [
+                    "None",
+                    "Legal notice sent/received",
+                    "FIR filed",
+                    "Case filed",
+                    "Multiple hearings done",
+                  ],
+                },
+                {
+                  type: "select",
+                  name: "urgency",
+                  label: "Urgency",
+                  required: true,
+                  options: [
+                    "Routine (schedule within a week)",
+                    "Urgent (within 48 hours)",
+                    "Emergency (same day)",
+                  ],
+                },
+              ],
+            },
+            {
+              label: "SERVICES",
+              type: "service-cards",
+              options: [
+                {
+                  id: "consult",
+                  icon: "fas fa-comments",
+                  title: "Initial Consultation",
+                  desc: "30-minute session with a verified advocate",
+                  fee: 2000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "notice",
+                  icon: "fas fa-envelope",
+                  title: "Legal Notice Drafting",
+                  desc: "Demand notice, reply, or cease-and-desist",
+                  fee: 5000,
+                  feeType: "fixed",
+                },
+                {
+                  id: "draft",
+                  icon: "fas fa-file-alt",
+                  title: "Document Drafting",
+                  desc: "Agreement, petition, or affidavit",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "represent",
+                  icon: "fas fa-gavel",
+                  title: "Court Representation",
+                  desc: "Appearance before court or tribunal",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "adr",
+                  icon: "fas fa-handshake",
+                  title: "ADR / Mediation",
+                  desc: "Settlement through negotiation or mediation",
+                  fee: null,
+                  feeType: "quote",
+                },
+                {
+                  id: "retainer",
+                  icon: "fas fa-briefcase",
+                  title: "Monthly Retainer",
+                  desc: "Ongoing legal support for business or individual",
+                  fee: 15000,
+                  feeType: "retainer",
+                  feeNote: "Billed monthly",
+                },
+              ],
+            },
+            {
+              label: "SUBMIT",
+              type: "review",
+              declaration:
+                "I confirm the information provided is <strong>true and accurate</strong>. I understand that this request does not create an advocate–client relationship until a formal engagement letter is signed.",
+            },
+          ],
+        },
+      };
+
+      const GLOBAL_WHY = [
+        {
+          icon: "fas fa-user-check",
+          title: "Verified Experts",
+          desc: "Every lawyer, ITP, and VAT consultant on the platform is credential-verified.",
+        },
+        {
+          icon: "fas fa-shield-alt",
+          title: "Secure & Confidential",
+          desc: "Bank-grade encryption and strict confidentiality for all your documents.",
+        },
+        {
+          icon: "fas fa-clock",
+          title: "Fast Turnaround",
+          desc: "Most fixed-price services completed within 24–48 hours of document submission.",
+        },
+        {
+          icon: "fas fa-tags",
+          title: "Transparent Pricing",
+          desc: "See fees upfront. No hidden charges, no surprises at the end.",
+        },
+      ];
+
+      const state = {
+        serviceKey: null,
+        currentStep: 1,
+        formState: {},
+      };
+
+      function feeDisplay(opt) {
+        if (opt.feeType === "quote") {
+          return `<span class="service-fee quote">Quote</span>`;
+        }
+        if (opt.feeType === "retainer") {
+          return `<span class="service-fee retainer">${formatBDT(opt.fee)}/mo</span>`;
+        }
+        return `<span class="service-fee fixed">${formatBDT(opt.fee)}</span>`;
+      }
+
+      function renderCatalog() {
+        const grid = document.getElementById("servicesCatalog");
+        grid.innerHTML = Object.keys(SERVICE_CONFIG)
+          .map((key) => {
+            const s = SERVICE_CONFIG[key].catalog;
+            const startFee = s.startingFee
+              ? `<span class="meta-item"><i class="fas fa-tag"></i> From ${formatBDT(s.startingFee)}</span>`
+              : "";
+            return `
+            <a href="#service=${key}" class="catalog-card">
+              <div class="catalog-icon"><i class="${s.icon}"></i></div>
+              <h3>${s.title}</h3>
+              <p>${s.desc}</p>
+              <div class="catalog-meta">
+                ${startFee}
+                <span class="meta-item"><i class="fas fa-clock"></i> 24–48h</span>
+              </div>
+              <span class="catalog-cta">Start Request <i class="fas fa-arrow-right"></i></span>
+            </a>`;
+          })
+          .join("");
+
+        document.getElementById("globalWhyGrid").innerHTML = GLOBAL_WHY.map(
+          (c) => `
+        <div class="why-card">
+          <div class="why-icon"><i class="${c.icon}"></i></div>
+          <h3>${c.title}</h3>
+          <p>${c.desc}</p>
+        </div>`,
+        ).join("");
+      }
+
+      function renderIntake(key) {
+        const config = SERVICE_CONFIG[key];
+        if (!config) {
+          location.hash = "#/";
+          return;
+        }
+        state.serviceKey = key;
+        state.currentStep = 1;
+        state.formState = {};
+
+        document.getElementById("intakeHero").innerHTML = `
+        <div class="hero-badge">✦ ${config.hero.badge}</div>
+        <h1>${config.hero.title}</h1>
+        <p>${config.hero.description}</p>
+        <a href="#/" class="back-link">
+          <i class="fas fa-arrow-left"></i> Back to All Services
+        </a>`;
+
+        document.getElementById("formTitle").innerHTML = config.formTitle;
+        document.getElementById("formSubtitle").textContent =
+          config.formSubtitle;
+
+        const stepper = document.getElementById("formStepper");
+        stepper.innerHTML = "";
+        config.steps.forEach((step, i) => {
+          const item = document.createElement("div");
+          item.className = "step-item";
+          const lineHtml =
+            i < config.steps.length - 1
+              ? `<div class="step-line" data-line="${i}"></div>`
+              : "";
+          item.innerHTML = `
+          <div class="step-dot ${i === 0 ? "active" : ""}" data-step="${i + 1}">
+            <span>${i + 1}</span>
+          </div>
+          <span class="step-label ${i === 0 ? "active" : ""}">${step.label}</span>
+          ${lineHtml}`;
+          stepper.appendChild(item);
         });
 
-        function updateSelectedServices() {
-          selectedServices = [];
-          document
-            .querySelectorAll(".service-option.selected")
-            .forEach(function (el) {
-              selectedServices.push(el.querySelector("h4").textContent);
-            });
-          document.getElementById("reviewServices").innerHTML =
-            '<span class="sub">' +
-            (selectedServices.length > 0
-              ? selectedServices.join(", ")
-              : "No services selected") +
-            "</span>";
+        const panels = document.getElementById("stepPanels");
+        panels.innerHTML = "";
+        config.steps.forEach((step, i) => {
+          const panel = document.createElement("div");
+          panel.className = `step-panel ${i === 0 ? "active" : ""}`;
+          panel.dataset.panel = i + 1;
+          panel.innerHTML = renderStep(step, i + 1);
+          panels.appendChild(panel);
+        });
+
+        document.getElementById("liveTotalBar").classList.remove("show");
+        updateProgress();
+      }
+
+      function renderStep(step, stepNum) {
+        if (step.type === "service-cards")
+          return renderServiceCards(step, stepNum);
+        if (step.type === "review") return renderReview(step, stepNum);
+        return renderFields(step, stepNum);
+      }
+
+      function renderFields(step, stepNum) {
+        let html = `<form id="step${stepNum}Form" novalidate><div class="form-fields">`;
+        let rowBuffer = [];
+
+        step.fields.forEach((f) => {
+          if (f.type === "checkbox-group") {
+            if (rowBuffer.length) {
+              html += flushRow(rowBuffer);
+              rowBuffer = [];
+            }
+            html += renderCheckboxGroup(f);
+          } else {
+            rowBuffer.push(f);
+            if (rowBuffer.length === 2) {
+              html += flushRow(rowBuffer);
+              rowBuffer = [];
+            }
+          }
+        });
+        if (rowBuffer.length) html += flushRow(rowBuffer);
+
+        html += `</div>
+        <div class="form-actions">
+          ${
+            stepNum > 1
+              ? '<button type="button" class="btn-back prev-step"><i class="fas fa-arrow-left"></i> Back</button>'
+              : "<span></span>"
+          }
+          <button type="button" class="btn-continue-dark next-step">
+            Continue <i class="fas fa-arrow-right"></i>
+          </button>
+        </div></form>`;
+        return html;
+      }
+
+      function flushRow(fields) {
+        return `<div class="field-row">${fields.map(renderField).join("")}</div>`;
+      }
+
+      function renderField(f) {
+        const req = f.required ? '<span class="star">*</span>' : "";
+        const opt = f.optional
+          ? '<span class="optional">(optional)</span>'
+          : "";
+        const hint = f.hint ? `<div class="hint">${f.hint}</div>` : "";
+
+        if (f.type === "select") {
+          return `<div class="field-group">
+          <label>${f.label} ${req} ${opt}</label>
+          <select name="${f.name}" ${f.required ? "required" : ""}>
+            <option value="">Select ${f.label}</option>
+            ${f.options.map((o) => `<option>${o}</option>`).join("")}
+          </select>
+          ${hint}
+        </div>`;
+        }
+        if (f.type === "textarea") {
+          return `<div class="field-group">
+          <label>${f.label} ${req} ${opt}</label>
+          <textarea name="${f.name}" placeholder="${f.placeholder || ""}" ${f.required ? "required" : ""}></textarea>
+          ${hint}
+        </div>`;
+        }
+        return `<div class="field-group">
+        <label>${f.label} ${req} ${opt}</label>
+        <input type="${f.type}" name="${f.name}" placeholder="${f.placeholder || ""}" ${f.required ? "required" : ""}>
+        ${hint}
+      </div>`;
+      }
+
+      function renderCheckboxGroup(f) {
+        return `<div class="field-group">
+        <label>${f.label} ${f.required ? '<span class="star">*</span>' : ""}</label>
+        <div class="checkbox-group" data-name="${f.name}">
+          ${f.options
+            .map(
+              (o) =>
+                `<label><input type="checkbox" name="${f.name}" value="${o}"> ${o}</label>`,
+            )
+            .join("")}
+        </div>
+      </div>`;
+      }
+
+      function renderServiceCards(step, stepNum) {
+        return `<form id="step${stepNum}Form" novalidate>
+        <div class="services-grid">
+          ${step.options
+            .map(
+              (o, i) => `
+            <div class="service-option ${i === 0 ? "selected" : ""}"
+                 data-service="${o.id}"
+                 data-fee="${o.fee ?? ""}"
+                 data-fee-type="${o.feeType || "fixed"}">
+              <div class="s-top">
+                <div class="s-icon"><i class="${o.icon}"></i></div>
+                <div class="s-body">
+                  <h4>${o.title}</h4>
+                  <p>${o.desc}</p>
+                </div>
+                <div class="s-check"></div>
+              </div>
+              <div class="service-fee-row">
+                <span class="fee-label">
+                  <i class="fas fa-tag"></i> ${
+                    o.feeType === "retainer"
+                      ? "Monthly fee"
+                      : o.feeType === "quote"
+                        ? "Custom pricing"
+                        : "Service fee"
+                  }
+                </span>
+                ${feeDisplay(o)}
+              </div>
+              ${o.feeNote ? `<div class="service-fee-note">${o.feeNote}</div>` : ""}
+            </div>`,
+            )
+            .join("")}
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-back prev-step">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <button type="button" class="btn-continue-dark next-step">
+            Continue <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </form>`;
+      }
+
+      function renderReview(step, stepNum) {
+        return `<form id="step${stepNum}Form" novalidate>
+        <div class="review-section" id="reviewSection"></div>
+        <div class="pricing-block" id="pricingBlock"></div>
+        <div class="declaration-box">
+          <input type="checkbox" id="declaration" required>
+          <label for="declaration">${step.declaration}</label>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-back prev-step">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          <button type="submit" class="btn-submit">
+            Submit Request <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>`;
+      }
+
+      function goToStep(step) {
+        const config = SERVICE_CONFIG[state.serviceKey];
+
+        document.querySelectorAll(".step-dot").forEach((dot) => {
+          const n = +dot.dataset.step;
+          dot.classList.toggle("active", n === step);
+          dot.classList.toggle("done", n < step);
+        });
+        document.querySelectorAll(".step-line").forEach((line) => {
+          const idx = +line.dataset.line;
+          line.classList.toggle("done", idx < step - 1);
+        });
+        document.querySelectorAll(".step-label").forEach((l, i) => {
+          const n = i + 1;
+          l.classList.toggle("active", n === step);
+          l.classList.toggle("done", n < step);
+        });
+        document.querySelectorAll(".step-panel").forEach((p) => {
+          p.classList.toggle("active", +p.dataset.panel === step);
+        });
+
+        state.currentStep = step;
+        updateProgress();
+
+        const stepConfig = config.steps[step - 1];
+        const totalBar = document.getElementById("liveTotalBar");
+        if (stepConfig.type === "service-cards") {
+          updateLiveTotal();
+          totalBar.classList.add("show");
+        } else {
+          totalBar.classList.remove("show");
         }
 
-        // --- Step navigation ---
-        function goToStep(step) {
-          // Update dots
-          stepperDots.forEach(function (dot, i) {
-            var num = parseInt(dot.dataset.step);
-            dot.classList.remove("active", "done");
-            if (num < step) dot.classList.add("done");
-            else if (num === step) dot.classList.add("active");
-          });
+        if (step === config.steps.length) buildReview();
 
-          // Update lines
-          stepLines.forEach(function (line, i) {
-            line.classList.toggle("done", i < step - 1);
-          });
+        document
+          .querySelector(".intake-form")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
 
-          // Update labels
-          stepLabels.forEach(function (label, i) {
-            var num = i + 1;
-            label.classList.remove("active", "done");
-            if (num < step) label.classList.add("done");
-            else if (num === step) label.classList.add("active");
-          });
+      function updateProgress() {
+        const total = SERVICE_CONFIG[state.serviceKey].steps.length;
+        const pct = (state.currentStep / total) * 100;
+        document.getElementById("progressFill").style.width = pct + "%";
+        document.getElementById("progressText").textContent =
+          `Step ${state.currentStep} of ${total}`;
+      }
 
-          // Update panels
-          panels.forEach(function (panel) {
-            panel.classList.remove("active");
-            if (parseInt(panel.dataset.panel) === step) {
-              panel.classList.add("active");
+      function calculateTotals() {
+        const opts = [...document.querySelectorAll(".service-option.selected")];
+        let fixedTotal = 0;
+        let retainerTotal = 0;
+        let quoteCount = 0;
+        const items = [];
+
+        opts.forEach((el) => {
+          const fee = el.dataset.fee ? Number(el.dataset.fee) : null;
+          const feeType = el.dataset.feeType;
+          const title = el.querySelector("h4").textContent;
+          const feeNote =
+            el.querySelector(".service-fee-note")?.textContent || "";
+
+          if (feeType === "fixed" && fee !== null) {
+            fixedTotal += fee;
+          } else if (feeType === "retainer" && fee !== null) {
+            retainerTotal += fee;
+          } else {
+            quoteCount++;
+          }
+          items.push({ title, fee, feeType, feeNote });
+        });
+
+        return {
+          fixedTotal,
+          retainerTotal,
+          quoteCount,
+          items,
+          count: opts.length,
+        };
+      }
+
+      function updateLiveTotal() {
+        const { fixedTotal, retainerTotal, quoteCount, count } =
+          calculateTotals();
+
+        document.getElementById("liveTotalCount").textContent =
+          count === 0
+            ? "No services selected"
+            : `${count} service${count > 1 ? "s" : ""} selected`;
+
+        const amountEl = document.getElementById("liveTotalAmount");
+        const plusEl = document.getElementById("liveTotalPlus");
+
+        let amountText = formatBDT(fixedTotal);
+        let plusText = "";
+
+        if (retainerTotal > 0) {
+          if (fixedTotal > 0) {
+            plusText = `+ ${formatBDT(retainerTotal)}/mo`;
+          } else {
+            amountText = formatBDT(retainerTotal);
+            plusText = "/mo";
+          }
+        }
+        if (quoteCount > 0) {
+          plusText +=
+            (plusText ? " · " : "") +
+            `${quoteCount} quote${quoteCount > 1 ? "s" : ""}`;
+        }
+
+        amountEl.textContent = amountText;
+        plusEl.textContent = plusText;
+      }
+
+      function collectFormState() {
+        const collected = {};
+        const checkboxes = {};
+
+        document
+          .querySelectorAll(
+            ".step-panel input, .step-panel select, .step-panel textarea",
+          )
+          .forEach((el) => {
+            if (el.type === "checkbox") {
+              if (!checkboxes[el.name]) checkboxes[el.name] = [];
+              if (el.checked) checkboxes[el.name].push(el.value);
+            } else if (el.name) {
+              const group = el.closest(".field-group");
+              const label = group
+                ? group
+                    .querySelector("label")
+                    ?.textContent.trim()
+                    .replace(/\s*\*\s*$/, "")
+                    .replace(/\s*\(optional\)\s*$/, "")
+                : el.name;
+              if (el.value.trim()) collected[label] = el.value;
             }
           });
 
-          currentStep = step;
+        Object.keys(checkboxes).forEach((name) => {
+          const values = checkboxes[name];
+          if (values.length) {
+            const firstCb = document.querySelector(
+              `.checkbox-group[data-name="${name}"]`,
+            );
+            const group = firstCb?.closest(".field-group");
+            const label = group
+              ? group
+                  .querySelector("label")
+                  ?.textContent.trim()
+                  .replace(/\s*\*\s*$/, "")
+              : name;
+            collected[label] = values.join(", ");
+          }
+        });
 
-          // Update review data when going to step 3
-          if (step === 3) {
-            updateReviewData();
+        state.formState = collected;
+      }
+
+      function buildReview() {
+        collectFormState();
+        const review = document.getElementById("reviewSection");
+        if (!review) return;
+
+        const keys = Object.keys(state.formState);
+        let html = "";
+
+        for (let i = 0; i < keys.length; i += 2) {
+          const k1 = keys[i];
+          const k2 = keys[i + 1];
+          if (k2) {
+            html += `<div class="review-row">
+            <div class="review-card">
+              <div class="r-label">${k1}</div>
+              <div class="r-value">${state.formState[k1] || "Not provided"}</div>
+            </div>
+            <div class="review-card">
+              <div class="r-label">${k2}</div>
+              <div class="r-value">${state.formState[k2] || "Not provided"}</div>
+            </div>
+          </div>`;
+          } else {
+            html += `<div class="review-card">
+            <div class="r-label">${k1}</div>
+            <div class="r-value">${state.formState[k1] || "Not provided"}</div>
+          </div>`;
+          }
+        }
+
+        review.innerHTML = html;
+        buildPricingBlock();
+      }
+
+      function buildPricingBlock() {
+        const block = document.getElementById("pricingBlock");
+        if (!block) return;
+
+        const { fixedTotal, retainerTotal, quoteCount, items } =
+          calculateTotals();
+
+        if (items.length === 0) {
+          block.innerHTML = `<div class="pb-title"><i class="fas fa-receipt"></i> Pricing Summary</div>
+          <p style="font-size:13px;color:var(--slate);text-align:center;padding:14px 0;">No services selected.</p>`;
+          return;
+        }
+
+        let linesHtml = "";
+        items.forEach((it) => {
+          let amountHtml;
+          if (it.feeType === "quote" || it.fee === null) {
+            amountHtml = `<span class="pl-amount quote">Quote</span>`;
+          } else if (it.feeType === "retainer") {
+            amountHtml = `<span class="pl-amount retainer">${formatBDT(it.fee)}/mo</span>`;
+          } else {
+            amountHtml = `<span class="pl-amount">${formatBDT(it.fee)}</span>`;
           }
 
-          // Scroll to top of form
-          document.querySelector(".intake-form").scrollIntoView({
+          linesHtml += `
+          <div class="pricing-line">
+            <div class="pl-name">
+              <i class="fas fa-check-circle"></i>
+              <div class="pl-name-text">
+                <span>${it.title}</span>
+                ${
+                  it.feeNote
+                    ? `<span class="pl-sub">${it.feeNote}</span>`
+                    : it.feeType === "retainer"
+                      ? `<span class="pl-sub">Recurring monthly charge</span>`
+                      : it.feeType === "quote"
+                        ? `<span class="pl-sub">Final fee quoted after review</span>`
+                        : ""
+                }
+              </div>
+            </div>
+            ${amountHtml}
+          </div>`;
+        });
+
+        let summaryHtml = "";
+        if (fixedTotal > 0) {
+          summaryHtml += `<div class="ps-row">
+          <span class="ps-label">One-time services subtotal</span>
+          <span class="ps-value">${formatBDT(fixedTotal)}</span>
+        </div>`;
+        }
+        if (retainerTotal > 0) {
+          summaryHtml += `<div class="ps-row">
+          <span class="ps-label">Monthly recurring services</span>
+          <span class="ps-value">${formatBDT(retainerTotal)}/mo</span>
+        </div>`;
+        }
+        if (quoteCount > 0) {
+          summaryHtml += `<div class="ps-row">
+          <span class="ps-label">Services requiring quote</span>
+          <span class="ps-value">${quoteCount}</span>
+        </div>`;
+        }
+
+        const totalText =
+          fixedTotal > 0
+            ? formatBDT(fixedTotal)
+            : retainerTotal > 0
+              ? formatBDT(retainerTotal) + "/mo"
+              : "—";
+
+        summaryHtml += `<div class="ps-row total">
+        <span class="ps-label">${
+          fixedTotal > 0 && retainerTotal > 0
+            ? "One-time total"
+            : fixedTotal > 0
+              ? "Total (one-time)"
+              : retainerTotal > 0
+                ? "Monthly total"
+                : "Total"
+        }</span>
+        <span class="ps-value">${totalText}</span>
+      </div>`;
+
+        let noteHtml = "";
+        if (quoteCount > 0 || retainerTotal > 0) {
+          noteHtml = `<div class="ps-note">
+          <i class="fas fa-info-circle"></i>
+          <div>
+            ${
+              quoteCount > 0
+                ? `<strong>${quoteCount} service${quoteCount > 1 ? "s" : ""}</strong> require a custom quote — our team will send you a detailed estimate within 24 hours.<br>`
+                : ""
+            }
+            ${
+              retainerTotal > 0
+                ? `Recurring fees are billed monthly. You can cancel anytime with 30 days' notice.`
+                : ""
+            }
+          </div>
+        </div>`;
+        } else {
+          noteHtml = `<div class="ps-note">
+          <i class="fas fa-info-circle"></i>
+          <div>
+            Government fees, stamp duty, and third-party costs are <strong>not included</strong> and will be billed separately at actual.
+          </div>
+        </div>`;
+        }
+
+        block.innerHTML = `
+        <div class="pb-title"><i class="fas fa-receipt"></i> Pricing Summary</div>
+        ${linesHtml}
+        <div class="pricing-summary">
+          ${summaryHtml}
+          ${noteHtml}
+        </div>`;
+      }
+
+      function validateCurrentStep() {
+        const config = SERVICE_CONFIG[state.serviceKey];
+        const step = config.steps[state.currentStep - 1];
+
+        if (step.type === "service-cards" || step.type === "review")
+          return true;
+
+        const panel = document.querySelector(
+          `.step-panel[data-panel="${state.currentStep}"]`,
+        );
+        const fields = step.fields || [];
+        let valid = true;
+        let firstInvalid = null;
+
+        fields.forEach((f) => {
+          if (!f.required) return;
+          if (f.type === "checkbox-group") {
+            const checked = panel.querySelectorAll(
+              `.checkbox-group[data-name="${f.name}"] input:checked`,
+            );
+            if (checked.length === 0) {
+              valid = false;
+              if (!firstInvalid)
+                firstInvalid = panel.querySelector(
+                  `.checkbox-group[data-name="${f.name}"]`,
+                );
+            }
+          } else {
+            const input = panel.querySelector(`[name="${f.name}"]`);
+            if (input && !input.value.trim()) {
+              valid = false;
+              input.classList.add("error");
+              if (!firstInvalid) firstInvalid = input;
+            } else if (input) {
+              input.classList.remove("error");
+            }
+          }
+        });
+
+        if (!valid && firstInvalid) {
+          firstInvalid.scrollIntoView({
             behavior: "smooth",
-            block: "start",
+            block: "center",
           });
+          if (firstInvalid.focus) firstInvalid.focus();
         }
 
-        // --- Update review data from step 1 ---
-        function updateReviewData() {
-          var companyName = document.querySelector(
-            '#step1Form input[placeholder="e.g. Acme Solutions Ltd"]',
-          );
-          var industry = document.querySelector("#step1Form select");
-          var regNumber = document.querySelector(
-            '#step1Form input[placeholder="C-XXXXXX"]',
-          );
-          var location = document.querySelector(
-            '#step1Form input[placeholder="e.g. Gulshan, Dhaka"]',
-          );
-          var structureCheckboxes = document.querySelectorAll(
-            '#step1Form .checkbox-group input[type="checkbox"]',
-          );
-          var selectedStructure = [];
+        return valid;
+      }
 
-          structureCheckboxes.forEach(function (cb) {
-            if (cb.checked) {
-              selectedStructure.push(cb.parentElement.textContent.trim());
-            }
-          });
-
-          document.getElementById("reviewCompany").textContent =
-            companyName && companyName.value
-              ? companyName.value
-              : "Not provided";
-          document.getElementById("reviewIndustry").textContent =
-            industry && industry.value ? industry.value : "Not selected";
-          document.getElementById("reviewReg").textContent =
-            regNumber && regNumber.value ? regNumber.value : "Not provided";
-          document.getElementById("reviewLocation").textContent =
-            location && location.value ? location.value : "Not provided";
-          document.getElementById("reviewStructure").textContent =
-            selectedStructure.length > 0
-              ? selectedStructure.join(", ")
-              : "Not selected";
-
-          updateSelectedServices();
+      document.addEventListener("click", (e) => {
+        const opt = e.target.closest(".service-option");
+        if (opt) {
+          opt.classList.toggle("selected");
+          updateLiveTotal();
+          return;
         }
 
-        // --- Next/Prev step buttons ---
-        document.querySelectorAll(".next-step").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            if (currentStep === 3) return;
-            goToStep(currentStep + 1);
-          });
+        if (e.target.closest(".next-step")) {
+          if (!validateCurrentStep()) return;
+          const totalSteps = SERVICE_CONFIG[state.serviceKey].steps.length;
+          if (state.currentStep < totalSteps) goToStep(state.currentStep + 1);
+        }
+
+        if (e.target.closest(".prev-step")) {
+          if (state.currentStep > 1) goToStep(state.currentStep - 1);
+        }
+      });
+
+      document.addEventListener("submit", (e) => {
+        if (!e.target.id.endsWith("Form")) return;
+        e.preventDefault();
+
+        const decl = document.getElementById("declaration");
+        if (decl && !decl.checked) {
+          alert("Please confirm the declaration before submitting.");
+          return;
+        }
+
+        collectFormState();
+        const totals = calculateTotals();
+        const payload = {
+          service: state.serviceKey,
+          fields: state.formState,
+          pricing: {
+            fixedTotal: totals.fixedTotal,
+            retainerTotal: totals.retainerTotal,
+            quoteCount: totals.quoteCount,
+            items: totals.items,
+          },
+        };
+        console.log("SUBMIT:", payload);
+        // TODO: send payload to your backend API here
+
+        document
+          .querySelectorAll(".step-panel")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("successMessage").classList.add("show");
+        document.getElementById("liveTotalBar").classList.remove("show");
+
+        document.querySelectorAll(".step-dot").forEach((d) => {
+          d.classList.remove("active");
+          d.classList.add("done");
+        });
+        document.querySelectorAll(".step-line").forEach((l) => {
+          l.classList.add("done");
+        });
+        document.querySelectorAll(".step-label").forEach((l) => {
+          l.classList.remove("active");
+          l.classList.add("done");
         });
 
-        document.querySelectorAll(".prev-step").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            if (currentStep === 1) return;
-            goToStep(currentStep - 1);
-          });
-        });
+        document.getElementById("progressFill").style.width = "100%";
+        document.getElementById("progressText").textContent = "Completed";
+      });
 
-        // --- Form submission ---
-        document
-          .getElementById("step3Form")
-          .addEventListener("submit", function (e) {
-            e.preventDefault();
+      function route() {
+        const hash = location.hash || "#/";
+        const match = hash.match(/^#service=([\w-]+)$/);
 
-            var declaration = document.getElementById("declaration");
-            if (!declaration.checked) {
-              alert("Please confirm the declaration before submitting.");
-              return;
-            }
+        const catalogView = document.getElementById("catalogView");
+        const intakeView = document.getElementById("intakeView");
 
-            // Hide form, show success
-            document.querySelectorAll(".step-panel").forEach(function (p) {
-              p.classList.remove("active");
-            });
-            document.getElementById("successMessage").classList.add("show");
+        if (match && SERVICE_CONFIG[match[1]]) {
+          catalogView.classList.remove("active");
+          intakeView.classList.add("active");
+          renderIntake(match[1]);
+          window.scrollTo({ top: 0, behavior: "instant" });
+        } else {
+          intakeView.classList.remove("active");
+          catalogView.classList.add("active");
+          renderCatalog();
+        }
+      }
 
-            // Update stepper to show all done
-            stepperDots.forEach(function (dot) {
-              dot.classList.remove("active");
-              dot.classList.add("done");
-            });
-            stepLines.forEach(function (line) {
-              line.classList.add("done");
-            });
-            stepLabels.forEach(function (label) {
-              label.classList.remove("active");
-              label.classList.add("done");
-            });
-          });
+      window.addEventListener("hashchange", route);
 
-        // --- Initialize ---
-        goToStep(1);
-        updateSelectedServices();
-
-        // --- Smooth scroll for anchor link ---
-        document
-          .querySelector(".hero-actions .btn-primary")
-          ?.addEventListener("click", function (e) {
-            var target = document.querySelector(this.getAttribute("href"));
-            if (target) {
-              e.preventDefault();
-              target.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-          });
-      })();
+      renderCatalog();
+      route();
     </script>
   </body>
 </html>
