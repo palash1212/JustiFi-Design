@@ -1,0 +1,1688 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Dashboard · JustiFi</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              outline: "#74777d",
+              "inverse-surface": "#2d3133",
+              "on-background": "#191c1e",
+              "tertiary-fixed-dim": "#e9c176",
+              "surface-bright": "#f7f9fb",
+              "on-secondary": "#ffffff",
+              "surface-container-high": "#e6e8ea",
+              surface: "#f7f9fb",
+              "inverse-primary": "#b7c8de",
+              "on-tertiary-fixed-variant": "#5d4201",
+              "secondary-container": "#d0e1fb",
+              tertiary: "#1f1300",
+              "on-primary-container": "#8192a7",
+              "tertiary-fixed": "#ffdea5",
+              primary: "#041627",
+              "surface-tint": "#4f6073",
+              "secondary-fixed-dim": "#b7c8e1",
+              "on-secondary-container": "#54647a",
+              "inverse-on-surface": "#eff1f3",
+              "secondary-fixed": "#d3e4fe",
+              "on-tertiary-fixed": "#261900",
+              error: "#ba1a1a",
+              background: "#f7f9fb",
+              "on-surface-variant": "#44474c",
+              "on-secondary-fixed-variant": "#38485d",
+              "surface-dim": "#d8dadc",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed": "#d2e4fb",
+              "on-error": "#ffffff",
+              "primary-fixed-dim": "#b7c8de",
+              "surface-container-highest": "#e0e3e5",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#191c1e",
+              secondary: "#505f76",
+              "primary-container": "#1a2b3c",
+              "on-primary-fixed-variant": "#38485a",
+              "surface-container-low": "#f2f4f6",
+              "on-primary": "#ffffff",
+              "on-secondary-fixed": "#0b1c30",
+              "error-container": "#ffdad6",
+              "surface-variant": "#e0e3e5",
+              "on-primary-fixed": "#0b1d2d",
+              "outline-variant": "#c4c6cd",
+              "on-error-container": "#93000a",
+              "surface-container": "#eceef0",
+              "tertiary-container": "#392700",
+              "on-tertiary-container": "#af8c47",
+              "warm-gold": "#C5A059",
+              "emerald-green": "#10B981",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              "margin-desktop": "40px",
+              gutter: "24px",
+              "stack-md": "16px",
+              "margin-mobile": "16px",
+              "container-max": "1280px",
+              "stack-sm": "8px",
+              "stack-lg": "32px",
+              unit: "8px",
+            },
+            fontFamily: {
+              "label-md": ["Inter"],
+              "headline-md": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "body-lg": ["Inter"],
+              caption: ["Inter"],
+              "body-md": ["Inter"],
+              "headline-lg": ["Inter"],
+              "display-lg": ["Inter"],
+            },
+            boxShadow: { "legal-soft": "0 4px 20px 0 rgba(26, 43, 60, 0.04)" },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: #f7f9fb;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .stat-card {
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .stat-card:hover {
+        border-color: #c5a059;
+      }
+      .filter-btn.active {
+        background-color: #041627;
+        color: white;
+        border-color: #041627;
+      }
+      .filter-btn:not(.active) {
+        background-color: white;
+        color: #505f76;
+        border: 1px solid #e0e3e5;
+      }
+      .filter-btn:not(.active):hover {
+        background-color: #eceef0;
+        color: #041627;
+      }
+      .request-card {
+        transition:
+          opacity 0.2s,
+          transform 0.15s;
+        cursor: pointer;
+      }
+      .request-card.hidden-card {
+        display: none;
+      }
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 14px;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+      .status-badge.completed {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .status-badge.under-review {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-badge.rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .status-badge.cancelled {
+        background: #f3f4f6;
+        color: #4b5563;
+      }
+      .status-badge.pending {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .modal-overlay {
+        background: rgba(4, 22, 39, 0.5);
+        backdrop-filter: blur(4px);
+      }
+      .modal-card {
+        animation: slideUp 0.3s ease forwards;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .detail-modal-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 1000;
+        overflow-y: auto;
+      }
+      .detail-modal-card {
+        background: #ffffff;
+        border: 1px solid #eef1f4;
+        box-shadow: 0 20px 60px rgba(4, 22, 39, 0.18);
+        width: min(960px, 100%);
+        max-width: 960px;
+        max-height: calc(100vh - 40px);
+        padding: 0;
+        overflow-y: auto;
+        position: relative;
+        animation: slideUp 0.3s ease forwards;
+        border-radius: 0 !important;
+      }
+      .detail-modal-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #c5a059, #f5e8c8);
+      }
+      .detail-modal-card::-webkit-scrollbar {
+        width: 6px;
+      }
+      .detail-modal-card::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      .detail-modal-card::-webkit-scrollbar-thumb {
+        background: #c5a059;
+      }
+      .modal-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: #ffffff;
+        padding: 20px 40px 16px 40px;
+        border-bottom: 1px solid #eef1f4;
+      }
+      .modal-body {
+        padding: 20px 40px 32px 40px;
+      }
+      @media (max-width: 640px) {
+        .modal-header {
+          padding: 16px 18px 12px 18px;
+        }
+        .modal-body {
+          padding: 16px 18px 24px 18px;
+        }
+        .detail-modal-wrapper {
+          padding: 12px;
+        }
+      }
+      .search-input {
+        transition: all 0.2s;
+      }
+      .search-input:focus {
+        border-color: #c5a059;
+        box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
+      }
+      .rejection-note {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #991b1b;
+      }
+      .cancelled-note {
+        background: #f3f4f6;
+        border-left: 4px solid #6b7280;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #4b5563;
+      }
+      .progress-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+        min-width: 0;
+      }
+      .progress-step .step-circle {
+        width: 32px;
+        height: 32px;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+        border: 2px solid #d0d3d8;
+        background: white;
+        color: #9ca3af;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .progress-step.active .step-circle {
+        border-color: #c5a059;
+        background: #c5a059;
+        color: white;
+      }
+      .progress-step.done .step-circle {
+        border-color: #10b981;
+        background: #10b981;
+        color: white;
+      }
+      .progress-step .step-label {
+        margin-top: 4px;
+        font-size: 9px;
+        font-weight: 500;
+        color: #6b7280;
+        text-align: center;
+        line-height: 1.2;
+        word-break: break-word;
+      }
+      .progress-step.active .step-label {
+        color: #041627;
+        font-weight: 600;
+      }
+      .progress-step.done .step-label {
+        color: #10b981;
+      }
+      .progress-line {
+        height: 3px;
+        flex: 1;
+        background: #d0d3d8;
+        margin: 0 2px;
+        align-self: flex-start;
+        margin-top: 16px;
+        min-width: 8px;
+      }
+      .progress-line.done {
+        background: #10b981;
+      }
+      .progress-line.active {
+        background: #c5a059;
+      }
+      .cancel-modal-card {
+        background: #ffffff;
+        border: 1px solid #eef1f4;
+        box-shadow: 0 20px 60px rgba(4, 22, 39, 0.18);
+        width: min(520px, 100%);
+        max-width: 520px;
+        max-height: calc(100vh - 40px);
+        padding: 32px 36px;
+        overflow-y: auto;
+        position: relative;
+        animation: slideUp 0.3s ease forwards;
+        border-radius: 0 !important;
+      }
+      .cancel-modal-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ef4444, #fca5a5);
+      }
+      @media (max-width: 640px) {
+        .cancel-modal-card {
+          padding: 24px 18px;
+        }
+      }
+      .main-content-land {
+        padding: 16px 0 24px;
+      }
+      @media (min-width: 600px) {
+        .main-content-land {
+          padding: 20px 0 32px;
+        }
+      }
+      @media (min-width: 992px) {
+        .main-content-land {
+          padding: 28px 0 40px;
+        }
+      }
+
+      #requestList {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      @media (min-width: 768px) {
+        #requestList {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1.5rem;
+        }
+      }
+      .request-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 1.25rem;
+        position: relative;
+        background: #ffffff;
+        border: 1px solid #eef1f4;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px 0 rgba(26, 43, 60, 0.04);
+      }
+      .request-card .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        width: 100%;
+      }
+      .request-card .submitted-date {
+        font-size: 0.75rem;
+        color: #505f76;
+        background: #f2f4f6;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+      }
+      .request-card .status-badge {
+        position: static;
+        top: auto;
+        right: auto;
+      }
+      .request-card .card-inner-top {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        width: 100%;
+        margin-top: 0.25rem;
+      }
+      .request-card .icon-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 0.75rem;
+        background: #eceef0;
+        flex-shrink: 0;
+      }
+      .request-card .title-wrap {
+        flex: 1;
+        min-width: 0;
+      }
+      .request-card .meta-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+        margin-top: 0.75rem;
+        width: 100%;
+      }
+      .request-card .footer-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        border-top: 1px solid #eef1f4;
+        padding-top: 1rem;
+      }
+      .property-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      @media (min-width: 768px) {
+        .property-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .property-grid .location-item {
+          grid-column: span 2;
+        }
+      }
+    </style>
+  </head>
+  <body data-page="client-dashboard" data-requires-auth="1">
+    <div id="navbarPlaceholder"></div>
+    <div class="app-shell" id="appShell">
+      <div id="sidebarPlaceholder"></div>
+      <main class="main-content-land">
+        <div
+          id="dashboardView"
+          class="min-h-screen w-full flex flex-col bg-background px-4 sm:px-margin-desktop py-2 sm:py-stack-lg"
+        >
+          <div
+            class="max-w-[1280px] mx-auto w-full flex flex-col gap-4 sm:gap-stack-lg"
+          >
+            <!-- PAGE HEADER -->
+            <div
+              class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+            >
+              <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-primary">
+                  My Dashboard
+                </h1>
+                <p class="text-on-surface-variant mt-1 text-sm sm:text-base">
+                  Track all your legal, tax, and property service requests in
+                  one place
+                </p>
+              </div>
+              <button
+                onclick="window.location.href = 'index.html#/'"
+                class="bg-warm-gold text-on-primary px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold shadow-legal-soft hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-warm-gold text-sm sm:text-base cursor-pointer"
+              >
+                <span
+                  class="material-symbols-outlined text-[18px] sm:text-[20px]"
+                  >add</span
+                >
+                New Service Request
+              </button>
+            </div>
+
+            <!-- STAT CARDS -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-gutter">
+              <div
+                class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-warm-gold transition-colors group"
+              >
+                <div class="flex justify-between items-start">
+                  <p class="text-secondary text-xs sm:text-sm">
+                    Total Requests
+                  </p>
+                  <div
+                    class="p-1.5 sm:p-2 bg-surface-container rounded-lg text-primary group-hover:bg-tertiary-fixed-dim/20"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[16px] sm:text-[20px]"
+                      >folder_open</span
+                    >
+                  </div>
+                </div>
+                <h3 class="text-primary text-xl sm:text-3xl" id="totalCount">
+                  05
+                </h3>
+              </div>
+              <div
+                class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-warm-gold transition-colors group"
+              >
+                <div class="flex justify-between items-start">
+                  <p class="text-secondary text-xs sm:text-sm">Under Review</p>
+                  <div
+                    class="p-1.5 sm:p-2 bg-surface-container rounded-lg text-primary group-hover:bg-warm-gold/20"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[16px] sm:text-[20px]"
+                      >hourglass_empty</span
+                    >
+                  </div>
+                </div>
+                <h3
+                  class="text-primary text-xl sm:text-3xl"
+                  id="underReviewCount"
+                >
+                  02
+                </h3>
+              </div>
+              <div
+                class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-emerald-green transition-colors group"
+              >
+                <div class="flex justify-between items-start">
+                  <p class="text-secondary text-xs sm:text-sm">Completed</p>
+                  <div
+                    class="p-1.5 sm:p-2 bg-surface-container rounded-lg text-primary group-hover:bg-emerald-green/20"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[16px] sm:text-[20px]"
+                      >check_circle</span
+                    >
+                  </div>
+                </div>
+                <h3
+                  class="text-primary text-xl sm:text-3xl"
+                  id="completedCount"
+                >
+                  02
+                </h3>
+              </div>
+              <div
+                class="bg-surface-container-lowest rounded-2xl p-4 sm:p-6 shadow-legal-soft flex flex-col justify-between h-28 sm:h-32 border border-surface-container-low hover:border-error transition-colors group"
+              >
+                <div class="flex justify-between items-start">
+                  <p class="text-secondary text-xs sm:text-sm">
+                    Pending Action
+                  </p>
+                  <div
+                    class="p-1.5 sm:p-2 bg-surface-container rounded-lg text-primary group-hover:bg-error/20"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[16px] sm:text-[20px]"
+                      >error_outline</span
+                    >
+                  </div>
+                </div>
+                <h3
+                  class="text-primary text-xl sm:text-3xl"
+                  id="pendingActionCount"
+                >
+                  01
+                </h3>
+              </div>
+            </div>
+
+            <!-- SEARCH + FILTERS -->
+            <div class="flex flex-col gap-3 sm:gap-stack-md mt-2">
+              <div
+                class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4"
+              >
+                <div class="relative flex-1 w-full sm:w-auto">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg"
+                    >search</span
+                  >
+                  <input
+                    id="searchRequest"
+                    oninput="filterRequests()"
+                    class="search-input w-full pl-10 pr-4 py-2.5 rounded-xl border border-outline-variant bg-white focus:border-warm-gold focus:ring-warm-gold transition-all text-sm"
+                    placeholder="Search by service, title, or reference ID..."
+                  />
+                </div>
+                <div class="flex flex-wrap items-center gap-2 flex-shrink-0">
+                  <span class="text-xs sm:text-sm font-medium text-secondary"
+                    >Date:</span
+                  >
+                  <input
+                    type="date"
+                    id="dateFrom"
+                    onchange="filterRequests()"
+                    class="px-2 sm:px-3 py-1 rounded-lg border border-outline-variant bg-white text-xs sm:text-sm focus:border-warm-gold"
+                  />
+                  <span class="text-secondary text-xs">to</span>
+                  <input
+                    type="date"
+                    id="dateTo"
+                    onchange="filterRequests()"
+                    class="px-2 sm:px-3 py-1 rounded-lg border border-outline-variant bg-white text-xs sm:text-sm focus:border-warm-gold"
+                  />
+                  <button
+                    onclick="
+                      document.getElementById('dateFrom').value = '';
+                      document.getElementById('dateTo').value = '';
+                      filterRequests();
+                    "
+                    class="text-xs sm:text-sm text-warm-gold font-medium hover:underline"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="flex flex-wrap items-center gap-2 sm:gap-3 border-b border-surface-container-low pb-3 sm:pb-4"
+              >
+                <button
+                  class="filter-btn active px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-colors shadow-sm text-sm sm:text-base"
+                  data-filter="all"
+                >
+                  All
+                </button>
+                <button
+                  class="filter-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-colors text-sm sm:text-base"
+                  data-filter="under-review"
+                >
+                  Under Review
+                </button>
+                <button
+                  class="filter-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-colors text-sm sm:text-base"
+                  data-filter="completed"
+                >
+                  Completed
+                </button>
+                <button
+                  class="filter-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-colors text-sm sm:text-base"
+                  data-filter="rejected"
+                >
+                  Rejected
+                </button>
+                <button
+                  class="filter-btn px-3 sm:px-4 py-1.5 sm:py-2 rounded-full font-medium transition-colors text-sm sm:text-base"
+                  data-filter="cancelled"
+                >
+                  Cancelled
+                </button>
+              </div>
+
+              <!-- REQUEST LIST -->
+              <div id="requestList">
+                <!-- Card 1: Corporate Tax — Under Review -->
+                <div
+                  class="request-card"
+                  data-status="under-review"
+                  data-id="1"
+                  data-service="corporate-tax"
+                  data-title="Corporate Income Tax Return — Acme Solutions Ltd"
+                  data-ref="CTX-2026-001"
+                  data-location="Gulshan-2, Dhaka"
+                  data-date="2023-10-12"
+                >
+                  <div class="card-top">
+                    <span class="submitted-date">Oct 12, 2023</span>
+                    <span class="status-badge under-review">Under Review</span>
+                  </div>
+                  <div class="card-inner-top">
+                    <div class="icon-wrap">
+                      <span
+                        class="material-symbols-outlined text-[22px] text-secondary"
+                        >account_balance</span
+                      >
+                    </div>
+                    <div class="title-wrap">
+                      <h4
+                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
+                      >
+                        Corporate Income Tax Return — Acme Solutions Ltd
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="meta-wrap">
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >confirmation_number</span
+                      >
+                      Ref: CTX-2026-001</span
+                    >
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >location_on</span
+                      >
+                      Gulshan-2, Dhaka</span
+                    >
+                  </div>
+                  <div class="footer-actions">
+                    <button
+                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      class="cancel-request-btn px-3 py-1.5 rounded-lg bg-error/10 text-error border border-error/30 text-xs sm:text-sm font-medium transition-colors hover:bg-error/20"
+                      data-id="1"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 2: Land Verification — Completed -->
+                <div
+                  class="request-card"
+                  data-status="completed"
+                  data-id="2"
+                  data-service="land-property"
+                  data-title="Land Verification — Purbachal Sector 4"
+                  data-ref="LND-2026-118"
+                  data-location="Purbachal Sector 4, Dhaka"
+                  data-date="2023-10-05"
+                >
+                  <div class="card-top">
+                    <span class="submitted-date">Oct 05, 2023</span>
+                    <span class="status-badge completed">Completed</span>
+                  </div>
+                  <div class="card-inner-top">
+                    <div class="icon-wrap">
+                      <span
+                        class="material-symbols-outlined text-[22px] text-secondary"
+                        >home_work</span
+                      >
+                    </div>
+                    <div class="title-wrap">
+                      <h4
+                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
+                      >
+                        Land Verification — Purbachal Sector 4
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="meta-wrap">
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >confirmation_number</span
+                      >
+                      Ref: LND-2026-118</span
+                    >
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >location_on</span
+                      >
+                      Purbachal Sector 4, Dhaka</span
+                    >
+                  </div>
+                  <div class="footer-actions">
+                    <button
+                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      class="px-3 py-1.5 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white text-xs sm:text-sm font-medium transition-colors flex items-center gap-1"
+                    >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >download</span
+                      >
+                      Report
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 3: Lawyer Consultancy — Under Review -->
+                <div
+                  class="request-card"
+                  data-status="under-review"
+                  data-id="4"
+                  data-service="lawyer-consultancy"
+                  data-title="Property Dispute Consultation — Uttara Plot"
+                  data-ref="LAW-2026-207"
+                  data-location="Uttara, Dhaka"
+                  data-date="2023-10-20"
+                >
+                  <div class="card-top">
+                    <span class="submitted-date">Oct 20, 2023</span>
+                    <span class="status-badge under-review">Under Review</span>
+                  </div>
+                  <div class="card-inner-top">
+                    <div class="icon-wrap">
+                      <span
+                        class="material-symbols-outlined text-[22px] text-secondary"
+                        >gavel</span
+                      >
+                    </div>
+                    <div class="title-wrap">
+                      <h4
+                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
+                      >
+                        Property Dispute Consultation — Uttara Plot
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="meta-wrap">
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >confirmation_number</span
+                      >
+                      Ref: LAW-2026-207</span
+                    >
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >location_on</span
+                      >
+                      Uttara, Dhaka</span
+                    >
+                  </div>
+                  <div class="footer-actions">
+                    <button
+                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      class="cancel-request-btn px-3 py-1.5 rounded-lg bg-error/10 text-error border border-error/30 text-xs sm:text-sm font-medium transition-colors hover:bg-error/20"
+                      data-id="4"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 4: VAT & BIN — Completed -->
+                <div
+                  class="request-card"
+                  data-status="completed"
+                  data-id="5"
+                  data-service="vat-bin"
+                  data-title="BIN Registration — Rahman Traders"
+                  data-ref="VAT-2026-089"
+                  data-location="Motijheel, Dhaka"
+                  data-date="2023-09-28"
+                >
+                  <div class="card-top">
+                    <span class="submitted-date">Sep 28, 2023</span>
+                    <span class="status-badge completed">Completed</span>
+                  </div>
+                  <div class="card-inner-top">
+                    <div class="icon-wrap">
+                      <span
+                        class="material-symbols-outlined text-[22px] text-secondary"
+                        >receipt_long</span
+                      >
+                    </div>
+                    <div class="title-wrap">
+                      <h4
+                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
+                      >
+                        BIN Registration — Rahman Traders
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="meta-wrap">
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >confirmation_number</span
+                      >
+                      Ref: VAT-2026-089</span
+                    >
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >location_on</span
+                      >
+                      Motijheel, Dhaka</span
+                    >
+                  </div>
+                  <div class="footer-actions">
+                    <button
+                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      View Details
+                    </button>
+                    <button
+                      class="px-3 py-1.5 rounded-lg border border-primary text-primary hover:bg-primary hover:text-white text-xs sm:text-sm font-medium transition-colors flex items-center gap-1"
+                    >
+                      <span class="material-symbols-outlined text-[14px]"
+                        >download</span
+                      >
+                      Certificate
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Card 5: Individual Tax — Rejected -->
+                <div
+                  class="request-card"
+                  data-status="rejected"
+                  data-id="6"
+                  data-service="individual-tax"
+                  data-title="Individual Tax Return 2022-23 — Ms. Nasrin Sultana"
+                  data-ref="ITX-2026-031"
+                  data-location="Sylhet"
+                  data-date="2023-09-15"
+                >
+                  <div class="card-top">
+                    <span class="submitted-date">Sep 15, 2023</span>
+                    <span class="status-badge rejected">Rejected</span>
+                  </div>
+                  <div class="card-inner-top">
+                    <div class="icon-wrap">
+                      <span
+                        class="material-symbols-outlined text-[22px] text-secondary"
+                        >person</span
+                      >
+                    </div>
+                    <div class="title-wrap">
+                      <h4
+                        class="text-[16px] sm:text-[18px] leading-tight font-bold text-primary"
+                      >
+                        Individual Tax Return 2022-23 — Ms. Nasrin Sultana
+                      </h4>
+                    </div>
+                  </div>
+                  <div class="meta-wrap">
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >confirmation_number</span
+                      >
+                      Ref: ITX-2026-031</span
+                    >
+                    <span
+                      class="flex items-center gap-1 text-xs sm:text-sm text-on-surface-variant"
+                      ><span
+                        class="material-symbols-outlined text-[14px] text-outline"
+                        >location_on</span
+                      >
+                      Sylhet</span
+                    >
+                  </div>
+                  <div class="footer-actions">
+                    <button
+                      class="view-details-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-primary text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EMPTY STATE -->
+              <div id="emptyState" class="hidden text-center py-12">
+                <span
+                  class="material-symbols-outlined text-6xl text-outline-variant block mx-auto"
+                  >inbox</span
+                >
+                <h3 class="text-xl font-bold text-primary mt-4">
+                  No requests found
+                </h3>
+                <p class="text-secondary text-sm mt-2">
+                  Try adjusting your filters or search terms.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="footerPlaceholder"></div>
+    <div id="bottomNavPlaceholder"></div>
+
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="fixed inset-0 z-[1200] hidden">
+      <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+      <div class="detail-modal-wrapper">
+        <div class="detail-modal-card">
+          <div class="modal-header">
+            <div class="flex justify-between items-start">
+              <h2
+                class="text-xl sm:text-2xl font-bold text-primary"
+                id="modalTitle"
+              >
+                Request Details
+              </h2>
+              <button
+                onclick="closeModal()"
+                class="text-secondary hover:text-primary transition-colors p-1"
+              >
+                <span class="material-symbols-outlined text-2xl">close</span>
+              </button>
+            </div>
+          </div>
+          <div class="modal-body" id="modalContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CANCEL MODAL -->
+    <div id="cancelModal" class="fixed inset-0 z-[1300] hidden">
+      <div
+        class="modal-overlay absolute inset-0"
+        onclick="closeCancelModal()"
+      ></div>
+      <div class="detail-modal-wrapper">
+        <div class="cancel-modal-card">
+          <div class="flex justify-between items-start mb-4">
+            <h2 class="text-2xl font-bold text-error">Cancel Request</h2>
+            <button
+              onclick="closeCancelModal()"
+              class="text-secondary hover:text-primary transition-colors p-1"
+            >
+              <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+          </div>
+          <div id="cancelModalContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/partials.js"></script>
+
+    <script>
+      (function () {
+        /* ==========================================================
+           REQUEST DATA — Affidavit (id: 3) removed
+        ========================================================== */
+        const requestData = {
+          1: {
+            title: "Corporate Income Tax Return — Acme Solutions Ltd",
+            icon: "account_balance",
+            service: "Corporate & Tax",
+            serviceKey: "corporate-tax",
+            status: "Under Review",
+            statusClass: "under-review",
+            submitted: "Oct 12, 2023",
+            submittedDate: "2023-10-12",
+            referenceId: "CTX-2026-001",
+            location: "Gulshan-2, Dhaka",
+            fee: "15,000",
+            platformCharge: 150,
+            total: 15150,
+            billingInvoice: "INV-2026-101",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              "Tax Year": "2024–2025",
+              "Entity Type": "Private Limited",
+              "Annual Turnover": "1 crore – 5 crore",
+              "Registration No": "C-123456",
+              "Assigned Specialist": "Md. Kamal Hossain (ITP)",
+            },
+            scope: [
+              { text: "Document collection & review", done: true },
+              { text: "Tax computation & reconciliation", done: true },
+              { text: "Draft return preparation", done: false },
+              { text: "Client review & e-filing", done: false },
+            ],
+            specialist: {
+              name: "Md. Kamal Hossain",
+              designation: "Income Tax Practitioner (ITP)",
+              experience: "12 years experience",
+            },
+            progress: 2,
+          },
+          2: {
+            title: "Land Verification — Purbachal Sector 4",
+            icon: "home_work",
+            service: "Land & Property",
+            serviceKey: "land-property",
+            status: "Completed",
+            statusClass: "completed",
+            submitted: "Oct 05, 2023",
+            submittedDate: "2023-10-05",
+            referenceId: "LND-2026-118",
+            location: "Purbachal Sector 4, Dhaka",
+            fee: "1,500",
+            platformCharge: 150,
+            total: 1650,
+            billingInvoice: "INV-2026-102",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              Khatian: "SA-1240",
+              Dag: "542",
+              "Property Type": "Residential",
+              Mouza: "Purbachal Mouza",
+              "Assigned Specialist":
+                "Md. Kamal Hossain (Senior Land Specialist)",
+            },
+            scope: [
+              { text: "Title Chain & CS-to-BS Record Tracing", done: true },
+              { text: "Encumbrance & Bank Lien Verification", done: true },
+              { text: "AC Land Mutation & DCR Status Check", done: true },
+              { text: "Physical Survey & Boundary Confirmation", done: true },
+            ],
+            specialist: {
+              name: "Md. Kamal Hossain",
+              designation: "Senior Land Specialist",
+              experience: "12 years experience",
+            },
+            progress: 5,
+          },
+          4: {
+            title: "Property Dispute Consultation — Uttara Plot",
+            icon: "gavel",
+            service: "Lawyer Consultancy",
+            serviceKey: "lawyer-consultancy",
+            status: "Under Review",
+            statusClass: "under-review",
+            submitted: "Oct 20, 2023",
+            submittedDate: "2023-10-20",
+            referenceId: "LAW-2026-207",
+            location: "Uttara, Dhaka",
+            fee: "2,000",
+            platformCharge: 150,
+            total: 2150,
+            billingInvoice: "INV-2026-104",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              "Matter Category": "Property / Land",
+              Urgency: "Urgent (within 48 hours)",
+              "Opposing Party": "Mr. Abdul Karim",
+              Court: "Dhaka Judge Court",
+              "Assigned Specialist": "Reviewing — matching specialist",
+            },
+            scope: [
+              { text: "Case intake & document review", done: true },
+              { text: "Specialist matching", done: false },
+              { text: "Initial consultation call", done: false },
+              { text: "Legal opinion & next steps", done: false },
+            ],
+            specialist: {
+              name: "Pending assignment",
+              designation: "Matching in progress",
+              experience: "—",
+            },
+            progress: 1,
+          },
+          5: {
+            title: "BIN Registration — Rahman Traders",
+            icon: "receipt_long",
+            service: "VAT & BIN",
+            serviceKey: "vat-bin",
+            status: "Completed",
+            statusClass: "completed",
+            submitted: "Sep 28, 2023",
+            submittedDate: "2023-09-28",
+            referenceId: "VAT-2026-089",
+            location: "Motijheel, Dhaka",
+            fee: "4,000",
+            platformCharge: 150,
+            total: 4150,
+            billingInvoice: "INV-2026-105",
+            isPaid: true,
+            isRefunded: false,
+            isCancelled: false,
+            rejectionNote: null,
+            cancelledNote: null,
+            refundPercentage: null,
+            refundAmount: null,
+            details: {
+              "Business Name": "Rahman Traders",
+              "Trade License": "TRAD/DSCC/012345",
+              "Annual Turnover": "1 crore – 5 crore",
+              Activity: "Trading (Wholesale)",
+              "Assigned Specialist": "Mr. Rafiqul Islam (VAT Consultant)",
+            },
+            scope: [
+              { text: "Document collection & verification", done: true },
+              { text: "BIN application preparation", done: true },
+              { text: "NBR submission & follow-up", done: true },
+              { text: "BIN certificate delivery", done: true },
+            ],
+            specialist: {
+              name: "Mr. Rafiqul Islam",
+              designation: "Licensed VAT Consultant",
+              experience: "6 years experience",
+            },
+            progress: 5,
+          },
+          6: {
+            title: "Individual Tax Return 2022-23 — Ms. Nasrin Sultana",
+            icon: "person",
+            service: "Individual Tax",
+            serviceKey: "individual-tax",
+            status: "Rejected",
+            statusClass: "rejected",
+            submitted: "Sep 15, 2023",
+            submittedDate: "2023-09-15",
+            referenceId: "ITX-2026-031",
+            location: "Sylhet",
+            fee: "3,000",
+            platformCharge: 150,
+            total: 3150,
+            billingInvoice: "INV-2026-106",
+            isPaid: false,
+            isRefunded: true,
+            isCancelled: false,
+            rejectionNote:
+              "Unable to process this request — NID copy submitted was expired. Please re-submit with a valid NID and updated income documents.",
+            cancelledNote: null,
+            refundPercentage: 100,
+            refundAmount: 3150,
+            details: {
+              "Tax Year": "2022–2023",
+              Residency: "Resident Bangladeshi",
+              "Income Sources": "Salary, Investment",
+              "Previous Filing": "Filed last year",
+              "Assigned Specialist": "—",
+            },
+            scope: [
+              { text: "Document collection & review", done: false },
+              { text: "Tax computation", done: false },
+              { text: "Return preparation", done: false },
+              { text: "e-Filing", done: false },
+            ],
+            specialist: {
+              name: "—",
+              designation: "Request rejected",
+              experience: "—",
+            },
+            progress: 0,
+          },
+        };
+
+        const modal = document.getElementById("detailModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalContent = document.getElementById("modalContent");
+        const cancelModal = document.getElementById("cancelModal");
+        const cancelModalContent =
+          document.getElementById("cancelModalContent");
+        const stepLabels = [
+          "Submitted",
+          "In Progress",
+          "Preparing",
+          "Review",
+          "Completed",
+        ];
+        let cancelTargetId = null;
+
+        /* ==========================================================
+           CANCEL MODAL
+        ========================================================== */
+        function openCancelModal(id) {
+          const data = requestData[id];
+          if (!data) return;
+          cancelTargetId = id;
+          const refundAmount = Math.round((data.total * 50) / 100);
+          const penalty = data.total - refundAmount;
+          cancelModalContent.innerHTML = `
+            <p class="text-secondary mb-4">Cancel request for <strong>${data.title}</strong>?</p>
+            <div class="bg-surface rounded-xl p-4 mb-6">
+              <div class="flex justify-between text-sm py-1"><span class="text-secondary">Submitted</span><span class="font-medium">${data.submitted}</span></div>
+              <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Ref ID</span><span class="font-medium">${data.referenceId}</span></div>
+              <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Refund Policy</span><span class="font-medium">50% refund</span></div>
+              <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Refund Amount</span><span class="font-medium text-success">৳${refundAmount}</span></div>
+              <div class="flex justify-between text-sm py-1 border-t"><span class="text-secondary">Penalty</span><span class="font-medium text-error">- ৳${penalty}</span></div>
+            </div>
+            <div class="flex gap-3">
+              <button onclick="confirmCancel()" class="flex-1 px-6 py-3 bg-error text-white rounded-xl font-bold hover:bg-red-700">Yes, Cancel</button>
+              <button onclick="closeCancelModal()" class="flex-1 px-6 py-3 border-2 border-primary text-primary rounded-xl font-bold hover:bg-primary/5">No, Keep</button>
+            </div>`;
+          cancelModal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+        }
+        function closeCancelModal() {
+          cancelModal.classList.add("hidden");
+          document.body.style.overflow = "";
+          cancelTargetId = null;
+        }
+        function confirmCancel() {
+          if (cancelTargetId === null) return;
+          const data = requestData[cancelTargetId];
+          if (data) {
+            data.status = "Cancelled";
+            data.statusClass = "cancelled";
+            data.isCancelled = true;
+            data.refundPercentage = 50;
+            data.refundAmount = Math.round((data.total * 50) / 100);
+            data.cancelledNote =
+              "Cancelled on " + new Date().toLocaleDateString();
+            document.querySelectorAll(".request-card").forEach((card) => {
+              if (card.dataset.id == cancelTargetId) {
+                card.dataset.status = "cancelled";
+                const badge = card.querySelector(".status-badge");
+                if (badge) {
+                  badge.className = "status-badge cancelled";
+                  badge.textContent = "Cancelled";
+                }
+                const cancelBtn = card.querySelector(".cancel-request-btn");
+                if (cancelBtn) cancelBtn.remove();
+              }
+            });
+            updateStats();
+          }
+          closeCancelModal();
+          filterRequests();
+        }
+
+        /* ==========================================================
+           STATS
+        ========================================================== */
+        function updateStats() {
+          let underReview = 0;
+          let completed = 0;
+          let pendingAction = 0;
+          const cards = document.querySelectorAll(".request-card");
+          cards.forEach((card) => {
+            const status = card.dataset.status;
+            if (status === "under-review") underReview++;
+            else if (status === "completed") completed++;
+            else if (status === "rejected" || status === "cancelled")
+              pendingAction++;
+          });
+          document.getElementById("totalCount").textContent = String(
+            cards.length,
+          ).padStart(2, "0");
+          document.getElementById("underReviewCount").textContent = String(
+            underReview,
+          ).padStart(2, "0");
+          document.getElementById("completedCount").textContent = String(
+            completed,
+          ).padStart(2, "0");
+          document.getElementById("pendingActionCount").textContent = String(
+            pendingAction,
+          ).padStart(2, "0");
+        }
+
+        /* ==========================================================
+           DETAIL MODAL
+        ========================================================== */
+        function renderModal(id) {
+          const data = requestData[id];
+          if (!data) return;
+          modalTitle.textContent = data.title;
+          const progressIndex = data.status === "Completed" ? 5 : data.progress;
+
+          let content = `
+            <div class="flex flex-wrap items-center gap-3 mb-5">
+              <span class="status-badge ${data.statusClass}">${data.status}</span>
+              <span class="text-sm text-secondary">• ${data.service}</span>
+              <span class="text-sm text-secondary">• Submitted: ${data.submitted}</span>
+            </div>
+
+            <div class="bg-surface p-4 rounded-xl mb-5">
+              <h4 class="font-bold text-primary text-sm mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-warm-gold text-lg">timeline</span>
+                Progress Tracker
+              </h4>
+              <div class="flex items-start w-full">
+                ${stepLabels
+                  .map((label, idx) => {
+                    const isDone =
+                      progressIndex === 5 ? true : idx < progressIndex;
+                    const isActive =
+                      progressIndex === 5 ? false : idx === progressIndex;
+                    const circleColor = isDone
+                      ? "#10b981"
+                      : isActive
+                        ? "#C5A059"
+                        : "#d0d3d8";
+                    const bgColor = isDone
+                      ? "#10b981"
+                      : isActive
+                        ? "#C5A059"
+                        : "white";
+                    const textColor = isDone || isActive ? "white" : "#9ca3af";
+                    const labelColor = isDone
+                      ? "#10b981"
+                      : isActive
+                        ? "#041627"
+                        : "#6b7280";
+                    const lineDone =
+                      isDone || (progressIndex === 5 && idx === 3);
+                    return `<div class="progress-step ${isDone ? "done" : ""} ${isActive ? "active" : ""}" style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative;min-width:0;">
+                      <div class="step-circle" style="width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;border:2px solid ${circleColor};background:${bgColor};color:${textColor};">${idx + 1}</div>
+                      <div class="step-label" style="margin-top:4px;font-size:9px;font-weight:500;color:${labelColor};text-align:center;line-height:1.2;">${label}</div>
+                    </div>${
+                      idx < stepLabels.length - 1
+                        ? `<div class="progress-line ${lineDone ? "done" : ""} ${isActive ? "active" : ""}" style="height:3px;flex:1;background:${lineDone ? "#10b981" : isActive ? "#C5A059" : "#d0d3d8"};margin:0 2px;align-self:flex-start;margin-top:16px;min-width:8px;"></div>`
+                        : ""
+                    }`;
+                  })
+                  .join("")}
+              </div>
+              <div class="mt-4 p-3 bg-white rounded-lg border border-outline-variant/30 flex justify-between items-center">
+                <p class="text-sm text-secondary">
+                  Current:
+                  <span class="font-semibold text-primary">
+                    ${data.status === "Completed" ? "Completed" : stepLabels[progressIndex < 5 ? progressIndex : 4]}
+                  </span>
+                  — ${data.status === "Completed" ? 5 : progressIndex + 1}/5
+                </p>
+                <span class="text-xs text-secondary bg-surface px-3 py-1 rounded-full">Updated: Today</span>
+              </div>
+            </div>
+
+            <div class="property-grid mb-4">
+              ${Object.entries(data.details)
+                .map(
+                  ([k, v], i, arr) => `
+                    <div class="bg-surface p-4 rounded-xl ${i === arr.length - 1 ? "location-item" : ""}">
+                      <p class="text-xs text-secondary uppercase">${k}</p>
+                      <p class="font-medium text-primary">${v}</p>
+                    </div>`,
+                )
+                .join("")}
+            </div>
+
+            <div class="bg-surface p-4 rounded-xl mb-4">
+              <h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-warm-gold text-lg">verified</span>
+                Scope of Work
+              </h4>
+              <ul class="space-y-2">
+                ${data.scope
+                  .map(
+                    (item) => `
+                    <li class="flex items-start gap-2 p-2 rounded-lg bg-white border">
+                      <span class="material-symbols-outlined ${item.done ? "text-emerald-green" : "text-gray-400"} text-sm">${item.done ? "check_circle" : "pending"}</span>
+                      <span class="text-primary font-medium text-sm">${item.text}</span>
+                    </li>`,
+                  )
+                  .join("")}
+              </ul>
+            </div>
+
+            <div class="bg-surface p-4 rounded-xl mb-4">
+              <h4 class="font-bold text-primary text-sm mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-warm-gold text-lg">person</span>
+                Assigned Specialist
+              </h4>
+              <div class="flex items-start gap-3 p-3 rounded-lg bg-white border">
+                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined">person</span>
+                </div>
+                <div>
+                  <p class="font-semibold text-primary">${data.specialist.name}</p>
+                  <p class="text-sm text-secondary">${data.specialist.designation}</p>
+                  <p class="text-xs text-secondary">${data.specialist.experience}</p>
+                </div>
+              </div>
+            </div>`;
+
+          if (data.isPaid && !data.isRefunded && !data.isCancelled) {
+            content += `
+              <div class="bg-primary/5 rounded-xl p-4 mb-4">
+                <h4 class="font-bold text-primary text-sm mb-2">Payment Summary</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between py-1"><span class="text-secondary">Service Fee</span><span class="font-medium">৳${data.fee}</span></div>
+                  <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${data.platformCharge}</span></div>
+                  <div class="flex justify-between border-t pt-2 font-bold"><span>Total Paid</span><span class="text-warm-gold">৳${data.total}</span></div>
+                  <div class="flex justify-between text-xs text-secondary"><span>Invoice</span><span>${data.billingInvoice}</span></div>
+                </div>
+              </div>`;
+          } else if (data.isRefunded) {
+            content += `
+              <div class="bg-red-50 rounded-xl p-4 mb-4 border border-red-200">
+                <h4 class="font-bold text-red-800 text-sm mb-2">Payment — Refunded</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between py-1"><span class="text-secondary">Service Fee</span><span class="font-medium">৳${data.fee}</span></div>
+                  <div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳${data.platformCharge}</span></div>
+                  <div class="flex justify-between border-t pt-2 font-bold"><span>Total Refunded</span><span class="text-red-700">৳${data.total}</span></div>
+                  ${data.rejectionNote ? `<div class="rejection-note mt-3 text-xs">${data.rejectionNote}</div>` : ""}
+                </div>
+              </div>`;
+          } else if (data.isCancelled) {
+            content += `
+              <div class="bg-yellow-50 rounded-xl p-4 mb-4 border border-yellow-200">
+                <h4 class="font-bold text-yellow-800 text-sm mb-2">Payment — Cancelled</h4>
+                <div class="space-y-1 text-sm">
+                  <div class="flex justify-between py-1"><span class="text-secondary">Client Paid</span><span class="font-medium">৳${data.total}</span></div>
+                  <div class="flex justify-between text-error py-1"><span>Penalty</span><span class="font-medium">- ৳${data.total - data.refundAmount}</span></div>
+                  <div class="flex justify-between border-t pt-2 font-bold"><span>Partial Refund</span><span class="text-warm-gold">+ ৳${data.refundAmount}</span></div>
+                  ${data.cancelledNote ? `<div class="cancelled-note mt-3 text-xs">${data.cancelledNote}</div>` : ""}
+                </div>
+              </div>`;
+          }
+
+          if (data.status === "Under Review") {
+            content += `
+              <div class="bg-surface p-4 rounded-xl mb-4 border">
+                <h4 class="font-bold text-primary text-sm mb-2">Submit Additional Documents</h4>
+                <div class="flex gap-2">
+                  <input type="file" class="text-sm" onchange="alert('uploaded')"/>
+                  <button class="px-4 py-1.5 bg-warm-gold text-white rounded-lg text-sm">Submit</button>
+                </div>
+              </div>`;
+          }
+
+          content += `
+            <div class="mt-5 pt-4 border-t">
+              <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-surface text-primary font-medium hover:bg-surface-container">
+                Close
+              </button>
+            </div>`;
+
+          modalContent.innerHTML = content;
+        }
+
+        function openModal(id) {
+          if (!requestData[id]) return;
+          modal.classList.remove("hidden");
+          document.body.style.overflow = "hidden";
+          renderModal(id);
+        }
+        function closeModal() {
+          modal.classList.add("hidden");
+          document.body.style.overflow = "";
+        }
+
+        /* ==========================================================
+           FILTERS
+        ========================================================== */
+        let currentFilter = "all";
+        function filterRequests() {
+          const searchTerm = document
+            .getElementById("searchRequest")
+            .value.toLowerCase()
+            .trim();
+          const dateFrom = document.getElementById("dateFrom").value;
+          const dateTo = document.getElementById("dateTo").value;
+          const cards = document.querySelectorAll(".request-card");
+          let visibleCount = 0;
+
+          cards.forEach((card) => {
+            const status = card.dataset.status;
+            const title = (card.dataset.title || "").toLowerCase();
+            const ref = (card.dataset.ref || "").toLowerCase();
+            const location = (card.dataset.location || "").toLowerCase();
+            const service = (card.dataset.service || "").toLowerCase();
+            const cardDate = card.dataset.date || "";
+
+            const matchesFilter =
+              currentFilter === "all" || status === currentFilter;
+            const matchesSearch =
+              !searchTerm ||
+              title.includes(searchTerm) ||
+              ref.includes(searchTerm) ||
+              location.includes(searchTerm) ||
+              service.includes(searchTerm);
+            const matchesDate =
+              (!dateFrom || cardDate >= dateFrom) &&
+              (!dateTo || cardDate <= dateTo);
+
+            if (matchesFilter && matchesSearch && matchesDate) {
+              card.classList.remove("hidden-card");
+              visibleCount++;
+            } else {
+              card.classList.add("hidden-card");
+            }
+          });
+
+          document
+            .getElementById("emptyState")
+            .classList.toggle("hidden", visibleCount !== 0);
+        }
+
+        /* ==========================================================
+           EVENT BINDING
+        ========================================================== */
+        document.querySelectorAll(".view-details-btn").forEach((btn) =>
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const card = this.closest(".request-card");
+            if (card) openModal(card.dataset.id);
+          }),
+        );
+        document.querySelectorAll(".cancel-request-btn").forEach((btn) =>
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            openCancelModal(this.dataset.id);
+          }),
+        );
+        document.querySelectorAll(".filter-btn").forEach((btn) =>
+          btn.addEventListener("click", function () {
+            document
+              .querySelectorAll(".filter-btn")
+              .forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+            currentFilter = this.dataset.filter;
+            filterRequests();
+          }),
+        );
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            closeModal();
+            closeCancelModal();
+          }
+        });
+        document.querySelectorAll(".modal-overlay").forEach((overlay) =>
+          overlay.addEventListener("click", function () {
+            closeModal();
+            closeCancelModal();
+          }),
+        );
+
+        /* ==========================================================
+           INIT
+        ========================================================== */
+        filterRequests();
+        updateStats();
+
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.openCancelModal = openCancelModal;
+        window.closeCancelModal = closeCancelModal;
+        window.confirmCancel = confirmCancel;
+        window.filterRequests = filterRequests;
+      })();
+    </script>
+  </body>
+</html>
