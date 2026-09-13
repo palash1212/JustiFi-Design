@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Center — JustiFi Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: { navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' }, gold: { DEFAULT:'#C5A059', 50:'#FBF6ED' }, slate2:'#64748B', offwhite:'#F8FAFC' },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-offwhite text-navy">
+<div class="flex h-screen overflow-hidden">
+  <aside id="sidebar-mount" class="w-72 bg-navy text-white flex-shrink-0 flex flex-col"></aside>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+      <div class="flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+        <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2" placeholder="Search...">
+      </div>
+      <div class="flex items-center gap-5">
+        <button class="relative text-slate2 hover:text-navy"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        <div class="h-6 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
+      </div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+
+      <div>
+        <h1 class="text-2xl font-bold">Security Center</h1>
+        <p class="text-slate2 text-sm mt-1">Master command center for platform security.</p>
+      </div>
+
+      <div class="grid grid-cols-5 gap-5">
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Security Health</p><p class="text-2xl font-bold mt-2 text-emerald-600">94/100</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Critical Events</p><p class="text-2xl font-bold mt-2">0</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">High Risk</p><p class="text-2xl font-bold mt-2 text-red-500">1</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Failed Logins</p><p class="text-2xl font-bold mt-2 text-amber-600">27</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Locked Accounts</p><p class="text-2xl font-bold mt-2">2</p></div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 shadow-card border">
+        <h3 class="font-semibold text-sm mb-4">Live Security Event Feed</h3>
+        <div class="space-y-3 text-sm">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="bg-red-50 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full">High</span>
+            <span class="flex-1 px-3">Multiple failed logins — Abdullah Hasan</span>
+            <span class="text-xs text-slate2">44 min ago</span>
+          </div>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <span class="bg-gold-50 text-gold text-xs font-semibold px-2.5 py-1 rounded-full">Medium</span>
+            <span class="flex-1 px-3">New device login — B. Sabbir Chowdhury</span>
+            <span class="text-xs text-slate2">2 hrs ago</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="bg-red-50 text-red-600 text-xs font-semibold px-2.5 py-1 rounded-full">High</span>
+            <span class="flex-1 px-3">Unusual transaction amount — TXN-88231</span>
+            <span class="text-xs text-slate2">3 hrs ago</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

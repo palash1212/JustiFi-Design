@@ -1,0 +1,93 @@
+<div class="h-16 flex items-center gap-2 px-6 border-b border-white/10 flex-shrink-0">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5A059" stroke-width="2">
+    <path d="M12 3v18M5 7l-3 6a4 4 0 008 0l-3-6zm14 0l-3 6a4 4 0 008 0l-3-6z"/>
+    <path d="M3 21h18M5 7h14"/>
+  </svg>
+  <span class="font-bold text-base tracking-tight leading-tight">JustiFi <span class="text-gold font-medium">Admin</span><br>
+    <span class="text-[10px] text-white/40 font-normal tracking-wide">CONTROL CENTER</span>
+  </span>
+</div>
+
+<nav class="flex-1 px-3 py-4 overflow-y-auto text-[13.5px] space-y-1">
+
+  <a href="dashboard.html" data-file="dashboard.html" class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium cursor-pointer">
+    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/>
+      <rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+    </svg>Dashboard
+  </a>
+
+  <div>
+    <button onclick="toggleGroup('g-users')" class="w-full flex items-center gap-2 px-3 py-2.5 text-[11px] font-bold text-white/40 tracking-wide uppercase hover:text-white/70">
+      <svg id="chev-g-users" class="chev w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+      Users / People
+    </button>
+    <div id="g-users" class="group-body space-y-0.5 pl-2">
+      <a href="clients.html" data-file="clients.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Clients</a>
+      <a href="lawyers.html" data-file="lawyers.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Lawyers <span class="ml-auto bg-gold text-navy text-[10px] font-bold px-1.5 rounded-full">6</span></a>
+      <a href="deed-writers.html" data-file="deed-writers.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Deed-Writers</a>
+      <a href="admin-users.html" data-file="admin-users.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Admin Users</a>
+    </div>
+  </div>
+
+  <div>
+    <button onclick="toggleGroup('g-ops')" class="w-full flex items-center gap-2 px-3 py-2.5 text-[11px] font-bold text-white/40 tracking-wide uppercase hover:text-white/70">
+      <svg id="chev-g-ops" class="chev w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+      Operations
+    </button>
+    <div id="g-ops" class="group-body space-y-0.5 pl-2">
+      <a href="bookings.html" data-file="bookings.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Booking &amp; Consultations</a>
+      <a href="affidavit-services.html" data-file="affidavit-services.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Affidavit Services</a>
+      <a href="affidavit-requests.html" data-file="affidavit-requests.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Affidavit Requests <span class="ml-auto bg-gold text-navy text-[10px] font-bold px-1.5 rounded-full">12</span></a>
+      <a href="land-property-services.html" data-file="land-property-services.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Land &amp; Property Services</a>
+      <a href="land-property-requests.html" data-file="land-property-requests.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Land &amp; Property Requests <span class="ml-auto bg-gold text-navy text-[10px] font-bold px-1.5 rounded-full">4</span></a>
+      <a href="tax-income-services.html" data-file="tax-income-services.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Tax &amp; Income Services</a>
+      <a href="tax-income-requests.html" data-file="tax-income-requests.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Tax &amp; Income Requests</a>
+    </div>
+  </div>
+
+  <div>
+    <button onclick="toggleGroup('g-sec')" class="w-full flex items-center gap-2 px-3 py-2.5 text-[11px] font-bold text-white/40 tracking-wide uppercase hover:text-white/70">
+      <svg id="chev-g-sec" class="chev w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+      Security &amp; Compliance
+    </button>
+    <div id="g-sec" class="group-body space-y-0.5 pl-2">
+      <a href="security-center.html" data-file="security-center.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Security Center</a>
+      <a href="login-sessions.html" data-file="login-sessions.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Login &amp; Active Sessions</a>
+    </div>
+  </div>
+
+  <div>
+    <button onclick="toggleGroup('g-admin')" class="w-full flex items-center gap-2 px-3 py-2.5 text-[11px] font-bold text-white/40 tracking-wide uppercase hover:text-white/70">
+      <svg id="chev-g-admin" class="chev w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+      Administration
+    </button>
+    <div id="g-admin" class="group-body space-y-0.5 pl-2">
+      <a href="roles-permissions.html" data-file="roles-permissions.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Role &amp; Permissions</a>
+      <a href="service-control.html" data-file="service-control.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Service Control Center</a>
+      <a href="transaction-monitoring.html" data-file="transaction-monitoring.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Transaction Monitoring <span class="ml-auto bg-gold text-navy text-[10px] font-bold px-1.5 rounded-full">3</span></a>
+      <a href="user-privilege.html" data-file="user-privilege.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>User Privilege</a>
+    </div>
+  </div>
+
+  <div>
+    <button onclick="toggleGroup('g-rep')" class="w-full flex items-center gap-2 px-3 py-2.5 text-[11px] font-bold text-white/40 tracking-wide uppercase hover:text-white/70">
+      <svg id="chev-g-rep" class="chev w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M9 18l6-6-6-6"/></svg>
+      Reports &amp; Analytics
+    </button>
+    <div id="g-rep" class="group-body space-y-0.5 pl-2">
+      <a href="executive-analytics.html" data-file="executive-analytics.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Executive Analytics</a>
+      <a href="financial-reports.html" data-file="financial-reports.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Financial &amp; Revenue Reports</a>
+      <a href="throughput-reports.html" data-file="throughput-reports.html" class="nav-link flex items-center gap-3 px-3 py-2 rounded-lg"><span class="w-1.5 h-1.5 rounded-full bg-white/30 dot"></span>Service &amp; Throughput Reports</a>
+    </div>
+  </div>
+
+</nav>
+
+<div class="px-4 py-4 border-t border-white/10 flex items-center gap-3 flex-shrink-0">
+  <div class="w-9 h-9 rounded-full bg-gold flex items-center justify-center text-navy font-bold text-sm">RA</div>
+  <div class="flex-1 min-w-0">
+    <p class="text-sm font-semibold truncate">Rafiq Ahmed</p>
+    <p class="text-[11px] text-white/50">Super Admin</p>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transaction Monitoring — JustiFi Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: { navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' }, gold: { DEFAULT:'#C5A059', 50:'#FBF6ED' }, slate2:'#64748B', offwhite:'#F8FAFC' },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-offwhite text-navy">
+<div class="flex h-screen overflow-hidden">
+  <aside id="sidebar-mount" class="w-72 bg-navy text-white flex-shrink-0 flex flex-col"></aside>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+      <div class="flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+        <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2" placeholder="Search...">
+      </div>
+      <div class="flex items-center gap-5">
+        <button class="relative text-slate2 hover:text-navy"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        <div class="h-6 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
+      </div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+
+      <div>
+        <h1 class="text-2xl font-bold">Transaction Monitoring</h1>
+        <p class="text-slate2 text-sm mt-1">Monitor every transaction. Filter by service, search by user, payment, or case ID.</p>
+      </div>
+
+      <div class="grid grid-cols-4 gap-5">
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Today</p><p class="text-2xl font-bold mt-2">1,248</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Successful</p><p class="text-2xl font-bold mt-2 text-emerald-600">1,186</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Failed</p><p class="text-2xl font-bold mt-2 text-red-500">38</p></div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border"><p class="text-slate2 text-xs">Under Review</p><p class="text-2xl font-bold mt-2 text-amber-600">7</p></div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 shadow-card border flex flex-wrap items-center gap-3">
+        <input id="txnSearch" placeholder="Search by user ID, payment ID, or case ID..." class="flex-1 min-w-[220px] border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+        <select id="txnService" class="border border-slate-200 rounded-lg px-3 py-2 text-sm">
+          <option value="">All Services</option>
+          <option>Booking</option>
+          <option>Affidavit</option>
+          <option>Land & Property</option>
+          <option>Tax & Income</option>
+        </select>
+        <select id="txnStatus" class="border border-slate-200 rounded-lg px-3 py-2 text-sm">
+          <option value="">All Status</option>
+          <option>Successful</option>
+          <option>Failed</option>
+          <option>Review</option>
+        </select>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
+            <tr>
+              <th class="text-left font-semibold px-5 py-3">Transaction</th>
+              <th class="text-left font-semibold px-5 py-3">User</th>
+              <th class="text-left font-semibold px-5 py-3">Service</th>
+              <th class="text-left font-semibold px-5 py-3">Case ID</th>
+              <th class="text-left font-semibold px-5 py-3">Amount</th>
+              <th class="text-left font-semibold px-5 py-3">Method</th>
+              <th class="text-left font-semibold px-5 py-3">Status</th>
+              <th class="text-right font-semibold px-5 py-3">Risk</th>
+            </tr>
+          </thead>
+          <tbody id="txnTbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+function renderTxn() {
+  const q = (document.getElementById('txnSearch').value || '').toLowerCase();
+  const svc = document.getElementById('txnService').value;
+  const st = document.getElementById('txnStatus').value;
+  const rows = DATA.transactions.filter(t =>
+    (!q || t.user.toLowerCase().includes(q) || t.id.toLowerCase().includes(q) || t.caseId.toLowerCase().includes(q)) &&
+    (!svc || t.service === svc) && (!st || t.status === st));
+
+  document.getElementById('txnTbody').innerHTML = rows.map(t => `
+    <tr class="hover:bg-offwhite/60">
+      <td class="px-5 py-3.5 font-medium">${t.id}</td>
+      <td class="px-5 py-3.5">${t.user}</td>
+      <td class="px-5 py-3.5 text-slate2 text-xs">${t.service}</td>
+      <td class="px-5 py-3.5 text-xs text-slate2">${t.caseId}</td>
+      <td class="px-5 py-3.5 font-semibold">${t.amount}</td>
+      <td class="px-5 py-3.5 text-xs">${t.method}</td>
+      <td class="px-5 py-3.5">
+        <span class="inline-flex items-center gap-1.5 ${t.status==='Successful'?'bg-emerald-50 text-emerald-700':t.status==='Failed'?'bg-red-50 text-red-600':'bg-amber-50 text-amber-700'} text-xs font-semibold px-2.5 py-1 rounded-full">
+          <span class="dot ${t.status==='Successful'?'bg-emerald-500':t.status==='Failed'?'bg-red-500':'bg-amber-500'}"></span>${t.status}
+        </span>
+      </td>
+      <td class="px-5 py-3.5 text-right">
+        <span class="inline-flex items-center gap-1.5 ${t.risk==='Low'?'bg-emerald-50 text-emerald-700':t.risk==='Medium'?'bg-gold-50 text-gold':'bg-red-50 text-red-600'} text-xs font-semibold px-2.5 py-1 rounded-full">
+          <span class="dot ${t.risk==='Low'?'bg-emerald-500':t.risk==='Medium'?'bg-gold':'bg-red-500'}"></span>${t.risk}
+        </span>
+      </td>
+    </tr>`).join('') || `<tr><td colspan="8" class="text-center py-6 text-slate2 text-sm">No transactions match.</td></tr>`;
+}
+document.getElementById('txnSearch').addEventListener('input', renderTxn);
+document.getElementById('txnService').addEventListener('change', renderTxn);
+document.getElementById('txnStatus').addEventListener('change', renderTxn);
+renderTxn();
+</script>
+</body>
+</html>

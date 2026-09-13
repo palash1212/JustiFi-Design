@@ -1,0 +1,33 @@
+body { font-family: 'Inter', sans-serif; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 8px; }
+
+.nav-link { color: rgba(255,255,255,0.8); transition: all .15s; }
+.nav-link:hover { background: rgba(255,255,255,0.05); color: #fff; }
+.nav-link.active { background: #C5A059; color: #1A2B3C; font-weight: 600; }
+.nav-link.active .dot { background: #1A2B3C !important; }
+
+.group-body { display: none; }
+.group-body.open { display: block; }
+
+.chev { transition: transform .15s; }
+.chev.open { transform: rotate(90deg); }
+
+.modal-backdrop { display: none; }
+.modal-backdrop.open { display: flex; }
+
+.dot { width: 6px; height: 6px; border-radius: 999px; display: inline-block; }
+
+.tab-btn { border-bottom: 2px solid transparent; }
+.tab-btn.active { border-color: #C5A059; color: #1A2B3C; font-weight: 600; }
+
+/* Action icon buttons in tables */
+.icon-btn {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 6px; transition: all .15s;
+}
+.icon-btn:hover { background: #F1F5F9; }
+.icon-btn.active { color: #059669; }
+.icon-btn.inactive { color: #94A3B8; }
+.icon-btn.danger { color: #DC2626; }

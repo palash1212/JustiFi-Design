@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clients — JustiFi Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: { navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' }, gold: { DEFAULT:'#C5A059', 50:'#FBF6ED' }, slate2:'#64748B', offwhite:'#F8FAFC' },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-offwhite text-navy">
+<div class="flex h-screen overflow-hidden">
+  <aside id="sidebar-mount" class="w-72 bg-navy text-white flex-shrink-0 flex flex-col"></aside>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+      <div class="flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+        <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2" placeholder="Search client, lawyer, booking, transaction ID...">
+      </div>
+      <div class="flex items-center gap-5">
+        <button class="relative text-slate2 hover:text-navy"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        <div class="h-6 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
+      </div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+
+      <div>
+        <h1 class="text-2xl font-bold">Clients</h1>
+        <p class="text-slate2 text-sm mt-1">14,902 registered clients on JustiFi.</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-5">
+        <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+          <p class="text-slate2 text-xs font-medium">Total Users</p>
+          <p class="text-2xl font-bold mt-2">14,902</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+          <p class="text-slate2 text-xs font-medium">Active Users</p>
+          <p class="text-2xl font-bold mt-2 text-emerald-600">14,210</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+          <p class="text-slate2 text-xs font-medium">Inactive Users</p>
+          <p class="text-2xl font-bold mt-2 text-slate-400">692</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-4 shadow-card border border-slate-100 flex flex-wrap items-center gap-3">
+        <input id="searchClient" placeholder="Search by name or Client ID..." class="flex-1 min-w-[200px] border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
+        <select id="filterStatus" class="border border-slate-200 rounded-lg px-3 py-2 text-sm">
+          <option value="">All Status</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
+            <tr>
+              <th class="text-left font-semibold px-5 py-3">Name</th>
+              <th class="text-left font-semibold px-5 py-3">ID</th>
+              <th class="text-left font-semibold px-5 py-3">Status</th>
+              <th class="text-left font-semibold px-5 py-3">Joining Date</th>
+              <th class="text-right font-semibold px-5 py-3">View</th>
+              <th class="text-right font-semibold px-5 py-3">Action</th>
+            </tr>
+          </thead>
+          <tbody id="clientsTbody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="modal-view-client" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <h3 class="font-bold text-lg">Client Details</h3>
+      <button onclick="closeModal('modal-view-client')" class="text-slate2">✕</button>
+    </div>
+    <div id="viewClientBody" class="px-6 py-5 space-y-3 text-sm"></div>
+    <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
+      <button onclick="closeModal('modal-view-client')" class="text-sm font-semibold text-slate2 px-4 py-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script><script>
+function renderClients() {
+  const q = (document.getElementById('searchClient').value || '').toLowerCase();
+  const s = document.getElementById('filterStatus').value;
+  const rows = DATA.clients.filter(c =>
+    (!q || c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q)) &&
+    (!s || c.status === s));
+  document.getElementById('clientsTbody').innerHTML = rows.map(c => `
+    <tr class="hover:bg-offwhite/60">
+      <td class="px-5 py-3.5 font-medium">${c.name}</td>
+      <td class="px-5 py-3.5 text-slate2">${c.id}</td>
+      <td class="px-5 py-3.5">
+        <span class="inline-flex items-center gap-1.5 ${c.status==='Active'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate2'} text-xs font-semibold px-2.5 py-1 rounded-full">
+          <span class="dot ${c.status==='Active'?'bg-emerald-500':'bg-slate-400'}"></span>${c.status}
+        </span>
+      </td>
+      <td class="px-5 py-3.5 text-slate2">${c.joined}</td>
+      <td class="px-5 py-3.5 text-right">
+        <button class="text-xs font-semibold text-navy border border-slate-200 px-3 py-1.5 rounded-lg" onclick="viewClient('${c.id}')">View</button>
+      </td>
+      <td class="px-5 py-3.5 text-right">
+        ${c.status === 'Active'
+          ? `<button class="icon-btn gray" title="Deactivate">⏸</button>`
+          : `<button class="icon-btn green" title="Activate">▶</button>`}
+      </td>
+    </tr>`).join('') || `<tr><td colspan="6" class="px-5 py-6 text-center text-slate2 text-sm">No clients found.</td></tr>`;
+}
+function viewClient(id) {
+  const c = DATA.clients.find(x => x.id === id);
+  document.getElementById('viewClientBody').innerHTML = `
+    <div class="flex justify-between"><span class="text-slate2">Name</span><span class="font-medium">${c.name}</span></div>
+    <div class="flex justify-between"><span class="text-slate2">Client ID</span><span class="font-medium">${c.id}</span></div>
+    <div class="flex justify-between"><span class="text-slate2">Email</span><span class="font-medium">${c.email}</span></div>
+    <div class="flex justify-between"><span class="text-slate2">Services Used</span><span class="font-medium">${c.services}</span></div>
+    <div class="flex justify-between"><span class="text-slate2">Joined</span><span class="font-medium">${c.joined}</span></div>
+    <div class="flex justify-between"><span class="text-slate2">Status</span><span class="font-medium">${c.status}</span></div>`;
+  openModal('modal-view-client');
+}
+document.getElementById('searchClient').addEventListener('input', renderClients);
+document.getElementById('filterStatus').addEventListener('change', renderClients);
+renderClients();
+</script>
+</body>
+</html>

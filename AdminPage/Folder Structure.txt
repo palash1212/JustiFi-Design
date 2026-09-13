@@ -1,0 +1,32 @@
+AdminPage/
+├── sidebar/
+│   ├── sidebar.html         <- the sidebar markup
+│   └── sidebar.js           <- loads sidebar + modal helpers + active link
+├── css/
+│   └── style.css
+├── images/
+├── js/
+│   ├── data.js              <- all mock data
+│   └── main.js              <- page-specific logic
+├── index.html
+├── dashboard.html
+├── clients.html
+├── lawyers.html
+├── deed-writers.html
+├── admin-users.html
+├── bookings.html
+├── affidavit-services.html     (analytics)
+├── affidavit-requests.html     (list + assign lawyer)
+├── land-property-services.html
+├── land-property-requests.html
+├── tax-income-services.html
+├── tax-income-requests.html
+├── security-center.html
+├── login-sessions.html
+├── roles-permissions.html
+├── service-control.html
+├── transaction-monitoring.html
+├── user-privilege.html
+├── executive-analytics.html
+├── financial-reports.html
+├── throughput-reports.html
