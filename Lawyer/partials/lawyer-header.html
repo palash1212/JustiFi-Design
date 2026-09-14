@@ -1,0 +1,40 @@
+<header class="lawyer-header" id="lawyerHeader">
+  <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" aria-label="Toggle menu">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+
+  <div class="header-greeting">
+    <h1 class="greet-title" id="headerGreetTitle">Welcome back</h1>
+    <p class="greet-sub" id="headerGreetSub">Manage your services from one place</p>
+  </div>
+
+  <div class="header-right">
+    <span class="status-pill" id="headerStatusPill">
+      <span class="dot"></span> Online
+    </span>
+
+    <button class="header-icon-btn" aria-label="Notifications">
+      <span class="material-symbols-outlined">notifications</span>
+      <span class="notif-dot"></span>
+    </button>
+
+    <div class="header-avatar-wrap">
+      <div class="header-avatar" id="headerAvatar">AS</div>
+      <div class="header-dropdown" id="headerDropdown">
+        <a href="lawyer-profile.html">
+          <span class="material-symbols-outlined">person</span> My Profile
+        </a>
+        <a href="service-settings.html">
+          <span class="material-symbols-outlined">tune</span> Service Settings
+        </a>
+        <a href="#">
+          <span class="material-symbols-outlined">help</span> Help &amp; Support
+        </a>
+        <div class="header-dd-divider"></div>
+        <a href="#" onclick="lawyerLogout(); return false;">
+          <span class="material-symbols-outlined">logout</span> Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</header>

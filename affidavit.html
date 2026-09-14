@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Affidavit Generator — JustiFi</title>
 
-    <!-- Existing project assets -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -17,7 +16,6 @@
     />
     <link rel="stylesheet" href="css/style.css" />
 
-    <!-- Tailwind + Material Symbols -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
@@ -104,9 +102,6 @@
         font-family: "Inter", sans-serif;
         background: #f8fafc;
       }
-      .legal-soft-shadow {
-        box-shadow: 0 4px 24px rgba(4, 22, 39, 0.06);
-      }
       .bg-gold {
         background-color: #c5a059;
       }
@@ -123,7 +118,14 @@
         background-color: #a07d3a;
       }
 
-      /* Stepper */
+      /* ===== Stepper ===== */
+      .step-item {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
       .step-dot {
         width: 40px;
         height: 40px;
@@ -133,11 +135,21 @@
         justify-content: center;
         font-weight: 700;
         font-size: 15px;
+        flex-shrink: 0;
         border: 2.5px solid #e2e8f0;
         background: #fff;
         color: #94a3b8;
         transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        flex-shrink: 0;
+      }
+      .step-dot.clickable {
+        cursor: pointer;
+      }
+      .step-dot.clickable:hover {
+        border-color: #a07d3a;
+      }
+      .step-dot.clickable:focus-visible {
+        outline: 3px solid #c5a059;
+        outline-offset: 2px;
       }
       .step-dot.active {
         border-color: #c5a059;
@@ -189,12 +201,8 @@
       .step-label.inactive {
         color: #94a3b8;
       }
-      .step-item {
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
+      .step-item.clickable-label {
+        cursor: pointer;
       }
 
       input:focus,
@@ -204,6 +212,14 @@
         border-color: #c5a059 !important;
         box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
       }
+      /* Visible keyboard focus everywhere (a11y floor) */
+      button:focus-visible,
+      a:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 3px solid #c5a059;
+        outline-offset: 2px;
+      }
+
       .form-card {
         background: #fff;
         border-radius: 20px;
@@ -226,7 +242,50 @@
         color: #c5a059;
       }
 
-      /* Document viewer frame */
+      /* ===== Field error states ===== */
+      .field-error-msg {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        margin-top: 6px;
+        font-size: 12px;
+        color: #ba1a1a;
+        font-weight: 500;
+      }
+      .field-error-msg.show {
+        display: flex;
+      }
+      .field-invalid {
+        border-color: #ba1a1a !important;
+        background: #fef2f2;
+      }
+      .field-invalid:focus {
+        box-shadow: 0 0 0 3px rgba(186, 26, 26, 0.15) !important;
+      }
+      @keyframes shake {
+        10%,
+        90% {
+          transform: translateX(-1px);
+        }
+        20%,
+        80% {
+          transform: translateX(2px);
+        }
+        30%,
+        50%,
+        70% {
+          transform: translateX(-4px);
+        }
+        40%,
+        60% {
+          transform: translateX(4px);
+        }
+      }
+      .shake {
+        animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+
+      /* ===== Document viewer ===== */
       .document-viewer {
         background: #ffffff;
         border-radius: 16px;
@@ -283,21 +342,156 @@
         padding: 20px;
       }
 
+      /* ===== Upload zone (real drag & drop) ===== */
       .upload-zone {
         border: 2px dashed #e2e8f0;
         border-radius: 14px;
         padding: 28px 20px;
         text-align: center;
         background: #fafbfc;
-        transition: all 0.3s;
+        transition: all 0.2s;
         cursor: pointer;
       }
       .upload-zone:hover {
         border-color: #c5a059;
         background: #fcf9f0;
       }
+      .upload-zone.drag-over {
+        border-color: #c5a059;
+        background: #fcf3dc;
+        transform: scale(1.01);
+      }
 
-      /* Success popup animation */
+      /* ===== Live affidavit document preview (paper look) ===== */
+      .affidavit-paper {
+        background: #fffdf8;
+        border: 1px solid #e7e2d4;
+        border-radius: 10px;
+        box-shadow: 0 6px 24px rgba(4, 22, 39, 0.08);
+        padding: 24px 20px;
+        font-family: Georgia, "Times New Roman", serif;
+        color: #1c1a15;
+        max-height: 520px;
+        overflow-y: auto;
+      }
+      .affidavit-paper .doc-title {
+        text-align: center;
+        font-weight: 700;
+        font-size: 17px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+      }
+      .affidavit-paper .doc-subtitle {
+        text-align: center;
+        font-size: 12px;
+        color: #6b6455;
+        margin-bottom: 18px;
+        font-style: italic;
+      }
+      .affidavit-paper .doc-intro {
+        font-size: 13.5px;
+        line-height: 1.75;
+        text-align: justify;
+        margin-bottom: 16px;
+      }
+      .affidavit-paper .doc-intro .blank {
+        border-bottom: 1px dotted #a8a08c;
+        padding: 0 2px;
+        font-style: normal;
+      }
+      .affidavit-paper .doc-points {
+        list-style: none;
+        counter-reset: pt;
+        padding: 0;
+        margin: 0 0 20px 0;
+      }
+      .affidavit-paper .doc-points li {
+        counter-increment: pt;
+        font-size: 13.5px;
+        line-height: 1.7;
+        text-align: justify;
+        margin-bottom: 10px;
+        padding-left: 26px;
+        position: relative;
+      }
+      .affidavit-paper .doc-points li::before {
+        content: counter(pt) ".";
+        position: absolute;
+        left: 0;
+        font-weight: 700;
+      }
+      .affidavit-paper .doc-closing {
+        font-size: 13.5px;
+        line-height: 1.75;
+        text-align: justify;
+        margin-bottom: 28px;
+      }
+      .affidavit-paper .doc-sign-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+      }
+      .affidavit-paper .doc-sign-block {
+        text-align: center;
+        min-width: 140px;
+      }
+      .affidavit-paper .doc-sign-line {
+        border-top: 1px solid #443f33;
+        margin-bottom: 4px;
+        width: 140px;
+      }
+      .affidavit-paper .doc-sign-label {
+        font-size: 11px;
+        color: #6b6455;
+      }
+      @media (max-width: 480px) {
+        .affidavit-paper {
+          padding: 16px 14px;
+          max-height: 420px;
+        }
+        .affidavit-paper .doc-title {
+          font-size: 15px;
+        }
+        .affidavit-paper .doc-intro,
+        .affidavit-paper .doc-points li,
+        .affidavit-paper .doc-closing {
+          font-size: 12.5px;
+        }
+        .affidavit-paper .doc-sign-row {
+          justify-content: center;
+          gap: 24px;
+        }
+      }
+
+      /* Subtle attention pulse on the top CTA button */
+      .cta-pulse {
+        position: relative;
+      }
+      .cta-pulse::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 8px;
+        box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.6);
+        animation: ctaPulse 2.4s ease-out infinite;
+        pointer-events: none;
+      }
+      @keyframes ctaPulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.55);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(197, 160, 89, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(197, 160, 89, 0);
+        }
+      }
+
       .success-popup {
         animation: slideUp 0.5s ease forwards;
       }
@@ -310,6 +504,31 @@
           opacity: 1;
           transform: translateY(0);
         }
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #041627;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
       }
 
       @media (max-width: 1024px) {
@@ -331,11 +550,49 @@
           font-size: 8px;
         }
       }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
     </style>
   </head>
   <body class="bg-background" data-page="affidavit" data-requires-auth="0">
-    <!-- Shared Navbar -->
     <div id="navbarPlaceholder"></div>
+
+    <!-- ====== TOP ACTION BAR ====== -->
+    <div
+      id="topActionBar"
+      class="sticky top-0 z-40 bg-primary/95 backdrop-blur border-b border-black/10"
+    >
+      <div
+        class="max-w-container-max mx-auto px-4 md:px-8 py-2.5 flex items-center justify-between gap-3"
+      >
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="material-symbols-outlined text-gold text-lg shrink-0"
+            >gavel</span
+          >
+          <p class="text-white text-xs sm:text-sm font-medium truncate">
+            Need an affidavit?
+            <span class="hidden sm:inline text-slate-300"
+              >Start below — takes about 5 minutes.</span
+            >
+          </p>
+        </div>
+        <button
+          onclick="startGenerator()"
+          aria-label="Create a new affidavit now"
+          class="cta-pulse shrink-0 px-3.5 sm:px-5 py-2 rounded-lg bg-gold text-white text-xs sm:text-sm font-bold hover:bg-gold-dark shadow-md transition-all flex items-center gap-1.5"
+        >
+          <span class="material-symbols-outlined text-[16px] sm:text-lg"
+            >add_circle</span
+          >
+          <span class="hidden sm:inline">Create Affidavit</span
+          ><span class="sm:hidden">Create</span>
+        </button>
+      </div>
+    </div>
 
     <!-- ====== INTRO SECTION ====== -->
     <section
@@ -346,7 +603,6 @@
         class="bg-white rounded-[24px] border border-[#eef1f4] shadow-sm overflow-hidden"
       >
         <div class="grid grid-cols-1 lg:grid-cols-12">
-          <!-- LEFT: MAIN MESSAGE -->
           <div class="lg:col-span-7 p-6 md:p-10 lg:p-12">
             <div
               class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-gold-light border border-[#ead5a7] text-gold-dark text-xs font-bold"
@@ -374,7 +630,6 @@
               </p>
             </div>
 
-            <!-- MAIN AGENDA -->
             <div
               class="mt-7 rounded-2xl border border-[#ead5a7] bg-[#fffaf0] p-5 md:p-6"
             >
@@ -401,7 +656,6 @@
               </div>
             </div>
 
-            <!-- BENEFITS -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
               <div class="text-center p-3">
                 <div
@@ -472,18 +726,17 @@
             </div>
           </div>
 
-          <!-- RIGHT: OVERVIEW IMAGE (image1.png) -->
           <div
             class="lg:col-span-5 bg-surface border-l border-[#eef1f4] p-6 md:p-10 flex flex-col justify-center"
           >
             <div class="document-viewer">
               <div class="viewer-header">
-                <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined icon"
+                <span class="flex items-center gap-2"
+                  ><span class="material-symbols-outlined icon"
                     >description</span
                   >
-                  Document Overview
-                </span>
+                  Document Overview</span
+                >
                 <span class="text-[10px] text-gold-dark font-semibold"
                   >Sample</span
                 >
@@ -537,7 +790,6 @@
         </div>
       </div>
 
-      <!-- SERVICE PROMISE -->
       <div class="mt-5 bg-primary rounded-2xl px-5 md:px-8 py-5 text-white">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
           <div class="flex items-center gap-3">
@@ -589,37 +841,73 @@
       </p>
     </section>
 
-    <!-- ====== STEPPER BAR (labels under circles) ====== -->
+    <!-- ====== STEPPER BAR ====== -->
     <div
       id="stepperBar"
       class="hidden max-w-container-max mx-auto px-4 md:px-8 mt-6 mb-8"
     >
-      <div class="flex items-center justify-between" id="stepperDots">
-        <!-- Step 1 -->
-        <div class="step-item">
-          <div class="step-dot active" data-step="1"><span>1</span></div>
+      <div
+        class="flex items-center justify-between"
+        id="stepperDots"
+        role="navigation"
+        aria-label="Affidavit creation steps"
+      >
+        <div class="step-item" data-step-item="1">
+          <div
+            class="step-dot active"
+            data-step="1"
+            role="button"
+            tabindex="0"
+            aria-label="Step 1: Affidavit Type"
+          >
+            <span>1</span>
+          </div>
           <span class="step-label active" data-label="1">Affidavit Type</span>
         </div>
         <div class="step-line" data-line="1"></div>
-        <!-- Step 2 -->
-        <div class="step-item">
-          <div class="step-dot" data-step="2"><span>2</span></div>
+        <div class="step-item" data-step-item="2">
+          <div
+            class="step-dot"
+            data-step="2"
+            role="button"
+            tabindex="-1"
+            aria-label="Step 2: Facts and Purpose"
+            aria-disabled="true"
+          >
+            <span>2</span>
+          </div>
           <span class="step-label inactive" data-label="2"
             >Facts &amp; Purpose</span
           >
         </div>
         <div class="step-line" data-line="2"></div>
-        <!-- Step 3 -->
-        <div class="step-item">
-          <div class="step-dot" data-step="3"><span>3</span></div>
+        <div class="step-item" data-step-item="3">
+          <div
+            class="step-dot"
+            data-step="3"
+            role="button"
+            tabindex="-1"
+            aria-label="Step 3: Deponent Identity"
+            aria-disabled="true"
+          >
+            <span>3</span>
+          </div>
           <span class="step-label inactive" data-label="3"
             >Deponent Identity</span
           >
         </div>
         <div class="step-line" data-line="3"></div>
-        <!-- Step 4 -->
-        <div class="step-item">
-          <div class="step-dot" data-step="4"><span>4</span></div>
+        <div class="step-item" data-step-item="4">
+          <div
+            class="step-dot"
+            data-step="4"
+            role="button"
+            tabindex="-1"
+            aria-label="Step 4: Preview and Verify"
+            aria-disabled="true"
+          >
+            <span>4</span>
+          </div>
           <span class="step-label inactive" data-label="4"
             >Preview &amp; Verify</span
           >
@@ -632,7 +920,7 @@
       id="generatorContainer"
       class="hidden max-w-container-max mx-auto px-4 md:px-8 pb-10"
     >
-      <!-- STEP 1: Affidavit Type (grid 6 columns: 4 for form, 2 for image) -->
+      <!-- STEP 1 -->
       <div id="step1" class="grid grid-cols-1 lg:grid-cols-6 gap-6 lg:gap-8">
         <div class="lg:col-span-4">
           <div class="form-card">
@@ -652,6 +940,8 @@
             <div
               class="grid grid-cols-1 sm:grid-cols-2 gap-3"
               id="typeGrid"
+              role="radiogroup"
+              aria-label="Affidavit type"
             ></div>
             <div
               class="mt-6 pt-5 border-t border-[#eef1f4] flex flex-col-reverse sm:flex-row justify-between gap-3"
@@ -666,7 +956,7 @@
                 Back
               </button>
               <button
-                onclick="goToStep(2)"
+                onclick="attemptStepChange(2)"
                 class="px-8 py-2.5 rounded-xl bg-black text-white font-label-md text-sm hover:bg-gray-800 shadow-md transition-all flex items-center justify-center gap-2"
               >
                 Next
@@ -686,7 +976,7 @@
                 <span class="material-symbols-outlined text-sm"
                   >visibility</span
                 >
-                Document Preview
+                Sample Template
               </h3>
               <span
                 class="text-[10px] text-gold-dark font-semibold px-2.5 py-1 bg-gold-light rounded-full"
@@ -695,12 +985,12 @@
             </div>
             <div class="document-viewer">
               <div class="viewer-header">
-                <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined icon"
+                <span class="flex items-center gap-2"
+                  ><span class="material-symbols-outlined icon"
                     >description</span
                   >
-                  Affidavit Sample
-                </span>
+                  Affidavit Sample</span
+                >
                 <span class="text-[10px] text-gold-dark font-semibold"
                   >Step 1</span
                 >
@@ -740,9 +1030,9 @@
         </div>
       </div>
 
-      <!-- STEP 2: Facts & Purpose (full width) -->
+      <!-- STEP 2 -->
       <div id="step2" class="hidden">
-        <div class="form-card max-w-7xl mx-auto">
+        <div class="form-card">
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xl font-bold text-primary">
               Statement of Facts &amp; Purpose
@@ -758,21 +1048,35 @@
           </p>
           <div class="space-y-5">
             <div>
-              <label class="block font-label-md text-primary text-sm mb-1.5 whitespace-nowrap">
+              <label
+                class="block font-label-md text-primary text-sm mb-1.5"
+                for="afdPurpose"
+              >
                 Specific Cause / Purpose
-                <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ বিশেষ কারণ / উদ্দেশ্য</span>
-                <span class="text-error text-xs">*</span>
+                <span class="text-secondary font-normal text-xs"
+                  >/ বিশেষ কারণ</span
+                >
+                <span class="text-error">*</span>
               </label>
               <textarea
                 id="afdPurpose"
                 class="w-full rounded-xl border-[#e2e8f0] p-3.5 text-sm transition-all resize-none"
+                placeholder="e.g., Correction of spelling in SSC Certificate"
                 rows="3"
+                aria-required="true"
+                oninput="clearFieldError('afdPurpose')"
               ></textarea>
+              <p class="field-error-msg" id="afdPurpose-error">
+                <span class="material-symbols-outlined text-[14px]">error</span>
+                Please describe the purpose of this affidavit.
+              </p>
             </div>
             <div>
-              <label class="block font-label-md text-primary text-sm mb-1.5 whitespace-nowrap">
+              <label class="block font-label-md text-primary text-sm mb-1.5">
                 Detailed Declaratory Points
-                <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ বিস্তারিত ঘোষণামূলক পয়েন্ট</span>
+                <span class="text-secondary font-normal text-xs"
+                  >/ ঘোষণামূলক পয়েন্ট</span
+                >
               </label>
               <div id="pointsContainer" class="space-y-2.5"></div>
               <button
@@ -783,18 +1087,22 @@
                 <span class="material-symbols-outlined text-[18px]">add</span>
                 Add Point
               </button>
+              <p class="field-error-msg" id="points-error">
+                <span class="material-symbols-outlined text-[14px]">error</span>
+                Add at least one declaratory point.
+              </p>
             </div>
           </div>
           <div class="mt-6 pt-5 border-t border-[#eef1f4] flex justify-between">
             <button
               class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
-              onclick="goToStep(1)"
+              onclick="attemptStepChange(1)"
             >
               ← Back
             </button>
             <button
               class="px-8 py-2.5 rounded-xl bg-black text-white font-label-md text-sm hover:bg-gray-800 shadow-md transition-all"
-              onclick="goToStep(3)"
+              onclick="attemptStepChange(3)"
             >
               Next →
             </button>
@@ -802,9 +1110,9 @@
         </div>
       </div>
 
-      <!-- STEP 3: Deponent Identity (full width) -->
+      <!-- STEP 3 -->
       <div id="step3" class="hidden">
-        <div class="form-card max-w-7xl mx-auto">
+        <div class="form-card">
           <div class="flex items-center justify-between mb-5">
             <h2 class="text-xl font-bold text-primary">Deponent Identity</h2>
             <span
@@ -827,95 +1135,172 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Full Name
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সম্পূর্ণ নাম</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdNameEn"
+                  >Full Name (English) <span class="text-error">*</span></label
+                >
                 <input
                   id="afdNameEn"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright uppercase text-sm"
                   type="text"
-                  oninput="updatePreview()"
+                  placeholder="MD. RAHMAN ISLAM"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdNameEn');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdNameEn-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  Full name is required.
+                </p>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Full Name (Bangla)
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সম্পূর্ণ নাম (বাংলা)</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdNameBn"
+                  >Full Name (Bangla) <span class="text-error">*</span></label
+                >
                 <input
                   id="afdNameBn"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="text"
-                  oninput="updatePreview()"
+                  placeholder="মোঃ রহমান ইসলাম"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdNameBn');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdNameBn-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  Bangla name is required.
+                </p>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Father's / Husband's Name
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পিতা / স্বামীর নাম</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdFather"
+                  >Father's / Husband's Name
+                  <span class="text-error">*</span></label
+                >
                 <input
                   id="afdFather"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="text"
-                  oninput="updatePreview()"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdFather');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdFather-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  This field is required.
+                </p>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Mother's Name
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ মাতার নাম</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdMother"
+                  >Mother's Name <span class="text-error">*</span></label
+                >
                 <input
                   id="afdMother"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="text"
-                  oninput="updatePreview()"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdMother');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdMother-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  This field is required.
+                </p>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Date of Birth
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জন্ম তারিখ</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdDob"
+                  >Date of Birth <span class="text-error">*</span></label
+                >
                 <input
                   id="afdDob"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="date"
-                  oninput="updatePreview()"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdDob');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdDob-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  Date of birth is required.
+                </p>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Age
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ বয়স</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdAge"
+                  >Age <span class="text-error">*</span></label
+                >
                 <input
                   id="afdAge"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="number"
-                  oninput="updatePreview()"
+                  min="0"
+                  max="130"
+                  placeholder="e.g., 30"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdAge');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdAge-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  Enter a valid age.
+                </p>
               </div>
               <div class="md:col-span-2">
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Profession
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পেশা</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdProfession"
+                  >Profession <span class="text-error">*</span></label
+                >
                 <input
                   id="afdProfession"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="text"
-                  oninput="updatePreview()"
+                  placeholder="Service Holder, Business, Student, etc."
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdProfession');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdProfession-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  Profession is required.
+                </p>
               </div>
             </div>
           </div>
@@ -928,11 +1313,11 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Document Type
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ নথির ধরন</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdDocType"
+                  >Document Type <span class="text-error">*</span></label
+                >
                 <select
                   id="afdDocType"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
@@ -948,17 +1333,27 @@
                 </select>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Document Number
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ নথি নম্বর</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdDocNumber"
+                  >Document Number <span class="text-error">*</span></label
+                >
                 <input
                   id="afdDocNumber"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
                   type="text"
-                  oninput="updatePreview()"
+                  aria-required="true"
+                  oninput="
+                    clearFieldError('afdDocNumber');
+                    updatePreview();
+                  "
                 />
+                <p class="field-error-msg" id="afdDocNumber-error">
+                  <span class="material-symbols-outlined text-[14px]"
+                    >error</span
+                  >
+                  Document number is required.
+                </p>
               </div>
             </div>
           </div>
@@ -969,86 +1364,70 @@
               <span class="icon material-symbols-outlined text-lg"
                 >location_on</span
               >
-              Address Details / ঠিকানা বিবরণ
+              Address Details / ঠিকানা
             </div>
             <div class="mb-3">
               <label class="font-label-md text-primary text-sm block mb-2"
-                >Permanent Address / স্থায়ী ঠিকানা</label
+                >Permanent Address / স্থায়ী ঠিকানা
+                <span class="text-error">*</span></label
               >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Village / House
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ গ্রাম / বাড়ি</span>
-                  </label>
-                  <input
-                    id="afdPermHouse"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Road / Block
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সড়ক / ব্লক</span>
-                  </label>
-                  <input
-                    id="afdPermRoad"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Post Office
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ ডাকঘর</span>
-                  </label>
-                  <input
-                    id="afdPermPost"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Post Code
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পোস্ট কোড</span>
-                  </label>
-                  <input
-                    id="afdPermCode"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Upazila / Thana
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ উপজেলা / থানা</span>
-                  </label>
-                  <input
-                    id="afdPermUpazila"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    District
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জেলা</span>
-                  </label>
-                  <input
-                    id="afdPermDistrict"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
+                <input
+                  id="afdPermHouse"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Village / House"
+                  type="text"
+                  oninput="
+                    clearFieldError('afdPermGroup');
+                    updatePreview();
+                  "
+                />
+                <input
+                  id="afdPermRoad"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Road / Block"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermPost"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Office"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermCode"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Code"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPermUpazila"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Upazila / Thana"
+                  type="text"
+                  oninput="
+                    clearFieldError('afdPermGroup');
+                    updatePreview();
+                  "
+                />
+                <input
+                  id="afdPermDistrict"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="District"
+                  type="text"
+                  oninput="
+                    clearFieldError('afdPermGroup');
+                    updatePreview();
+                  "
+                />
               </div>
+              <p class="field-error-msg" id="afdPermGroup-error">
+                <span class="material-symbols-outlined text-[14px]">error</span>
+                Add at least village/house, upazila and district.
+              </p>
             </div>
             <div
               class="flex items-center gap-3 p-3 bg-surface rounded-xl border border-[#e2e8f0]/50 mb-3"
@@ -1066,7 +1445,8 @@
               <label
                 class="text-sm text-on-surface cursor-pointer select-none"
                 for="sameAddress"
-                >Present Address same as Permanent / বর্তমান ঠিকানা স্থায়ী ঠিকানার মতো</label
+                >Present Address same as Permanent / বর্তমান ঠিকানা স্থায়ী
+                ঠিকানার মতো</label
               >
             </div>
             <div
@@ -1078,78 +1458,48 @@
                 >Present Address / বর্তমান ঠিকানা</label
               >
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Village / House
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ গ্রাম / বাড়ি</span>
-                  </label>
-                  <input
-                    id="afdPresHouse"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Road / Block
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ সড়ক / ব্লক</span>
-                  </label>
-                  <input
-                    id="afdPresRoad"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Post Office
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ ডাকঘর</span>
-                  </label>
-                  <input
-                    id="afdPresPost"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Post Code
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ পোস্ট কোড</span>
-                  </label>
-                  <input
-                    id="afdPresCode"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    Upazila / Thana
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ উপজেলা / থানা</span>
-                  </label>
-                  <input
-                    id="afdPresUpazila"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
-                <div>
-                  <label class="font-label-md text-secondary text-xs block mb-1 whitespace-nowrap">
-                    District
-                    <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জেলা</span>
-                  </label>
-                  <input
-                    id="afdPresDistrict"
-                    class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
-                    type="text"
-                    oninput="updatePreview()"
-                  />
-                </div>
+                <input
+                  id="afdPresHouse"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Village / House"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresRoad"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Road / Block"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresPost"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Office"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresCode"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Post Code"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresUpazila"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="Upazila / Thana"
+                  type="text"
+                  oninput="updatePreview()"
+                />
+                <input
+                  id="afdPresDistrict"
+                  class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
+                  placeholder="District"
+                  type="text"
+                  oninput="updatePreview()"
+                />
               </div>
             </div>
           </div>
@@ -1162,11 +1512,11 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Religion
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ ধর্ম</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdReligion"
+                  >Religion <span class="text-error">*</span></label
+                >
                 <select
                   id="afdReligion"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-bright text-sm"
@@ -1180,11 +1530,11 @@
                 </select>
               </div>
               <div>
-                <label class="font-label-md text-secondary text-xs uppercase tracking-wider block mb-1 whitespace-nowrap">
-                  Nationality
-                  <span class="text-secondary font-normal text-xs sm:inline sm:ml-1">/ জাতীয়তা</span>
-                  <span class="text-error text-xs">*</span>
-                </label>
+                <label
+                  class="font-label-md text-secondary text-xs block mb-1"
+                  for="afdNationality"
+                  >Nationality</label
+                >
                 <input
                   id="afdNationality"
                   class="w-full h-11 px-4 rounded-xl border-[#e2e8f0] bg-surface-container-low text-secondary font-bold text-sm"
@@ -1210,14 +1560,22 @@
             </p>
             <div
               class="upload-zone"
+              id="uploadZone"
               onclick="document.getElementById('fileInput').click()"
+              ondragover="handleDragOver(event)"
+              ondragleave="handleDragLeave(event)"
+              ondrop="handleDrop(event)"
+              role="button"
+              tabindex="0"
+              aria-label="Upload supporting documents"
             >
               <span
                 class="material-symbols-outlined text-4xl text-secondary block mx-auto"
                 >cloud_upload</span
               >
               <p class="font-medium text-primary mt-2">
-                Drop files here or <span class="text-gold underline">browse</span>
+                Drop files here or
+                <span class="text-gold underline">browse</span>
               </p>
               <p class="text-caption text-secondary">
                 PDF, JPG, PNG · Max 10MB each
@@ -1231,24 +1589,34 @@
                 onchange="handleFileUpload(event)"
               />
               <button
+                type="button"
                 class="mt-2 px-6 py-2 bg-gold text-white rounded-xl font-label-md text-sm hover:bg-gold-dark"
+                onclick="
+                  event.stopPropagation();
+                  document.getElementById('fileInput').click();
+                "
               >
                 Choose Files
               </button>
             </div>
+            <p class="field-error-msg" id="upload-error">
+              <span class="material-symbols-outlined text-[14px]">error</span>
+              One or more files were too large or an unsupported type — they
+              were skipped.
+            </p>
             <div id="fileList" class="mt-3 space-y-2"></div>
           </div>
 
           <div class="mt-6 pt-5 border-t border-[#eef1f4] flex justify-between">
             <button
               class="px-6 py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
-              onclick="goToStep(2)"
+              onclick="attemptStepChange(2)"
             >
               ← Back
             </button>
             <button
               class="px-8 py-2.5 rounded-xl bg-black text-white font-label-md text-sm hover:bg-gray-800 shadow-md transition-all"
-              onclick="goToStep(4)"
+              onclick="attemptStepChange(4)"
             >
               Preview →
             </button>
@@ -1256,173 +1624,173 @@
         </div>
       </div>
 
-      <!-- STEP 4: Preview & Submit (grid 6 columns: 4 for form, 2 for image) -->
-      <div
-        id="step4"
-        class="hidden grid grid-cols-1 lg:grid-cols-6 gap-6 lg:gap-8"
-      >
-        <div class="lg:col-span-4">
-          <div class="form-card">
-            <div class="flex items-center justify-between mb-5">
-              <h2 class="text-xl font-bold text-primary">Review Information</h2>
-              <span
-                class="text-xs text-secondary bg-surface-container-low px-3 py-1 rounded-full"
-                >Step 4 of 4</span
-              >
-            </div>
-            <div class="bg-surface p-4 rounded-xl mb-5">
-              <h4 class="font-label-md text-primary text-sm mb-2">
-                Affidavit Details
-              </h4>
-              <div
-                id="afdSummary"
-                class="space-y-1 text-sm text-on-surface-variant"
-              ></div>
-            </div>
-            <div
-              class="flex items-start gap-3 p-4 bg-gold-light/30 rounded-xl border border-gold/30 mb-5"
+      <!-- STEP 4 -->
+      <div id="step4" class="hidden">
+        <div class="form-card">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-xl font-bold text-primary">Review Information</h2>
+            <span
+              class="text-xs text-secondary bg-surface-container-low px-3 py-1 rounded-full"
+              >Step 4 of 4</span
             >
-              <input
-                id="afdDeclare"
-                class="mt-1 w-4 h-4 rounded border-[#e2e8f0] text-gold"
-                type="checkbox"
-              />
-              <label
-                for="afdDeclare"
-                class="text-sm text-on-surface cursor-pointer"
-              >
-                I solemnly declare that the information provided is true and
-                correct to the best of my knowledge and belief.
-                <span class="text-secondary font-normal text-xs block sm:inline sm:ml-1"
-                  >/ আমি দৃঢ়ভাবে ঘোষণা করছি যে প্রদত্ত তথ্য সত্য এবং সঠিক।</span
-                >
-              </label>
-            </div>
-
-            <!-- SUCCESS POPUP -->
-            <div
-              id="successMessage"
-              class="hidden success-popup p-6 bg-green-50 border-2 border-green-400 rounded-xl text-center mb-4 shadow-lg"
+          </div>
+          <!-- Tabs: Summary vs Live Document Preview -->
+          <div
+            class="flex gap-2 mb-4 border-b border-[#eef1f4]"
+            role="tablist"
+            aria-label="Review view"
+          >
+            <button
+              type="button"
+              id="tabBtnSummary"
+              role="tab"
+              aria-selected="true"
+              class="px-4 py-2.5 text-sm font-bold border-b-2 border-gold text-primary transition-all"
+              onclick="switchStep4Tab('summary')"
             >
-              <span
-                class="material-symbols-outlined text-green-600 text-5xl block mx-auto"
-                >check_circle</span
+              Summary
+            </button>
+            <button
+              type="button"
+              id="tabBtnDocument"
+              role="tab"
+              aria-selected="false"
+              class="px-4 py-2.5 text-sm font-bold border-b-2 border-transparent text-secondary hover:text-primary transition-all flex items-center gap-1.5"
+              onclick="switchStep4Tab('document')"
+            >
+              <span class="material-symbols-outlined text-[16px]"
+                >visibility</span
               >
-              <h3 class="text-xl font-bold text-green-800 mt-2">
-                Affidavit Submitted Successfully! 🎉
-                <span class="text-lg font-normal text-green-700 block"
-                  >/ হলফনামা সফলভাবে জমা দেওয়া হয়েছে!</span
-                >
-              </h3>
-              <p class="text-sm text-green-700 mt-1 max-w-md mx-auto">
-                We will process your document and deliver the final stamped
-                copy.
-                <span class="text-secondary font-normal text-xs block"
-                  >/ আমরা আপনার নথি প্রক্রিয়া করব এবং চূড়ান্ত স্ট্যাম্পযুক্ত কপি সরবরাহ করব।</span
-                >
-              </p>
-              <div
-                class="mt-3 p-3 bg-white/80 rounded-lg border border-green-200"
-              >
-                <p class="text-sm font-semibold text-primary">
-                  📁 Please check your
-                  <span class="text-gold">"Affidavit Vault"</span> in the
-                  dashboard for dynamic process tracking.
-                  <span class="text-secondary font-normal text-xs block"
-                    >/ ড্যাশবোর্ডে আপনার "Affidavit Vault" চেক করুন ডায়নামিক প্রক্রিয়া ট্র্যাকিংয়ের জন্য।</span
-                  >
-                </p>
-              </div>
-              <a
-                href="dashboard.html"
-                class="mt-4 inline-block px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-md"
-              >
-                Go to Dashboard / ড্যাশবোর্ডে যান
-              </a>
-            </div>
+              Final Preview
+            </button>
+          </div>
 
-            <div class="pt-5 border-t border-[#eef1f4] flex justify-between gap-3">
-              <button
-                class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
-                onclick="goToStep(3)"
-              >
-                ← Back
-              </button>
-              <button
-                id="submitBtn"
-                class="px-6 sm:px-10 py-2 sm:py-2.5 rounded-xl bg-gold text-black font-label-md text-sm hover:bg-gold-dark shadow-md transition-all"
-                onclick="submitAffidavit()"
-              >
-                Submit for Processing
-              </button>
+          <div id="tabPanelSummary" class="bg-surface p-4 rounded-xl mb-5">
+            <h4 class="font-label-md text-primary text-sm mb-2">
+              Affidavit Details
+            </h4>
+            <div
+              id="afdSummary"
+              class="space-y-1 text-sm text-on-surface-variant"
+            ></div>
+          </div>
+
+          <div id="tabPanelDocument" class="hidden mb-5">
+            <p class="text-xs text-secondary mb-3 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[14px]">info</span>
+              This is a live preview built from your answers — the final stamped
+              copy may differ slightly in formatting.
+            </p>
+            <div class="affidavit-paper">
+              <div id="afdDocumentPreview"></div>
             </div>
           </div>
-        </div>
-        <div class="lg:col-span-2">
-          <div class="sticky top-24">
-            <div class="flex items-center justify-between mb-3">
-              <h3
-                class="font-label-md text-primary flex items-center gap-2 text-sm"
-              >
-                <span class="material-symbols-outlined text-sm"
-                  >visibility</span
-                >
-                Final Document Preview
-              </h3>
-              <span
-                class="text-[10px] text-gold-dark font-semibold px-2.5 py-1 bg-gold-light rounded-full"
-                >Sample</span
-              >
-            </div>
-            <div class="document-viewer">
-              <div class="viewer-header">
-                <span class="flex items-center gap-2">
-                  <span class="material-symbols-outlined icon"
-                    >description</span
-                  >
-                  Final Affidavit
-                </span>
-                <span class="text-[10px] text-gold-dark font-semibold"
-                  >Step 4</span
-                >
-              </div>
-              <div class="viewer-body">
-                <img
-                  src="images/image3.png"
-                  alt="Final affidavit sample"
-                  class="w-full h-auto"
-                  onerror="
-                    this.style.display = 'none';
-                    this.parentElement.innerHTML =
-                      '<div class=\'img-placeholder\'><span class=\'material-symbols-outlined text-4xl block mb-2\'>image_not_supported</span>Image not found: image3.png<br>Please place it in the /images/ folder</div>';
-                  "
-                />
-              </div>
-              <div class="viewer-footer">
-                Your completed affidavit will look like this
-              </div>
-            </div>
-            <div
-              class="mt-4 bg-gold-light/30 rounded-xl p-3 flex items-center gap-3 border border-gold/20"
+          <div
+            class="flex items-start gap-3 p-4 bg-gold-light/30 rounded-xl border border-gold/30"
+            id="declareWrap"
+          >
+            <input
+              id="afdDeclare"
+              class="mt-1 w-4 h-4 rounded border-[#e2e8f0] text-gold"
+              type="checkbox"
+              onchange="clearFieldError('afdDeclare')"
+            />
+            <label
+              for="afdDeclare"
+              class="text-sm text-on-surface cursor-pointer"
             >
-              <span class="material-symbols-outlined text-gold text-xl"
-                >verified</span
+              I solemnly declare that the information provided is true and
+              correct to the best of my knowledge and belief.
+              <span class="text-secondary font-normal text-xs block mt-1"
+                >/ আমি দৃঢ়ভাবে ঘোষণা করছি যে প্রদত্ত তথ্য সত্য এবং সঠিক।</span
               >
-              <div>
-                <p class="text-xs font-bold text-primary">
-                  Trusted by Clients Across Bangladesh
-                </p>
-                <p class="text-[10px] text-secondary">
-                  Final preview shows how your affidavit will appear
-                </p>
-              </div>
+            </label>
+          </div>
+          <p class="field-error-msg mb-5" id="afdDeclare-error">
+            <span class="material-symbols-outlined text-[14px]">error</span>
+            Please confirm the declaration before submitting.
+          </p>
+
+          <!-- SUCCESS -->
+          <div
+            id="successMessage"
+            class="hidden success-popup p-6 bg-green-50 border-2 border-green-400 rounded-xl text-center mb-4 shadow-lg"
+          >
+            <span
+              class="material-symbols-outlined text-green-600 text-5xl block mx-auto"
+              >check_circle</span
+            >
+            <h3 class="text-xl font-bold text-green-800 mt-2">
+              Affidavit Submitted Successfully! 🎉
+              <span class="text-lg font-normal text-green-700 block"
+                >/ হলফনামা সফলভাবে জমা দেওয়া হয়েছে!</span
+              >
+            </h3>
+            <div
+              class="mt-3 inline-block px-4 py-2 bg-white rounded-lg border-2 border-green-300"
+            >
+              <p
+                class="text-[11px] text-secondary uppercase tracking-wide font-semibold"
+              >
+                Reference Number
+              </p>
+              <p
+                class="text-lg font-bold text-primary tracking-wide"
+                id="refNumberDisplay"
+              >
+                —
+              </p>
             </div>
+            <p class="text-sm text-green-700 mt-3 max-w-md mx-auto">
+              Save this reference number to track your affidavit's status.
+              <span class="text-secondary font-normal text-xs block"
+                >/ আপনার হলফনামার অবস্থা ট্র্যাক করতে এই নম্বরটি সংরক্ষণ
+                করুন।</span
+              >
+            </p>
+            <div
+              class="mt-3 p-3 bg-white/80 rounded-lg border border-green-200"
+            >
+              <p class="text-sm font-semibold text-primary">
+                📁 Track progress anytime in your
+                <span class="text-gold">"Affidavit Vault"</span> in the
+                dashboard.
+              </p>
+            </div>
+            <a
+              href="dashboard.html"
+              class="mt-4 inline-block px-6 py-2.5 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all shadow-md"
+              >Go to Dashboard / ড্যাশবোর্ডে যান</a
+            >
+          </div>
+
+          <div
+            class="pt-5 border-t border-[#eef1f4] flex justify-between gap-3"
+          >
+            <button
+              class="px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl border border-primary text-primary font-label-md text-sm hover:bg-primary/5 transition-all"
+              onclick="attemptStepChange(3)"
+            >
+              ← Back
+            </button>
+            <button
+              id="submitBtn"
+              class="px-6 sm:px-10 py-2 sm:py-2.5 rounded-xl bg-gold text-black font-label-md text-sm hover:bg-gold-dark shadow-md transition-all flex items-center gap-2"
+              onclick="submitAffidavit()"
+            >
+              <span id="submitBtnText">Submit for Processing</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Shared Footer -->
+    <!-- Toast for autosave / minor feedback -->
+    <div id="toast" class="toast">
+      <span class="material-symbols-outlined text-[16px]">check_circle</span
+      ><span id="toastText"></span>
+    </div>
+
     <div id="footerPlaceholder"></div>
 
     <script src="js/data.js"></script>
@@ -1431,26 +1799,7 @@
 
     <script>
       // ============================================================
-      // 1. INTRO / GENERATOR TOGGLE
-      // ============================================================
-      function startGenerator() {
-        document.getElementById("introSection").style.display = "none";
-        document.getElementById("stepperBar").classList.remove("hidden");
-        document
-          .getElementById("generatorContainer")
-          .classList.remove("hidden");
-        goToStep(1);
-      }
-
-      function backToAffidavitService() {
-        document.getElementById("generatorContainer").classList.add("hidden");
-        document.getElementById("stepperBar").classList.add("hidden");
-        document.getElementById("introSection").style.display = "";
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      // ============================================================
-      // 2. DATA & STATE
+      // STATE
       // ============================================================
       var AFFIDAVIT_TYPES = [
         "Name Change / Title Correction Affidavit",
@@ -1461,8 +1810,8 @@
         "Property / Land Ownership Affidavit",
         "General Declaratory Affidavit",
       ];
-
       var currentStep = 1;
+      var highestStepReached = 1;
       var points = [
         'That my name is incorrectly spelled as "John Doe" in my SSC certificate.',
         'That my actual and correct name according to my birth registration is "Jonathon Doe".',
@@ -1470,9 +1819,212 @@
       ];
       var selectedType = AFFIDAVIT_TYPES[0];
       var uploadedFiles = [];
+      var formDirty = false;
+      var MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
       // ============================================================
-      // 3. STEP 1: TYPE SELECTION
+      // TOAST
+      // ============================================================
+      var toastTimer = null;
+      function showToast(msg) {
+        var t = document.getElementById("toast");
+        document.getElementById("toastText").textContent = msg;
+        t.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          t.classList.remove("show");
+        }, 2200);
+      }
+
+      // ============================================================
+      // INTRO / GENERATOR TOGGLE + BROWSER/HARDWARE BACK BUTTON SUPPORT
+      // ============================================================
+      // We push one history entry per step. Pressing the phone's back
+      // button (or browser back) then simply pops one entry, which our
+      // popstate listener below turns into "go to previous step" or,
+      // from step 1, "return to the affidavit intro page".
+      var suppressHistoryPush = false;
+
+      function startGenerator(fromPopState) {
+        document.getElementById("introSection").style.display = "none";
+        document.getElementById("stepperBar").classList.remove("hidden");
+        document
+          .getElementById("generatorContainer")
+          .classList.remove("hidden");
+        goToStep(1, fromPopState);
+      }
+
+      function backToAffidavitService(fromPopState) {
+        if (
+          !fromPopState &&
+          formDirty &&
+          !confirm(
+            "You have unsaved changes. Leave and discard this affidavit draft?",
+          )
+        )
+          return;
+        document.getElementById("generatorContainer").classList.add("hidden");
+        document.getElementById("stepperBar").classList.add("hidden");
+        document.getElementById("introSection").style.display = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        formDirty = false;
+        if (!fromPopState) {
+          suppressHistoryPush = true;
+          history.pushState({ page: "intro" }, "", "#intro");
+          suppressHistoryPush = false;
+        }
+      }
+
+      // Mark the very first history entry as "intro" so the back button
+      // has somewhere sensible to land once all generator steps are popped.
+      history.replaceState({ page: "intro" }, "", location.href);
+
+      window.addEventListener("popstate", function (e) {
+        var state = e.event ? e.event.state : e.state;
+        suppressHistoryPush = true;
+        if (!state || state.page === "intro") {
+          backToAffidavitService(true);
+        } else if (state.page === "generator") {
+          startGenerator(true);
+          goToStep(state.step, true);
+        }
+        suppressHistoryPush = false;
+      });
+
+      window.addEventListener("beforeunload", function (e) {
+        if (formDirty) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+
+      // ============================================================
+      // FIELD ERROR HELPERS
+      // ============================================================
+      function setFieldError(fieldId, groupEl) {
+        var el = groupEl || document.getElementById(fieldId);
+        var msg = document.getElementById(fieldId + "-error");
+        if (el) {
+          el.classList.add("field-invalid");
+          el.setAttribute("aria-invalid", "true");
+        }
+        if (msg) msg.classList.add("show");
+      }
+      function clearFieldError(fieldId) {
+        var el = document.getElementById(fieldId);
+        var msg = document.getElementById(fieldId + "-error");
+        if (el) {
+          el.classList.remove("field-invalid");
+          el.removeAttribute("aria-invalid");
+        }
+        if (msg) msg.classList.remove("show");
+      }
+      function focusFirstInvalid(ids) {
+        for (var i = 0; i < ids.length; i++) {
+          var el = document.getElementById(ids[i]);
+          if (el && el.classList.contains("field-invalid")) {
+            el.focus();
+            return;
+          }
+        }
+      }
+
+      // ============================================================
+      // STEP VALIDATION
+      // ============================================================
+      function validateStep2() {
+        var ok = true;
+        var purpose = document.getElementById("afdPurpose");
+        clearFieldError("afdPurpose");
+        clearFieldError("points");
+        if (!purpose.value.trim()) {
+          setFieldError("afdPurpose");
+          ok = false;
+        }
+        if (
+          points.filter(function (p) {
+            return p.trim();
+          }).length === 0
+        ) {
+          setFieldError("points", document.getElementById("pointsContainer"));
+          ok = false;
+        }
+        return ok;
+      }
+
+      function validateStep3() {
+        var ok = true;
+        var required = [
+          "afdNameEn",
+          "afdNameBn",
+          "afdFather",
+          "afdMother",
+          "afdDob",
+          "afdAge",
+          "afdProfession",
+          "afdDocNumber",
+        ];
+        required.forEach(function (id) {
+          clearFieldError(id);
+          var val = getVal(id).trim();
+          if (!val) {
+            setFieldError(id);
+            ok = false;
+          }
+        });
+        var age = parseInt(getVal("afdAge"), 10);
+        if (getVal("afdAge") && (isNaN(age) || age < 0 || age > 130)) {
+          setFieldError("afdAge");
+          ok = false;
+        }
+
+        clearFieldError("afdPermGroup");
+        var permHouse = getVal("afdPermHouse").trim();
+        var permUpazila = getVal("afdPermUpazila").trim();
+        var permDistrict = getVal("afdPermDistrict").trim();
+        if (!permHouse || !permUpazila || !permDistrict) {
+          setFieldError(
+            "afdPermGroup",
+            document.getElementById("afdPermHouse").closest("div"),
+          );
+          ok = false;
+        }
+
+        if (!ok) focusFirstInvalid(required.concat(["afdPermHouse"]));
+        return ok;
+      }
+
+      function validateStep4() {
+        clearFieldError("afdDeclare");
+        var checkbox = document.getElementById("afdDeclare");
+        if (!checkbox.checked) {
+          setFieldError("afdDeclare");
+          var wrap = document.getElementById("declareWrap");
+          wrap.classList.add("shake");
+          setTimeout(function () {
+            wrap.classList.remove("shake");
+          }, 500);
+          checkbox.focus();
+          return false;
+        }
+        return true;
+      }
+
+      function attemptStepChange(targetStep) {
+        formDirty = true;
+        if (currentStep === 2 && targetStep > currentStep && !validateStep2()) {
+          showToast("Please complete the required fields");
+          return;
+        }
+        if (currentStep === 3 && targetStep > currentStep && !validateStep3()) {
+          showToast("Please complete the required fields");
+          return;
+        }
+        goToStep(targetStep);
+      }
+
+      // ============================================================
+      // STEP 1: TYPE SELECTION
       // ============================================================
       function renderTypes() {
         var grid = document.getElementById("typeGrid");
@@ -1488,7 +2040,9 @@
         grid.innerHTML = AFFIDAVIT_TYPES.map(function (t, i) {
           var sel = t === selectedType;
           return (
-            '<button type="button" class="text-left p-3.5 border-2 rounded-xl transition-all ' +
+            '<button type="button" role="radio" aria-checked="' +
+            sel +
+            '" class="text-left p-3.5 border-2 rounded-xl transition-all ' +
             (sel
               ? "border-gold bg-gold-light/30"
               : "border-[#e2e8f0] bg-white hover:border-gold/50") +
@@ -1536,9 +2090,11 @@
 
       function selectType(el, type) {
         selectedType = type;
+        formDirty = true;
         document.querySelectorAll("#typeGrid button").forEach(function (b) {
           b.classList.remove("border-gold", "bg-gold-light/30");
           b.classList.add("border-[#e2e8f0]", "bg-white");
+          b.setAttribute("aria-checked", "false");
           var icon = b.querySelector(".material-symbols-outlined");
           if (icon) {
             icon.classList.remove("text-gold");
@@ -1547,6 +2103,7 @@
         });
         el.classList.remove("border-[#e2e8f0]", "bg-white");
         el.classList.add("border-gold", "bg-gold-light/30");
+        el.setAttribute("aria-checked", "true");
         var iconEl = el.querySelector(".material-symbols-outlined");
         if (iconEl) {
           iconEl.classList.remove("text-secondary");
@@ -1555,7 +2112,7 @@
       }
 
       // ============================================================
-      // 4. STEP 2: POINTS MANAGEMENT
+      // STEP 2: POINTS
       // ============================================================
       function renderPoints() {
         var container = document.getElementById("pointsContainer");
@@ -1578,12 +2135,13 @@
               (idx + 1) +
               '" onchange="updatePoint(' +
               idx +
-              ', this.value)" />' +
-              '<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-error transition-colors" onclick="removePoint(' +
+              ', this.value)" oninput="clearFieldError(\'points\')" />' +
+              '<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-error transition-colors" aria-label="Remove point ' +
+              (idx + 1) +
+              '" onclick="removePoint(' +
               idx +
               ')"><span class="material-symbols-outlined text-[18px]">delete</span></button>' +
-              "</div>" +
-              "</div>"
+              "</div></div>"
             );
           })
           .join("");
@@ -1591,20 +2149,23 @@
 
       function addPoint() {
         points.push("");
+        formDirty = true;
         renderPoints();
         var inp = document.querySelectorAll("#pointsContainer input");
         if (inp.length) inp[inp.length - 1].focus();
       }
       function removePoint(idx) {
         points.splice(idx, 1);
+        formDirty = true;
         renderPoints();
       }
       function updatePoint(idx, val) {
         points[idx] = val;
+        formDirty = true;
       }
 
       // ============================================================
-      // 5. STEP 3: ADDRESS TOGGLE
+      // STEP 3: ADDRESS TOGGLE
       // ============================================================
       function togglePresentAddress() {
         var checked = document.getElementById("sameAddress").checked;
@@ -1621,13 +2182,44 @@
       }
 
       // ============================================================
-      // 6. FILE UPLOAD
+      // FILE UPLOAD (with drag & drop + size/type validation)
       // ============================================================
+      var ALLOWED_EXT = [".pdf", ".jpg", ".jpeg", ".png"];
+
+      function handleDragOver(e) {
+        e.preventDefault();
+        document.getElementById("uploadZone").classList.add("drag-over");
+      }
+      function handleDragLeave(e) {
+        e.preventDefault();
+        document.getElementById("uploadZone").classList.remove("drag-over");
+      }
+      function handleDrop(e) {
+        e.preventDefault();
+        document.getElementById("uploadZone").classList.remove("drag-over");
+        processFiles(e.dataTransfer.files);
+      }
       function handleFileUpload(e) {
-        var files = e.target.files;
-        for (var i = 0; i < files.length; i++) uploadedFiles.push(files[i]);
-        renderFileList();
+        processFiles(e.target.files);
         e.target.value = "";
+      }
+
+      function processFiles(fileListObj) {
+        var rejected = false;
+        for (var i = 0; i < fileListObj.length; i++) {
+          var f = fileListObj[i];
+          var ext = "." + f.name.split(".").pop().toLowerCase();
+          if (ALLOWED_EXT.indexOf(ext) === -1 || f.size > MAX_FILE_SIZE) {
+            rejected = true;
+            continue;
+          }
+          uploadedFiles.push(f);
+        }
+        document
+          .getElementById("upload-error")
+          .classList.toggle("show", rejected);
+        formDirty = true;
+        renderFileList();
       }
 
       function renderFileList() {
@@ -1640,12 +2232,14 @@
           .map(function (f, idx) {
             return (
               '<div class="flex items-center justify-between bg-surface p-2.5 rounded-xl text-sm">' +
-              '<span class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">description</span> ' +
+              '<span class="flex items-center gap-2 truncate"><span class="material-symbols-outlined text-[18px] shrink-0">description</span> ' +
               f.name +
               " (" +
               (f.size / 1024).toFixed(1) +
               " KB)</span>" +
-              '<button class="text-error hover:text-red-700" onclick="removeFile(' +
+              '<button class="text-error hover:text-red-700 shrink-0" aria-label="Remove file ' +
+              f.name +
+              '" onclick="removeFile(' +
               idx +
               ')"><span class="material-symbols-outlined text-[18px]">delete</span></button>' +
               "</div>"
@@ -1653,36 +2247,55 @@
           })
           .join("");
       }
-
       function removeFile(idx) {
         uploadedFiles.splice(idx, 1);
         renderFileList();
       }
 
       // ============================================================
-      // 7. NAVIGATION
+      // NAVIGATION / STEPPER
       // ============================================================
-      function goToStep(step) {
+      function goToStep(step, fromPopState) {
         currentStep = step;
+        if (step > highestStepReached) highestStepReached = step;
 
-        // Reset success message visibility when moving away from step 4
+        if (!fromPopState && !suppressHistoryPush) {
+          history.pushState(
+            { page: "generator", step: step },
+            "",
+            "#step" + step,
+          );
+        }
+
         if (step !== 4) {
           document.getElementById("successMessage").classList.add("hidden");
           document.getElementById("submitBtn").classList.remove("hidden");
         }
 
-        // Show/hide step containers
         for (var i = 1; i <= 4; i++) {
           var el = document.getElementById("step" + i);
           if (el) el.classList.toggle("hidden", i !== step);
         }
 
-        // Update stepper dots and labels
         document.querySelectorAll(".step-dot").forEach(function (dot) {
           var s = parseInt(dot.dataset.step, 10);
-          dot.classList.remove("active", "done");
-          if (s === step) dot.classList.add("active");
-          else if (s < step) dot.classList.add("done");
+          dot.classList.remove("active", "done", "clickable");
+          if (s === step) {
+            dot.classList.add("active");
+            dot.setAttribute("tabindex", "0");
+            dot.setAttribute("aria-current", "step");
+          } else {
+            dot.removeAttribute("aria-current");
+          }
+          if (s < step || s <= highestStepReached) {
+            dot.classList.add("clickable");
+            dot.setAttribute("tabindex", "0");
+            dot.removeAttribute("aria-disabled");
+            if (s < step) dot.classList.add("done");
+          } else if (s !== step) {
+            dot.setAttribute("tabindex", "-1");
+            dot.setAttribute("aria-disabled", "true");
+          }
         });
 
         document.querySelectorAll(".step-label").forEach(function (label) {
@@ -1693,28 +2306,54 @@
           else label.classList.add("inactive");
         });
 
-        // Update step lines
         document.querySelectorAll(".step-line").forEach(function (line) {
           var s = parseInt(line.dataset.line, 10);
           line.classList.toggle("done", s < step);
         });
 
-        // If step 4, build the full preview
         if (step === 4) buildPreview();
-
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
+      // Wire up clickable stepper dots (jump back to any visited step)
+      document.addEventListener("click", function (e) {
+        var dot = e.target.closest(".step-dot.clickable");
+        if (dot) {
+          var target = parseInt(dot.dataset.step, 10);
+          if (target !== currentStep) goToStep(target);
+        }
+      });
+      document.addEventListener("keydown", function (e) {
+        if (
+          (e.key === "Enter" || e.key === " ") &&
+          e.target.classList.contains("step-dot") &&
+          e.target.classList.contains("clickable")
+        ) {
+          e.preventDefault();
+          goToStep(parseInt(e.target.dataset.step, 10));
+        }
+      });
+
       // ============================================================
-      // 8. HELPERS
+      // HELPERS
       // ============================================================
       function getVal(id) {
         var el = document.getElementById(id);
         return el ? el.value : "";
       }
+      HTMLElement.prototype.closest =
+        HTMLElement.prototype.closest ||
+        function (sel) {
+          var el = this;
+          while (el) {
+            if (el.matches(sel)) return el;
+            el = el.parentElement;
+          }
+          return null;
+        };
 
       // ============================================================
-      // 9. STEP 4 PREVIEW
+      // STEP 4 PREVIEW
       // ============================================================
       function buildPreview() {
         var name = getVal("afdNameEn") || "[DEPONENT NAME]";
@@ -1751,7 +2390,6 @@
         var nationality = getVal("afdNationality") || "Bangladeshi";
         var purpose = getVal("afdPurpose") || "[PURPOSE OF AFFIDAVIT]";
 
-        // Build summary table
         var summary = document.getElementById("afdSummary");
         var rows = [
           ["Type", selectedType],
@@ -1776,36 +2414,177 @@
             return (
               '<div class="flex justify-between text-sm border-b border-[#e2e8f0]/50 py-1.5"><span class="text-secondary">' +
               r[0] +
-              '</span><span class="font-medium">' +
+              '</span><span class="font-medium text-right ml-4">' +
               r[1] +
               "</span></div>"
             );
           })
           .join("");
+
+        buildDocumentPreview({
+          name: name,
+          father: father,
+          mother: mother,
+          profession: profession,
+          docType: docType,
+          docNumber: docNumber,
+          permAddr: permAddr,
+          presAddr: presAddr,
+          religion: religion,
+          nationality: nationality,
+          purpose: purpose,
+          same: same,
+        });
+      }
+
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+      function blank(val, placeholder) {
+        var v = (val || "").trim();
+        return v
+          ? "<span>" + esc(v) + "</span>"
+          : '<span class="blank">' + esc(placeholder) + "</span>";
+      }
+
+      function buildDocumentPreview(d) {
+        var age = getVal("afdAge") || "____";
+        var filledPoints = points.filter(function (p) {
+          return p.trim();
+        });
+        var pointsHtml = filledPoints.length
+          ? filledPoints
+              .map(function (p) {
+                return "<li>" + esc(p) + "</li>";
+              })
+              .join("")
+          : '<li class="blank">Add declaratory points in Step 2 to see them here.</li>';
+
+        var html =
+          '<div class="doc-title">Affidavit</div>' +
+          '<div class="doc-subtitle">' +
+          esc(selectedType) +
+          "</div>" +
+          '<div class="doc-intro">I, ' +
+          blank(d.name, "[Full Name]") +
+          " (Bangla: " +
+          blank(getVal("afdNameBn"), "[বাংলা নাম]") +
+          "), son/daughter of " +
+          blank(d.father, "[Father's/Husband's Name]") +
+          " and " +
+          blank(d.mother, "[Mother's Name]") +
+          ', aged about <span class="blank">' +
+          esc(age) +
+          "</span> years, by faith " +
+          blank(d.religion, "[Religion]") +
+          ", by profession " +
+          blank(d.profession, "[Profession]") +
+          ", holder of " +
+          blank(d.docType, "[Document Type]") +
+          " No. " +
+          blank(d.docNumber, "[Document Number]") +
+          ", nationality " +
+          blank(d.nationality, "Bangladeshi") +
+          ", permanently residing at " +
+          blank(d.permAddr, "[Permanent Address]") +
+          (d.same
+            ? ""
+            : ", presently residing at " +
+              blank(d.presAddr, "[Present Address]")) +
+          ", do hereby solemnly affirm and declare as follows regarding " +
+          blank(d.purpose, "[Purpose of Affidavit]") +
+          ":</div>" +
+          '<ol class="doc-points">' +
+          pointsHtml +
+          "</ol>" +
+          '<div class="doc-closing">That the statements made above are true to the best of my knowledge and belief, and nothing material has been concealed therein.</div>' +
+          '<div class="doc-sign-row">' +
+          '<div class="doc-sign-block"><div class="doc-sign-line"></div><div class="doc-sign-label">Signature of Deponent</div><div class="doc-sign-label" style="margin-top:2px;font-weight:600;color:#1c1a15;">' +
+          esc((d.name || "").trim() || "[Full Name]") +
+          "</div></div>" +
+          '<div class="doc-sign-block"><div class="doc-sign-line"></div><div class="doc-sign-label">Identified &amp; Attested By</div><div class="doc-sign-label">(Notary / Advocate)</div></div>' +
+          "</div>";
+
+        document.getElementById("afdDocumentPreview").innerHTML = html;
+      }
+
+      function switchStep4Tab(tab) {
+        var showSummary = tab === "summary";
+        document
+          .getElementById("tabPanelSummary")
+          .classList.toggle("hidden", !showSummary);
+        document
+          .getElementById("tabPanelDocument")
+          .classList.toggle("hidden", showSummary);
+        document
+          .getElementById("tabBtnSummary")
+          .classList.toggle("border-gold", showSummary);
+        document
+          .getElementById("tabBtnSummary")
+          .classList.toggle("border-transparent", !showSummary);
+        document
+          .getElementById("tabBtnSummary")
+          .classList.toggle("text-primary", showSummary);
+        document
+          .getElementById("tabBtnSummary")
+          .classList.toggle("text-secondary", !showSummary);
+        document
+          .getElementById("tabBtnSummary")
+          .setAttribute("aria-selected", showSummary);
+        document
+          .getElementById("tabBtnDocument")
+          .classList.toggle("border-gold", !showSummary);
+        document
+          .getElementById("tabBtnDocument")
+          .classList.toggle("border-transparent", showSummary);
+        document
+          .getElementById("tabBtnDocument")
+          .classList.toggle("text-primary", !showSummary);
+        document
+          .getElementById("tabBtnDocument")
+          .classList.toggle("text-secondary", showSummary);
+        document
+          .getElementById("tabBtnDocument")
+          .setAttribute("aria-selected", !showSummary);
       }
 
       // ============================================================
-      // 10. SUBMIT - shows the success popup with dashboard link
+      // SUBMIT
       // ============================================================
+      function generateReferenceNumber() {
+        var d = new Date();
+        var y = d.getFullYear();
+        var rand = Math.floor(100000 + Math.random() * 900000);
+        return "JF-" + y + "-" + rand;
+      }
+
       function submitAffidavit() {
-        if (!document.getElementById("afdDeclare").checked) {
-          alert("Please confirm the declaration before submitting.");
-          return;
-        }
+        if (!validateStep4()) return;
 
-        // Hide the submit button and show the success message
-        document.getElementById("submitBtn").classList.add("hidden");
-        var successEl = document.getElementById("successMessage");
-        successEl.classList.remove("hidden");
+        var btn = document.getElementById("submitBtn");
+        var btnText = document.getElementById("submitBtnText");
+        btn.disabled = true;
+        btnText.textContent = "Submitting…";
 
-        // Optional: Scroll to the top of the success message
+        // Simulate processing delay (replace with real API call)
         setTimeout(function () {
-          successEl.scrollIntoView({ behavior: "smooth", block: "center" });
-        }, 100);
+          var ref = generateReferenceNumber();
+          document.getElementById("refNumberDisplay").textContent = ref;
+          btn.classList.add("hidden");
+          var successEl = document.getElementById("successMessage");
+          successEl.classList.remove("hidden");
+          formDirty = false;
+          setTimeout(function () {
+            successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 100);
+        }, 600);
       }
 
       // ============================================================
-      // 11. INIT
+      // INIT
       // ============================================================
       window.addEventListener("load", function () {
         renderTypes();

@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Service Settings — JustiFi Advocate</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <link rel="stylesheet" href="css/lawyer.css" />
+
+  <style>
+    /* ================= HERO / STATUS BANNER ================= */
+    .avail-banner {
+      background:
+        radial-gradient(circle at 15% 25%, rgba(197, 160, 89, 0.22) 0%, transparent 45%),
+        linear-gradient(135deg, #041627 0%, #0a2740 100%);
+      border-radius: 16px;
+      padding: 22px 24px;
+      color: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .avail-banner::before {
+      content: ""; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+    }
+    .avail-banner > * { position: relative; z-index: 1; }
+
+    .avail-status-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 9999px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+      background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;
+    }
+    .avail-status-pill .dot {
+      width: 8px; height: 8px; border-radius: 50%; background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.25);
+    }
+    .avail-status-pill.offline {
+      background: #fee2e2; color: #991b1b; border-color: #fecaca;
+    }
+    .avail-status-pill.offline .dot {
+      background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.25);
+    }
+
+    /* ================= WEEKLY SCHEDULE ================= */
+    .day-row {
+      border: 1.5px solid #eef1f4;
+      border-radius: 14px;
+      background: #fff;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: all 0.22s;
+    }
+    .day-row.active {
+      border-color: rgba(197, 160, 89, 0.4);
+      background: linear-gradient(135deg, #fffdf7 0%, #ffffff 70%);
+    }
+    .day-row-head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      user-select: none;
+    }
+    .day-row-head:hover { background: rgba(248, 250, 252, 0.7); }
+
+    .day-badge {
+      width: 54px; height: 46px; border-radius: 12px;
+      background: #f1f5f9; color: #64748b;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-weight: 800; font-size: 12px; line-height: 1; gap: 2px;
+      flex-shrink: 0; transition: all 0.22s;
+    }
+    .day-badge small { font-size: 9px; font-weight: 600; opacity: 0.7; }
+    .day-row.active .day-badge { background: #C5A059; color: #fff; }
+    .day-row.active .day-badge small { opacity: 0.85; }
+
+    .day-title { flex: 1; min-width: 0; }
+    .day-name { font-size: 14px; font-weight: 700; color: #041627; margin: 0; }
+    .day-summary { font-size: 11.5px; color: #64748b; margin: 2px 0 0; }
+    .day-row.active .day-summary { color: #a07d3a; font-weight: 600; }
+
+    /* "Customize ▼" button */
+    .customize-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 10px;
+      background: #f8fafc; border: 1.5px solid #e2e8f0;
+      color: #475569;
+      font-size: 11.5px; font-weight: 700;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .customize-btn:hover {
+      border-color: #C5A059;
+      color: #a07d3a;
+      background: rgba(197, 160, 89, 0.06);
+    }
+    .day-row.active .customize-btn {
+      background: #fff;
+      border-color: rgba(197, 160, 89, 0.4);
+      color: #a07d3a;
+    }
+    .customize-btn .chev {
+      display: inline-block;
+      font-size: 10px;
+      line-height: 1;
+      transition: transform 0.25s ease;
+      transform: translateY(-1px);
+    }
+    .day-row.expanded .customize-btn .chev {
+      transform: rotate(180deg) translateY(1px);
+    }
+    .day-row.expanded .customize-btn {
+      background: #C5A059;
+      color: #fff;
+      border-color: #C5A059;
+    }
+
+    /* Expand body */
+    .day-row-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      border-top: 0 solid #eef1f4;
+    }
+    .day-row.expanded .day-row-body {
+      max-height: 1000px;
+      border-top-width: 1px;
+    }
+    .day-row-body-inner { padding: 16px; background: #f8fafc; }
+
+    /* Time slot */
+    .slot-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 12px;
+      background: #fff; border: 1.5px solid #e2e8f0;
+      margin-bottom: 8px;
+      transition: all 0.18s;
+    }
+    .slot-item:hover { border-color: rgba(197, 160, 89, 0.4); }
+    .slot-time-field {
+      flex: 1;
+      display: flex; align-items: center; gap: 8px;
+      min-width: 0;
+    }
+    .slot-time-field input[type="time"] {
+      border: none; background: transparent;
+      font-family: inherit; font-size: 13.5px; font-weight: 600;
+      color: #041627; padding: 4px 6px; border-radius: 6px;
+      cursor: pointer; width: 100%;
+    }
+    .slot-time-field input[type="time"]:focus {
+      outline: none; background: #fff;
+      box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.3);
+    }
+    .slot-sep {
+      color: #94a3b8; font-weight: 700; font-size: 12px;
+      padding: 0 2px; flex-shrink: 0;
+    }
+    .slot-delete {
+      background: none; border: none;
+      color: #94a3b8; cursor: pointer;
+      padding: 6px; border-radius: 8px;
+      display: flex; align-items: center;
+      transition: all 0.18s; flex-shrink: 0;
+    }
+    .slot-delete:hover {
+      background: rgba(220, 38, 38, 0.08); color: #dc2626;
+    }
+
+    .add-slot-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 10px;
+      border: 1.5px dashed #cbd5e1; background: transparent;
+      color: #64748b; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; transition: all 0.18s; font-family: inherit;
+    }
+    .add-slot-btn:hover {
+      border-color: #C5A059; color: #a07d3a;
+      background: rgba(197, 160, 89, 0.05);
+    }
+
+    /* Service toggle card */
+    .svc-toggle-card {
+      border: 1.5px solid #eef1f4; border-radius: 14px;
+      padding: 16px 18px; background: #fff;
+      display: flex; align-items: flex-start; gap: 14px;
+      transition: all 0.22s; position: relative; overflow: hidden;
+    }
+    .svc-toggle-card.enabled {
+      border-color: rgba(197, 160, 89, 0.35);
+      background: linear-gradient(135deg, #fffdf7 0%, #fff 60%);
+    }
+    .svc-toggle-card.enabled::before {
+      content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; background: #C5A059;
+    }
+    .svc-toggle-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: #f1f5f9; color: #475569;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.2s;
+    }
+    .svc-toggle-card.enabled .svc-toggle-icon {
+      background: #C5A059; color: #fff;
+    }
+
+    /* Blocked date chip */
+    .blocked-chip {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border-radius: 12px;
+      background: #f8fafc; border: 1.5px solid #eef1f4;
+      transition: all 0.18s;
+    }
+    .blocked-chip:hover { border-color: rgba(197, 160, 89, 0.4); }
+
+    /* Save bar */
+    .save-bar {
+      position: sticky; bottom: 12px;
+      background: #041627; color: #fff;
+      border-radius: 14px; padding: 12px 16px;
+      display: none; align-items: center; justify-content: space-between;
+      gap: 12px; box-shadow: 0 12px 40px rgba(4,22,39,0.25);
+      z-index: 20; margin-top: 20px;
+      animation: slideUp 0.4s ease;
+    }
+    .save-bar.show { display: flex; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================= MODAL SYSTEM ================= */
+    .lp-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(4, 22, 39, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .lp-modal-overlay.show { display: flex; }
+
+    .lp-modal {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(4, 22, 39, 0.28);
+      animation: modalIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .lp-modal-header {
+      padding: 24px 26px 18px;
+      display: flex; align-items: flex-start; gap: 14px;
+      border-bottom: 1px solid #eef1f4;
+    }
+    .lp-modal-header.info  { background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 60%); }
+    .lp-modal-header.warn  { background: linear-gradient(135deg, #fff7ed 0%, #ffffff 60%); }
+    .lp-modal-header.danger{ background: linear-gradient(135deg, #fef2f2 0%, #ffffff 60%); }
+
+    .lp-modal-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .lp-modal-icon.info   { background: #dbeafe; color: #1e40af; }
+    .lp-modal-icon.warn   { background: #fef3c7; color: #b45309; }
+    .lp-modal-icon.danger { background: #fee2e2; color: #991b1b; }
+    .lp-modal-icon .material-symbols-outlined { font-size: 26px; }
+
+    .lp-modal-title {
+      font-size: 18px; font-weight: 800; color: #041627;
+      margin: 0 0 4px; line-height: 1.3;
+    }
+    .lp-modal-subtitle {
+      font-size: 13px; color: #64748b; margin: 0; line-height: 1.5;
+    }
+
+    .lp-modal-close {
+      position: absolute; top: 14px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: #94a3b8; padding: 6px; border-radius: 8px;
+      display: flex; transition: all 0.18s;
+    }
+    .lp-modal-close:hover { background: #f1f3f5; color: #041627; }
+
+    .lp-modal-body { padding: 20px 26px 8px; }
+    .lp-modal-footer {
+      padding: 16px 26px 24px;
+      display: flex; flex-wrap: wrap; gap: 10px;
+      justify-content: flex-end;
+      border-top: 1px solid #eef1f4;
+      margin-top: 12px;
+    }
+    .lp-modal-footer .lp-btn { min-width: 110px; }
+
+    /* Warning box */
+    .lp-warning-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      font-size: 12.5px;
+      color: #78350f;
+      line-height: 1.6;
+    }
+    .lp-warning-box.danger {
+      background: #fee2e2; border-left-color: #dc2626; color: #7f1d1d;
+    }
+    .lp-warning-box strong { color: #7c2d12; }
+    .lp-warning-box.danger strong { color: #991b1b; }
+    .lp-warning-box .wc-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 4px 0;
+    }
+    .lp-warning-box .wc-row .material-symbols-outlined {
+      font-size: 16px; color: #b45309;
+    }
+    .lp-warning-box.danger .wc-row .material-symbols-outlined { color: #dc2626; }
+
+    /* Modal fields */
+    .lp-modal-field { margin-bottom: 16px; }
+    .lp-modal-field label {
+      display: block; font-size: 11.5px; font-weight: 700;
+      color: #334155; text-transform: uppercase;
+      letter-spacing: 0.4px; margin-bottom: 6px;
+    }
+    .lp-modal-field label .req { color: #dc2626; }
+    .lp-modal-field label .opt {
+      font-weight: 500; color: #94a3b8;
+      text-transform: none; letter-spacing: 0;
+      font-size: 11px; margin-left: 4px;
+    }
+    .lp-modal-field .helper {
+      font-size: 11px; color: #94a3b8;
+      margin-top: 5px; line-height: 1.5;
+    }
+    .field-error {
+      font-size: 11.5px; color: #dc2626;
+      margin-top: 4px; display: none;
+    }
+    .field-error.show { display: block; }
+    .lp-input.invalid {
+      border-color: #dc2626 !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+      background: #fff5f5 !important;
+    }
+
+    .lp-modal-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .avail-banner { padding: 18px; }
+      .day-badge { width: 46px; height: 40px; font-size: 11px; }
+      .customize-btn { font-size: 10.5px; padding: 5px 10px; }
+      .customize-btn .label-text { display: none; }
+      .lp-modal { border-radius: 16px; }
+      .lp-modal-header { padding: 20px 18px 14px; }
+      .lp-modal-body { padding: 16px 18px 6px; }
+      .lp-modal-footer { padding: 14px 18px 20px; }
+      .lp-modal-footer .lp-btn { flex: 1; min-width: 0; }
+      .lp-modal-grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body class="lawyer-body" data-page="service-settings" data-requires-auth="1"
+      data-header-title="Service Settings"
+      data-header-subtitle="Manage availability, professional profile & service offerings">
+
+  <div class="lawyer-shell">
+    <div id="lawyerSidebarPlaceholder"></div>
+
+    <div class="lawyer-main">
+      <div id="lawyerHeaderPlaceholder"></div>
+
+      <div class="lawyer-content">
+        <div class="max-w-[1100px] mx-auto space-y-6">
+
+          <!-- ============ 1. OVERALL AVAILABILITY BANNER ============ -->
+          <div class="avail-banner">
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-widest text-[#C5A059] m-0 mb-1">Overall Availability</p>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-white m-0 mb-1" id="availHeadline">You are currently available for work</h2>
+              <p class="text-sm text-white/70 m-0">Turn this off if you're unavailable for upcoming days. Admin won't assign new services to you while offline.</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <span class="avail-status-pill" id="availStatusPill">
+                <span class="dot"></span> AVAILABLE
+              </span>
+              <label class="switch">
+                <input type="checkbox" id="overallAvailabilityToggle" checked onchange="requestOverallToggle(this)" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div id="offlineNoticeBox" class="lp-card p-5 hidden" style="border-color:#fecaca;background:#fff5f5;">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-red-500 mt-0.5">info</span>
+              <div class="flex-1">
+                <p class="text-sm font-bold text-red-700 m-0 mb-1">You are currently offline</p>
+                <p class="text-xs text-red-700/80 m-0 mb-2" id="offlineNoticeReason">—</p>
+                <p class="text-xs text-red-700/80 m-0" id="offlineNoticeDates">—</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ 2. WEEKLY SCHEDULE ============ -->
+          <div class="lp-card p-5 sm:p-7">
+            <div class="lp-section-title">
+              <div class="icon-wrap"><span class="material-symbols-outlined">calendar_month</span></div>
+              Weekly Schedule &amp; Time Slots
+            </div>
+            <p class="text-xs text-secondary -mt-2 mb-5">
+              Enable the days you work. Click <strong>Customize ▼</strong> on any day to manage its own custom time slots. Add as many slots as you need.
+            </p>
+
+            <div id="weeklyScheduleWrap"></div>
+          </div>
+
+          <!-- ============ 3. DATE EXCEPTIONS ============ -->
+          <div class="lp-card p-5 sm:p-7">
+            <div class="lp-section-title">
+              <div class="icon-wrap"><span class="material-symbols-outlined">event_busy</span></div>
+              Date-Specific Exceptions
+            </div>
+            <p class="text-xs text-secondary -mt-2 mb-4">
+              Block specific dates (leave, holidays, court hearings) — even if they fall on your working days.
+            </p>
+
+            <button type="button" class="lp-btn lp-btn-dark mb-4" onclick="openBlockedDateModal()">
+              <span class="material-symbols-outlined text-[18px]">add</span> Add Blocked Date
+            </button>
+
+            <div id="blockedDatesList" class="space-y-2">
+              <div class="blocked-chip">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-[#a07d3a]">event_busy</span>
+                  <div>
+                    <p class="text-sm font-semibold m-0 text-primary">Oct 18, 2026</p>
+                    <p class="text-xs text-secondary m-0">Supreme Court hearing — unavailable</p>
+                  </div>
+                </div>
+                <button type="button" class="text-secondary hover:text-red-600 transition-colors"
+                  onclick="this.parentElement.remove(); showSaveBar();">
+                  <span class="material-symbols-outlined text-[18px]">delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ 4. SERVICE AVAILABILITY ============ -->
+          <div class="lp-card p-5 sm:p-7">
+            <div class="lp-section-title">
+              <div class="icon-wrap"><span class="material-symbols-outlined">toggle_on</span></div>
+              Service Availability
+            </div>
+            <p class="text-xs text-secondary -mt-2 mb-5">
+              Toggle each service ON/OFF. When OFF, admin will not assign new requests of that type to you.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="svc-toggle-card enabled" id="svcCard-consultancy">
+                <div class="svc-toggle-icon"><span class="material-symbols-outlined">gavel</span></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between gap-3 mb-1">
+                    <h4 class="text-sm font-bold text-primary m-0">Consultancy</h4>
+                    <label class="switch">
+                      <input type="checkbox" checked data-service="consultancy" data-label="Consultancy" onchange="requestServiceToggle(this)" />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <p class="text-xs text-secondary m-0 leading-relaxed">Client consultation via video call or chamber visit.</p>
+                </div>
+              </div>
+
+              <div class="svc-toggle-card enabled" id="svcCard-affidavit">
+                <div class="svc-toggle-icon"><span class="material-symbols-outlined">description</span></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between gap-3 mb-1">
+                    <h4 class="text-sm font-bold text-primary m-0">Affidavit Workspace</h4>
+                    <label class="switch">
+                      <input type="checkbox" checked data-service="affidavit" data-label="Affidavit" onchange="requestServiceToggle(this)" />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <p class="text-xs text-secondary m-0 leading-relaxed">Drafting and reviewing client affidavits.</p>
+                </div>
+              </div>
+
+              <div class="svc-toggle-card enabled" id="svcCard-land">
+                <div class="svc-toggle-icon"><span class="material-symbols-outlined">home_work</span></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between gap-3 mb-1">
+                    <h4 class="text-sm font-bold text-primary m-0">Land &amp; Property</h4>
+                    <label class="switch">
+                      <input type="checkbox" checked data-service="land" data-label="Land & Property" onchange="requestServiceToggle(this)" />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <p class="text-xs text-secondary m-0 leading-relaxed">Title verification, khatian tracing, property document review.</p>
+                </div>
+              </div>
+
+              <div class="svc-toggle-card enabled" id="svcCard-vat">
+                <div class="svc-toggle-icon"><span class="material-symbols-outlined">receipt_long</span></div>
+                <div class="flex-1">
+                  <div class="flex items-center justify-between gap-3 mb-1">
+                    <h4 class="text-sm font-bold text-primary m-0">VAT &amp; Tax</h4>
+                    <label class="switch">
+                      <input type="checkbox" checked data-service="vat" data-label="VAT & Tax" onchange="requestServiceToggle(this)" />
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <p class="text-xs text-secondary m-0 leading-relaxed">VAT registration, tax filing, business compliance advisory.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ 5. CONSULTATION SETTINGS ============ -->
+          <div class="lp-card p-5 sm:p-7">
+            <div class="lp-section-title">
+              <div class="icon-wrap"><span class="material-symbols-outlined">payments</span></div>
+              Consultation Settings
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="lp-field-label">Consultation Fee (৳)</label>
+                <input type="number" class="lp-input" value="3500" oninput="showSaveBar()" />
+              </div>
+              <div>
+                <label class="lp-field-label">Session Duration</label>
+                <select class="lp-input" onchange="showSaveBar()">
+                  <option>30 minutes</option>
+                  <option selected>45 minutes</option>
+                  <option>60 minutes</option>
+                </select>
+              </div>
+              <div>
+                <label class="lp-field-label">Consultation Mode</label>
+                <select class="lp-input" onchange="showSaveBar()">
+                  <option>Online &amp; Chamber (both)</option>
+                  <option>Online only</option>
+                  <option>Chamber only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 p-4 rounded-xl bg-[#f8fafc] border border-[#eef1f4]">
+              <p class="text-xs text-secondary m-0">
+                <strong class="text-primary">Note:</strong> JustiFi adds a small platform charge on top of your fee, so your full consultation fee is preserved.
+              </p>
+            </div>
+          </div>
+
+          <!-- ============ 6. PROFESSIONAL PROFILE ============ -->
+          <div class="lp-card p-5 sm:p-7">
+            <div class="lp-section-title">
+              <div class="icon-wrap"><span class="material-symbols-outlined">workspace_premium</span></div>
+              Professional Profile
+            </div>
+            <p class="text-xs text-secondary -mt-2 mb-5">
+              These details appear on your public advocate profile.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="lp-field-label">Court / Chamber Name</label>
+                <input type="text" class="lp-input" value="Supreme Court of Bangladesh, High Court Division" oninput="showSaveBar()" />
+              </div>
+              <div>
+                <label class="lp-field-label">Enrollment Year</label>
+                <input type="text" class="lp-input" value="2012" oninput="showSaveBar()" />
+              </div>
+              <div>
+                <label class="lp-field-label">Bar Council Sanad No.</label>
+                <input type="text" class="lp-input" value="BC-2012-4589" oninput="showSaveBar()" />
+              </div>
+              <div>
+                <label class="lp-field-label">Designation</label>
+                <input type="text" class="lp-input" value="Senior Advocate" oninput="showSaveBar()" />
+              </div>
+            </div>
+
+            <!-- Practice Areas -->
+            <div class="mt-6">
+              <label class="lp-field-label">Practice Areas</label>
+              <div class="flex flex-wrap gap-2" id="practiceAreaChips">
+                <span class="lp-chip">Corporate Law <span class="remove" onclick="this.parentElement.remove(); showSaveBar();">×</span></span>
+                <span class="lp-chip">Tax &amp; VAT <span class="remove" onclick="this.parentElement.remove(); showSaveBar();">×</span></span>
+                <button type="button" class="lp-add-chip" onclick="openPracticeAreaModal()">
+                  <span class="material-symbols-outlined text-[15px]">add</span> Add Area
+                </button>
+              </div>
+            </div>
+
+            <!-- Languages -->
+            <div class="mt-6">
+              <label class="lp-field-label">Languages Spoken</label>
+              <div class="flex flex-wrap gap-2" id="languageChips">
+                <span class="lp-chip">English <span class="remove" onclick="this.parentElement.remove(); showSaveBar();">×</span></span>
+                <span class="lp-chip">Bengali <span class="remove" onclick="this.parentElement.remove(); showSaveBar();">×</span></span>
+                <button type="button" class="lp-add-chip" onclick="openLanguageModal()">
+                  <span class="material-symbols-outlined text-[15px]">add</span> Add Language
+                </button>
+              </div>
+            </div>
+
+            <!-- Education -->
+            <div class="mt-6">
+              <label class="lp-field-label">Education &amp; Qualifications</label>
+              <div class="space-y-3" id="educationList">
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-[#f8fafc] border border-[#eef1f4]">
+                  <span class="material-symbols-outlined text-[#a07d3a] mt-0.5">school</span>
+                  <div class="flex-1">
+                    <p class="text-sm font-bold text-primary m-0">LL.M — Corporate &amp; Tax Law</p>
+                    <p class="text-xs text-secondary m-0 mt-0.5">University of Dhaka · 2011</p>
+                  </div>
+                  <button type="button" class="text-secondary hover:text-red-600" onclick="this.parentElement.remove(); showSaveBar();">
+                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="lp-btn lp-btn-outline mt-3" onclick="openEducationModal()">
+                <span class="material-symbols-outlined text-[18px]">add</span> Add Education
+              </button>
+            </div>
+
+            <!-- Awards -->
+            <div class="mt-6">
+              <label class="lp-field-label">Awards &amp; Achievements</label>
+              <div class="space-y-3" id="awardList">
+                <div class="flex items-start gap-3 p-3 rounded-xl bg-[#f8fafc] border border-[#eef1f4]">
+                  <span class="material-symbols-outlined text-[#a07d3a] mt-0.5">emoji_events</span>
+                  <div class="flex-1">
+                    <p class="text-sm font-bold text-primary m-0">Best Corporate Lawyer Award</p>
+                    <p class="text-xs text-secondary m-0 mt-0.5">Dhaka Bar Association · 2022</p>
+                  </div>
+                  <button type="button" class="text-secondary hover:text-red-600" onclick="this.parentElement.remove(); showSaveBar();">
+                    <span class="material-symbols-outlined text-[18px]">delete</span>
+                  </button>
+                </div>
+              </div>
+              <button type="button" class="lp-btn lp-btn-outline mt-3" onclick="openAwardModal()">
+                <span class="material-symbols-outlined text-[18px]">add</span> Add Award
+              </button>
+            </div>
+          </div>
+
+          <!-- ============ SAVE BAR ============ -->
+          <div class="save-bar" id="saveBar">
+            <p class="text-[13px] font-medium m-0 opacity-90">
+              <span class="material-symbols-outlined align-middle mr-1" style="font-size:18px;">info</span>
+              You have unsaved changes.
+            </p>
+            <div class="flex gap-2">
+              <button type="button" class="lp-btn" style="background:rgba(255,255,255,0.1);color:#fff;" onclick="discardChanges()">
+                Discard
+              </button>
+              <button type="button" class="lp-btn lp-btn-primary" onclick="saveSettings()">
+                <span class="material-symbols-outlined text-[18px]">save</span> Save Settings
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="lawyerFooterPlaceholder"></div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       STATIC MODALS
+       ========================================================= -->
+
+  <!-- GO OFFLINE MODAL -->
+  <div class="lp-modal-overlay" id="offlineModal">
+    <div class="lp-modal">
+      <button class="lp-modal-close" onclick="cancelOverallToggle()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="lp-modal-header danger">
+        <div class="lp-modal-icon danger">
+          <span class="material-symbols-outlined">power_settings_new</span>
+        </div>
+        <div>
+          <h3 class="lp-modal-title">Go Offline?</h3>
+          <p class="lp-modal-subtitle">You're about to pause all new work assignments.</p>
+        </div>
+      </div>
+
+      <div class="lp-modal-body">
+        <div class="lp-warning-box danger">
+          <p style="margin:0 0 6px;"><strong>Heads up!</strong> You currently have upcoming assignments in your queue:</p>
+          <div class="wc-row"><span class="material-symbols-outlined">gavel</span><span><strong>4</strong> pending consultations</span></div>
+          <div class="wc-row"><span class="material-symbols-outlined">description</span><span><strong>2</strong> affidavits in progress</span></div>
+          <div class="wc-row"><span class="material-symbols-outlined">home_work</span><span><strong>1</strong> land &amp; property verification</span></div>
+          <div class="wc-row"><span class="material-symbols-outlined">receipt_long</span><span><strong>0</strong> VAT &amp; tax advisory</span></div>
+          <p style="margin:8px 0 0;font-size:11.5px;opacity:0.85;">
+            These will remain in your queue. Only <strong>new</strong> assignments will be blocked while you are offline.
+          </p>
+        </div>
+
+        <div class="lp-modal-field">
+          <label>Reason for going offline <span class="req">*</span></label>
+          <textarea id="offlineReasonInput" class="lp-input" rows="3"
+                    placeholder="e.g., Attending Supreme Court hearings in Dhaka until Oct 22..."></textarea>
+          <p class="field-error" id="offlineReasonErr">Please provide a reason.</p>
+        </div>
+
+        <div class="lp-modal-grid-2">
+          <div class="lp-modal-field" style="margin-bottom:0;">
+            <label>Unavailable from <span class="req">*</span></label>
+            <input type="date" id="offlineFromInput" class="lp-input" />
+            <p class="field-error" id="offlineFromErr">Select a start date.</p>
+          </div>
+          <div class="lp-modal-field" style="margin-bottom:0;">
+            <label>Until <span class="req">*</span></label>
+            <input type="date" id="offlineUntilInput" class="lp-input" />
+            <p class="field-error" id="offlineUntilErr">Select an end date.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-modal-footer">
+        <button class="lp-btn lp-btn-outline" onclick="cancelOverallToggle()">Cancel</button>
+        <button class="lp-btn lp-btn-dark" onclick="confirmGoOffline()">
+          <span class="material-symbols-outlined text-[18px]">power_settings_new</span>
+          Confirm Offline
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISABLE SERVICE MODAL -->
+  <div class="lp-modal-overlay" id="serviceModal">
+    <div class="lp-modal">
+      <button class="lp-modal-close" onclick="cancelServiceToggle()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="lp-modal-header warn">
+        <div class="lp-modal-icon warn">
+          <span class="material-symbols-outlined">warning</span>
+        </div>
+        <div>
+          <h3 class="lp-modal-title">Disable <span id="svcModalName">Consultancy</span>?</h3>
+          <p class="lp-modal-subtitle">You're about to stop accepting new requests for this service.</p>
+        </div>
+      </div>
+
+      <div class="lp-modal-body">
+        <div class="lp-warning-box">
+          <p style="margin:0 0 6px;"><strong>You have upcoming work!</strong> This service has active assignments:</p>
+          <div class="wc-row">
+            <span class="material-symbols-outlined">assignment</span>
+            <span><strong id="svcUpcomingCount">3</strong> <span id="svcUpcomingLabel">pending consultations</span> in your queue</span>
+          </div>
+          <p style="margin:8px 0 0;font-size:11.5px;opacity:0.85;">
+            These existing assignments will remain in your queue. Only <strong>new</strong> requests will be blocked.
+          </p>
+        </div>
+
+        <div class="lp-modal-field">
+          <label>Reason for disabling <span class="req">*</span></label>
+          <textarea id="svcReasonInput" class="lp-input" rows="3"
+                    placeholder="e.g., At full capacity — will resume once I clear my queue..."></textarea>
+          <p class="field-error" id="svcReasonErr">Please provide a reason (visible to admin).</p>
+        </div>
+
+        <div class="lp-modal-field" style="margin-bottom:0;">
+          <label>Available again from <span class="req">*</span></label>
+          <input type="date" id="svcAvailableFromInput" class="lp-input" />
+          <p class="field-error" id="svcFromErr">Select a date when you'll be back.</p>
+        </div>
+      </div>
+
+      <div class="lp-modal-footer">
+        <button class="lp-btn lp-btn-outline" onclick="cancelServiceToggle()">Cancel</button>
+        <button class="lp-btn lp-btn-primary" onclick="confirmServiceDisable()">
+          <span class="material-symbols-outlined text-[18px]">block</span>
+          Confirm Disable
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC FORM MODAL -->
+  <div class="lp-modal-overlay" id="dynamicFormModal">
+    <div class="lp-modal">
+      <button class="lp-modal-close" onclick="closeDynamicModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <div class="lp-modal-header info">
+        <div class="lp-modal-icon info">
+          <span class="material-symbols-outlined" id="dynModalIcon">add</span>
+        </div>
+        <div>
+          <h3 class="lp-modal-title" id="dynModalTitle">Add Item</h3>
+          <p class="lp-modal-subtitle" id="dynModalSubtitle">Fill in the details below.</p>
+        </div>
+      </div>
+
+      <div class="lp-modal-body" id="dynModalBody"></div>
+
+      <div class="lp-modal-footer">
+        <button class="lp-btn lp-btn-outline" onclick="closeDynamicModal()">Cancel</button>
+        <button class="lp-btn lp-btn-primary" id="dynModalSaveBtn" onclick="submitDynamicModal()">
+          <span class="material-symbols-outlined text-[18px]">check</span>
+          <span id="dynModalSaveLabel">Save</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/lawyer-partials.js"></script>
+
+  <script>
+    /* ============================================================
+       WEEKLY SCHEDULE STATE
+       ============================================================ */
+    var weeklySchedule = {
+      sat: { active: true,  slots: [ { start: '10:00', end: '13:00' }, { start: '15:00', end: '18:00' } ] },
+      sun: { active: true,  slots: [ { start: '10:00', end: '18:00' } ] },
+      mon: { active: true,  slots: [ { start: '10:00', end: '18:00' } ] },
+      tue: { active: true,  slots: [ { start: '10:00', end: '18:00' } ] },
+      wed: { active: true,  slots: [ { start: '10:00', end: '13:00' }, { start: '16:00', end: '19:00' } ] },
+      thu: { active: false, slots: [] },
+      fri: { active: false, slots: [] }
+    };
+    var DAY_LABELS = { sat:'Saturday', sun:'Sunday', mon:'Monday', tue:'Tuesday', wed:'Wednesday', thu:'Thursday', fri:'Friday' };
+    var DAY_SHORT  = { sat:'SAT', sun:'SUN', mon:'MON', tue:'TUE', wed:'WED', thu:'THU', fri:'FRI' };
+
+    var UPCOMING_COUNTS = { consultancy: 4, affidavit: 2, land: 1, vat: 0 };
+    var pendingServiceToggle = null;
+
+    /* ============================================================
+       WEEKLY SCHEDULE — RENDER
+       ============================================================ */
+    function renderWeeklySchedule() {
+      var wrap = document.getElementById('weeklyScheduleWrap');
+      if (!wrap) return;
+
+      var order = ['sat','sun','mon','tue','wed','thu','fri'];
+      wrap.innerHTML = order.map(function (key) {
+        var d = weeklySchedule[key];
+        var totalSlots = d.slots.length;
+
+        var summary = d.active
+          ? (totalSlots === 0
+              ? 'No time slots yet — click Customize to add'
+              : totalSlots + ' slot' + (totalSlots > 1 ? 's' : '') + ' · ' +
+                d.slots.map(function (s) { return s.start + '–' + s.end; }).join(', '))
+          : 'Off — not available';
+
+        var slotsHtml = d.slots.length === 0
+          ? '<p class="text-xs text-secondary italic m-0 mb-2">No time slots yet. Add your first slot below.</p>'
+          : d.slots.map(function (slot, idx) {
+              return '' +
+                '<div class="slot-item">' +
+                  '<span class="material-symbols-outlined text-[#a07d3a] text-[18px]">schedule</span>' +
+                  '<div class="slot-time-field">' +
+                    '<input type="time" value="' + slot.start + '" ' +
+                      'onchange="updateSlotTime(\'' + key + '\', ' + idx + ', \'start\', this.value)" />' +
+                    '<span class="slot-sep">→</span>' +
+                    '<input type="time" value="' + slot.end + '" ' +
+                      'onchange="updateSlotTime(\'' + key + '\', ' + idx + ', \'end\', this.value)" />' +
+                  '</div>' +
+                  '<button type="button" class="slot-delete" title="Remove slot" ' +
+                    'onclick="removeSlot(\'' + key + '\', ' + idx + ')">' +
+                    '<span class="material-symbols-outlined text-[18px]">delete</span>' +
+                  '</button>' +
+                '</div>';
+            }).join('');
+
+        return '' +
+          '<div class="day-row ' + (d.active ? 'active' : '') + '" id="dayRow-' + key + '">' +
+            '<div class="day-row-head">' +
+              '<div class="day-badge">' + DAY_SHORT[key] + '<small>' + DAY_LABELS[key].substring(0,3) + '</small></div>' +
+              '<div class="day-title">' +
+                '<p class="day-name">' + DAY_LABELS[key] + '</p>' +
+                '<p class="day-summary">' + summary + '</p>' +
+              '</div>' +
+              '<label class="switch" onclick="event.stopPropagation();">' +
+                '<input type="checkbox" ' + (d.active ? 'checked' : '') + ' ' +
+                  'onchange="toggleDayActive(\'' + key + '\', this.checked)" />' +
+                '<span class="slider"></span>' +
+              '</label>' +
+              '<button type="button" class="customize-btn" onclick="toggleDayExpand(\'' + key + '\')">' +
+                '<span class="label-text">Customize</span>' +
+                '<span class="chev">▼</span>' +
+              '</button>' +
+            '</div>' +
+            '<div class="day-row-body">' +
+              '<div class="day-row-body-inner">' +
+                '<p class="text-[11px] font-bold text-secondary uppercase tracking-wider m-0 mb-3">Custom time slots for ' + DAY_LABELS[key] + '</p>' +
+                '<div id="slotsWrap-' + key + '">' + slotsHtml + '</div>' +
+                '<button type="button" class="add-slot-btn mt-2" onclick="addSlot(\'' + key + '\')">' +
+                  '<span class="material-symbols-outlined text-[16px]">add</span> Add time slot' +
+                '</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+      }).join('');
+    }
+
+    function toggleDayExpand(key) {
+      var row = document.getElementById('dayRow-' + key);
+      if (row) row.classList.toggle('expanded');
+    }
+
+    function toggleDayActive(key, isActive) {
+      weeklySchedule[key].active = isActive;
+      var row = document.getElementById('dayRow-' + key);
+      var expanded = row && row.classList.contains('expanded');
+      renderWeeklySchedule();
+      if (expanded) document.getElementById('dayRow-' + key).classList.add('expanded');
+      showSaveBar();
+    }
+
+    function addSlot(key) {
+      weeklySchedule[key].slots.push({ start: '10:00', end: '12:00' });
+      var expanded = document.getElementById('dayRow-' + key).classList.contains('expanded');
+      renderWeeklySchedule();
+      if (expanded) document.getElementById('dayRow-' + key).classList.add('expanded');
+      showSaveBar();
+    }
+
+    function removeSlot(key, idx) {
+      weeklySchedule[key].slots.splice(idx, 1);
+      var expanded = document.getElementById('dayRow-' + key).classList.contains('expanded');
+      renderWeeklySchedule();
+      if (expanded) document.getElementById('dayRow-' + key).classList.add('expanded');
+      showSaveBar();
+    }
+
+    function updateSlotTime(key, idx, field, value) {
+      if (weeklySchedule[key].slots[idx]) {
+        weeklySchedule[key].slots[idx][field] = value;
+        showSaveBar();
+      }
+    }
+
+    /* ============================================================
+       DYNAMIC FORM MODAL ENGINE
+       ============================================================ */
+    var dynamicModalConfig = null;
+
+    function openDynamicForm(config) {
+      dynamicModalConfig = config;
+
+      document.getElementById('dynModalTitle').textContent = config.title || 'Add Item';
+      document.getElementById('dynModalSubtitle').textContent = config.subtitle || 'Fill in the details below.';
+      document.getElementById('dynModalIcon').textContent = config.icon || 'add';
+      document.getElementById('dynModalSaveLabel').textContent = config.saveLabel || 'Save';
+
+      var header = document.querySelector('#dynamicFormModal .lp-modal-header');
+      var iconBox = document.querySelector('#dynamicFormModal .lp-modal-icon');
+      header.className = 'lp-modal-header ' + (config.iconClass || 'info');
+      iconBox.className = 'lp-modal-icon ' + (config.iconClass || 'info');
+
+      var fields = config.fields || [];
+      var body = document.getElementById('dynModalBody');
+
+      var wrapped = '';
+      var buffer = [];
+
+      fields.forEach(function (f) {
+        var requiredMark = f.required
+          ? ' <span class="req">*</span>'
+          : ' <span class="opt">(optional)</span>';
+
+        var inputHtml = '';
+        if (f.type === 'textarea') {
+          inputHtml = '<textarea class="lp-input" id="' + f.id + '" rows="' + (f.rows || 3) + '" ' +
+                      'placeholder="' + (f.placeholder || '') + '"></textarea>';
+        } else if (f.type === 'select') {
+          inputHtml = '<select class="lp-input" id="' + f.id + '">' +
+                        (f.options || []).map(function (opt) {
+                          var val = typeof opt === 'string' ? opt : opt.value;
+                          var lab = typeof opt === 'string' ? opt : opt.label;
+                          return '<option value="' + val + '">' + lab + '</option>';
+                        }).join('') +
+                      '</select>';
+        } else {
+          inputHtml = '<input class="lp-input" type="' + (f.type || 'text') + '" id="' + f.id + '" ' +
+                      'placeholder="' + (f.placeholder || '') + '" />';
+        }
+
+        var fieldHtml =
+          '<div class="lp-modal-field" style="margin-bottom:0;">' +
+            '<label>' + (f.label || '') + requiredMark + '</label>' +
+            inputHtml +
+            (f.helper ? '<p class="helper">' + f.helper + '</p>' : '') +
+            '<p class="field-error" id="' + f.id + 'Err">' + (f.errorMsg || 'This field is required.') + '</p>' +
+          '</div>';
+
+        if (f.gridClass === 'grid-half') {
+          buffer.push(fieldHtml);
+          if (buffer.length === 2) {
+            wrapped += '<div class="lp-modal-grid-2" style="margin-bottom:16px;">' + buffer.join('') + '</div>';
+            buffer = [];
+          }
+        } else {
+          if (buffer.length) {
+            wrapped += '<div class="lp-modal-grid-2" style="margin-bottom:16px;">' + buffer.join('') + '</div>';
+            buffer = [];
+          }
+          wrapped += '<div style="margin-bottom:16px;">' + fieldHtml + '</div>';
+        }
+      });
+
+      if (buffer.length) {
+        wrapped += '<div class="lp-modal-grid-2" style="margin-bottom:16px;">' + buffer.join('') + '</div>';
+      }
+
+      body.innerHTML = wrapped;
+
+      document.getElementById('dynamicFormModal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+
+      setTimeout(function () {
+        var first = document.querySelector('#dynModalBody input, #dynModalBody textarea, #dynModalBody select');
+        if (first) first.focus();
+      }, 120);
+    }
+
+    function closeDynamicModal() {
+      document.getElementById('dynamicFormModal').classList.remove('show');
+      document.body.style.overflow = '';
+      dynamicModalConfig = null;
+    }
+
+    function submitDynamicModal() {
+      if (!dynamicModalConfig) return;
+      var fields = dynamicModalConfig.fields || [];
+      var data = {};
+      var valid = true;
+
+      fields.forEach(function (f) {
+        var input = document.getElementById(f.id);
+        var err = document.getElementById(f.id + 'Err');
+        var val = input ? input.value.trim() : '';
+
+        if (f.required && !val) {
+          valid = false;
+          if (input) input.classList.add('invalid');
+          if (err) err.classList.add('show');
+        } else {
+          if (input) input.classList.remove('invalid');
+          if (err) err.classList.remove('show');
+        }
+        data[f.id] = val;
+      });
+
+      if (!valid) return;
+
+      if (typeof dynamicModalConfig.onSave === 'function') {
+        dynamicModalConfig.onSave(data);
+      }
+      closeDynamicModal();
+      showSaveBar();
+    }
+
+    /* ============================================================
+       SPECIFIC ADD MODALS
+       ============================================================ */
+
+    // 1. Practice Area
+    function openPracticeAreaModal() {
+      openDynamicForm({
+        title: 'Add Practice Area',
+        subtitle: 'Add a legal practice area to your public profile.',
+        icon: 'gavel',
+        iconClass: 'info',
+        saveLabel: 'Add Area',
+        fields: [
+          {
+            id: 'practiceAreaName',
+            label: 'Practice Area Name',
+            type: 'text',
+            placeholder: 'e.g., Family Law',
+            required: true,
+            helper: 'Use standard legal terms so clients can find you easily.',
+            errorMsg: 'Please enter a practice area.'
+          }
+        ],
+        onSave: function (data) {
+          var container = document.getElementById('practiceAreaChips');
+          var addBtn = container.querySelector('.lp-add-chip');
+          var chip = document.createElement('span');
+          chip.className = 'lp-chip';
+          chip.innerHTML = data.practiceAreaName +
+            ' <span class="remove" onclick="this.parentElement.remove(); showSaveBar();">×</span>';
+          container.insertBefore(chip, addBtn);
+        }
+      });
+    }
+
+    // 2. Language
+    function openLanguageModal() {
+      openDynamicForm({
+        title: 'Add Language',
+        subtitle: 'Add a language you can advise clients in.',
+        icon: 'translate',
+        iconClass: 'info',
+        saveLabel: 'Add Language',
+        fields: [
+          {
+            id: 'languageName',
+            label: 'Language',
+            type: 'text',
+            placeholder: 'e.g., Hindi',
+            required: true,
+            errorMsg: 'Please enter a language.'
+          }
+        ],
+        onSave: function (data) {
+          var container = document.getElementById('languageChips');
+          var addBtn = container.querySelector('.lp-add-chip');
+          var chip = document.createElement('span');
+          chip.className = 'lp-chip';
+          chip.innerHTML = data.languageName +
+            ' <span class="remove" onclick="this.parentElement.remove(); showSaveBar();">×</span>';
+          container.insertBefore(chip, addBtn);
+        }
+      });
+    }
+
+    // 3. Education
+    function openEducationModal() {
+      openDynamicForm({
+        title: 'Add Education',
+        subtitle: 'Add a degree or academic qualification.',
+        icon: 'school',
+        iconClass: 'info',
+        saveLabel: 'Add Education',
+        fields: [
+          {
+            id: 'eduDegree',
+            label: 'Degree / Qualification',
+            type: 'text',
+            placeholder: 'e.g., LL.M — Corporate & Tax Law',
+            required: true,
+            errorMsg: 'Please enter the degree.'
+          },
+          {
+            id: 'eduInstitution',
+            label: 'Institution',
+            type: 'text',
+            placeholder: 'e.g., University of Dhaka',
+            required: true,
+            gridClass: 'grid-half',
+            errorMsg: 'Please enter the institution.'
+          },
+          {
+            id: 'eduYear',
+            label: 'Year of Completion',
+            type: 'text',
+            placeholder: 'e.g., 2011',
+            required: true,
+            gridClass: 'grid-half',
+            errorMsg: 'Please enter the year.'
+          }
+        ],
+        onSave: function (data) {
+          var container = document.getElementById('educationList');
+          var row = document.createElement('div');
+          row.className = 'flex items-start gap-3 p-3 rounded-xl bg-[#f8fafc] border border-[#eef1f4]';
+          row.innerHTML =
+            '<span class="material-symbols-outlined text-[#a07d3a] mt-0.5">school</span>' +
+            '<div class="flex-1">' +
+              '<p class="text-sm font-bold text-primary m-0">' + data.eduDegree + '</p>' +
+              '<p class="text-xs text-secondary m-0 mt-0.5">' + data.eduInstitution + ' · ' + data.eduYear + '</p>' +
+            '</div>' +
+            '<button type="button" class="text-secondary hover:text-red-600" onclick="this.parentElement.remove(); showSaveBar();">' +
+              '<span class="material-symbols-outlined text-[18px]">delete</span>' +
+            '</button>';
+          container.appendChild(row);
+        }
+      });
+    }
+
+    // 4. Award
+    function openAwardModal() {
+      openDynamicForm({
+        title: 'Add Award or Achievement',
+        subtitle: 'Highlight a professional recognition or milestone.',
+        icon: 'emoji_events',
+        iconClass: 'info',
+        saveLabel: 'Add Award',
+        fields: [
+          {
+            id: 'awardTitle',
+            label: 'Award / Achievement Title',
+            type: 'text',
+            placeholder: 'e.g., Best Corporate Lawyer Award',
+            required: true,
+            errorMsg: 'Please enter the title.'
+          },
+          {
+            id: 'awardBody',
+            label: 'Awarded By',
+            type: 'text',
+            placeholder: 'e.g., Dhaka Bar Association',
+            required: true,
+            gridClass: 'grid-half',
+            errorMsg: 'Please enter the awarding body.'
+          },
+          {
+            id: 'awardYear',
+            label: 'Year',
+            type: 'text',
+            placeholder: 'e.g., 2022',
+            required: true,
+            gridClass: 'grid-half',
+            errorMsg: 'Please enter the year.'
+          }
+        ],
+        onSave: function (data) {
+          var container = document.getElementById('awardList');
+          var row = document.createElement('div');
+          row.className = 'flex items-start gap-3 p-3 rounded-xl bg-[#f8fafc] border border-[#eef1f4]';
+          row.innerHTML =
+            '<span class="material-symbols-outlined text-[#a07d3a] mt-0.5">emoji_events</span>' +
+            '<div class="flex-1">' +
+              '<p class="text-sm font-bold text-primary m-0">' + data.awardTitle + '</p>' +
+              '<p class="text-xs text-secondary m-0 mt-0.5">' + data.awardBody + ' · ' + data.awardYear + '</p>' +
+            '</div>' +
+            '<button type="button" class="text-secondary hover:text-red-600" onclick="this.parentElement.remove(); showSaveBar();">' +
+              '<span class="material-symbols-outlined text-[18px]">delete</span>' +
+            '</button>';
+          container.appendChild(row);
+        }
+      });
+    }
+
+    // 5. Blocked Date
+    function openBlockedDateModal() {
+      openDynamicForm({
+        title: 'Block a Date',
+        subtitle: 'Mark a specific date as unavailable — leave, holidays, or hearings.',
+        icon: 'event_busy',
+        iconClass: 'info',
+        saveLabel: 'Block Date',
+        fields: [
+          {
+            id: 'blockedDate',
+            label: 'Date',
+            type: 'date',
+            required: true,
+            errorMsg: 'Please select a date.'
+          },
+          {
+            id: 'blockedReason',
+            label: 'Reason',
+            type: 'textarea',
+            placeholder: 'e.g., Supreme Court hearing in Dhaka',
+            required: true,
+            rows: 2,
+            helper: 'This reason is shown to the admin.',
+            errorMsg: 'Please provide a reason.'
+          }
+        ],
+        onSave: function (data) {
+          var d = new Date(data.blockedDate + 'T00:00:00');
+          var pretty = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+          var list = document.getElementById('blockedDatesList');
+          var row = document.createElement('div');
+          row.className = 'blocked-chip';
+          row.innerHTML =
+            '<div class="flex items-center gap-3">' +
+              '<span class="material-symbols-outlined text-[#a07d3a]">event_busy</span>' +
+              '<div>' +
+                '<p class="text-sm font-semibold m-0 text-primary">' + pretty + '</p>' +
+                '<p class="text-xs text-secondary m-0">' + data.blockedReason + '</p>' +
+              '</div>' +
+            '</div>' +
+            '<button type="button" class="text-secondary hover:text-red-600 transition-colors" ' +
+              'onclick="this.parentElement.remove(); showSaveBar();">' +
+              '<span class="material-symbols-outlined text-[18px]">delete</span>' +
+            '</button>';
+          list.appendChild(row);
+        }
+      });
+    }
+
+    /* ============================================================
+       OVERALL AVAILABILITY — GO OFFLINE FLOW
+       ============================================================ */
+    var overallToggleEl = null;
+
+    function requestOverallToggle(el) {
+      overallToggleEl = el;
+
+      if (el.checked) {
+        setOnlineState(true);
+        showSaveBar();
+      } else {
+        document.getElementById('offlineModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('offlineFromInput').value = today;
+      }
+    }
+
+    function confirmGoOffline() {
+      var reason = document.getElementById('offlineReasonInput').value.trim();
+      var from   = document.getElementById('offlineFromInput').value;
+      var until  = document.getElementById('offlineUntilInput').value;
+
+      var ok = true;
+      ok = validateField(reason, 'offlineReasonInput', 'offlineReasonErr') && ok;
+      ok = validateField(from,   'offlineFromInput',   'offlineFromErr')   && ok;
+      ok = validateField(until,  'offlineUntilInput',  'offlineUntilErr')  && ok;
+
+      if (!ok) return;
+
+      setOnlineState(false, reason, from, until);
+      closeModal('offlineModal');
+      clearOfflineForm();
+      showSaveBar();
+    }
+
+    function cancelOverallToggle() {
+      if (overallToggleEl) overallToggleEl.checked = true;
+      closeModal('offlineModal');
+      clearOfflineForm();
+    }
+
+    function setOnlineState(isOnline, reason, from, until) {
+      var pill     = document.getElementById('availStatusPill');
+      var headline = document.getElementById('availHeadline');
+      var notice   = document.getElementById('offlineNoticeBox');
+
+      if (isOnline) {
+        pill.classList.remove('offline');
+        pill.innerHTML = '<span class="dot"></span> AVAILABLE';
+        headline.textContent = 'You are currently available for work';
+        notice.classList.add('hidden');
+      } else {
+        pill.classList.add('offline');
+        pill.innerHTML = '<span class="dot"></span> OFFLINE';
+        headline.textContent = 'You are currently offline';
+        notice.classList.remove('hidden');
+        document.getElementById('offlineNoticeReason').textContent = 'Reason: ' + (reason || '—');
+        document.getElementById('offlineNoticeDates').textContent  =
+          'Unavailable from ' + formatDate(from) + ' until ' + formatDate(until);
+      }
+    }
+
+    function clearOfflineForm() {
+      ['offlineReasonInput','offlineFromInput','offlineUntilInput'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.value = ''; el.classList.remove('invalid'); }
+        var err = document.getElementById(id + 'Err');
+        if (err) err.classList.remove('show');
+      });
+    }
+
+    /* ============================================================
+       SERVICE TOGGLE — DISABLE FLOW
+       ============================================================ */
+    function requestServiceToggle(checkbox) {
+      var service = checkbox.dataset.service;
+      var label   = checkbox.dataset.label;
+      var cardId  = 'svcCard-' + service;
+
+      if (checkbox.checked) {
+        document.getElementById(cardId).classList.add('enabled');
+        showSaveBar();
+        return;
+      }
+
+      pendingServiceToggle = { checkbox: checkbox, cardId: cardId, serviceKey: service };
+
+      document.getElementById('svcModalName').textContent = label;
+      var count = UPCOMING_COUNTS[service] || 0;
+      document.getElementById('svcUpcomingCount').textContent = count;
+      document.getElementById('svcUpcomingLabel').textContent =
+        service === 'consultancy' ? 'pending consultations' :
+        service === 'affidavit'   ? 'affidavits in progress' :
+        service === 'land'        ? 'land & property requests' :
+                                    'VAT & tax assignments';
+
+      var soon = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+      document.getElementById('svcAvailableFromInput').value = soon;
+
+      document.getElementById('serviceModal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function confirmServiceDisable() {
+      if (!pendingServiceToggle) return;
+
+      var reason = document.getElementById('svcReasonInput').value.trim();
+      var from   = document.getElementById('svcAvailableFromInput').value;
+
+      var ok = true;
+      ok = validateField(reason, 'svcReasonInput', 'svcReasonErr') && ok;
+      ok = validateField(from,   'svcAvailableFromInput', 'svcFromErr') && ok;
+      if (!ok) return;
+
+      pendingServiceToggle.checkbox.checked = false;
+      document.getElementById(pendingServiceToggle.cardId).classList.remove('enabled');
+
+      closeModal('serviceModal');
+      clearServiceForm();
+      pendingServiceToggle = null;
+      showSaveBar();
+    }
+
+    function cancelServiceToggle() {
+      if (pendingServiceToggle && pendingServiceToggle.checkbox) {
+        pendingServiceToggle.checkbox.checked = true;
+      }
+      closeModal('serviceModal');
+      clearServiceForm();
+      pendingServiceToggle = null;
+    }
+
+    function clearServiceForm() {
+      ['svcReasonInput','svcAvailableFromInput'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) { el.value = ''; el.classList.remove('invalid'); }
+        var err = document.getElementById(id + 'Err');
+        if (err) err.classList.remove('show');
+      });
+    }
+
+    /* ============================================================
+       HELPERS
+       ============================================================ */
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function validateField(value, inputId, errId) {
+      var input = document.getElementById(inputId);
+      var err   = document.getElementById(errId);
+      if (!value) {
+        if (input) input.classList.add('invalid');
+        if (err) err.classList.add('show');
+        return false;
+      }
+      if (input) input.classList.remove('invalid');
+      if (err) err.classList.remove('show');
+      return true;
+    }
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      var d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function showSaveBar() {
+      var bar = document.getElementById('saveBar');
+      if (bar) bar.classList.add('show');
+    }
+
+    function discardChanges() {
+      if (!confirm('Discard all unsaved changes?')) return;
+      location.reload();
+    }
+
+    function saveSettings() {
+      var bar = document.getElementById('saveBar');
+      if (bar) bar.classList.remove('show');
+      alert('Service settings saved successfully!');
+    }
+
+    /* ============================================================
+       MODAL CLOSE HANDLERS
+       ============================================================ */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (document.getElementById('offlineModal').classList.contains('show'))     cancelOverallToggle();
+      if (document.getElementById('serviceModal').classList.contains('show'))     cancelServiceToggle();
+      if (document.getElementById('dynamicFormModal').classList.contains('show')) closeDynamicModal();
+    });
+
+    document.querySelectorAll('.lp-modal-overlay').forEach(function (overlay) {
+      overlay.addEventListener('click', function (e) {
+        if (e.target !== overlay) return;
+        if (overlay.id === 'offlineModal')      cancelOverallToggle();
+        if (overlay.id === 'serviceModal')      cancelServiceToggle();
+        if (overlay.id === 'dynamicFormModal')  closeDynamicModal();
+      });
+    });
+
+    /* ============================================================
+       INIT
+       ============================================================ */
+    document.addEventListener('DOMContentLoaded', function () {
+      renderWeeklySchedule();
+    });
+  </script>
+
+</body>
+</html>
