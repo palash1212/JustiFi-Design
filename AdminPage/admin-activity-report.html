@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Activity Report — JustiFi Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: { navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' }, gold: { DEFAULT:'#C5A059', 50:'#FBF6ED' }, slate2:'#64748B', offwhite:'#F8FAFC' },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    border-radius: 14px;
+    padding: 18px 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(197,160,89,0.15), transparent 70%);
+    border-radius: 50%; transform: translate(30%, -30%);
+  }
+  .page-hero::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+
+  .stat-tile {
+    background: #fff; border: 1px solid #EEF1F4;
+    border-radius: 12px; padding: 12px 16px;
+    transition: all .2s; position: relative; overflow: hidden;
+  }
+  .stat-tile::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: currentColor; opacity: 0.8;
+  }
+  .stat-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,43,60,0.08); }
+  .stat-tile .num { font-size: 22px; font-weight: 800; line-height: 1; }
+  .stat-tile .lbl {
+    font-size: 10.5px; color: #64748B; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; margin-top: 6px;
+  }
+  .stat-tile .icon { position: absolute; right: 12px; top: 12px; font-size: 18px; opacity: 0.15; }
+
+  .section-title {
+    font-size: 11.5px; font-weight: 700; color: #1A2B3C;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .section-title .bar { width: 3px; height: 13px; background: #C5A059; border-radius: 2px; }
+
+  /* ═══ Filter chips ═══ */
+  .filter-chip {
+    padding: 5px 12px;
+    font-size: 11.5px; font-weight: 600;
+    border-radius: 999px;
+    border: 1.5px solid #E2E8F0;
+    background: #fff; color: #64748B;
+    cursor: pointer; transition: all .15s;
+    white-space: nowrap;
+  }
+  .filter-chip:hover { border-color: #C5A059; color: #1A2B3C; }
+  .filter-chip.active { background: #1A2B3C; color: #fff; border-color: #1A2B3C; }
+
+  /* ═══ Filter inputs ═══ */
+  .filter-input, .filter-select {
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 7px 12px; font-size: 13px;
+    outline: none; transition: border-color .15s;
+    background: #F8FAFC; font-family: inherit;
+  }
+  .filter-input:focus, .filter-select:focus { border-color: #C5A059; background: #fff; }
+
+  .date-range-wrap {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 3px 9px 3px 11px; background: #F8FAFC;
+  }
+  .date-range-wrap:focus-within { border-color: #C5A059; background: #fff; }
+  .date-range-wrap .d-label {
+    font-size: 10.5px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .date-range-wrap input[type="date"] {
+    border: 0; background: transparent; font-size: 12px;
+    color: #1A2B3C; font-weight: 600; outline: none;
+    cursor: pointer; font-family: inherit;
+  }
+
+  /* ═══ Action Item ═══ */
+  .action-item {
+    display: flex; gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: all .15s;
+  }
+  .action-item:hover { border-color: #C5A059; box-shadow: 0 4px 12px rgba(26,43,60,0.04); }
+  .action-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .action-icon.user     { background: #EFF6FF; color: #3B82F6; }
+  .action-icon.lawyer   { background: #FBF6ED; color: #C5A059; }
+  .action-icon.affidavit{ background: #F5F3FF; color: #8B5CF6; }
+  .action-icon.land     { background: #F0FDF4; color: #10B981; }
+  .action-icon.tax      { background: #ECFEFF; color: #06B6D4; }
+  .action-icon.payment  { background: #FFFBEB; color: #F59E0B; }
+  .action-icon.system   { background: #F1F5F9; color: #64748B; }
+  .action-icon.security { background: #FEF2F2; color: #EF4444; }
+
+  .action-body { flex: 1; min-width: 0; }
+  .action-title {
+    font-size: 12.5px; font-weight: 700; color: #1A2B3C;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .action-meta {
+    font-size: 10.5px; color: #94A3B8;
+    margin-top: 2px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .action-target {
+    font-size: 12px; color: #475569; margin-top: 5px;
+    padding: 6px 10px;
+    background: #F8FAFC;
+    border-left: 2px solid #C5A059;
+    border-radius: 0 6px 6px 0;
+  }
+  .action-target .t-lbl {
+    font-size: 9px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    display: block; margin-bottom: 2px;
+  }
+  .action-status {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .action-status.success { background: #DCFCE7; color: #166534; }
+  .action-status.failed  { background: #FEE2E2; color: #B91C1C; }
+  .action-status.pending { background: #FEF3C7; color: #92400E; }
+
+  .btn-back {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 600; color: #64748B;
+    padding: 5px 11px; border-radius: 7px;
+    border: 1px solid #E2E8F0; background: #fff;
+    transition: all .15s; cursor: pointer;
+  }
+  .btn-back:hover { color: #1A2B3C; border-color: #C5A059; background: #FBF6ED; }
+</style>
+</head>
+<body class="bg-offwhite text-navy">
+<div class="flex h-screen overflow-hidden">
+  <aside id="sidebar-mount" class="w-72 bg-navy text-white flex-shrink-0 flex flex-col"></aside>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+      <div class="flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+        <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2" placeholder="Search client, lawyer, booking, transaction ID...">
+      </div>
+      <div class="flex items-center gap-5">
+        <button class="relative text-slate2 hover:text-navy"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        <div class="h-6 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
+      </div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
+
+      <!-- Back -->
+      <div class="flex items-center justify-between">
+        <button id="backBtn" class="btn-back">
+          ← Back to Admin Profile
+        </button>
+      </div>
+
+      <!-- Hero -->
+      <div class="page-hero">
+        <div class="relative z-10 flex items-center justify-between gap-4">
+          <div class="min-w-0">
+            <p class="text-[9.5px] font-bold tracking-widest text-white/50 uppercase">Admin Activity Report</p>
+            <h1 class="text-lg font-bold text-white mt-1 truncate" id="adminName">Rafiq Ahmed</h1>
+            <p class="text-xs text-white/55 mt-0.5 truncate" id="adminMeta">ADM-001 · Super Admin · rafiq@justifi.com.bd</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="text-white/45 text-[9.5px] font-bold uppercase tracking-wider">Total Actions</div>
+            <div class="text-2xl font-extrabold text-gold leading-tight mt-0.5" id="heroTotalActions">48</div>
+            <div class="text-[10.5px] text-white/45 mt-0.5" id="heroToday">8 today</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-5 gap-2.5">
+        <div class="stat-tile" style="color: #1A2B3C;">
+          <span class="icon">📋</span>
+          <div class="num" style="color: #1A2B3C;" id="statTotal">48</div>
+          <div class="lbl">Total Actions</div>
+        </div>
+        <div class="stat-tile" style="color: #3B82F6;">
+          <span class="icon">👤</span>
+          <div class="num" style="color: #3B82F6;" id="statUser">18</div>
+          <div class="lbl">User Mgmt</div>
+        </div>
+        <div class="stat-tile" style="color: #C5A059;">
+          <span class="icon">⚖️</span>
+          <div class="num" style="color: #C5A059;" id="statLawyer">14</div>
+          <div class="lbl">Lawyer Mgmt</div>
+        </div>
+        <div class="stat-tile" style="color: #8B5CF6;">
+          <span class="icon">📄</span>
+          <div class="num" style="color: #8B5CF6;" id="statService">11</div>
+          <div class="lbl">Service Actions</div>
+        </div>
+        <div class="stat-tile" style="color: #EF4444;">
+          <span class="icon">🔒</span>
+          <div class="num" style="color: #EF4444;" id="statSecurity">5</div>
+          <div class="lbl">Security</div>
+        </div>
+      </div>
+
+      <!-- Filter + Search bar -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-3 flex flex-wrap items-center gap-2">
+        <input id="fSearch" placeholder="Search by action title, target, or reason..."
+               class="filter-input flex-1 min-w-[200px]">
+
+        <div class="date-range-wrap">
+          <span class="d-label">Date</span>
+          <input id="fDateFrom" type="date" title="From date">
+          <span class="text-slate2 text-xs font-bold">→</span>
+          <input id="fDateTo" type="date" title="To date">
+          <button onclick="clearDateFilter()" id="clearDateBtn"
+                  class="text-[11px] font-semibold text-slate2 hover:text-navy ml-1 hidden"
+                  title="Clear date filter">✕</button>
+        </div>
+
+        <select id="fStatus" class="filter-select">
+          <option value="">All Status</option>
+          <option value="success">Success</option>
+          <option value="failed">Failed</option>
+          <option value="pending">Pending</option>
+        </select>
+
+        <button onclick="clearAllFilters()" id="clearAllBtn"
+                class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-3 py-1.5 rounded-lg hidden">
+          Clear All
+        </button>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[10px] font-bold text-slate2 uppercase tracking-wide mr-1.5">Type:</span>
+          <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">All Actions</button>
+          <button class="filter-chip" data-filter="user" onclick="setFilter('user', this)">👤 User</button>
+          <button class="filter-chip" data-filter="lawyer" onclick="setFilter('lawyer', this)">⚖️ Lawyer</button>
+          <button class="filter-chip" data-filter="affidavit" onclick="setFilter('affidavit', this)">📄 Affidavit</button>
+          <button class="filter-chip" data-filter="land" onclick="setFilter('land', this)">🏠 Land</button>
+          <button class="filter-chip" data-filter="tax" onclick="setFilter('tax', this)">💰 Tax</button>
+          <button class="filter-chip" data-filter="payment" onclick="setFilter('payment', this)">💳 Payment</button>
+          <button class="filter-chip" data-filter="system" onclick="setFilter('system', this)">⚙️ System</button>
+          <button class="filter-chip" data-filter="security" onclick="setFilter('security', this)">🔒 Security</button>
+
+          <span class="ml-auto text-[10.5px] text-slate2">
+            Showing <strong id="visibleCount" class="text-navy">0</strong> of <strong id="totalCount" class="text-navy">0</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- Full Log -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+        <div class="section-title"><span class="bar"></span> Full Action Log</div>
+        <div id="actionLog"></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ADMIN ACTIVITY REPORT
+   ═══════════════════════════════════════════════════════════════════ */
+
+const ADMINS_DB = {
+  'ADM-001': {
+    id: 'ADM-001', name: 'Rafiq Ahmed', email: 'rafiq@justifi.com.bd', role: 'Super Admin',
+    actions: [
+      { type: 'lawyer',   icon: '✓',  title: 'Approved Lawyer Profile', target: 'Adv. Tahmina Akhter (LW-2004)', status: 'success', time: 'Today, 11:32 AM', date: '2026-09-16' },
+      { type: 'affidavit',icon: '⚖️', title: 'Assigned Lawyer to Affidavit', target: 'Case #AF-20394 → Farhana Islam', status: 'success', time: 'Today, 10:15 AM', date: '2026-09-16' },
+      { type: 'user',     icon: '⊘',  title: 'Blocked Client Account', target: 'Tania Islam (CLI-10893)', status: 'success', time: 'Today, 09:48 AM', date: '2026-09-16', reason: 'Suspicious transaction activity detected' },
+      { type: 'security', icon: '🔒', title: 'Reset Security Credentials', target: 'Farhana Islam (ADM-002)', status: 'success', time: 'Today, 09:20 AM', date: '2026-09-16', reason: 'Routine quarterly security reset' },
+      { type: 'land',     icon: '🏠', title: 'Transferred Land Case', target: '#LP-1042 → Legal Team B', status: 'success', time: 'Today, 08:55 AM', date: '2026-09-16', reason: 'Workload rebalancing' },
+      { type: 'payment',  icon: '↩',  title: 'Approved Refund', target: 'TXN-88201 (৳3,100)', status: 'success', time: 'Yesterday, 05:20 PM', date: '2026-09-15', reason: 'Client dispute resolved' },
+      { type: 'user',     icon: '▶',  title: 'Activated Client Account', target: 'Abdullah Hasan (CLI-88214)', status: 'success', time: 'Yesterday, 03:45 PM', date: '2026-09-15' },
+      { type: 'system',   icon: '⚙️', title: 'Disabled Affidavit Service', target: 'System — Service Control', status: 'success', time: 'Yesterday, 02:10 PM', date: '2026-09-15', reason: 'Scheduled maintenance window' },
+      { type: 'lawyer',   icon: '⊘',  title: 'Blocked Lawyer Account', target: 'Barrister Mahbub Alam (LW-2005)', status: 'success', time: 'Yesterday, 11:30 AM', date: '2026-09-15', reason: 'Repeated confidentiality violation' },
+      { type: 'affidavit',icon: '✓',  title: 'Approved Affidavit Application', target: '#AF-20388 (Joynal Abedin)', status: 'success', time: 'Yesterday, 10:15 AM', date: '2026-09-15' },
+      { type: 'tax',      icon: '💰', title: 'Approved Tax Filing', target: '#TX-3021 (Nasrin Akter)', status: 'success', time: '14 Sep 2026, 04:20 PM', date: '2026-09-14' },
+      { type: 'user',     icon: '⏸',  title: 'Deactivated Client', target: 'Abdullah Hasan (CLI-88214)', status: 'success', time: '13 Sep 2026, 02:42 PM', date: '2026-09-13', reason: 'Multiple disputes filed — pending review' },
+      { type: 'security', icon: '🔒', title: 'Forced Session Termination', target: 'All sessions for CLI-10893', status: 'success', time: '13 Sep 2026, 11:00 AM', date: '2026-09-13', reason: 'Suspicious login detected' },
+      { type: 'lawyer',   icon: '✓',  title: 'Verified Lawyer Documents', target: 'Md. Rezaul Karim (LW-2003)', status: 'success', time: '12 Sep 2026, 03:15 PM', date: '2026-09-12' },
+      { type: 'system',   icon: '⚙️', title: 'Updated System Config', target: 'Session timeout: 30m → 45m', status: 'success', time: '12 Sep 2026, 10:00 AM', date: '2026-09-12', reason: 'Improved security posture' },
+      { type: 'payment',  icon: '✓',  title: 'Approved High-Value Transaction', target: 'TXN-88231 (৳45,000)', status: 'success', time: '11 Sep 2026, 04:30 PM', date: '2026-09-11' },
+      { type: 'land',     icon: '🏠', title: 'Assigned Land Specialist', target: '#LP-1035 → Md. Kamal Hossain', status: 'success', time: '11 Sep 2026, 02:15 PM', date: '2026-09-11' },
+      { type: 'user',     icon: '✎',  title: 'Updated User Details', target: 'Shirin Rahman (CLI-10891)', status: 'success', time: '10 Sep 2026, 11:30 AM', date: '2026-09-10', reason: 'Correction requested by user' },
+      { type: 'affidavit',icon: '⊘',  title: 'Rejected Affidavit', target: '#AF-20375 (Incomplete Documents)', status: 'failed', time: '10 Sep 2026, 09:45 AM', date: '2026-09-10', reason: 'Identity mismatch — resubmission required' },
+      { type: 'security', icon: '⊘',  title: 'Blocked IP Address', target: 'IP 45.33.22.11', status: 'success', time: '09 Sep 2026, 05:30 PM', date: '2026-09-09', reason: 'Multiple failed login attempts' }
+    ]
+  },
+  'ADM-002': {
+    id: 'ADM-002', name: 'Farhana Islam', email: 'farhana@justifi.com.bd', role: 'Support Admin',
+    actions: [
+      { type: 'affidavit',icon: '⚖️', title: 'Assigned Lawyer to Affidavit', target: 'Case #AF-20394 → Farhana Islam', status: 'success', time: 'Today, 01:10 PM', date: '2026-09-16' },
+      { type: 'user',     icon: '✓',  title: 'Verified Client Documents', target: 'Nasrin Akter (CLI-10892)', status: 'success', time: 'Today, 11:45 AM', date: '2026-09-16' },
+      { type: 'affidavit',icon: '✓',  title: 'Approved Affidavit', target: '#AF-20360', status: 'success', time: 'Today, 10:20 AM', date: '2026-09-16' },
+      { type: 'lawyer',   icon: '✎',  title: 'Updated Lawyer Profile', target: 'Adv. Nusrat Ara (LW-2002)', status: 'success', time: '15 Sep 2026, 03:30 PM', date: '2026-09-15', reason: 'Chamber address updated' },
+      { type: 'payment',  icon: '↩',  title: 'Processed Refund', target: 'TXN-88150 (৳1,800)', status: 'success', time: '15 Sep 2026, 11:15 AM', date: '2026-09-15' },
+      { type: 'user',     icon: '✓',  title: 'Verified Client', target: 'Rokeya Sultana (CLI-10891)', status: 'success', time: '14 Sep 2026, 04:45 PM', date: '2026-09-14' }
+    ]
+  },
+  'ADM-003': {
+    id: 'ADM-003', name: 'Kamrul Hasan', email: 'kamrul@justifi.com.bd', role: 'System Admin',
+    actions: [
+      { type: 'system',   icon: '⚙️', title: 'Deployed System Update', target: 'JustiFi v2.4.1', status: 'success', time: '13 Sep 2026, 02:00 AM', date: '2026-09-13' },
+      { type: 'system',   icon: '⚙️', title: 'Enabled Maintenance Mode', target: 'Land Service — 2 hours', status: 'success', time: '12 Sep 2026, 11:00 PM', date: '2026-09-12', reason: 'Database migration' }
+    ]
+  },
+  'ADM-004': {
+    id: 'ADM-004', name: 'Sabrina Akhter', email: 'sabrina@justifi.com.bd', role: 'Security Admin',
+    actions: [
+      { type: 'security', icon: '🔒', title: 'Terminated Suspicious Sessions', target: 'User CLI-77120', status: 'success', time: '15 Sep 2026, 04:00 PM', date: '2026-09-15', reason: 'Anomalous device detected' },
+      { type: 'security', icon: '⊘',  title: 'Blocked Account', target: 'Suspicious login attempts', status: 'success', time: '14 Sep 2026, 09:30 AM', date: '2026-09-14' },
+      { type: 'user',     icon: '🔒', title: 'Reset User Password', target: 'Abdullah Hasan (CLI-88214)', status: 'success', time: '13 Sep 2026, 03:00 PM', date: '2026-09-13' }
+    ]
+  },
+  'ADM-005': {
+    id: 'ADM-005', name: 'Md. Jashim Uddin', email: 'jashim@justifi.com.bd', role: 'User Admin',
+    actions: [
+      { type: 'user',     icon: '✎',  title: 'Updated Client Phone', target: 'Mahmudul Karim (CLI-10234)', status: 'success', time: '14 Sep 2026, 02:00 PM', date: '2026-09-14', reason: 'User requested update' },
+      { type: 'user',     icon: '✓',  title: 'Verified Client Email', target: 'Farzana Akhter (CLI-10893)', status: 'success', time: '14 Sep 2026, 10:30 AM', date: '2026-09-14' }
+    ]
+  }
+};
+
+const ACTION_LABELS = {
+  user: 'User Management', lawyer: 'Lawyer Management',
+  affidavit: 'Affidavit', land: 'Land & Property', tax: 'Tax & Income',
+  payment: 'Payment', system: 'System', security: 'Security'
+};
+
+let currentFilter = 'all';
+let currentAdmin = null;
+let filters = { search: '', dateFrom: '', dateTo: '', status: '' };
+
+function getAdminIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || 'ADM-001';
+}
+
+function formatBdt() { return ''; }
+
+/* ─── INIT ─── */
+function init() {
+  const id = getAdminIdFromUrl();
+  currentAdmin = ADMINS_DB[id];
+  if (!currentAdmin) {
+    document.querySelector('main').innerHTML = `
+      <div class="p-12 text-center">
+        <p class="text-lg font-bold text-navy">Admin not found</p>
+        <a href="admin-users.html" class="text-gold font-semibold underline mt-2 inline-block">← Back to Admin Users</a>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('adminName').textContent = currentAdmin.name;
+  document.getElementById('adminMeta').textContent = `${currentAdmin.id} · ${currentAdmin.role} · ${currentAdmin.email}`;
+
+  document.getElementById('backBtn').onclick = () => {
+    window.location.href = `admin-information.html?id=${encodeURIComponent(id)}`;
+  };
+
+  // Hero counts
+  const today = new Date().toISOString().slice(0, 10);
+  const todayCount = currentAdmin.actions.filter(x => x.date === today).length;
+  document.getElementById('heroTotalActions').textContent = currentAdmin.actions.length;
+  document.getElementById('heroToday').textContent = `${todayCount} today`;
+
+  // Stats
+  const byType = {};
+  currentAdmin.actions.forEach(act => { byType[act.type] = (byType[act.type] || 0) + 1; });
+  document.getElementById('statTotal').textContent    = currentAdmin.actions.length;
+  document.getElementById('statUser').textContent     = byType.user || 0;
+  document.getElementById('statLawyer').textContent   = byType.lawyer || 0;
+  document.getElementById('statService').textContent  = (byType.affidavit || 0) + (byType.land || 0) + (byType.tax || 0);
+  document.getElementById('statSecurity').textContent = (byType.security || 0) + (byType.payment || 0);
+
+  renderLog();
+  document.title = `${currentAdmin.name} — Activity Report`;
+}
+
+/* ─── RENDER LOG ─── */
+function renderLog() {
+  const all = currentAdmin.actions;
+  const filtered = all.filter(act => {
+    if (currentFilter !== 'all' && act.type !== currentFilter) return false;
+    if (filters.status && act.status !== filters.status) return false;
+    if (filters.search) {
+      const hay = `${act.title} ${act.target} ${act.reason || ''}`.toLowerCase();
+      if (!hay.includes(filters.search.toLowerCase())) return false;
+    }
+    if (filters.dateFrom || filters.dateTo) {
+      const d = new Date(act.date);
+      const f = filters.dateFrom ? new Date(filters.dateFrom) : null;
+      const t = filters.dateTo   ? new Date(filters.dateTo)   : null;
+      if (f && d < f) return false;
+      if (t && d > t) return false;
+    }
+    return true;
+  });
+
+  document.getElementById('visibleCount').textContent = filtered.length;
+  document.getElementById('totalCount').textContent   = all.length;
+  document.getElementById('clearDateBtn').classList.toggle('hidden', !(filters.dateFrom || filters.dateTo));
+  document.getElementById('clearAllBtn').classList.toggle('hidden', !(filters.search || filters.status || filters.dateFrom || filters.dateTo || currentFilter !== 'all'));
+
+  const el = document.getElementById('actionLog');
+  if (filtered.length === 0) {
+    el.innerHTML = `<p class="text-xs text-slate2 italic py-8 text-center">No actions match your filters.</p>`;
+    return;
+  }
+  el.innerHTML = filtered.map(act => renderActionItem(act)).join('');
+}
+
+function renderActionItem(act) {
+  return `
+    <div class="action-item">
+      <div class="action-icon ${act.type}">${act.icon}</div>
+      <div class="action-body">
+        <div class="action-title">
+          ${act.title}
+          <span class="action-status ${act.status}">${act.status}</span>
+        </div>
+        <div class="action-meta">
+          <span>🕐 ${act.time}</span>
+          <span>·</span>
+          <span>${ACTION_LABELS[act.type] || act.type}</span>
+        </div>
+        <div class="action-target">
+          <span class="t-lbl">Target</span>
+          ${act.target}
+        </div>
+        ${act.reason ? `
+          <div class="text-[11px] text-slate2 mt-2 italic">
+            <strong class="text-navy not-italic">Reason:</strong> ${act.reason}
+          </div>` : ''}
+      </div>
+    </div>`;
+}
+
+/* ─── FILTERS ─── */
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLog();
+}
+
+function clearDateFilter() {
+  filters.dateFrom = '';
+  filters.dateTo = '';
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value = '';
+  renderLog();
+}
+
+function clearAllFilters() {
+  filters = { search: '', dateFrom: '', dateTo: '', status: '' };
+  currentFilter = 'all';
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fStatus').value = '';
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value = '';
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
+  renderLog();
+}
+
+document.getElementById('fSearch').addEventListener('input', (e) => {
+  filters.search = e.target.value;
+  renderLog();
+});
+document.getElementById('fStatus').addEventListener('change', (e) => {
+  filters.status = e.target.value;
+  renderLog();
+});
+document.getElementById('fDateFrom').addEventListener('change', (e) => {
+  filters.dateFrom = e.target.value;
+  renderLog();
+});
+document.getElementById('fDateTo').addEventListener('change', (e) => {
+  filters.dateTo = e.target.value;
+  renderLog();
+});
+
+init();
+</script>
+</body>
+</html>

@@ -15,6 +15,89 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ═══ Action Buttons ═══ */
+  .btn-action {
+    padding: 5px 11px;
+    font-size: 11px; font-weight: 600;
+    border-radius: 7px;
+    transition: all .15s;
+    display: inline-flex; align-items: center; gap: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .btn-details {
+    color: #1A2B3C;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+  }
+  .btn-details:hover {
+    border-color: #C5A059;
+    background: #FBF6ED;
+  }
+
+  .btn-deactivate {
+    color: #B45309; border: 1.5px solid #FDE68A; background: #FFFBEB;
+  }
+  .btn-deactivate:hover { background: #FEF3C7; border-color: #F59E0B; }
+
+  .btn-activate {
+    color: #fff; border: 1.5px solid #22C55E; background: #22C55E;
+  }
+  .btn-activate:hover { background: #16A34A; border-color: #16A34A; }
+
+  /* ═══ Date Filter ═══ */
+  .date-range-wrap {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 3px 9px 3px 11px; background: #F8FAFC;
+    transition: border-color .15s;
+  }
+  .date-range-wrap:focus-within { border-color: #C5A059; background: #fff; }
+  .date-range-wrap .d-label {
+    font-size: 10.5px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .date-range-wrap input[type="date"] {
+    border: 0; background: transparent; font-size: 12px;
+    color: #1A2B3C; font-weight: 600; outline: none;
+    cursor: pointer; font-family: inherit;
+  }
+  .date-range-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer; opacity: 0.5;
+  }
+
+  /* ═══ Table Row ═══ */
+  .admin-row {
+    transition: background .15s;
+  }
+  .admin-row:hover { background: #F8FAFC; }
+
+  .admin-row td {
+    padding: 12px 14px;
+    vertical-align: middle;
+  }
+
+  /* ═══ Column dividers (subtle) ═══ */
+  .col-divider {
+    border-left: 1px solid #F1F5F9;
+  }
+
+  /* ═══ Avatar ═══ */
+  .admin-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .admin-avatar.super   { background: linear-gradient(135deg, #C5A059, #A07D3A); color: #fff; }
+  .admin-avatar.support { background: linear-gradient(135deg, #3B82F6, #1E40AF); color: #fff; }
+  .admin-avatar.system  { background: linear-gradient(135deg, #64748B, #475569); color: #fff; }
+  .admin-avatar.security{ background: linear-gradient(135deg, #EF4444, #B91C1C); color: #fff; }
+  .admin-avatar.user    { background: linear-gradient(135deg, #8B5CF6, #6D28D9); color: #fff; }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -31,46 +114,87 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
 
+      <!-- Title + Create -->
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-2xl font-bold">Admin Users</h1>
-          <p class="text-slate2 text-sm mt-1">Internal staff accounts. Only Super Admin can create or manage other admins.</p>
+          <h1 class="text-xl font-bold">Admin Users</h1>
+          <p class="text-slate2 text-xs mt-0.5">Internal staff accounts. Only Super Admin can create or manage other admins.</p>
         </div>
-        <button onclick="openModal('modal-add-admin')" class="flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2.5 rounded-lg">
+        <button onclick="openModal('modal-add-admin')" class="flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-navy-800">
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           Create Admin
         </button>
       </div>
 
-      <div class="bg-white rounded-2xl p-4 shadow-card border border-slate-100 flex flex-wrap items-center gap-3">
-        <input id="searchAdmin" placeholder="Search by name or email..." class="flex-1 min-w-[200px] border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
-        <select id="filterAdminRole" class="border border-slate-200 rounded-lg px-3 py-2 text-sm">
+      <!-- Stat Cards -->
+      <div class="grid grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Total Admins</p>
+          <p class="text-xl font-bold mt-1" id="statTotal">0</p>
+        </div>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Active</p>
+          <p class="text-xl font-bold mt-1 text-emerald-600" id="statActive">0</p>
+        </div>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Inactive</p>
+          <p class="text-xl font-bold mt-1 text-slate-400" id="statInactive">0</p>
+        </div>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Super Admins</p>
+          <p class="text-xl font-bold mt-1 text-gold" id="statSuper">0</p>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="bg-white rounded-xl px-3 py-2.5 shadow-card border border-slate-100 flex flex-wrap items-center gap-2">
+        <input id="searchAdmin" placeholder="Search by name or email..."
+               class="flex-1 min-w-[180px] border border-slate-200 rounded-lg px-3 py-1.5 text-[13px] outline-none focus:border-gold">
+
+        <select id="filterAdminRole" class="border border-slate-200 rounded-lg px-3 py-1.5 text-[13px] focus:border-gold outline-none">
           <option value="">All Roles</option>
           <option>Super Admin</option>
           <option>Support Admin</option>
           <option>System Admin</option>
+          <option>Security Admin</option>
+          <option>User Admin</option>
         </select>
-        <select id="filterAdminStatus" class="border border-slate-200 rounded-lg px-3 py-2 text-sm">
+
+        <select id="filterAdminStatus" class="border border-slate-200 rounded-lg px-3 py-1.5 text-[13px] focus:border-gold outline-none">
           <option value="">All Status</option>
           <option>Active</option>
           <option>Inactive</option>
         </select>
+
+        <button onclick="clearAllFilters()" id="clearAllBtn"
+                class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-3 py-1.5 rounded-lg hidden">
+          Clear All
+        </button>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+      <!-- Table -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <table class="w-full text-sm" style="table-layout: fixed; border-collapse: collapse;">
+          <colgroup>
+            <col style="width: 11%;">   <!-- Admin ID -->
+            <col style="width: 20%;">   <!-- Name -->
+            <col style="width: 22%;">   <!-- Email -->
+            <col style="width: 13%;">   <!-- Role -->
+            <col style="width: 11%;">   <!-- Status -->
+            <col style="width: 10%;">   <!-- Details -->
+            <col style="width: 13%;">   <!-- Actions -->
+          </colgroup>
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-5 py-3">Admin ID</th>
-              <th class="text-left font-semibold px-5 py-3">Name</th>
-              <th class="text-left font-semibold px-5 py-3">Email</th>
-              <th class="text-left font-semibold px-5 py-3">Role</th>
-              <th class="text-left font-semibold px-5 py-3">MFA</th>
-              <th class="text-left font-semibold px-5 py-3">Last Login</th>
-              <th class="text-left font-semibold px-5 py-3">Status</th>
-              <th class="text-right font-semibold px-5 py-3">Action</th>
+              <th class="text-left font-semibold px-4 py-3">Admin ID</th>
+              <th class="text-left font-semibold px-4 py-3">Name</th>
+              <th class="text-left font-semibold px-4 py-3">Email</th>
+              <th class="text-left font-semibold px-4 py-3">Role</th>
+              <th class="text-left font-semibold px-4 py-3">Status</th>
+              <th class="text-center font-semibold px-4 py-3">Details</th>
+              <th class="text-right font-semibold px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody id="adminTbody" class="divide-y divide-slate-100"></tbody>
@@ -81,6 +205,7 @@
   </div>
 </div>
 
+<!-- Create Admin Modal -->
 <div id="modal-add-admin" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
     <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
@@ -92,9 +217,10 @@
       <div><label class="text-xs font-semibold text-slate2">Work Email</label><input class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"></div>
       <div><label class="text-xs font-semibold text-slate2">Role</label>
         <select class="mt-1 w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
-          <option>Super Admin</option>
           <option>Support Admin</option>
           <option>System Admin</option>
+          <option>Security Admin</option>
+          <option>User Admin</option>
         </select>
       </div>
       <div class="bg-offwhite border border-slate-200 rounded-lg px-4 py-3 text-xs text-slate2">
@@ -111,38 +237,254 @@
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 <script>
+/* ═══════════════════════════════════════════════════════════════════
+   ADMIN USERS — List
+   ═══════════════════════════════════════════════════════════════════ */
+
+const ADMINS = [
+  { id: 'ADM-001', name: 'Rafiq Ahmed', email: 'rafiq@justifi.com.bd', role: 'Super Admin', status: 'Active' },
+  { id: 'ADM-002', name: 'Farhana Islam', email: 'farhana@justifi.com.bd', role: 'Support Admin', status: 'Active' },
+  { id: 'ADM-003', name: 'Kamrul Hasan', email: 'kamrul@justifi.com.bd', role: 'System Admin', status: 'Inactive' },
+  { id: 'ADM-004', name: 'Sabrina Akhter', email: 'sabrina@justifi.com.bd', role: 'Security Admin', status: 'Active' },
+  { id: 'ADM-005', name: 'Md. Jashim Uddin', email: 'jashim@justifi.com.bd', role: 'User Admin', status: 'Active' }
+];
+
+let currentAction = null;
+
+/* ─── Helpers ─── */
+function initialsFrom(name) {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function avatarTone(role) {
+  if (role === 'Super Admin') return 'super';
+  if (role === 'Support Admin') return 'support';
+  if (role === 'System Admin') return 'system';
+  if (role === 'Security Admin') return 'security';
+  return 'user';
+}
+
+function roleTone(role) {
+  const map = {
+    'Super Admin':   { bg: '#FBF6ED', color: '#A07D3A' },
+    'Support Admin': { bg: '#EFF6FF', color: '#1D4ED8' },
+    'System Admin':  { bg: '#F1F5F9', color: '#475569' },
+    'Security Admin':{ bg: '#FEF2F2', color: '#B91C1C' },
+    'User Admin':    { bg: '#F5F3FF', color: '#6D28D9' }
+  };
+  return map[role] || { bg: '#F1F5F9', color: '#475569' };
+}
+
+/* ─── Render Table ─── */
 function renderAdmins() {
-  const q = (document.getElementById('searchAdmin').value || '').toLowerCase();
+  const q = (document.getElementById('searchAdmin').value || '').toLowerCase().trim();
   const r = document.getElementById('filterAdminRole').value;
   const s = document.getElementById('filterAdminStatus').value;
-  const rows = DATA.admins.filter(a =>
-    (!q || a.name.toLowerCase().includes(q) || a.email.toLowerCase().includes(q)) &&
-    (!r || a.role === r) && (!s || a.status === s));
-  document.getElementById('adminTbody').innerHTML = rows.map(a => `
-    <tr class="hover:bg-offwhite/60">
-      <td class="px-5 py-3.5 text-slate2">${a.id}</td>
-      <td class="px-5 py-3.5 font-medium">${a.name}</td>
-      <td class="px-5 py-3.5 text-slate2">${a.email}</td>
-      <td class="px-5 py-3.5"><span class="${a.role==='Super Admin'?'text-gold font-semibold':'text-navy'}">${a.role}</span></td>
-      <td class="px-5 py-3.5">${a.mfa?'✅':'❌'}</td>
-      <td class="px-5 py-3.5 text-slate2">${a.lastLogin}</td>
-      <td class="px-5 py-3.5">
-        <span class="inline-flex items-center gap-1.5 ${a.status==='Active'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate2'} text-xs font-semibold px-2.5 py-1 rounded-full">
-          <span class="dot ${a.status==='Active'?'bg-emerald-500':'bg-slate-400'}"></span>${a.status}
-        </span>
-      </td>
-      <td class="px-5 py-3.5 text-right">
-        ${a.role==='Super Admin'
-          ? `<span class="text-xs text-slate2 italic">This is you</span>`
-          : a.status==='Active'
-            ? `<button class="icon-btn gray" title="Deactivate">⏸</button>`
-            : `<button class="icon-btn green" title="Activate">▶</button>`}
-      </td>
-    </tr>`).join('') || `<tr><td colspan="8" class="px-5 py-6 text-center text-slate2 text-sm">No admins found.</td></tr>`;
+
+  const rows = ADMINS.filter(a => {
+    if (q && !(a.name.toLowerCase().includes(q) || a.email.toLowerCase().includes(q))) return false;
+    if (r && a.role !== r) return false;
+    if (s && a.status !== s) return false;
+    return true;
+  });
+
+  document.getElementById('clearAllBtn').classList.toggle('hidden', !(q || r || s));
+
+  const tbody = document.getElementById('adminTbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="px-4 py-8 text-center text-slate2 text-sm">No admins found.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(a => {
+    const isSelf = a.role === 'Super Admin';
+    const statusTone = a.status === 'Active' ? 'emerald' : 'slate';
+    const rTone = roleTone(a.role);
+
+    // Action buttons
+    let actionsHtml = '';
+    if (isSelf) {
+      actionsHtml = `<span class="text-[10.5px] text-slate2 italic">This is you</span>`;
+    } else if (a.status === 'Active') {
+      actionsHtml = `
+        <button class="btn-action btn-deactivate" onclick="openConfirmAction('${a.id}', 'deactivate')">
+          ⏸ Deactivate
+        </button>`;
+    } else {
+      actionsHtml = `
+        <button class="btn-action btn-activate" onclick="openConfirmAction('${a.id}', 'activate')">
+          ▶ Activate
+        </button>`;
+    }
+
+    return `
+      <tr class="admin-row">
+        <!-- Admin ID -->
+        <td class="px-4 text-slate2 text-[12px] font-mono">${a.id}</td>
+
+        <!-- Name -->
+        <td class="px-4">
+          <div class="flex items-center gap-2.5">
+            <div class="admin-avatar ${avatarTone(a.role)}">${initialsFrom(a.name)}</div>
+            <span class="font-semibold text-navy text-[13px] truncate">${a.name}</span>
+          </div>
+        </td>
+
+        <!-- Email -->
+        <td class="px-4 text-slate2 text-[12px] truncate">${a.email}</td>
+
+        <!-- Role -->
+        <td class="px-4">
+          <span class="inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                style="background: ${rTone.bg}; color: ${rTone.color};">
+            ${a.role}
+          </span>
+        </td>
+
+        <!-- Status -->
+        <td class="px-4">
+          <span class="inline-flex items-center gap-1.5
+            ${statusTone === 'emerald' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate2'}
+            text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
+            <span class="dot ${statusTone === 'emerald' ? 'bg-emerald-500' : 'bg-slate-400'}"></span>${a.status}
+          </span>
+        </td>
+
+        <!-- Details -->
+        <td class="px-4 text-center">
+          <button class="btn-action btn-details" onclick="goToAdminInfo('${a.id}')">
+            View →
+          </button>
+        </td>
+
+        <!-- Actions -->
+        <td class="px-4 text-right col-divider">
+          <div class="flex items-center justify-end gap-1.5">${actionsHtml}</div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  // Update stats
+  document.getElementById('statTotal').textContent    = ADMINS.length;
+  document.getElementById('statActive').textContent   = ADMINS.filter(a => a.status === 'Active').length;
+  document.getElementById('statInactive').textContent = ADMINS.filter(a => a.status === 'Inactive').length;
+  document.getElementById('statSuper').textContent    = ADMINS.filter(a => a.role === 'Super Admin').length;
 }
+
+/* ─── Navigate to Admin Info ─── */
+function goToAdminInfo(id) {
+  window.location.href = `admin-information.html?id=${encodeURIComponent(id)}`;
+}
+
+/* ─── Confirmation Action ─── */
+function openConfirmAction(adminId, action) {
+  const a = ADMINS.find(x => x.id === adminId);
+  if (!a) return;
+
+  currentAction = { adminId, action, name: a.name };
+
+  const config = {
+    deactivate: {
+      icon: '⏸',
+      iconBg: '#FEF3C7', iconColor: '#B45309',
+      title: 'Deactivate Admin',
+      message: `Are you sure you want to deactivate <strong class="text-navy">${a.name}</strong>? They will not be able to log in or perform any actions.`,
+      btnColor: '#B45309', btnText: 'Deactivate'
+    },
+    activate: {
+      icon: '▶',
+      iconBg: '#DCFCE7', iconColor: '#166534',
+      title: 'Activate Admin',
+      message: `Reactivate <strong class="text-navy">${a.name}</strong>'s account? They will regain full admin privileges.`,
+      btnColor: '#16A34A', btnText: 'Activate'
+    }
+  }[action];
+
+  // Create or reuse modal
+  let modal = document.getElementById('modal-confirm-action');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'modal-confirm-action';
+    modal.className = 'modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4';
+    modal.innerHTML = `
+      <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+        <div class="px-6 pt-8 pb-6">
+          <div id="confirmIcon" style="width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:26px;"></div>
+          <h3 class="text-lg font-bold text-navy text-center" id="confirmTitle"></h3>
+          <p class="text-sm text-slate2 text-center mt-2 leading-relaxed" id="confirmMessage"></p>
+          <div class="mt-5">
+            <label class="block text-[11px] font-bold text-slate2 uppercase tracking-wide mb-1.5">Reason for this action <span class="text-red-500">*</span></label>
+            <textarea id="confirmReason" rows="3" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-gold resize-y" placeholder="Briefly describe why (min 10 characters)..."></textarea>
+            <p class="text-[11px] text-slate2 mt-1.5">This reason will be visible in the admin's activity log.</p>
+          </div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
+          <button onclick="closeModal('modal-confirm-action')" class="text-sm font-semibold text-slate2 px-4 py-2">Cancel</button>
+          <button id="confirmActionBtn" onclick="submitAction()" class="text-sm font-semibold text-white px-5 py-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed" disabled>Confirm</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+  }
+
+  const iconEl = document.getElementById('confirmIcon');
+  iconEl.textContent = config.icon;
+  iconEl.style.background = config.iconBg;
+  iconEl.style.color      = config.iconColor;
+
+  document.getElementById('confirmTitle').textContent = config.title;
+  document.getElementById('confirmMessage').innerHTML = config.message;
+
+  const btn = document.getElementById('confirmActionBtn');
+  btn.textContent = config.btnText;
+  btn.style.background = config.btnColor;
+  btn.disabled = true;
+
+  const reasonEl = document.getElementById('confirmReason');
+  reasonEl.value = '';
+  reasonEl.oninput = () => { btn.disabled = reasonEl.value.trim().length < 10; };
+
+  openModal('modal-confirm-action');
+}
+
+function submitAction() {
+  if (!currentAction) return;
+  const { adminId, action } = currentAction;
+  const a = ADMINS.find(x => x.id === adminId);
+  if (!a) return;
+
+  const reason = document.getElementById('confirmReason').value.trim();
+  if (reason.length < 10) {
+    showToast('Reason must be at least 10 characters', 'error');
+    return;
+  }
+
+  if (action === 'deactivate') a.status = 'Inactive';
+  else if (action === 'activate') a.status = 'Active';
+
+  closeModal('modal-confirm-action');
+  renderAdmins();
+
+  const msgs = {
+    deactivate: `${a.name} deactivated`,
+    activate:   `${a.name} activated`
+  };
+  showToast(msgs[action], 'success');
+  currentAction = null;
+}
+
+/* ─── Clear Filters ─── */
+function clearAllFilters() {
+  document.getElementById('searchAdmin').value = '';
+  document.getElementById('filterAdminRole').value = '';
+  document.getElementById('filterAdminStatus').value = '';
+  renderAdmins();
+}
+
+/* ─── Event Listeners + Init ─── */
 document.getElementById('searchAdmin').addEventListener('input', renderAdmins);
 document.getElementById('filterAdminRole').addEventListener('change', renderAdmins);
 document.getElementById('filterAdminStatus').addEventListener('change', renderAdmins);
+
 renderAdmins();
 </script>
 </body>

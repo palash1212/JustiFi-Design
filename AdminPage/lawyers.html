@@ -16,9 +16,9 @@
 </script>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* ── Action Buttons ── */
+  /* ═══ Action Buttons ═══ */
   .btn-action {
-    padding: 4px 10px;
+    padding: 5px 11px;
     font-size: 11px; font-weight: 600;
     border-radius: 7px;
     transition: all .15s;
@@ -26,22 +26,24 @@
     cursor: pointer;
     white-space: nowrap;
   }
-  .btn-view       { color: #1A2B3C; border: 1.5px solid #E2E8F0; background: #fff; }
-  .btn-view:hover { border-color: #C5A059; background: #FBF6ED; }
 
-  .btn-details       { color: #fff; border: 1.5px solid #1A2B3C; background: #1A2B3C; }
-  .btn-details:hover { background: #152233; }
+  .btn-details {
+    color: #1A2B3C;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+  }
+  .btn-details:hover { border-color: #C5A059; background: #FBF6ED; }
 
-  .btn-deactivate       { color: #B45309; border: 1.5px solid #FDE68A; background: #FFFBEB; }
+  .btn-deactivate { color: #B45309; border: 1.5px solid #FDE68A; background: #FFFBEB; }
   .btn-deactivate:hover { background: #FEF3C7; border-color: #F59E0B; }
 
-  .btn-activate       { color: #fff; border: 1.5px solid #22C55E; background: #22C55E; }
+  .btn-activate { color: #fff; border: 1.5px solid #22C55E; background: #22C55E; }
   .btn-activate:hover { background: #16A34A; border-color: #16A34A; }
 
-  .btn-block       { color: #B91C1C; border: 1.5px solid #FECACA; background: #FEF2F2; }
+  .btn-block { color: #B91C1C; border: 1.5px solid #FECACA; background: #FEF2F2; }
   .btn-block:hover { background: #FEE2E2; border-color: #EF4444; }
 
-  /* ── Confirmation Modal ── */
+  /* ═══ Confirmation Modal ═══ */
   .confirm-icon-wrap {
     width: 60px; height: 60px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -66,7 +68,7 @@
     box-shadow: 0 0 0 3px rgba(197,160,89,0.12);
   }
 
-  /* ── Date Filter ── */
+  /* ═══ Date Filter ═══ */
   .date-range-wrap {
     display: flex; align-items: center; gap: 6px;
     border: 1px solid #E2E8F0; border-radius: 8px;
@@ -86,6 +88,45 @@
   .date-range-wrap input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer; opacity: 0.5;
   }
+
+  /* ═══ Table Row ═══ */
+  .lawyer-row {
+    transition: background .15s;
+  }
+  .lawyer-row:hover { background: #F8FAFC; }
+
+  .lawyer-row td {
+    padding: 12px 14px;
+    vertical-align: middle;
+  }
+
+  .col-divider {
+    border-left: 1px solid #F1F5F9;
+  }
+
+  /* ═══ Avatar ═══ */
+  .lawyer-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .lawyer-avatar.corporate { background: linear-gradient(135deg, #C5A059, #A07D3A); }
+  .lawyer-avatar.family    { background: linear-gradient(135deg, #EC4899, #BE185D); }
+  .lawyer-avatar.criminal  { background: linear-gradient(135deg, #EF4444, #B91C1C); }
+  .lawyer-avatar.property  { background: linear-gradient(135deg, #10B981, #047857); }
+  .lawyer-avatar.tax       { background: linear-gradient(135deg, #3B82F6, #1D4ED8); }
+  .lawyer-avatar.default   { background: linear-gradient(135deg, #64748B, #475569); }
+
+  /* ═══ Rating Chip ═══ */
+  .rating-chip {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 12px; font-weight: 700;
+    color: #1A2B3C;
+  }
+  .rating-chip .star { color: #C5A059; font-size: 13px; }
 </style>
 </head>
 <body class="bg-offwhite text-navy">
@@ -103,7 +144,7 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-6 space-y-4">
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
 
       <!-- Title + Add Button -->
       <div class="flex items-center justify-between">
@@ -117,7 +158,7 @@
         </button>
       </div>
 
-      <!-- Stat Cards (compact) -->
+      <!-- Stat Cards -->
       <div class="grid grid-cols-4 gap-4">
         <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
           <p class="text-slate2 text-[11px] font-medium">Total</p>
@@ -176,16 +217,25 @@
 
       <!-- Table -->
       <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm" style="table-layout: fixed; border-collapse: collapse;">
+          <colgroup>
+            <col style="width: 22%;">   <!-- Name + avatar -->
+            <col style="width: 11%;">   <!-- Bar/Sanad -->
+            <col style="width: 14%;">   <!-- Practice Area -->
+            <col style="width: 10%;">   <!-- Rating -->
+            <col style="width: 11%;">   <!-- Status -->
+            <col style="width: 10%;">   <!-- Details -->
+            <col style="width: 22%;">   <!-- Actions -->
+          </colgroup>
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-4 py-2.5">Name</th>
-              <th class="text-left font-semibold px-4 py-2.5">Bar/Sanad</th>
-              <th class="text-left font-semibold px-4 py-2.5">Practice Area</th>
-              <th class="text-left font-semibold px-4 py-2.5">Rating</th>
-              <th class="text-left font-semibold px-4 py-2.5">Status</th>
-              <th class="text-center font-semibold px-4 py-2.5">Details</th>
-              <th class="text-right font-semibold px-4 py-2.5" style="width: 280px;">Actions</th>
+              <th class="text-left font-semibold px-4 py-3">Name</th>
+              <th class="text-left font-semibold px-4 py-3">Bar/Sanad</th>
+              <th class="text-left font-semibold px-4 py-3">Practice Area</th>
+              <th class="text-left font-semibold px-4 py-3">Rating</th>
+              <th class="text-left font-semibold px-4 py-3">Status</th>
+              <th class="text-center font-semibold px-4 py-3">Details</th>
+              <th class="text-right font-semibold px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody id="lawyersTbody" class="divide-y divide-slate-100"></tbody>
@@ -225,7 +275,7 @@
   </div>
 </div>
 
-<!-- Confirmation Modal (Deactivate / Activate / Block) -->
+<!-- Confirmation Modal -->
 <div id="modal-confirm-action" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
     <div class="px-6 pt-8 pb-6">
@@ -254,7 +304,7 @@
 <script src="js/main.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════════════
-   LAWYERS PAGE — Full Logic
+   LAWYERS PAGE — List
    ═══════════════════════════════════════════════════════════════════ */
 
 const LAWYERS = [
@@ -319,7 +369,7 @@ const LAWYERS = [
 
 let currentAction = null;
 
-/* ─── Helper: parse "15 Jan 2024" → Date ─── */
+/* ─── Helpers ─── */
 function parseDate(str) {
   const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
   const parts = str.trim().split(' ');
@@ -329,6 +379,31 @@ function parseDate(str) {
   const year = parseInt(parts[2], 10);
   if (isNaN(day) || mon === undefined || isNaN(year)) return null;
   return new Date(year, mon, day);
+}
+
+function initialsFrom(name) {
+  return name.replace(/^(Barrister|Advocate|Adv\.|Md\.|Mr\.|Ms\.|Mrs\.)\s+/i, '')
+    .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function avatarTone(area) {
+  if (area === 'Corporate Law') return 'corporate';
+  if (area === 'Family Law')    return 'family';
+  if (area === 'Criminal Law')  return 'criminal';
+  if (area === 'Property Law')  return 'property';
+  if (area === 'Tax Law')       return 'tax';
+  return 'default';
+}
+
+function areaTone(area) {
+  const map = {
+    'Corporate Law': { bg: '#FBF6ED', color: '#A07D3A' },
+    'Family Law':    { bg: '#FCE7F3', color: '#BE185D' },
+    'Criminal Law':  { bg: '#FEF2F2', color: '#B91C1C' },
+    'Property Law':  { bg: '#F0FDF4', color: '#047857' },
+    'Tax Law':       { bg: '#EFF6FF', color: '#1D4ED8' }
+  };
+  return map[area] || { bg: '#F1F5F9', color: '#475569' };
 }
 
 /* ─── Render Table ─── */
@@ -343,7 +418,6 @@ function renderLawyers() {
     if (q && !(l.name.toLowerCase().includes(q) || l.bar.toLowerCase().includes(q))) return false;
     if (s && l.status !== s) return false;
     if (area && l.area !== area) return false;
-
     if (dFrom || dTo) {
       const jd = parseDate(l.joined);
       if (!jd) return false;
@@ -355,14 +429,8 @@ function renderLawyers() {
     return true;
   });
 
-  // Clear buttons
-  const clearDateBtn = document.getElementById('clearDateBtn');
-  if (dFrom || dTo) clearDateBtn.classList.remove('hidden');
-  else clearDateBtn.classList.add('hidden');
-
-  const clearAllBtn = document.getElementById('clearAllBtn');
-  if (q || s || area || dFrom || dTo) clearAllBtn.classList.remove('hidden');
-  else clearAllBtn.classList.add('hidden');
+  document.getElementById('clearDateBtn').classList.toggle('hidden', !(dFrom || dTo));
+  document.getElementById('clearAllBtn').classList.toggle('hidden', !(q || s || area || dFrom || dTo));
 
   const tbody = document.getElementById('lawyersTbody');
   if (rows.length === 0) {
@@ -373,66 +441,83 @@ function renderLawyers() {
   tbody.innerHTML = rows.map(l => {
     const statusTone = l.status === 'Active' ? 'emerald'
                      : l.status === 'Blocked' ? 'red' : 'slate';
+    const aTone = areaTone(l.area);
 
     let actionsHtml = '';
     if (l.status === 'Active') {
       actionsHtml = `
-        <button class="btn-action btn-deactivate" onclick="openConfirmAction('${l.id}', 'deactivate')">
-          <span>⏸</span> Deactivate
-        </button>
-        <button class="btn-action btn-block" onclick="openConfirmAction('${l.id}', 'block')">
-          <span>⊘</span> Block
-        </button>`;
+        <button class="btn-action btn-deactivate" onclick="openConfirmAction('${l.id}', 'deactivate')">⏸ Deactivate</button>
+        <button class="btn-action btn-block" onclick="openConfirmAction('${l.id}', 'block')">⊘ Block</button>`;
     } else {
       actionsHtml = `
-        <button class="btn-action btn-activate" onclick="openConfirmAction('${l.id}', 'activate')">
-          <span>▶</span> Activate
-        </button>`;
+        <button class="btn-action btn-activate" onclick="openConfirmAction('${l.id}', 'activate')">▶ Activate</button>`;
       if (l.status === 'Inactive') {
         actionsHtml += `
-          <button class="btn-action btn-block" onclick="openConfirmAction('${l.id}', 'block')">
-            <span>⊘</span> Block
-          </button>`;
+          <button class="btn-action btn-block" onclick="openConfirmAction('${l.id}', 'block')">⊘ Block</button>`;
       }
     }
 
     return `
-      <tr class="hover:bg-offwhite/60 transition">
-        <td class="px-4 py-2.5 font-medium text-[13px]">${l.name}</td>
-        <td class="px-4 py-2.5 text-slate2 text-xs">${l.bar}</td>
-        <td class="px-4 py-2.5 text-slate2 text-[13px]">${l.area}</td>
-        <td class="px-4 py-2.5 text-[13px]">
-          <span class="text-gold">★</span> ${l.rating.toFixed(1)}
+      <tr class="lawyer-row">
+        <!-- Name + Avatar -->
+        <td class="px-4">
+          <div class="flex items-center gap-2.5">
+            <div class="lawyer-avatar ${avatarTone(l.area)}">${initialsFrom(l.name)}</div>
+            <span class="font-semibold text-navy text-[13px] truncate">${l.name}</span>
+          </div>
         </td>
-        <td class="px-4 py-2.5">
+
+        <!-- Bar/Sanad -->
+        <td class="px-4 text-slate2 text-[12px] font-mono">${l.bar}</td>
+
+        <!-- Practice Area -->
+        <td class="px-4">
+          <span class="inline-flex items-center text-[11px] font-semibold px-2.5 py-1 rounded-full"
+                style="background: ${aTone.bg}; color: ${aTone.color};">
+            ${l.area}
+          </span>
+        </td>
+
+        <!-- Rating -->
+        <td class="px-4">
+          <span class="rating-chip">
+            <span class="star">★</span> ${l.rating.toFixed(1)}
+          </span>
+        </td>
+
+        <!-- Status -->
+        <td class="px-4">
           <span class="inline-flex items-center gap-1.5
             ${statusTone === 'emerald' ? 'bg-emerald-50 text-emerald-700'
               : statusTone === 'red' ? 'bg-red-50 text-red-600'
               : 'bg-slate-100 text-slate2'}
-            text-xs font-semibold px-2.5 py-1 rounded-full">
+            text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
             <span class="dot ${statusTone === 'emerald' ? 'bg-emerald-500'
               : statusTone === 'red' ? 'bg-red-500' : 'bg-slate-400'}"></span>${l.status}
           </span>
         </td>
-        <td class="px-4 py-2.5 text-center">
-          <button class="btn-action btn-details"
-                  onclick="goToLawyerInfo('${l.id}')">
-            Click →
+
+        <!-- Details -->
+        <td class="px-4 text-center">
+          <button class="btn-action btn-details" onclick="goToLawyerInfo('${l.id}')">
+            View →
           </button>
         </td>
-        <td class="px-4 py-2.5 text-right">
+
+        <!-- Actions -->
+        <td class="px-4 text-right col-divider">
           <div class="flex items-center justify-end gap-1.5">${actionsHtml}</div>
         </td>
       </tr>`;
   }).join('');
 }
 
-/* ─── Navigate to Lawyer Info Page ─── */
+/* ─── Navigate ─── */
 function goToLawyerInfo(id) {
   window.location.href = `lawyer-information.html?id=${encodeURIComponent(id)}`;
 }
 
-/* ─── Confirmation Action ─── */
+/* ─── Confirm Action ─── */
 function openConfirmAction(lawyerId, action) {
   const l = LAWYERS.find(x => x.id === lawyerId);
   if (!l) return;
@@ -474,9 +559,7 @@ function openConfirmAction(lawyerId, action) {
 
   const reasonEl = document.getElementById('confirmReason');
   reasonEl.value = '';
-  reasonEl.oninput = () => {
-    btn.disabled = reasonEl.value.trim().length < 10;
-  };
+  reasonEl.oninput = () => { btn.disabled = reasonEl.value.trim().length < 10; };
 
   openModal('modal-confirm-action');
 }
@@ -512,7 +595,6 @@ function submitAction() {
     block:      `${l.name} blocked`
   };
   showToast(msgs[action], 'success');
-
   currentAction = null;
 }
 
@@ -524,15 +606,15 @@ function clearDateFilter() {
 }
 
 function clearAllFilters() {
-  document.getElementById('searchLawyer').value     = '';
+  document.getElementById('searchLawyer').value       = '';
   document.getElementById('filterLawyerStatus').value = '';
   document.getElementById('filterLawyerArea').value   = '';
-  document.getElementById('dateFrom').value          = '';
-  document.getElementById('dateTo').value            = '';
+  document.getElementById('dateFrom').value           = '';
+  document.getElementById('dateTo').value             = '';
   renderLawyers();
 }
 
-/* ─── Event Listeners + Init ─── */
+/* ─── Init ─── */
 document.getElementById('searchLawyer').addEventListener('input', renderLawyers);
 document.getElementById('filterLawyerStatus').addEventListener('change', renderLawyers);
 document.getElementById('filterLawyerArea').addEventListener('change', renderLawyers);

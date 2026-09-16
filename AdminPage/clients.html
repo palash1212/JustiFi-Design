@@ -16,9 +16,9 @@
 </script>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* ── Action Buttons ── */
+  /* ═══ Action Buttons ═══ */
   .btn-action {
-    padding: 4px 10px;
+    padding: 5px 11px;
     font-size: 11px; font-weight: 600;
     border-radius: 7px;
     transition: all .15s;
@@ -26,22 +26,24 @@
     cursor: pointer;
     white-space: nowrap;
   }
-  .btn-view       { color: #1A2B3C; border: 1.5px solid #E2E8F0; background: #fff; }
-  .btn-view:hover { border-color: #C5A059; background: #FBF6ED; }
 
-  .btn-details       { color: #fff; border: 1.5px solid #1A2B3C; background: #1A2B3C; }
-  .btn-details:hover { background: #152233; }
+  .btn-details {
+    color: #1A2B3C;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+  }
+  .btn-details:hover { border-color: #C5A059; background: #FBF6ED; }
 
-  .btn-deactivate       { color: #B45309; border: 1.5px solid #FDE68A; background: #FFFBEB; }
+  .btn-deactivate { color: #B45309; border: 1.5px solid #FDE68A; background: #FFFBEB; }
   .btn-deactivate:hover { background: #FEF3C7; border-color: #F59E0B; }
 
-  .btn-activate       { color: #fff; border: 1.5px solid #22C55E; background: #22C55E; }
+  .btn-activate { color: #fff; border: 1.5px solid #22C55E; background: #22C55E; }
   .btn-activate:hover { background: #16A34A; border-color: #16A34A; }
 
-  .btn-block       { color: #B91C1C; border: 1.5px solid #FECACA; background: #FEF2F2; }
+  .btn-block { color: #B91C1C; border: 1.5px solid #FECACA; background: #FEF2F2; }
   .btn-block:hover { background: #FEE2E2; border-color: #EF4444; }
 
-  /* ── Confirmation Modal ── */
+  /* ═══ Confirmation Modal ═══ */
   .confirm-icon-wrap {
     width: 60px; height: 60px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
@@ -66,7 +68,7 @@
     box-shadow: 0 0 0 3px rgba(197,160,89,0.12);
   }
 
-  /* ── Date Filter ── */
+  /* ═══ Date Filter ═══ */
   .date-range-wrap {
     display: flex; align-items: center; gap: 6px;
     border: 1px solid #E2E8F0; border-radius: 8px;
@@ -86,6 +88,41 @@
   .date-range-wrap input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer; opacity: 0.5;
   }
+
+  /* ═══ Table Row ═══ */
+  .client-row {
+    transition: background .15s;
+  }
+  .client-row:hover { background: #F8FAFC; }
+
+  .client-row td {
+    padding: 12px 14px;
+    vertical-align: middle;
+  }
+
+  .col-divider {
+    border-left: 1px solid #F1F5F9;
+  }
+
+  /* ═══ Avatar ═══ */
+  .client-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* Avatar colors — assign by index for variety */
+  .client-avatar.c0 { background: linear-gradient(135deg, #3B82F6, #1E40AF); }
+  .client-avatar.c1 { background: linear-gradient(135deg, #10B981, #047857); }
+  .client-avatar.c2 { background: linear-gradient(135deg, #8B5CF6, #6D28D9); }
+  .client-avatar.c3 { background: linear-gradient(135deg, #EC4899, #BE185D); }
+  .client-avatar.c4 { background: linear-gradient(135deg, #F59E0B, #B45309); }
+  .client-avatar.c5 { background: linear-gradient(135deg, #06B6D4, #0E7490); }
+  .client-avatar.c6 { background: linear-gradient(135deg, #EF4444, #B91C1C); }
+  .client-avatar.c7 { background: linear-gradient(135deg, #C5A059, #A07D3A); }
 </style>
 </head>
 <body class="bg-offwhite text-navy">
@@ -103,7 +140,7 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-6 space-y-4">
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
 
       <!-- Title -->
       <div>
@@ -157,15 +194,23 @@
 
       <!-- Table -->
       <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm" style="table-layout: fixed; border-collapse: collapse;">
+          <colgroup>
+            <col style="width: 26%;">   <!-- Name + avatar -->
+            <col style="width: 14%;">   <!-- ID -->
+            <col style="width: 13%;">   <!-- Status -->
+            <col style="width: 15%;">   <!-- Joining Date -->
+            <col style="width: 12%;">   <!-- Details -->
+            <col style="width: 20%;">   <!-- Actions -->
+          </colgroup>
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-4 py-2.5">Name</th>
-              <th class="text-left font-semibold px-4 py-2.5">ID</th>
-              <th class="text-left font-semibold px-4 py-2.5">Status</th>
-              <th class="text-left font-semibold px-4 py-2.5">Joining Date</th>
-              <th class="text-center font-semibold px-4 py-2.5">Details</th>
-              <th class="text-right font-semibold px-4 py-2.5" style="width: 280px;">Actions</th>
+              <th class="text-left font-semibold px-4 py-3">Name</th>
+              <th class="text-left font-semibold px-4 py-3">Client ID</th>
+              <th class="text-left font-semibold px-4 py-3">Status</th>
+              <th class="text-left font-semibold px-4 py-3">Joining Date</th>
+              <th class="text-center font-semibold px-4 py-3">Details</th>
+              <th class="text-right font-semibold px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody id="clientsTbody" class="divide-y divide-slate-100"></tbody>
@@ -217,60 +262,33 @@ const CLIENTS = [
   {
     id: 'CLI-10234', name: 'Mahmudul Karim', email: 'mahmud@mail.com',
     phone: '+880 1712-345678', address: 'House 12, Road 5, Dhanmondi, Dhaka',
-    status: 'Active', joined: '12 Jan 2025',
-    services: { affidavit: 12, corporateTax: 3, lawyerBooking: 8, landProperty: 2, taxIncome: 5 },
-    ratings: { lawyer: { avg: 4.7, count: 15 }, deed: { avg: 4.5, count: 6 } },
-    history: [
-      { action: 'activate', label: 'Account Activated', date: '12 Jan 2025, 10:30 AM', reason: 'Initial registration — email verified.' }
-    ]
+    status: 'Active', joined: '12 Jan 2025'
   },
   {
     id: 'CLI-88214', name: 'Abdullah Hasan', email: 'abdullah@mail.com',
     phone: '+880 1819-556677', address: 'Flat 3B, Gulshan 2, Dhaka',
-    status: 'Inactive', joined: '03 Mar 2025',
-    services: { affidavit: 4, corporateTax: 8, lawyerBooking: 15, landProperty: 6, taxIncome: 11 },
-    ratings: { lawyer: { avg: 4.2, count: 22 }, deed: { avg: 4.0, count: 9 } },
-    history: [
-      { action: 'activate',   label: 'Account Activated',   date: '03 Mar 2025, 09:15 AM', reason: 'Initial registration.' },
-      { action: 'deactivate', label: 'Account Deactivated', date: '18 Sep 2026, 02:42 PM', reason: 'Multiple disputes filed against service providers. Account temporarily restricted pending review.' }
-    ]
+    status: 'Inactive', joined: '03 Mar 2025'
   },
   {
     id: 'CLI-10891', name: 'Shirin Rahman', email: 'shirin@mail.com',
     phone: '+880 1512-334455', address: 'Uttara Sector 10, Dhaka',
-    status: 'Active', joined: '21 Apr 2024',
-    services: { affidavit: 6, corporateTax: 1, lawyerBooking: 4, landProperty: 3, taxIncome: 7 },
-    ratings: { lawyer: { avg: 4.9, count: 11 }, deed: { avg: 4.8, count: 4 } },
-    history: [
-      { action: 'activate', label: 'Account Activated', date: '21 Apr 2024, 11:05 AM', reason: 'Initial registration — verified via NID.' }
-    ]
+    status: 'Active', joined: '21 Apr 2024'
   },
   {
     id: 'CLI-10892', name: 'Nasrin Akter', email: 'nasrin@mail.com',
     phone: '+880 1717-889900', address: 'Mohammadpur, Dhaka',
-    status: 'Active', joined: '07 Jul 2024',
-    services: { affidavit: 2, corporateTax: 0, lawyerBooking: 3, landProperty: 1, taxIncome: 9 },
-    ratings: { lawyer: { avg: 4.6, count: 8 }, deed: { avg: 0, count: 0 } },
-    history: [
-      { action: 'activate', label: 'Account Activated', date: '07 Jul 2024, 04:22 PM', reason: 'Initial registration.' }
-    ]
+    status: 'Active', joined: '07 Jul 2024'
   },
   {
     id: 'CLI-10893', name: 'Tania Islam', email: 'tania@mail.com',
     phone: '+880 1912-778899', address: 'Banani, Dhaka',
-    status: 'Blocked', joined: '19 Feb 2025',
-    services: { affidavit: 1, corporateTax: 2, lawyerBooking: 5, landProperty: 0, taxIncome: 3 },
-    ratings: { lawyer: { avg: 2.8, count: 9 }, deed: { avg: 3.0, count: 2 } },
-    history: [
-      { action: 'activate', label: 'Account Activated', date: '19 Feb 2025, 08:40 AM', reason: 'Initial registration.' },
-      { action: 'block',    label: 'Account Blocked',   date: '22 Aug 2026, 03:15 PM', reason: 'Suspicious transaction activity detected. Account blocked pending fraud investigation.' }
-    ]
+    status: 'Blocked', joined: '19 Feb 2025'
   }
 ];
 
 let currentAction = null;
 
-/* ─── Parse "12 Jan 2025" → Date ─── */
+/* ─── Helpers ─── */
 function parseClientDate(str) {
   const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
   const parts = str.trim().split(' ');
@@ -280,6 +298,10 @@ function parseClientDate(str) {
   const year = parseInt(parts[2], 10);
   if (isNaN(day) || mon === undefined || isNaN(year)) return null;
   return new Date(year, mon, day);
+}
+
+function initialsFrom(name) {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
 }
 
 /* ─── Render Table ─── */
@@ -292,7 +314,6 @@ function renderClients() {
   const rows = CLIENTS.filter(c => {
     if (q && !(c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q))) return false;
     if (s && c.status !== s) return false;
-
     if (dFrom || dTo) {
       const cDate = parseClientDate(c.joined);
       if (!cDate) return false;
@@ -304,13 +325,8 @@ function renderClients() {
     return true;
   });
 
-  const clearDateBtn = document.getElementById('clearDateBtn');
-  if (dFrom || dTo) clearDateBtn.classList.remove('hidden');
-  else clearDateBtn.classList.add('hidden');
-
-  const clearAllBtn = document.getElementById('clearAllBtn');
-  if (q || s || dFrom || dTo) clearAllBtn.classList.remove('hidden');
-  else clearAllBtn.classList.add('hidden');
+  document.getElementById('clearDateBtn').classList.toggle('hidden', !(dFrom || dTo));
+  document.getElementById('clearAllBtn').classList.toggle('hidden', !(q || s || dFrom || dTo));
 
   const tbody = document.getElementById('clientsTbody');
   if (rows.length === 0) {
@@ -318,66 +334,76 @@ function renderClients() {
     return;
   }
 
-  tbody.innerHTML = rows.map(c => {
+  tbody.innerHTML = rows.map((c, idx) => {
     const statusTone = c.status === 'Active' ? 'emerald'
                      : c.status === 'Blocked' ? 'red' : 'slate';
+    const avatarTone = `c${idx % 8}`;
 
     let actionsHtml = '';
     if (c.status === 'Active') {
       actionsHtml = `
-        <button class="btn-action btn-deactivate" onclick="openConfirmAction('${c.id}', 'deactivate')">
-          <span>⏸</span> Deactivate
-        </button>
-        <button class="btn-action btn-block" onclick="openConfirmAction('${c.id}', 'block')">
-          <span>⊘</span> Block
-        </button>`;
+        <button class="btn-action btn-deactivate" onclick="openConfirmAction('${c.id}', 'deactivate')">⏸ Deactivate</button>
+        <button class="btn-action btn-block" onclick="openConfirmAction('${c.id}', 'block')">⊘ Block</button>`;
     } else {
       actionsHtml = `
-        <button class="btn-action btn-activate" onclick="openConfirmAction('${c.id}', 'activate')">
-          <span>▶</span> Activate
-        </button>`;
+        <button class="btn-action btn-activate" onclick="openConfirmAction('${c.id}', 'activate')">▶ Activate</button>`;
       if (c.status === 'Inactive') {
         actionsHtml += `
-          <button class="btn-action btn-block" onclick="openConfirmAction('${c.id}', 'block')">
-            <span>⊘</span> Block
-          </button>`;
+          <button class="btn-action btn-block" onclick="openConfirmAction('${c.id}', 'block')">⊘ Block</button>`;
       }
     }
 
     return `
-      <tr class="hover:bg-offwhite/60 transition">
-        <td class="px-4 py-2.5 font-medium text-[13px]">${c.name}</td>
-        <td class="px-4 py-2.5 text-slate2 text-xs">${c.id}</td>
-        <td class="px-4 py-2.5">
+      <tr class="client-row">
+        <!-- Name + Avatar -->
+        <td class="px-4">
+          <div class="flex items-center gap-2.5">
+            <div class="client-avatar ${avatarTone}">${initialsFrom(c.name)}</div>
+            <span class="font-semibold text-navy text-[13px] truncate">${c.name}</span>
+          </div>
+        </td>
+
+        <!-- Client ID -->
+        <td class="px-4 text-slate2 text-[12px] font-mono">${c.id}</td>
+
+        <!-- Status -->
+        <td class="px-4">
           <span class="inline-flex items-center gap-1.5
             ${statusTone === 'emerald' ? 'bg-emerald-50 text-emerald-700'
               : statusTone === 'red' ? 'bg-red-50 text-red-600'
               : 'bg-slate-100 text-slate2'}
-            text-xs font-semibold px-2.5 py-1 rounded-full">
+            text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
             <span class="dot ${statusTone === 'emerald' ? 'bg-emerald-500'
               : statusTone === 'red' ? 'bg-red-500' : 'bg-slate-400'}"></span>${c.status}
           </span>
         </td>
-        <td class="px-4 py-2.5 text-slate2 text-[13px]">${c.joined}</td>
-        <td class="px-4 py-2.5 text-center">
-          <button class="btn-action btn-details"
-                  onclick="goToClientInfo('${c.id}')">
-            Click →
+
+        <!-- Joining Date -->
+        <td class="px-4 text-slate2 text-[13px]">${c.joined}</td>
+
+        <!-- Details -->
+        <td class="px-4 text-center">
+          <button class="btn-action btn-details" onclick="goToClientInfo('${c.id}')">
+            View →
           </button>
         </td>
-        <td class="px-4 py-2.5 text-right">
+
+        <!-- Actions -->
+        <td class="px-4 text-right col-divider">
           <div class="flex items-center justify-end gap-1.5">${actionsHtml}</div>
         </td>
       </tr>`;
   }).join('');
+
+  updateStats();
 }
 
-/* ─── Navigate to Client Info Page ─── */
+/* ─── Navigate ─── */
 function goToClientInfo(id) {
   window.location.href = `client-information.html?id=${encodeURIComponent(id)}`;
 }
 
-/* ─── Confirmation Action ─── */
+/* ─── Confirm Action ─── */
 function openConfirmAction(clientId, action) {
   const c = CLIENTS.find(x => x.id === clientId);
   if (!c) return;
@@ -419,9 +445,7 @@ function openConfirmAction(clientId, action) {
 
   const reasonEl = document.getElementById('confirmReason');
   reasonEl.value = '';
-  reasonEl.oninput = () => {
-    btn.disabled = reasonEl.value.trim().length < 10;
-  };
+  reasonEl.oninput = () => { btn.disabled = reasonEl.value.trim().length < 10; };
 
   document.getElementById('confirmHint').textContent =
     action === 'activate'
@@ -446,16 +470,8 @@ function submitAction() {
   const newStatus = action === 'deactivate' ? 'Inactive' : action === 'activate' ? 'Active' : 'Blocked';
   c.status = newStatus;
 
-  const labelMap = { deactivate: 'Account Deactivated', activate: 'Account Activated', block: 'Account Blocked' };
-  const now = new Date().toLocaleString('en-GB', {
-    day: '2-digit', month: 'short', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
-  });
-  c.history.push({ action, label: labelMap[action], date: now, reason });
-
   closeModal('modal-confirm-action');
   renderClients();
-  updateStats();
 
   const msgs = {
     deactivate: `${c.name} deactivated`,
@@ -463,17 +479,12 @@ function submitAction() {
     block:      `${c.name} blocked`
   };
   showToast(msgs[action], 'success');
-
   currentAction = null;
 }
 
 function updateStats() {
-  const active   = CLIENTS.filter(c => c.status === 'Active').length;
-  const inactive = CLIENTS.filter(c => c.status === 'Inactive').length;
-  const el1 = document.getElementById('statActive');
-  const el2 = document.getElementById('statInactive');
-  if (el1) el1.textContent = active;
-  if (el2) el2.textContent = inactive;
+  document.getElementById('statActive').textContent   = CLIENTS.filter(c => c.status === 'Active').length;
+  document.getElementById('statInactive').textContent = CLIENTS.filter(c => c.status === 'Inactive').length;
 }
 
 /* ─── Clear Filters ─── */
@@ -491,14 +502,13 @@ function clearAllFilters() {
   renderClients();
 }
 
-/* ─── Event Listeners + Init ─── */
+/* ─── Init ─── */
 document.getElementById('searchClient').addEventListener('input', renderClients);
 document.getElementById('filterStatus').addEventListener('change', renderClients);
 document.getElementById('dateFrom').addEventListener('change', renderClients);
 document.getElementById('dateTo').addEventListener('change', renderClients);
 
 renderClients();
-updateStats();
 </script>
 </body>
 </html>
