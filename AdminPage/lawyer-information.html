@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lawyer Information — JustiFi Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: { navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' }, gold: { DEFAULT:'#C5A059', 50:'#FBF6ED' }, slate2:'#64748B', offwhite:'#F8FAFC' },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* ═══ Hero (compact) ═══ */
+  .lawyer-hero {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    border-radius: 14px;
+    padding: 18px 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .lawyer-hero::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(197,160,89,0.15), transparent 70%);
+    border-radius: 50%; transform: translate(30%, -30%);
+  }
+  .lawyer-hero::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+
+  .hero-avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #C5A059, #A07D3A);
+    color: #1A2B3C;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+    border: 3px solid rgba(255,255,255,0.15);
+    flex-shrink: 0;
+    position: relative; z-index: 2;
+  }
+
+  .hero-status {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .hero-status .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .hero-status.active   { background: rgba(34,197,94,0.15);  color: #4ADE80; border: 1px solid rgba(34,197,94,0.35); }
+  .hero-status.active .dot   { background: #4ADE80; }
+  .hero-status.inactive { background: rgba(148,163,184,0.15); color: #CBD5E1; border: 1px solid rgba(148,163,184,0.35); }
+  .hero-status.inactive .dot { background: #CBD5E1; }
+  .hero-status.blocked  { background: rgba(239,68,68,0.15);  color: #FCA5A5; border: 1px solid rgba(239,68,68,0.35); }
+  .hero-status.blocked .dot  { background: #FCA5A5; }
+
+  .hero-verified {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px;
+    background: rgba(197,160,89,0.18);
+    color: #E5C878;
+    border: 1px solid rgba(197,160,89,0.4);
+  }
+
+  /* ═══ Stat Tiles (compact) ═══ */
+  .stat-tile {
+    background: #F8FAFC; border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    padding: 10px 12px;
+    transition: all .2s;
+    text-align: center;
+  }
+  .stat-tile:hover {
+    border-color: #C5A059; background: #FBF6ED;
+    transform: translateY(-1px);
+  }
+  .stat-tile .num {
+    font-size: 20px; font-weight: 800; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-tile .lbl {
+    font-size: 9.5px; color: #64748B; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-top: 5px;
+    line-height: 1.2;
+  }
+
+  /* ═══ Section Title ═══ */
+  .section-title {
+    font-size: 11px; font-weight: 700; color: #1A2B3C;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .section-title .bar { width: 3px; height: 12px; background: #C5A059; border-radius: 2px; }
+
+  /* ═══ Info Table with Vertical Dividers ═══ */
+  .info-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .info-cell {
+    padding: 9px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 12.5px;
+  }
+  .info-cell:nth-child(odd) {
+    border-right: 1px solid #F1F5F9;
+  }
+  .info-cell.full-width {
+    grid-column: span 2;
+    border-right: 0 !important;
+  }
+  .info-cell:last-child { border-bottom: 0; }
+  .info-cell .lbl {
+    color: #64748B; font-weight: 500;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .info-cell .val {
+    color: #1A2B3C; font-weight: 600;
+    text-align: right;
+    font-size: 12.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ═══ Rating Box ═══ */
+  .rating-box {
+    background: #FBF6ED;
+    border: 1px solid #F0E0B8;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .rating-box .stars { color: #C5A059; font-size: 16px; letter-spacing: 1px; line-height: 1; }
+  .rating-box .avg   { font-size: 24px; font-weight: 800; color: #1A2B3C; line-height: 1; }
+
+  /* ═══ Review Card ═══ */
+  .review-card {
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    padding: 11px 14px;
+    margin-bottom: 8px;
+    transition: all .15s;
+  }
+  .review-card:hover { border-color: #C5A059; box-shadow: 0 4px 12px rgba(26,43,60,0.04); }
+  .review-card .rev-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+  .review-card .rev-name { font-size: 12.5px; font-weight: 700; color: #1A2B3C; }
+  .review-card .rev-date { font-size: 10.5px; color: #94A3B8; }
+  .review-card .rev-stars { color: #C5A059; font-size: 12px; letter-spacing: 1px; }
+  .review-card .rev-text { font-size: 12px; color: #475569; line-height: 1.5; margin-top: 4px; }
+
+  /* ═══ Performance Bars ═══ */
+  .perf-row { margin-bottom: 12px; }
+  .perf-row .top { display: flex; justify-content: space-between; font-size: 11.5px; margin-bottom: 5px; }
+  .perf-row .top .lbl { color: #64748B; font-weight: 500; }
+  .perf-row .top .val { color: #1A2B3C; font-weight: 700; }
+  .perf-bar { height: 6px; background: #F1F5F9; border-radius: 4px; overflow: hidden; }
+  .perf-bar > div { height: 100%; background: #C5A059; border-radius: 4px; }
+
+  /* ═══ Change Item ═══ */
+  .change-item {
+    padding: 10px 12px;
+    background: #F8FAFC;
+    border-left: 3px solid #CBD5E1;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    font-size: 12px;
+  }
+  .change-item.phone    { border-left-color: #3B82F6; background: #EFF6FF; }
+  .change-item.email    { border-left-color: #8B5CF6; background: #F5F3FF; }
+  .change-item.name     { border-left-color: #C5A059; background: #FBF6ED; }
+  .change-item.address  { border-left-color: #10B981; background: #F0FDF4; }
+  .change-item.avatar   { border-left-color: #F59E0B; background: #FFFBEB; }
+  .change-item.account  { border-left-color: #EF4444; background: #FEF2F2; }
+  .change-item.chamber  { border-left-color: #8B5CF6; background: #F5F3FF; }
+  .change-item.area     { border-left-color: #06B6D4; background: #ECFEFF; }
+  .change-item.bar      { border-left-color: #F59E0B; background: #FFFBEB; }
+  .change-item .c-title { font-size: 11.5px; font-weight: 700; color: #1A2B3C; }
+  .change-item .c-meta  { font-size: 10px; color: #94A3B8; margin-top: 1px; }
+  .change-item .c-diff {
+    margin-top: 6px; padding: 6px 8px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 6px; font-size: 11.5px; line-height: 1.5;
+  }
+  .change-item .c-diff .old {
+    color: #B91C1C; text-decoration: line-through;
+    background: rgba(239,68,68,0.08);
+    padding: 1px 5px; border-radius: 4px;
+    display: inline-block;
+  }
+  .change-item .c-diff .arr { color: #94A3B8; margin: 0 4px; }
+  .change-item .c-diff .new {
+    color: #166534; background: rgba(34,197,94,0.1);
+    padding: 1px 5px; border-radius: 4px;
+    display: inline-block; font-weight: 600;
+  }
+  .change-item .c-by {
+    font-size: 9.5px; color: #64748B; margin-top: 4px;
+    display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  }
+  .change-item .c-by .who {
+    background: #E2E8F0; color: #475569;
+    padding: 1px 6px; border-radius: 4px;
+    font-weight: 700; text-transform: uppercase;
+    font-size: 9px;
+  }
+  .change-item .c-by .who.user  { background: #DBEAFE; color: #1E40AF; }
+  .change-item .c-by .who.admin { background: #FEF3C7; color: #92400E; }
+  .change-item .c-by .who.system{ background: #F1F5F9; color: #475569; }
+
+  /* ═══ History Item ═══ */
+  .history-item {
+    padding: 9px 12px;
+    background: #F8FAFC;
+    border-left: 3px solid #CBD5E1;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .history-item.deactivate { border-left-color: #F59E0B; background: #FFFBEB; }
+  .history-item.block      { border-left-color: #EF4444; background: #FEF2F2; }
+  .history-item.activate   { border-left-color: #22C55E; background: #F0FDF4; }
+  .history-item .h-title { font-size: 11.5px; font-weight: 700; color: #1A2B3C; }
+  .history-item .h-meta  { font-size: 10px; color: #94A3B8; margin-top: 1px; }
+  .history-item .h-reason {
+    font-size: 11.5px; color: #1A2B3C; margin-top: 5px;
+    padding: 6px 8px; background: rgba(255,255,255,0.7);
+    border-radius: 5px; line-height: 1.5;
+  }
+  .history-item .h-reason .lbl {
+    font-size: 9px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    display: block; margin-bottom: 2px;
+  }
+
+  /* ═══ Verification row ═══ */
+  .verify-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 12px;
+  }
+  .verify-row:last-child { border-bottom: 0; }
+
+  /* ═══ Buttons ═══ */
+  .btn-back {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 600; color: #64748B;
+    padding: 5px 11px; border-radius: 7px;
+    border: 1px solid #E2E8F0; background: #fff;
+    transition: all .15s; cursor: pointer;
+  }
+  .btn-back:hover { color: #1A2B3C; border-color: #C5A059; background: #FBF6ED; }
+
+  .btn-report {
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    font-size: 11.5px; font-weight: 600;
+    padding: 7px 12px; border-radius: 7px;
+    background: #1A2B3C; color: #fff;
+    border: 1px solid #1A2B3C;
+    transition: all .15s; cursor: pointer;
+    width: 100%;
+  }
+  .btn-report:hover { background: #152233; }
+</style>
+</head>
+<body class="bg-offwhite text-navy">
+<div class="flex h-screen overflow-hidden">
+  <aside id="sidebar-mount" class="w-72 bg-navy text-white flex-shrink-0 flex flex-col"></aside>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+      <div class="flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+        <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2" placeholder="Search client, lawyer, booking, transaction ID...">
+      </div>
+      <div class="flex items-center gap-5">
+        <button class="relative text-slate2 hover:text-navy"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        <div class="h-6 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
+      </div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
+
+      <!-- Back row -->
+      <div class="flex items-center justify-between">
+        <button onclick="window.location.href='lawyers.html'" class="btn-back">
+          ← Back to Lawyers
+        </button>
+        <button onclick="openModal('modal-confirm-action')"
+                class="text-[11px] font-semibold border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-offwhite">
+          Manage Status
+        </button>
+      </div>
+
+      <!-- ═══ HERO (compact) ═══ -->
+      <div class="lawyer-hero">
+        <div class="flex items-center gap-4 relative z-10">
+          <div class="hero-avatar" id="heroAvatar">SC</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h1 class="text-lg font-bold text-white truncate" id="heroName">Barrister Sabbir Chowdhury</h1>
+              <span id="heroVerified" class="hero-verified">★ Verified</span>
+            </div>
+            <p class="text-xs text-white/55 mt-0.5 truncate" id="heroMeta">LW-2001 · BD-33471 · Corporate Law</p>
+            <div class="mt-1.5 flex flex-wrap items-center gap-2.5">
+              <span id="heroStatus" class="hero-status active"><span class="dot"></span>Active</span>
+              <span class="text-[10.5px] text-white/45">Member since <strong class="text-white/75" id="heroJoined">15 Jan 2024</strong></span>
+            </div>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="text-white/45 text-[9.5px] font-bold uppercase tracking-wider">Overall Rating</div>
+            <div class="flex items-center gap-1.5 justify-end mt-0.5">
+              <span class="text-xl font-extrabold text-gold leading-tight" id="heroRating">4.8</span>
+              <span class="text-gold text-sm" id="heroStars">★★★★★</span>
+            </div>
+            <div class="text-[10.5px] text-white/45 mt-0.5" id="heroReviews">45 reviews</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ Case Status Stats ═══ -->
+      <div class="grid grid-cols-5 gap-2.5">
+        <div class="stat-tile">
+          <div class="num" style="color: #1A2B3C;" id="statTotal">126</div>
+          <div class="lbl">Total Bookings</div>
+        </div>
+        <div class="stat-tile">
+          <div class="num" style="color: #B45309;" id="statPending">4</div>
+          <div class="lbl">Pending</div>
+        </div>
+        <div class="stat-tile">
+          <div class="num" style="color: #3B82F6;" id="statOngoing">8</div>
+          <div class="lbl">Ongoing</div>
+        </div>
+        <div class="stat-tile">
+          <div class="num" style="color: #16A34A;" id="statComplete">108</div>
+          <div class="lbl">Cases Won</div>
+        </div>
+        <div class="stat-tile">
+          <div class="num" style="color: #DC2626;" id="statCanceled">18</div>
+          <div class="lbl">Cases Lost</div>
+        </div>
+      </div>
+
+      <!-- ═══ Two-Column Layout ═══ -->
+      <div class="grid grid-cols-3 gap-3.5">
+
+        <!-- LEFT: Main Details -->
+        <div class="col-span-2 space-y-3.5">
+
+          <!-- Basic Info (with vertical divider) -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Basic Information</div>
+            <div class="info-table">
+              <div class="info-cell"><span class="lbl">Lawyer ID</span><span class="val" id="infoId">LW-2001</span></div>
+              <div class="info-cell"><span class="lbl">Bar/Sanad No</span><span class="val" id="infoBar">BD-33471</span></div>
+
+              <div class="info-cell"><span class="lbl">Email</span><span class="val" id="infoEmail">sabbir@justifi.com.bd</span></div>
+              <div class="info-cell"><span class="lbl">Phone</span><span class="val" id="infoPhone">+880 1711-100200</span></div>
+
+              <div class="info-cell"><span class="lbl">Practice Area</span><span class="val" id="infoArea">Corporate Law</span></div>
+              <div class="info-cell"><span class="lbl">Experience</span><span class="val" id="infoExp">12 years</span></div>
+
+              <div class="info-cell"><span class="lbl">Joined</span><span class="val" id="infoJoined">15 Jan 2024</span></div>
+              <div class="info-cell"><span class="lbl">Status</span><span class="val" id="infoStatus">Active</span></div>
+
+              <div class="info-cell full-width"><span class="lbl">Chamber</span><span class="val" id="infoChamber">Dhaka Judge Court, Chamber 204</span></div>
+            </div>
+          </div>
+
+          <!-- Performance -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Performance Metrics</div>
+            <div class="perf-row">
+              <div class="top"><span class="lbl">Case Success Rate</span><span class="val" id="perfSuccess">85%</span></div>
+              <div class="perf-bar"><div id="perfSuccessBar" style="width: 85%"></div></div>
+            </div>
+            <div class="perf-row">
+              <div class="top"><span class="lbl">On-Time Completion</span><span class="val" id="perfOnTime">92%</span></div>
+              <div class="perf-bar"><div id="perfOnTimeBar" style="width: 92%"></div></div>
+            </div>
+            <div class="perf-row">
+              <div class="top"><span class="lbl">Client Satisfaction</span><span class="val" id="perfSatisfaction">96%</span></div>
+              <div class="perf-bar"><div id="perfSatisfactionBar" style="width: 96%"></div></div>
+            </div>
+            <div class="perf-row" style="margin-bottom: 0;">
+              <div class="top"><span class="lbl">Response Rate</span><span class="val" id="perfResponse">88%</span></div>
+              <div class="perf-bar"><div id="perfResponseBar" style="width: 88%"></div></div>
+            </div>
+          </div>
+
+          <!-- Client Reviews -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Recent Client Reviews</div>
+            <div id="reviewsList"></div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Sidebar -->
+        <div class="space-y-3.5">
+
+          <!-- Recent Changes -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div class="section-title" style="margin-bottom: 0;">
+                <span class="bar"></span> Recent Changes
+              </div>
+              <button onclick="goToFullReport()"
+                      class="text-[10px] font-bold text-gold hover:underline bg-transparent border-0 cursor-pointer">
+                View all →
+              </button>
+            </div>
+            <div id="recentChanges"></div>
+
+            <button onclick="goToFullReport()" class="btn-report mt-2.5">
+              📊 View Full Activity Report
+            </button>
+          </div>
+
+          <!-- Rating Breakdown -->
+          <div class="rating-box">
+            <div class="text-[10px] font-bold text-gold uppercase tracking-wider mb-2">Rating Breakdown</div>
+            <div class="flex items-center gap-2.5 mb-3">
+              <span class="avg" id="sideRating">4.8</span>
+              <div>
+                <div class="stars" id="sideStars">★★★★★</div>
+                <div class="text-[10.5px] text-slate2 mt-0.5" id="sideReviews">45 reviews</div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex items-center gap-2 text-[11px]">
+                <span class="text-slate2 w-7">5 ★</span>
+                <div class="flex-1 perf-bar"><div style="width: 78%"></div></div>
+                <span class="text-slate2 w-8 text-right">78%</span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px]">
+                <span class="text-slate2 w-7">4 ★</span>
+                <div class="flex-1 perf-bar"><div style="width: 15%"></div></div>
+                <span class="text-slate2 w-8 text-right">15%</span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px]">
+                <span class="text-slate2 w-7">3 ★</span>
+                <div class="flex-1 perf-bar"><div style="width: 5%"></div></div>
+                <span class="text-slate2 w-8 text-right">5%</span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px]">
+                <span class="text-slate2 w-7">2 ★</span>
+                <div class="flex-1 perf-bar"><div style="width: 2%"></div></div>
+                <span class="text-slate2 w-8 text-right">2%</span>
+              </div>
+              <div class="flex items-center gap-2 text-[11px]">
+                <span class="text-slate2 w-7">1 ★</span>
+                <div class="flex-1 perf-bar"><div style="width: 0%"></div></div>
+                <span class="text-slate2 w-8 text-right">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verification -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Verification</div>
+            <div>
+              <div class="verify-row">
+                <span class="text-slate2">Bar Certificate</span>
+                <span class="text-emerald-600 font-semibold text-[11px]">✓ Verified</span>
+              </div>
+              <div class="verify-row">
+                <span class="text-slate2">NID</span>
+                <span class="text-emerald-600 font-semibold text-[11px]">✓ Verified</span>
+              </div>
+              <div class="verify-row">
+                <span class="text-slate2">Degree Certificate</span>
+                <span class="text-emerald-600 font-semibold text-[11px]">✓ Verified</span>
+              </div>
+              <div class="verify-row">
+                <span class="text-slate2">Chamber Proof</span>
+                <span class="text-gold font-semibold text-[11px]">⏳ Pending</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status History -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Status History</div>
+            <div id="historyList"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="modal-confirm-action" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+    <div class="px-6 pt-8 pb-6">
+      <h3 class="text-lg font-bold text-navy text-center">Manage Status</h3>
+      <p class="text-sm text-slate2 text-center mt-2">Choose an action for this lawyer</p>
+      <div class="mt-5 grid grid-cols-3 gap-2">
+        <button onclick="quickAction('activate')" class="text-xs font-semibold text-white bg-emerald-600 px-3 py-2.5 rounded-lg hover:bg-emerald-700">Activate</button>
+        <button onclick="quickAction('deactivate')" class="text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-2.5 rounded-lg hover:bg-amber-100">Deactivate</button>
+        <button onclick="quickAction('block')" class="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 px-3 py-2.5 rounded-lg hover:bg-red-100">Block</button>
+      </div>
+      <p class="text-xs text-slate2 mt-4 text-center">
+        Go back to <a href="lawyers.html" class="text-gold font-semibold underline">Lawyers list</a> to perform actions.
+      </p>
+    </div>
+    <div class="px-6 py-4 border-t border-slate-100 flex justify-end">
+      <button onclick="closeModal('modal-confirm-action')" class="text-sm font-semibold text-slate2 px-4 py-2">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   LAWYER INFORMATION PAGE
+   ═══════════════════════════════════════════════════════════════════ */
+
+const LAWYERS_DB = {
+  'LW-2001': {
+    id: 'LW-2001', name: 'Barrister Sabbir Chowdhury', bar: 'BD-33471',
+    email: 'sabbir@justifi.com.bd', phone: '+880 1711-100200',
+    area: 'Corporate Law', rating: 4.8, reviewsCount: 45,
+    status: 'Active', verified: true, joined: '15 Jan 2024',
+    chamber: 'Dhaka Judge Court, Chamber 204',
+    experience: 12,
+    caseStats: { total: 126, pending: 4, ongoing: 8, won: 108, lost: 18 },
+    perf: { success: 85, onTime: 92, satisfaction: 96, response: 88 },
+    ratingBreakdown: { 5: 78, 4: 15, 3: 5, 2: 2, 1: 0 },
+    changes: [
+      { field: 'phone',   label: 'Phone Number', oldValue: '+880 1711-000000', newValue: '+880 1711-100200', changedBy: 'user', changedAt: '20 Feb 2024, 11:00 AM', reason: 'Updated contact number.' },
+      { field: 'chamber', label: 'Chamber Location', oldValue: 'Old Dhaka Court, Room 12', newValue: 'Dhaka Judge Court, Chamber 204', changedBy: 'user', changedAt: '05 May 2024, 03:15 PM', reason: 'Relocated chamber.' },
+      { field: 'avatar',  label: 'Profile Picture', oldValue: 'Initial Upload', newValue: 'Current Picture', changedBy: 'user', changedAt: '12 Aug 2024, 10:00 AM', reason: null },
+      { field: 'area',    label: 'Practice Area', oldValue: 'Civil Law', newValue: 'Corporate Law', changedBy: 'admin', changedAt: '15 Jan 2025, 09:30 AM', reason: 'Updated specialization as per Bar Council.' },
+      { field: 'bar',     label: 'Bar Certificate', oldValue: 'BD-33470', newValue: 'BD-33471', changedBy: 'admin', changedAt: '10 Mar 2025, 04:20 PM', reason: 'Corrected Bar number.' }
+    ],
+    history: [
+      { action: 'activate', label: 'Lawyer Verified', date: '15 Jan 2024, 10:00 AM', reason: 'All documents verified — profile activated.' }
+    ],
+    reviews: [
+      { name: 'Mahmudul Karim', date: '12 Sep 2026', rating: 5, text: 'Very professional and responsive. Handled my corporate case with excellent care.' },
+      { name: 'Shirin Rahman',  date: '08 Sep 2026', rating: 5, text: 'Highly knowledgeable about corporate law. Would recommend to anyone.' },
+      { name: 'Tania Islam',    date: '02 Sep 2026', rating: 4, text: 'Good experience overall. Response time could be slightly better.' }
+    ]
+  },
+  'LW-2002': {
+    id: 'LW-2002', name: 'Advocate Nusrat Ara', bar: 'BD-19045',
+    email: 'nusrat@justifi.com.bd', phone: '+880 1711-200300',
+    area: 'Family Law', rating: 4.5, reviewsCount: 32,
+    status: 'Inactive', verified: false, joined: '03 Mar 2025',
+    chamber: 'Chattogram Court, Chamber 12',
+    experience: 8,
+    caseStats: { total: 84, pending: 2, ongoing: 6, won: 62, lost: 22 },
+    perf: { success: 74, onTime: 80, satisfaction: 88, response: 82 },
+    ratingBreakdown: { 5: 65, 4: 22, 3: 8, 2: 3, 1: 2 },
+    changes: [
+      { field: 'phone', label: 'Phone Number', oldValue: '+880 1711-000000', newValue: '+880 1711-200300', changedBy: 'user', changedAt: '10 Apr 2025, 02:00 PM', reason: 'Updated contact.' }
+    ],
+    history: [
+      { action: 'activate',   label: 'Profile Created',     date: '03 Mar 2025, 09:15 AM', reason: 'Initial registration.' },
+      { action: 'deactivate', label: 'Account Deactivated', date: '18 Sep 2026, 02:42 PM', reason: 'Pending re-verification of Bar certificate.' }
+    ],
+    reviews: [
+      { name: 'Nasrin Akter',   date: '05 Sep 2026', rating: 5, text: 'Very understanding and helpful with family matters.' },
+      { name: 'Abdullah Hasan', date: '01 Sep 2026', rating: 4, text: 'Handled my case well but communication could improve.' }
+    ]
+  },
+  'LW-2003': {
+    id: 'LW-2003', name: 'Md. Rezaul Karim', bar: 'BD-27810',
+    email: 'rezaul@justifi.com.bd', phone: '+880 1711-300400',
+    area: 'Criminal Law', rating: 4.2, reviewsCount: 18,
+    status: 'Active', verified: true, joined: '21 Apr 2024',
+    chamber: 'Sylhet Court, Chamber 8',
+    experience: 6,
+    caseStats: { total: 39, pending: 1, ongoing: 3, won: 30, lost: 9 },
+    perf: { success: 77, onTime: 85, satisfaction: 82, response: 79 },
+    ratingBreakdown: { 5: 50, 4: 28, 3: 15, 2: 5, 1: 2 },
+    changes: [],
+    history: [
+      { action: 'activate', label: 'Lawyer Verified', date: '21 Apr 2024, 11:05 AM', reason: 'All documents verified.' }
+    ],
+    reviews: [
+      { name: 'Kamal Uddin', date: '10 Sep 2026', rating: 4, text: 'Fought my case diligently. Good outcome.' }
+    ]
+  },
+  'LW-2004': {
+    id: 'LW-2004', name: 'Adv. Tahmina Akhter', bar: 'BD-55612',
+    email: 'tahmina@justifi.com.bd', phone: '+880 1711-400500',
+    area: 'Property Law', rating: 4.7, reviewsCount: 38,
+    status: 'Active', verified: true, joined: '07 Jul 2024',
+    chamber: 'Rajshahi Court, Chamber 5',
+    experience: 10,
+    caseStats: { total: 92, pending: 3, ongoing: 5, won: 78, lost: 14 },
+    perf: { success: 84, onTime: 90, satisfaction: 94, response: 87 },
+    ratingBreakdown: { 5: 72, 4: 20, 3: 6, 2: 2, 1: 0 },
+    changes: [],
+    history: [
+      { action: 'activate', label: 'Lawyer Verified', date: '07 Jul 2024, 04:22 PM', reason: 'Documents verified.' }
+    ],
+    reviews: [
+      { name: 'Habibur Rahman', date: '11 Sep 2026', rating: 5, text: 'Excellent knowledge of property law. Very thorough.' },
+      { name: 'Ayesha Siddiqua', date: '06 Sep 2026', rating: 5, text: 'Extremely patient and detailed. Highly recommended!' }
+    ]
+  },
+  'LW-2005': {
+    id: 'LW-2005', name: 'Barrister Mahbub Alam', bar: 'BD-31248',
+    email: 'mahbub@justifi.com.bd', phone: '+880 1711-500600',
+    area: 'Tax Law', rating: 4.4, reviewsCount: 25,
+    status: 'Blocked', verified: true, joined: '19 Feb 2025',
+    chamber: 'Dhaka Tax Tribunal, Room 3',
+    experience: 9,
+    caseStats: { total: 65, pending: 0, ongoing: 0, won: 51, lost: 14 },
+    perf: { success: 78, onTime: 82, satisfaction: 85, response: 80 },
+    ratingBreakdown: { 5: 58, 4: 24, 3: 10, 2: 5, 1: 3 },
+    changes: [],
+    history: [
+      { action: 'activate', label: 'Lawyer Verified',  date: '19 Feb 2025, 08:40 AM', reason: 'Initial verification.' },
+      { action: 'block',    label: 'Account Blocked',  date: '22 Aug 2026, 03:15 PM', reason: 'Repeated violation of client confidentiality policy.' }
+    ],
+    reviews: [
+      { name: 'Nasrin Sultana', date: '15 Aug 2026', rating: 4, text: 'Good with tax law but was blocked recently.' }
+    ]
+  }
+};
+
+function getLawyerIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || 'LW-2001';
+}
+
+function renderStars(avg) {
+  const full = Math.floor(avg);
+  const half = avg - full >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  return '★'.repeat(full) + (half ? '☆' : '') + '☆'.repeat(empty);
+}
+
+function goToFullReport() {
+  const id = getLawyerIdFromUrl();
+  window.location.href = `lawyer-activity-report.html?id=${encodeURIComponent(id)}`;
+}
+
+function renderLawyerInfo() {
+  const id = getLawyerIdFromUrl();
+  const l = LAWYERS_DB[id];
+  if (!l) {
+    document.querySelector('main').innerHTML = `
+      <div class="p-12 text-center">
+        <p class="text-lg font-bold text-navy">Lawyer not found</p>
+        <a href="lawyers.html" class="text-gold font-semibold underline mt-2 inline-block">← Back to Lawyers</a>
+      </div>`;
+    return;
+  }
+
+  // Hero
+  const initials = l.name.replace(/^(Barrister|Advocate|Adv\.|Md\.|Mr\.|Ms\.|Mrs\.)\s+/i, '')
+    .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+  document.getElementById('heroAvatar').textContent = initials;
+  document.getElementById('heroName').textContent = l.name;
+  document.getElementById('heroMeta').textContent = `${l.id} · ${l.bar} · ${l.area}`;
+  document.getElementById('heroJoined').textContent = l.joined;
+
+  const badge = document.getElementById('heroStatus');
+  const tone = l.status === 'Active' ? 'active' : l.status === 'Blocked' ? 'blocked' : 'inactive';
+  badge.className = `hero-status ${tone}`;
+  badge.innerHTML = `<span class="dot"></span>${l.status}`;
+
+  const vBadge = document.getElementById('heroVerified');
+  if (l.verified) vBadge.style.display = 'inline-flex';
+  else vBadge.style.display = 'none';
+
+  document.getElementById('heroRating').textContent = l.rating.toFixed(1);
+  document.getElementById('heroStars').textContent = renderStars(l.rating);
+  document.getElementById('heroReviews').textContent = `${l.reviewsCount} reviews`;
+
+  // Case Stats
+  const cs = l.caseStats;
+  document.getElementById('statTotal').textContent    = cs.total;
+  document.getElementById('statPending').textContent  = cs.pending;
+  document.getElementById('statOngoing').textContent  = cs.ongoing;
+  document.getElementById('statComplete').textContent = cs.won;
+  document.getElementById('statCanceled').textContent = cs.lost;
+
+  // Info
+  document.getElementById('infoId').textContent = l.id;
+  document.getElementById('infoBar').textContent = l.bar;
+  document.getElementById('infoEmail').textContent = l.email;
+  document.getElementById('infoPhone').textContent = l.phone;
+  document.getElementById('infoArea').textContent = l.area;
+  document.getElementById('infoExp').textContent = l.experience + ' years';
+  document.getElementById('infoJoined').textContent = l.joined;
+  document.getElementById('infoStatus').textContent = l.status;
+  document.getElementById('infoChamber').textContent = l.chamber;
+
+  // Performance
+  document.getElementById('perfSuccess').textContent = l.perf.success + '%';
+  document.getElementById('perfSuccessBar').style.width = l.perf.success + '%';
+  document.getElementById('perfOnTime').textContent = l.perf.onTime + '%';
+  document.getElementById('perfOnTimeBar').style.width = l.perf.onTime + '%';
+  document.getElementById('perfSatisfaction').textContent = l.perf.satisfaction + '%';
+  document.getElementById('perfSatisfactionBar').style.width = l.perf.satisfaction + '%';
+  document.getElementById('perfResponse').textContent = l.perf.response + '%';
+  document.getElementById('perfResponseBar').style.width = l.perf.response + '%';
+
+  // Side rating
+  document.getElementById('sideRating').textContent = l.rating.toFixed(1);
+  document.getElementById('sideStars').textContent = renderStars(l.rating);
+  document.getElementById('sideReviews').textContent = `${l.reviewsCount} reviews`;
+
+  // Rating breakdown
+  const bd = l.ratingBreakdown;
+  const breakdownEls = document.querySelectorAll('.rating-box .perf-bar > div');
+  const breakdownLabels = ['5','4','3','2','1'];
+  breakdownEls.forEach((el, idx) => {
+    const star = breakdownLabels[idx];
+    if (bd[star] !== undefined) el.style.width = bd[star] + '%';
+  });
+  const valueEls = document.querySelectorAll('.rating-box .w-8.text-right');
+  valueEls.forEach((el, idx) => {
+    const star = breakdownLabels[idx];
+    if (bd[star] !== undefined) el.textContent = bd[star] + '%';
+  });
+
+  // Reviews
+  const revEl = document.getElementById('reviewsList');
+  if (!l.reviews || l.reviews.length === 0) {
+    revEl.innerHTML = `<p class="text-xs text-slate2 italic">No reviews yet.</p>`;
+  } else {
+    revEl.innerHTML = l.reviews.map(r => `
+      <div class="review-card">
+        <div class="rev-head">
+          <div>
+            <div class="rev-name">${r.name}</div>
+            <div class="rev-date">${r.date}</div>
+          </div>
+          <div class="rev-stars">${renderStars(r.rating)}</div>
+        </div>
+        <div class="rev-text">"${r.text}"</div>
+      </div>
+    `).join('');
+  }
+
+  // Recent Changes (max 4)
+  const changesEl = document.getElementById('recentChanges');
+  const recent = (l.changes || []).slice(-4).reverse();
+  if (recent.length === 0) {
+    changesEl.innerHTML = `<p class="text-xs text-slate2 italic">No profile changes recorded.</p>`;
+  } else {
+    changesEl.innerHTML = recent.map(ch => renderChangeItem(ch)).join('');
+  }
+
+  // Status History
+  const histEl = document.getElementById('historyList');
+  const items = [...l.history].reverse();
+  histEl.innerHTML = items.map(h => `
+    <div class="history-item ${h.action}">
+      <div class="h-title">${h.label}</div>
+      <div class="h-meta">${h.date}</div>
+      <div class="h-reason">
+        <span class="lbl">Reason</span>
+        ${h.reason}
+      </div>
+    </div>
+  `).join('');
+
+  document.title = `${l.name} — Lawyer Information`;
+}
+
+function renderChangeItem(ch) {
+  const isAvatar = ch.field === 'avatar';
+  const whoClass = ch.changedBy === 'user' ? 'user' : ch.changedBy === 'admin' ? 'admin' : 'system';
+  const whoLabel = ch.changedBy === 'user' ? 'User' : ch.changedBy === 'admin' ? 'Admin' : 'System';
+
+  return `
+    <div class="change-item ${ch.field}">
+      <div class="c-title">${ch.label} ${isAvatar ? '📷' : ''}</div>
+      <div class="c-meta">${ch.changedAt}</div>
+      <div class="c-diff">
+        <span class="old">${ch.oldValue}</span><span class="arr">→</span><span class="new">${ch.newValue}</span>
+      </div>
+      <div class="c-by">
+        by <span class="who ${whoClass}">${whoLabel}</span>
+        ${ch.reason ? `· <em>${ch.reason}</em>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function quickAction(action) {
+  showToast(`Please perform "${action}" from the Lawyers list`, 'info');
+  closeModal('modal-confirm-action');
+}
+
+renderLawyerInfo();
+</script>
+</body>
+</html>

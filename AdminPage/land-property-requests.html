@@ -15,6 +15,275 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ── Stage Badges ── */
+  .stage-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 600;
+    padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  }
+  .stage-badge .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+  .stage-1 { background: #F1F5F9; color: #475569; }  .stage-1 .dot { background: #94A3B8; }
+  .stage-2 { background: #FBF6ED; color: #A07D3A; }  .stage-2 .dot { background: #C5A059; }
+  .stage-3 { background: #FEF3C7; color: #92400E; }  .stage-3 .dot { background: #F59E0B; }
+  .stage-4 { background: #DBEAFE; color: #1E40AF; }  .stage-4 .dot { background: #3B82F6; }
+  .stage-5 { background: #DCFCE7; color: #166534; }  .stage-5 .dot { background: #22C55E; }
+
+  /* ── Action Column (visually distinct) ── */
+  .action-cell {
+    border-left: 2px solid #F1F5F9;
+    background: linear-gradient(to right, rgba(248,250,252,0.5), rgba(248,250,252,0));
+  }
+  tr:hover .action-cell {
+    border-left-color: #C5A059;
+    background: linear-gradient(to right, rgba(251,246,237,0.6), rgba(251,246,237,0));
+  }
+
+  /* ── View Modal ── */
+  .view-modal-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26, 43, 60, 0.55);
+    backdrop-filter: blur(4px); z-index: 100;
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .view-modal-backdrop.open { display: flex; }
+  .view-modal-card {
+    background: #fff; width: 100%; max-width: 900px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(26, 43, 60, 0.25);
+    border-radius: 16px;
+    animation: modalSlideUp 0.3s ease;
+  }
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     PROGRESS STEPPER — restored at top of View Modal
+     ═══════════════════════════════════════════════════════ */
+  .stepper-hero {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    padding: 24px 32px 22px;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+  }
+  .stepper-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+  .stepper-hero .hero-title {
+    color: rgba(255,255,255,0.55);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .stepper-hero .hero-title .case-id {
+    color: #C5A059;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Reuse standard stepper */
+  .stepper {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    position: relative; padding: 4px 0;
+  }
+  .stepper-step {
+    display: flex; flex-direction: column;
+    align-items: center; flex: 1;
+    position: relative; z-index: 2;
+  }
+  .stepper-dot {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.55);
+    transition: all 0.3s;
+  }
+  .stepper-step.done .stepper-dot {
+    background: #C5A059; border-color: #C5A059; color: #1A2B3C;
+  }
+  .stepper-step.active .stepper-dot {
+    background: #fff; border-color: #fff; color: #1A2B3C;
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.15);
+    animation: pulseActive 2s infinite;
+  }
+  @keyframes pulseActive {
+    0%, 100% { box-shadow: 0 0 0 6px rgba(255,255,255,0.15); }
+    50%      { box-shadow: 0 0 0 10px rgba(255,255,255,0.05); }
+  }
+  .stepper-label {
+    font-size: 10px; color: rgba(255,255,255,0.45);
+    text-align: center; margin-top: 8px;
+    max-width: 90px; line-height: 1.3; font-weight: 500;
+  }
+  .stepper-step.done .stepper-label { color: #C5A059; font-weight: 600; }
+  .stepper-step.active .stepper-label { color: #fff; font-weight: 700; }
+  .stepper-line {
+    flex: 1; height: 2px; background: rgba(255,255,255,0.15);
+    margin-top: 16px; margin-left: -6px; margin-right: -6px;
+    z-index: 1; transition: background 0.3s;
+  }
+  .stepper-line.done { background: #C5A059; }
+  .stepper-footer {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+  }
+  .stepper-footer strong { color: #C5A059; font-weight: 700; }
+
+  /* ── Two-Column Layout below stepper ── */
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 0;
+  }
+  @media (max-width: 768px) {
+    .modal-grid { grid-template-columns: 1fr; }
+  }
+  .modal-main { padding: 24px 32px; }
+  .modal-side {
+    padding: 24px 24px;
+    background: #FAFBFC;
+    border-left: 1px solid #EEF1F4;
+  }
+
+  /* ── Transfer History (side panel) ── */
+  .transfer-history-item {
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .transfer-history-item.current {
+    border-color: #22C55E;
+    background: #F0FDF4;
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.08);
+  }
+  .transfer-history-item.previous {
+    background: #F8FAFC;
+    border-style: dashed;
+    border-color: #CBD5E1;
+    opacity: 0.8;
+  }
+  .th-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+  .th-avatar.current  { background: #22C55E; }
+  .th-avatar.previous { background: #94A3B8; }
+  .th-name { font-size: 12px; font-weight: 700; color: #1A2B3C; line-height: 1.3; }
+  .th-name.previous { text-decoration: line-through; color: #94A3B8; }
+  .th-email { font-size: 10.5px; color: #64748B; }
+  .th-tag {
+    font-size: 9px; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .th-tag.current  { background: #22C55E; color: #fff; }
+  .th-tag.previous { background: #E2E8F0; color: #64748B; }
+  .th-reason {
+    margin-top: 8px;
+    padding: 8px 10px;
+    background: #FFFBEB;
+    border-left: 3px solid #F59E0B;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #78350F;
+    line-height: 1.5;
+  }
+  .th-reason .label {
+    font-weight: 700; color: #B45309;
+    font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block; margin-bottom: 2px;
+  }
+
+  /* ── Form fields ── */
+  .form-label {
+    display: block;
+    font-size: 11px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .form-input, .form-textarea {
+    width: 100%; border: 1px solid #E2E8F0;
+    border-radius: 8px; padding: 10px 12px;
+    font-size: 13px; outline: none;
+    transition: border-color .15s;
+    background: #fff; font-family: inherit;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: #C5A059;
+    box-shadow: 0 0 0 3px rgba(197,160,89,0.12);
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  .file-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: #F8FAFC;
+    border: 1px solid #EEF1F4; border-radius: 8px;
+    margin-bottom: 6px; font-size: 13px;
+  }
+  .scope-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px; background: #fff;
+    border: 1px solid #EEF1F4; border-radius: 8px;
+    margin-bottom: 6px; font-size: 13px;
+  }
+
+  /* ── Lawyer selection ── */
+  .lawyer-option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; border-radius: 10px;
+    border: 1.5px solid #E2E8F0;
+    cursor: pointer; transition: all 0.2s;
+    background: #fff; margin-bottom: 8px;
+  }
+  .lawyer-option:hover { border-color: #C5A059; background: #FBF6ED; }
+  .lawyer-option.selected { border-color: #C5A059; background: #FBF6ED; }
+  .lawyer-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #1A2B3C; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    background: #fff; border-radius: 16px; padding: 16px;
+    border: 1px solid #EEF1F4;
+    box-shadow: 0 1px 3px 0 rgba(26,43,60,0.08);
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .filter-input, .filter-select {
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 8px 12px; font-size: 13px;
+    outline: none; transition: border-color .15s; background: #F8FAFC;
+  }
+  .filter-input:focus, .filter-select:focus { border-color: #C5A059; background: #fff; }
+
+  .view-modal-card::-webkit-scrollbar { width: 6px; }
+  .view-modal-card::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
+  .view-modal-card::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -38,17 +307,58 @@
         <p class="text-slate2 text-sm mt-1">All incoming land & property applications.</p>
       </div>
 
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+          <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input id="fSearch" type="text" placeholder="Search by Case ID, User, or Specialist..."
+                 oninput="applyFilters()" class="filter-input flex-1">
+        </div>
+        <select id="fStatus" onchange="applyFilters()" class="filter-select">
+          <option value="">All Status</option>
+          <option value="0">File Submitted</option>
+          <option value="1">Info Received</option>
+          <option value="2">Preparing Draft</option>
+          <option value="3">User Review</option>
+          <option value="4">Completed</option>
+        </select>
+        <select id="fType" onchange="applyFilters()" class="filter-select">
+          <option value="">All Property Types</option>
+          <option>Residential</option>
+          <option>Commercial</option>
+          <option>Agricultural</option>
+          <option>Industrial</option>
+        </select>
+        <button onclick="clearFilters()" class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-4 py-2 rounded-lg transition">
+          Clear
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between text-xs text-slate2">
+        <span>Showing <strong id="resultCount" class="text-navy">0</strong> results</span>
+      </div>
+
+      <!-- TABLE -->
       <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm" style="table-layout:fixed;">
+          <colgroup>
+            <col style="width: 12%;">   <!-- Case ID -->
+            <col style="width: 17%;">   <!-- User -->
+            <col style="width: 13%;">   <!-- Type -->
+            <col style="width: 22%;">   <!-- Specialist -->
+            <col style="width: 14%;">   <!-- Status -->
+            <col style="width: 22%;">   <!-- Actions -->
+          </colgroup>
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-5 py-3">Case ID</th>
-              <th class="text-left font-semibold px-5 py-3">User Name</th>
-              <th class="text-left font-semibold px-5 py-3">Service</th>
-              <th class="text-left font-semibold px-5 py-3">Location</th>
-              <th class="text-left font-semibold px-5 py-3">Progress</th>
-              <th class="text-left font-semibold px-5 py-3">Status</th>
-              <th class="text-right font-semibold px-5 py-3">Actions</th>
+              <th class="text-left font-semibold px-4 py-3">Case ID</th>
+              <th class="text-left font-semibold px-4 py-3">User</th>
+              <th class="text-left font-semibold px-4 py-3">Type</th>
+              <th class="text-left font-semibold px-4 py-3">Specialist</th>
+              <th class="text-left font-semibold px-4 py-3">Status</th>
+              <th class="text-right font-semibold px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody id="landTbody" class="divide-y divide-slate-100"></tbody>
@@ -59,45 +369,172 @@
   </div>
 </div>
 
-<div id="modal-view-land" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
-    <div class="flex items-center justify-between px-6 py-4 border-b">
-      <h3 class="font-bold text-lg">Land Request <span id="viewLandId"></span></h3>
-      <button onclick="closeModal('modal-view-land')" class="text-slate2">✕</button>
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW MODAL — Progress Stepper on top, two-column below
+     ══════════════════════════════════════════════════════════════ -->
+<div id="modal-view-land" class="view-modal-backdrop">
+  <div class="view-modal-card">
+
+    <!-- ═════ PROGRESS STEPPER (TOP of modal) ═════ -->
+    <div class="stepper-hero">
+      <div class="hero-title">
+        <span>Progress Tracker</span>
+        <span class="case-id" id="heroCaseId">#LP-1042</span>
+      </div>
+      <div class="stepper" id="vStepper"></div>
+      <div class="stepper-footer" id="vCurrentStep">
+        Current step: <strong>Info Received</strong> — 2 of 5 done
+      </div>
     </div>
-    <div class="px-6 py-5 space-y-3 text-sm">
-      <div class="flex justify-between"><span class="text-slate2">User</span><span>Habibur Rahman</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Service</span><span>25-Year Ownership Verification</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Location</span><span>Savar, Dhaka</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Documents</span><span>Khatian, Deed, Mutation</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Payment</span><span class="text-emerald-600 font-semibold">Paid ৳18,000</span></div>
+
+    <!-- Header -->
+    <div class="bg-white border-b border-slate-100 px-8 py-4 flex items-center justify-between">
+      <div>
+        <h3 class="font-bold text-lg text-navy" id="viewTitle">Land & Property Request</h3>
+        <p class="text-xs text-slate2 mt-0.5" id="viewSubtitle">#LP-1042 · Habibur Rahman</p>
+      </div>
+      <button onclick="closeModal('modal-view-land')" class="text-slate2 hover:text-navy text-xl leading-none">✕</button>
     </div>
-    <div class="px-6 py-4 border-t flex justify-end">
-      <button onclick="closeModal('modal-view-land')" class="text-sm font-semibold text-slate2 px-4 py-2">Close</button>
+
+    <!-- Status banner (small, below header) -->
+    <div class="px-8 py-3 border-b border-slate-100 flex items-center gap-3 bg-offwhite/40">
+      <span id="vStatusBadge" class="stage-badge stage-1"><span class="dot"></span>File Submitted</span>
+      <span class="text-xs text-slate2" id="vSubmitted">Submitted 08 Sep 2026</span>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="modal-grid">
+
+      <!-- LEFT: Main Details -->
+      <div class="modal-main space-y-6">
+
+        <!-- Property Information -->
+        <div>
+          <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-gold rounded"></span> Property Information
+          </h4>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Division</p>
+              <p class="text-sm font-semibold text-navy" id="vDivision">Dhaka</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">District</p>
+              <p class="text-sm font-semibold text-navy" id="vDistrict">Dhaka</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Upazila</p>
+              <p class="text-sm font-semibold text-navy" id="vUpazila">Savar</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Mouza</p>
+              <p class="text-sm font-semibold text-navy" id="vMouza">Savar Mouza</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Khatian</p>
+              <p class="text-sm font-semibold text-navy" id="vKhatian">SA-1240</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Dag No</p>
+              <p class="text-sm font-semibold text-navy" id="vDag">542</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Type</p>
+              <p class="text-sm font-semibold text-navy" id="vPropType">Residential</p>
+            </div>
+            <div class="bg-offwhite rounded-xl p-3.5">
+              <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Service</p>
+              <p class="text-sm font-semibold text-navy" id="vService">25-Year Ownership Verification</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submitted Documents -->
+        <div>
+          <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-gold rounded"></span> Submitted Documents
+          </h4>
+          <div id="vDocs"></div>
+        </div>
+
+        <!-- Verification Scope -->
+        <div>
+          <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-gold rounded"></span> Verification Scope
+          </h4>
+          <div id="vScope"></div>
+        </div>
+
+        <!-- Billing -->
+        <div class="bg-offwhite rounded-xl p-4">
+          <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+            <span class="w-1.5 h-4 bg-gold rounded"></span> Billing Summary
+          </h4>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-slate2">Service Fee</span><span class="font-medium" id="vFee">৳18,000</span></div>
+            <div class="flex justify-between"><span class="text-slate2">Platform Charge</span><span class="font-medium" id="vCharge">৳500</span></div>
+            <div class="flex justify-between pt-2 border-t border-slate-200">
+              <span class="font-semibold">Total</span>
+              <span class="font-bold text-gold" id="vTotal">৳18,500</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Specialist History Side Panel -->
+      <aside class="modal-side">
+        <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+          <span class="w-1.5 h-4 bg-gold rounded"></span> Specialist History
+        </h4>
+        <div id="vSpecialistHistory"></div>
+      </aside>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="sticky bottom-0 bg-white border-t border-slate-100 px-8 py-4 flex justify-end">
+      <button onclick="closeModal('modal-view-land')" class="text-sm font-semibold text-slate2 px-5 py-2 rounded-lg border border-slate-200 hover:bg-offwhite">Close</button>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+     ASSIGN / TRANSFER SPECIALIST MODAL
+     ══════════════════════════════════════════════════════════════ -->
 <div id="modal-assign-land" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
-    <div class="flex items-center justify-between px-6 py-4 border-b">
-      <h3 class="font-bold text-lg">Assign Lawyer to <span id="assignLandId"></span></h3>
-      <button onclick="closeModal('modal-assign-land')" class="text-slate2">✕</button>
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <div>
+        <h3 class="font-bold text-lg" id="assignModalTitle">Assign Land Specialist</h3>
+        <p class="text-xs text-slate2 mt-0.5">For case <span id="assignLandId" class="font-semibold text-navy"></span></p>
+      </div>
+      <button onclick="closeModal('modal-assign-land')" class="text-slate2 hover:text-navy text-xl leading-none">✕</button>
     </div>
-    <div class="px-6 py-5 space-y-2 text-sm">
-      <input placeholder="Search lawyer..." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-2">
-      <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-offwhite cursor-pointer border border-slate-100">
-        <input type="radio" name="landLawyerPick" class="accent-gold">
-        <div><p class="font-medium">Legal Team A</p><p class="text-xs text-slate2">Land specialist · 58 cases</p></div>
-      </label>
-      <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-offwhite cursor-pointer border border-slate-100">
-        <input type="radio" name="landLawyerPick" class="accent-gold">
-        <div><p class="font-medium">Legal Team B</p><p class="text-xs text-slate2">Land specialist · 42 cases</p></div>
-      </label>
+
+    <div class="px-6 py-5 space-y-5">
+
+      <div id="transferReasonWrap" style="display:none;">
+        <label class="form-label">Reason for Transfer <span class="text-red-500">*</span></label>
+        <textarea id="transferReason" class="form-textarea"
+                  placeholder="Briefly describe why this case is being transferred to another specialist (1-2 lines)..."></textarea>
+        <p class="text-[11px] text-slate2 mt-1.5">This reason will be visible in the case history.</p>
+      </div>
+
+      <div>
+        <label class="form-label">Select Specialist</label>
+        <input id="specialistSearch" placeholder="Search specialist by name or email..."
+               oninput="filterSpecialistList()"
+               class="form-input mb-3">
+        <div id="specialistList" class="max-h-64 overflow-y-auto"></div>
+      </div>
     </div>
-    <div class="px-6 py-4 border-t flex justify-end gap-3">
+
+    <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
       <button onclick="closeModal('modal-assign-land')" class="text-sm font-semibold text-slate2 px-4 py-2">Cancel</button>
-      <button onclick="closeModal('modal-assign-land')" class="bg-navy text-white text-sm font-semibold px-5 py-2.5 rounded-lg">Assign</button>
+      <button id="confirmAssignLandBtn" onclick="confirmAssignSpecialist()"
+              class="bg-navy text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-navy-800 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled>Assign Specialist</button>
     </div>
   </div>
 </div>
@@ -105,33 +542,465 @@
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 <script>
-function renderLand() {
-  document.getElementById('landTbody').innerHTML = DATA.landRequests.map(l => `
-    <tr class="hover:bg-offwhite/60">
-      <td class="px-5 py-3.5 font-medium">${l.id}</td>
-      <td class="px-5 py-3.5">${l.user}</td>
-      <td class="px-5 py-3.5 text-slate2">${l.service}</td>
-      <td class="px-5 py-3.5 text-slate2">${l.location}</td>
-      <td class="px-5 py-3.5">
-        <div class="w-32 bg-slate-100 h-2 rounded mb-1"><div class="bg-gold h-2 rounded" style="width:${l.progress}%"></div></div>
-        <span class="text-xs text-slate2">${l.progress}%</span>
-      </td>
-      <td class="px-5 py-3.5">
-        <span class="inline-flex items-center gap-1.5 ${l.status==='Completed'?'bg-emerald-50 text-emerald-700':l.status==='In Review'?'bg-gold-50 text-gold':'bg-slate-100 text-slate2'} text-xs font-semibold px-2.5 py-1 rounded-full">
-          <span class="dot ${l.status==='Completed'?'bg-emerald-500':l.status==='In Review'?'bg-gold':'bg-slate-400'}"></span>${l.status}
-        </span>
-      </td>
-      <td class="px-5 py-3.5 text-right space-x-1">
-        <button class="text-xs font-semibold text-navy border border-slate-200 px-3 py-1.5 rounded-lg" onclick="openLandView('${l.id}')">View</button>
-        ${l.lawyer
-          ? `<button class="text-xs font-semibold text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-lg" onclick="openModal('modal-review')">Review</button>`
-          : `<button class="text-xs font-semibold bg-navy text-white px-3 py-1.5 rounded-lg" onclick="openLandAssign('${l.id}')">Assign Lawyer</button>`}
-      </td>
-    </tr>`).join('');
+/* ═══════════════════════════════════════════════════════════════════
+   LAND & PROPERTY REQUESTS — Full Logic
+   ═══════════════════════════════════════════════════════════════════ */
+
+const LAND_STAGES = [
+  { key: 'submitted',  label: 'File Submitted',   cls: 'stage-1' },
+  { key: 'info',       label: 'Info Received',    cls: 'stage-2' },
+  { key: 'drafting',   label: 'Preparing Draft',  cls: 'stage-3' },
+  { key: 'review',     label: 'User Review',      cls: 'stage-4' },
+  { key: 'completed',  label: 'Completed',        cls: 'stage-5' },
+];
+
+const SPECIALISTS_POOL = [
+  { id: 'SP-101', name: 'Md. Kamal Hossain',   email: 'kamal@justifi.com.bd',   role: 'Senior Land Specialist',     cases: 58 },
+  { id: 'SP-102', name: 'Mr. Rafiqul Islam',   email: 'rafiqul@justifi.com.bd', role: 'Land Verification Officer',  cases: 42 },
+  { id: 'SP-103', name: 'Ms. Sabrina Akhter',  email: 'sabrina@justifi.com.bd', role: 'Land Verification Officer',  cases: 37 },
+  { id: 'SP-104', name: 'Md. Jashim Uddin',    email: 'jashim@justifi.com.bd',  role: 'Property Survey Specialist', cases: 29 },
+  { id: 'SP-105', name: 'Adv. Farhana Rahman', email: 'farhana@justifi.com.bd', role: 'Legal Land Advisor',         cases: 63 },
+];
+
+let LAND_REQUESTS = [
+  {
+    id: '#LP-1042', user: 'Habibur Rahman', type: 'Residential',
+    service: '25-Year Ownership Verification',
+    division: 'Dhaka', district: 'Dhaka', upazila: 'Savar',
+    mouza: 'Savar Mouza', khatian: 'SA-1240', dag: '542',
+    submitted: '08 Sep 2026', stageIndex: 1,
+    specialist: null, previousSpecialists: [],
+    docs: [
+      { name: 'Current_Khatian.pdf',  size: '1.2 MB', date: '08 Sep 2026' },
+      { name: 'Sale_Deed.pdf',         size: '2.4 MB', date: '08 Sep 2026' },
+      { name: 'Mutation_Khatian.pdf', size: '900 KB', date: '08 Sep 2026' }
+    ],
+    scope: [
+      { text: 'Title Chain & CS-to-BS Record Tracing', done: true },
+      { text: 'Encumbrance & Bank Lien Verification',   done: false },
+      { text: 'AC Land Mutation & DCR Status Check',    done: false },
+      { text: 'Physical Survey & Boundary Confirmation', done: false }
+    ],
+    fee: 18000, platformCharge: 500
+  },
+  {
+    id: '#LP-1039', user: 'Ayesha Siddiqua', type: 'Commercial',
+    service: 'Pre-purchase Land Verification',
+    division: 'Dhaka', district: 'Gazipur', upazila: 'Gazipur Sadar',
+    mouza: 'Gazipur Mouza', khatian: 'RS-882', dag: '1201',
+    submitted: '07 Sep 2026', stageIndex: 0,
+    specialist: null, previousSpecialists: [],
+    docs: [
+      { name: 'NID_Copy.pdf',      size: '245 KB', date: '07 Sep 2026' },
+      { name: 'Trade_License.pdf', size: '1.8 MB', date: '07 Sep 2026' }
+    ],
+    scope: [
+      { text: 'Title Chain & CS-to-BS Record Tracing', done: false },
+      { text: 'Encumbrance & Bank Lien Verification',   done: false },
+      { text: 'AC Land Mutation & DCR Status Check',    done: false },
+      { text: 'Physical Survey & Boundary Confirmation', done: false }
+    ],
+    fee: 25000, platformCharge: 500
+  },
+  {
+    id: '#LP-1021', user: 'Md. Iqbal Hossain', type: 'Agricultural',
+    service: 'Mutation (Namjari) Assistance',
+    division: 'Chattogram', district: 'Comilla', upazila: 'Comilla Sadar',
+    mouza: 'Comilla Mouza', khatian: 'BS-311', dag: '908',
+    submitted: '05 Sep 2026', stageIndex: 4,
+    specialist: { name: 'Ms. Sabrina Akhter', email: 'sabrina@justifi.com.bd', role: 'Land Verification Officer' },
+    previousSpecialists: [],
+    docs: [
+      { name: 'Succession_Certificate.pdf', size: '1.4 MB', date: '05 Sep 2026' },
+      { name: 'Khatian_Copy.pdf',           size: '620 KB', date: '05 Sep 2026' }
+    ],
+    scope: [
+      { text: 'Title Chain & CS-to-BS Record Tracing', done: true },
+      { text: 'Encumbrance & Bank Lien Verification',   done: true },
+      { text: 'AC Land Mutation & DCR Status Check',    done: true },
+      { text: 'Physical Survey & Boundary Confirmation', done: true }
+    ],
+    fee: 12000, platformCharge: 500
+  },
+  {
+    id: '#LP-1035', user: 'Nasrin Sultana', type: 'Residential',
+    service: 'Land Tax (Khajna) Assistance',
+    division: 'Dhaka', district: 'Dhaka', upazila: 'Uttara',
+    mouza: 'Uttara Mouza', khatian: 'SA-756', dag: '223',
+    submitted: '03 Sep 2026', stageIndex: 3,
+    specialist: { name: 'Md. Kamal Hossain', email: 'kamal@justifi.com.bd', role: 'Senior Land Specialist' },
+    previousSpecialists: [
+      { name: 'Mr. Rafiqul Islam', email: 'rafiqul@justifi.com.bd', role: 'Land Verification Officer',
+        reason: 'Transferred due to workload rebalancing — specialist had 8 concurrent cases in the same district.',
+        transferredAt: '04 Sep 2026, 10:42 AM' }
+    ],
+    docs: [
+      { name: 'Tax_Receipt.pdf', size: '125 KB', date: '03 Sep 2026' }
+    ],
+    scope: [
+      { text: 'Title Chain & CS-to-BS Record Tracing', done: true },
+      { text: 'Encumbrance & Bank Lien Verification',   done: true },
+      { text: 'AC Land Mutation & DCR Status Check',    done: true },
+      { text: 'Physical Survey & Boundary Confirmation', done: false }
+    ],
+    fee: 8000, platformCharge: 500
+  }
+];
+
+/* ─── Apply Filters ─── */
+function applyFilters() {
+  const q      = (document.getElementById('fSearch').value || '').toLowerCase().trim();
+  const status = document.getElementById('fStatus').value;
+  const type   = document.getElementById('fType').value;
+
+  const filtered = LAND_REQUESTS.filter(l => {
+    if (status !== '' && l.stageIndex !== parseInt(status)) return false;
+    if (type && l.type !== type) return false;
+    if (q) {
+      const haystack = [
+        l.id, l.user,
+        l.specialist ? l.specialist.name  : '',
+        l.specialist ? l.specialist.email : ''
+      ].join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  document.getElementById('resultCount').textContent = filtered.length;
+  renderTable(filtered);
 }
-function openLandView(id){ document.getElementById('viewLandId').textContent = id; openModal('modal-view-land'); }
-function openLandAssign(id){ document.getElementById('assignLandId').textContent = id; openModal('modal-assign-land'); }
-renderLand();
+
+function clearFilters() {
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fStatus').value = '';
+  document.getElementById('fType').value   = '';
+  applyFilters();
+}
+
+//* ─── Render Table ─── */
+function renderTable(list) {
+  const tbody = document.getElementById('landTbody');
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate2 text-sm">No results match your filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(l => {
+    const stage = LAND_STAGES[l.stageIndex];
+    const isCompleted = l.stageIndex === 4;   // ← NEW: track completion
+
+    const specialistCell = l.specialist
+      ? `<div class="min-w-0">
+           <p class="font-medium text-navy text-[13px] truncate">${l.specialist.name}</p>
+           <p class="text-[11px] text-slate2 truncate">${l.specialist.email}</p>
+         </div>`
+      : `<span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate2 text-[11px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">
+           <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Not Assigned
+         </span>`;
+
+    // ── Build actions based on state ──
+    let actionsHtml = `
+      <button class="text-[11px] font-semibold text-navy border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-offwhite transition"
+              onclick="openLandView('${l.id}')">View</button>`;
+
+    if (l.specialist) {
+      // Show Transfer ONLY if case is NOT completed
+      if (!isCompleted) {
+        actionsHtml += `
+          <button class="text-[11px] font-semibold text-amber-700 border border-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-50 transition"
+                  onclick="openLandAssign('${l.id}', true)">Transfer</button>`;
+      }
+      // Show Report ONLY when completed
+      if (isCompleted) {
+        actionsHtml += `
+          <button class="text-[11px] font-semibold text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-lg hover:bg-emerald-50 transition"
+                  onclick="showToast('Report ready for download','success')">Report</button>`;
+      }
+    } else {
+      // No specialist → Assign button
+      actionsHtml += `
+        <button class="text-[11px] font-semibold bg-navy text-white px-3 py-1.5 rounded-lg hover:bg-navy-800 transition"
+                onclick="openLandAssign('${l.id}', false)">Assign</button>`;
+    }
+
+    return `
+      <tr class="hover:bg-offwhite/60 transition">
+        <td class="px-4 py-3 font-medium text-[13px]">${l.id}</td>
+        <td class="px-4 py-3 text-[13px] truncate">${l.user}</td>
+        <td class="px-4 py-3 text-slate2 text-[13px] truncate">${l.type}</td>
+        <td class="px-4 py-3">${specialistCell}</td>
+        <td class="px-4 py-3">
+          <span class="stage-badge ${stage.cls}">
+            <span class="dot"></span>${stage.label}
+          </span>
+        </td>
+        <td class="px-4 py-3 action-cell">
+          <div class="flex items-center justify-end gap-1.5">
+            ${actionsHtml}
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+/* ─── View Modal ─── */
+function openLandView(id) {
+  const l = LAND_REQUESTS.find(x => x.id === id);
+  if (!l) return;
+
+  const stage = LAND_STAGES[l.stageIndex];
+
+  document.getElementById('heroCaseId').textContent   = l.id;
+  document.getElementById('viewTitle').textContent    = l.service;
+  document.getElementById('viewSubtitle').textContent = `${l.id} · ${l.user}`;
+
+  document.getElementById('vStatusBadge').className = `stage-badge ${stage.cls}`;
+  document.getElementById('vStatusBadge').innerHTML = `<span class="dot"></span>${stage.label}`;
+  document.getElementById('vSubmitted').textContent = `Submitted ${l.submitted}`;
+
+  // ── Progress Stepper (top of modal — restored) ──
+  const stepper = document.getElementById('vStepper');
+  stepper.innerHTML = '';
+  LAND_STAGES.forEach((s, i) => {
+    let cls = '';
+    if (i < l.stageIndex) cls = 'done';
+    else if (i === l.stageIndex) cls = 'active';
+
+    stepper.innerHTML += `
+      <div class="stepper-step ${cls}">
+        <div class="stepper-dot">${i < l.stageIndex ? '✓' : (i + 1)}</div>
+        <div class="stepper-label">${s.label}</div>
+      </div>
+      ${i < LAND_STAGES.length - 1 ? `<div class="stepper-line ${i < l.stageIndex ? 'done' : ''}"></div>` : ''}
+    `;
+  });
+
+  const currentLabel = l.stageIndex === 4 ? 'Completed' : LAND_STAGES[l.stageIndex].label;
+  document.getElementById('vCurrentStep').innerHTML =
+    l.stageIndex === 4
+      ? `Status: <strong>Completed</strong> — 5 of 5 done`
+      : `Current step: <strong>${currentLabel}</strong> — ${l.stageIndex + 1} of 5 done`;
+
+  // Property info
+  document.getElementById('vDivision').textContent = l.division;
+  document.getElementById('vDistrict').textContent = l.district;
+  document.getElementById('vUpazila').textContent  = l.upazila;
+  document.getElementById('vMouza').textContent    = l.mouza;
+  document.getElementById('vKhatian').textContent  = l.khatian;
+  document.getElementById('vDag').textContent      = l.dag;
+  document.getElementById('vPropType').textContent = l.type;
+  document.getElementById('vService').textContent  = l.service;
+
+  // Docs
+  const docsEl = document.getElementById('vDocs');
+  docsEl.innerHTML = l.docs.length > 0
+    ? l.docs.map(d => `
+        <div class="file-item">
+          <div class="flex items-center gap-3">
+            <span class="text-slate2">📄</span>
+            <div>
+              <p class="font-medium text-navy">${d.name}</p>
+              <p class="text-[11px] text-slate2">${d.size} · Uploaded ${d.date}</p>
+            </div>
+          </div>
+          <button class="text-gold hover:text-navy text-xs font-semibold">Download</button>
+        </div>`).join('')
+    : `<p class="text-xs text-slate2 italic">No files uploaded yet.</p>`;
+
+  // Scope
+  const scopeEl = document.getElementById('vScope');
+  scopeEl.innerHTML = l.scope.map(s => `
+    <div class="scope-item">
+      <span style="font-size:16px;${s.done ? 'color:#22C55E' : 'color:#94A3B8'}">${s.done ? '✓' : '○'}</span>
+      <span class="text-navy font-medium flex-1">${s.text}</span>
+      <span class="text-[10px] ${s.done ? 'text-emerald-600' : 'text-slate2'} font-semibold uppercase">${s.done ? 'Done' : 'Pending'}</span>
+    </div>
+  `).join('');
+
+  // Billing
+  document.getElementById('vFee').textContent    = `৳${l.fee.toLocaleString()}`;
+  document.getElementById('vCharge').textContent = `৳${l.platformCharge.toLocaleString()}`;
+  document.getElementById('vTotal').textContent  = `৳${(l.fee + l.platformCharge).toLocaleString()}`;
+
+  // ── Specialist History (right side panel) ──
+  const spEl = document.getElementById('vSpecialistHistory');
+  let historyHtml = '';
+
+  (l.previousSpecialists || []).forEach(prev => {
+    const initials = prev.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    historyHtml += `
+      <div class="transfer-history-item previous">
+        <div class="flex items-start gap-2.5 mb-2">
+          <div class="th-avatar previous">${initials}</div>
+          <div class="flex-1 min-w-0">
+            <p class="th-name previous">${prev.name}</p>
+            <p class="th-email">${prev.email}</p>
+          </div>
+          <span class="th-tag previous">Out</span>
+        </div>
+        ${prev.reason ? `
+          <div class="th-reason">
+            <span class="label">Transfer Reason</span>
+            ${prev.reason}
+          </div>` : ''}
+        ${prev.transferredAt ? `
+          <p class="text-[10px] text-slate2 mt-2">↪ Transferred: ${prev.transferredAt}</p>` : ''}
+      </div>`;
+  });
+
+  if (l.specialist) {
+    const initials = l.specialist.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    historyHtml += `
+      <div class="transfer-history-item current">
+        <div class="flex items-start gap-2.5">
+          <div class="th-avatar current">${initials}</div>
+          <div class="flex-1 min-w-0">
+            <p class="th-name">${l.specialist.name}</p>
+            <p class="th-email">${l.specialist.email}</p>
+            <p class="text-[10.5px] text-slate2 mt-0.5">${l.specialist.role}</p>
+          </div>
+          <span class="th-tag current">Active</span>
+        </div>
+      </div>`;
+  } else {
+    historyHtml += `
+      <div style="background:#F8FAFC;border:1.5px dashed #CBD5E1;border-radius:10px;padding:16px;text-align:center;">
+        <p class="text-sm text-slate2 italic">Not Assigned yet</p>
+      </div>`;
+  }
+
+  spEl.innerHTML = historyHtml;
+
+  openModal('modal-view-land');
+}
+
+/* ─── Assign / Transfer Specialist ─── */
+let currentLandId      = null;
+let selectedSpecialist = null;
+let isTransferMode     = false;
+
+function openLandAssign(id, transfer = false) {
+  currentLandId      = id;
+  selectedSpecialist = null;
+  isTransferMode     = transfer;
+
+  const req = LAND_REQUESTS.find(l => l.id === id);
+  if (!req) return;
+
+  document.getElementById('assignModalTitle').textContent = transfer ? 'Transfer Case' : 'Assign Land Specialist';
+  document.getElementById('assignLandId').textContent = id;
+
+  document.getElementById('specialistSearch').value = '';
+  document.getElementById('transferReason').value   = '';
+  document.getElementById('confirmAssignLandBtn').disabled = true;
+  document.getElementById('confirmAssignLandBtn').textContent = transfer ? 'Transfer Case' : 'Assign Specialist';
+
+  document.getElementById('transferReasonWrap').style.display = transfer ? 'block' : 'none';
+
+  let pool = SPECIALISTS_POOL;
+  if (transfer && req.specialist) {
+    pool = SPECIALISTS_POOL.filter(s => s.name !== req.specialist.name);
+  }
+
+  document.getElementById('transferReason').oninput = validateAssignForm;
+
+  renderSpecialistList(pool);
+  openModal('modal-assign-land');
+}
+
+function validateAssignForm() {
+  const btn = document.getElementById('confirmAssignLandBtn');
+  const hasSpecialist = !!selectedSpecialist;
+  const hasReason = !isTransferMode || (document.getElementById('transferReason').value.trim().length >= 5);
+  btn.disabled = !(hasSpecialist && hasReason);
+}
+
+function renderSpecialistList(list) {
+  const el = document.getElementById('specialistList');
+  if (list.length === 0) {
+    el.innerHTML = `<p class="text-center text-sm text-slate2 py-6">No specialists found.</p>`;
+    return;
+  }
+  el.innerHTML = list.map(s => {
+    const initials = s.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const selected = selectedSpecialist === s.id ? 'selected' : '';
+    return `
+      <div class="lawyer-option ${selected}" data-id="${s.id}" onclick="selectSpecialist('${s.id}')">
+        <div class="lawyer-avatar">${initials}</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-sm text-navy">${s.name}</p>
+          <p class="text-xs text-slate2 truncate">${s.email}</p>
+          <p class="text-[11px] text-slate2 mt-0.5">${s.role} · ${s.cases} cases</p>
+        </div>
+        <div class="text-xl ${selected ? 'text-gold' : 'text-slate-300'}">${selected ? '●' : '○'}</div>
+      </div>`;
+  }).join('');
+}
+
+function selectSpecialist(id) {
+  selectedSpecialist = id;
+  document.querySelectorAll('#specialistList .lawyer-option').forEach(el => {
+    const isSel = el.dataset.id === id;
+    el.classList.toggle('selected', isSel);
+    const radio = el.lastElementChild;
+    radio.textContent = isSel ? '●' : '○';
+    radio.className = 'text-xl ' + (isSel ? 'text-gold' : 'text-slate-300');
+  });
+  validateAssignForm();
+}
+
+function filterSpecialistList() {
+  const q = document.getElementById('specialistSearch').value.toLowerCase();
+  const req = LAND_REQUESTS.find(l => l.id === currentLandId);
+  let filtered = SPECIALISTS_POOL.filter(s =>
+    s.name.toLowerCase().includes(q) || s.email.toLowerCase().includes(q)
+  );
+  if (isTransferMode && req.specialist) {
+    filtered = filtered.filter(s => s.name !== req.specialist.name);
+  }
+  renderSpecialistList(filtered);
+}
+
+function confirmAssignSpecialist() {
+  if (!currentLandId || !selectedSpecialist) return;
+  const sp  = SPECIALISTS_POOL.find(s => s.id === selectedSpecialist);
+  const req = LAND_REQUESTS.find(l => l.id === currentLandId);
+  if (!sp || !req) return;
+
+  if (isTransferMode && req.specialist) {
+    const reason = document.getElementById('transferReason').value.trim();
+    if (!reason) {
+      showToast('Please provide a transfer reason', 'error');
+      return;
+    }
+
+    req.previousSpecialists = req.previousSpecialists || [];
+    req.previousSpecialists.push({
+      name:  req.specialist.name,
+      email: req.specialist.email,
+      role:  req.specialist.role,
+      reason: reason,
+      transferredAt: new Date().toLocaleString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      })
+    });
+
+    showToast(`Case ${req.id} transferred to ${sp.name}`, 'success');
+  } else {
+    showToast(`${sp.name} assigned to ${req.id}`, 'success');
+  }
+
+  req.specialist = { name: sp.name, email: sp.email, role: sp.role };
+  if (req.stageIndex === 0 && !isTransferMode) req.stageIndex = 1;
+
+  closeModal('modal-assign-land');
+  applyFilters();
+}
+
+/* ─── Init ─── */
+applyFilters();
 </script>
 </body>
 </html>

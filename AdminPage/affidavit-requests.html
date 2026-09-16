@@ -15,6 +15,143 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ── Stage Badges (5 stages) ── */
+  .stage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .stage-badge .dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+  .stage-1 { background: #F1F5F9; color: #475569; }
+  .stage-1 .dot { background: #94A3B8; }
+  .stage-2 { background: #FBF6ED; color: #A07D3A; }
+  .stage-2 .dot { background: #C5A059; }
+  .stage-3 { background: #FEF3C7; color: #92400E; }
+  .stage-3 .dot { background: #F59E0B; }
+  .stage-4 { background: #DBEAFE; color: #1E40AF; }
+  .stage-4 .dot { background: #3B82F6; }
+  .stage-5 { background: #DCFCE7; color: #166534; }
+  .stage-5 .dot { background: #22C55E; }
+
+  /* ── Compact Progress Bar ── */
+  .mini-progress {
+    width: 60px;
+    height: 5px;
+    background: #F1F5F9;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .mini-progress > div {
+    height: 100%;
+    background: #C5A059;
+    border-radius: 4px;
+    transition: width .3s;
+  }
+
+  /* ── View Modal ── */
+  .view-modal-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(26, 43, 60, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .view-modal-backdrop.open { display: flex; }
+
+  .view-modal-card {
+    background: #fff;
+    width: 100%; max-width: 720px;
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(26, 43, 60, 0.25);
+    border-radius: 16px;
+    animation: modalSlideUp 0.3s ease;
+  }
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── Progress Stepper ── */
+  .stepper { display: flex; align-items: flex-start; justify-content: space-between; position: relative; padding: 4px 0; }
+  .stepper-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; z-index: 2; }
+  .stepper-dot {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #fff; border: 2px solid #E2E8F0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #94A3B8;
+    transition: all 0.3s;
+  }
+  .stepper-step.done .stepper-dot { background: #1A2B3C; border-color: #1A2B3C; color: #fff; }
+  .stepper-step.active .stepper-dot { background: #C5A059; border-color: #C5A059; color: #fff; box-shadow: 0 0 0 5px rgba(197, 160, 89, 0.18); }
+  .stepper-label { font-size: 10px; color: #94A3B8; text-align: center; margin-top: 8px; max-width: 80px; line-height: 1.3; font-weight: 500; }
+  .stepper-step.done .stepper-label, .stepper-step.active .stepper-label { color: #1A2B3C; font-weight: 600; }
+  .stepper-line { flex: 1; height: 2px; background: #E2E8F0; margin-top: 15px; margin-left: -6px; margin-right: -6px; z-index: 1; transition: background 0.3s; }
+  .stepper-line.done { background: #1A2B3C; }
+
+  .view-modal-card::-webkit-scrollbar { width: 6px; }
+  .view-modal-card::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
+  .view-modal-card::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
+
+  .file-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: #F8FAFC;
+    border: 1px solid #EEF1F4; border-radius: 8px;
+    margin-bottom: 6px; font-size: 13px;
+  }
+  .file-item:hover { border-color: #C5A059; }
+
+  .lawyer-option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px; border-radius: 10px;
+    border: 1.5px solid #E2E8F0;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+    margin-bottom: 8px;
+  }
+  .lawyer-option:hover { border-color: #C5A059; background: #FBF6ED; }
+  .lawyer-option.selected { border-color: #C5A059; background: #FBF6ED; }
+  .lawyer-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #1A2B3C; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+  }
+
+  /* ── Filter Bar ── */
+  .filter-bar {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid #EEF1F4;
+    box-shadow: 0 1px 3px 0 rgba(26,43,60,0.08);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .filter-input, .filter-select {
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .15s;
+    background: #F8FAFC;
+  }
+  .filter-input:focus, .filter-select:focus { border-color: #C5A059; background: #fff; }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -38,16 +175,71 @@
         <p class="text-slate2 text-sm mt-1">All incoming affidavit applications.</p>
       </div>
 
+      <!-- ══════════════════════════════════════════════════
+           FILTER BAR
+           ══════════════════════════════════════════════════ -->
+      <div class="filter-bar">
+        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+          <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input id="fSearch" type="text" placeholder="Search by Application ID, User name, or Lawyer..." 
+                 oninput="applyFilters()"
+                 class="filter-input flex-1" style="background:#F8FAFC;">
+        </div>
+
+        <select id="fStatus" onchange="applyFilters()" class="filter-select">
+          <option value="">All Status</option>
+          <option value="0">User Submitted</option>
+          <option value="1">Document Review</option>
+          <option value="2">Verification</option>
+          <option value="3">Processing</option>
+          <option value="4">Complete</option>
+        </select>
+
+        <select id="fType" onchange="applyFilters()" class="filter-select">
+          <option value="">All Types</option>
+          <option>Name Change</option>
+          <option>Same Person</option>
+          <option>Land Ownership</option>
+          <option>Address Proof</option>
+          <option>Income Declaration</option>
+        </select>
+
+        <button onclick="clearFilters()" 
+                class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-4 py-2 rounded-lg transition">
+          Clear
+        </button>
+      </div>
+
+      <!-- Results Count -->
+      <div class="flex items-center justify-between text-xs text-slate2">
+        <span>Showing <strong id="resultCount" class="text-navy">0</strong> results</span>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════
+           TABLE
+           ══════════════════════════════════════════════════ -->
       <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+        <table class="w-full text-sm" style="table-layout:fixed;">
+          <colgroup>
+            <col style="width: 11%;">   <!-- ID -->
+            <col style="width: 16%;">   <!-- User -->
+            <col style="width: 13%;">   <!-- Type -->
+            <col style="width: 20%;">   <!-- Lawyer -->
+            <col style="width: 11%;">   <!-- Progress -->
+            <col style="width: 14%;">   <!-- Status -->
+            <col style="width: 15%;">   <!-- Actions -->
+          </colgroup>
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-5 py-3">Application ID</th>
-              <th class="text-left font-semibold px-5 py-3">User Name</th>
-              <th class="text-left font-semibold px-5 py-3">Type</th>
-              <th class="text-left font-semibold px-5 py-3">Progress</th>
-              <th class="text-left font-semibold px-5 py-3">Status</th>
-              <th class="text-right font-semibold px-5 py-3">Actions</th>
+              <th class="text-left font-semibold px-4 py-3">ID</th>
+              <th class="text-left font-semibold px-4 py-3">User</th>
+              <th class="text-left font-semibold px-4 py-3">Type</th>
+              <th class="text-left font-semibold px-4 py-3">Lawyer</th>
+              <th class="text-left font-semibold px-4 py-3">Progress</th>
+              <th class="text-left font-semibold px-4 py-3">Status</th>
+              <th class="text-right font-semibold px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody id="affidavitTbody" class="divide-y divide-slate-100"></tbody>
@@ -58,53 +250,111 @@
   </div>
 </div>
 
-<div id="modal-view-affidavit" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
-    <div class="flex items-center justify-between px-6 py-4 border-b">
-      <h3 class="font-bold text-lg">Affidavit <span id="viewModalId"></span></h3>
-      <button onclick="closeModal('modal-view-affidavit')" class="text-slate2">✕</button>
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW MODAL
+     ══════════════════════════════════════════════════════════════ -->
+<div id="modal-view-affidavit" class="view-modal-backdrop">
+  <div class="view-modal-card">
+    <div class="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between z-10">
+      <div>
+        <h3 class="font-bold text-lg text-navy">Affidavit Application</h3>
+        <p class="text-xs text-slate2 mt-0.5" id="viewModalSubtitle">#AF-20394 · Kamal Uddin Bhuiyan</p>
+      </div>
+      <button onclick="closeModal('modal-view-affidavit')" class="text-slate2 hover:text-navy text-xl leading-none">✕</button>
     </div>
-    <div class="px-6 py-5 space-y-3 text-sm">
-      <div class="flex justify-between"><span class="text-slate2">Applicant</span><span>Kamal Uddin Bhuiyan</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Type</span><span>Name Change</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Submitted Data</span><span>Step 1 · 2 · 3 · 4</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Documents</span><span>NID, Photo, Declaration</span></div>
-      <div class="flex justify-between"><span class="text-slate2">Payment</span><span class="text-emerald-600 font-semibold">Paid ৳300</span></div>
+
+    <div class="px-6 py-6 space-y-6">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-offwhite rounded-xl p-4">
+          <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Affidavit Type</p>
+          <p class="text-sm font-semibold text-navy" id="vType">Name Change</p>
+        </div>
+        <div class="bg-offwhite rounded-xl p-4">
+          <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Purpose</p>
+          <p class="text-sm font-semibold text-navy" id="vPurpose">Correction of spelling</p>
+        </div>
+        <div class="bg-offwhite rounded-xl p-4">
+          <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Assigned Lawyer</p>
+          <p class="text-sm font-semibold text-navy" id="vLawyer">Not Assigned</p>
+          <p class="text-xs text-slate2 mt-0.5" id="vLawyerEmail"></p>
+        </div>
+        <div class="bg-offwhite rounded-xl p-4">
+          <p class="text-[10px] text-slate2 uppercase tracking-wider font-semibold mb-1">Submitted On</p>
+          <p class="text-sm font-semibold text-navy" id="vDate">10 Sep 2026</p>
+        </div>
+      </div>
+
+      <div class="bg-offwhite rounded-xl p-5">
+        <h4 class="font-semibold text-sm text-navy mb-4 flex items-center gap-2">
+          <span class="w-1.5 h-4 bg-gold rounded"></span> Progress Tracker
+        </h4>
+        <div class="stepper" id="vStepper"></div>
+        <p class="text-xs text-slate2 text-center mt-4" id="vCurrentStep">Current step: Document Review</p>
+      </div>
+
+      <div>
+        <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+          <span class="w-1.5 h-4 bg-gold rounded"></span> Uploaded Documents
+        </h4>
+        <div id="vFiles"></div>
+      </div>
+
+      <div class="bg-gold-50 border border-gold/20 rounded-xl p-4">
+        <p class="text-[10px] text-gold uppercase tracking-wider font-semibold mb-1">Lawyer Notes</p>
+        <p class="text-sm text-navy" id="vNotes">—</p>
+      </div>
+
+      <div class="bg-offwhite rounded-xl p-4">
+        <h4 class="font-semibold text-sm text-navy mb-3 flex items-center gap-2">
+          <span class="w-1.5 h-4 bg-gold rounded"></span> Billing Summary
+        </h4>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between"><span class="text-slate2">Affidavit Fee</span><span class="font-medium" id="vFee">৳300</span></div>
+          <div class="flex justify-between"><span class="text-slate2">Platform Charge</span><span class="font-medium" id="vCharge">৳50</span></div>
+          <div class="flex justify-between pt-2 border-t border-slate-200"><span class="font-semibold">Total Paid</span><span class="font-bold text-gold" id="vTotal">৳350</span></div>
+        </div>
+      </div>
     </div>
-    <div class="px-6 py-4 border-t flex justify-end">
-      <button onclick="closeModal('modal-view-affidavit')" class="text-sm font-semibold text-slate2 px-4 py-2">Close</button>
+
+    <div class="sticky bottom-0 bg-white border-t border-slate-100 px-6 py-4 flex justify-end gap-3">
+      <button onclick="closeModal('modal-view-affidavit')" class="text-sm font-semibold text-slate2 px-5 py-2 rounded-lg border border-slate-200 hover:bg-offwhite">Close</button>
+      <button onclick="closeModal('modal-view-affidavit'); showToast('Application approved', 'success')" class="bg-navy text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-navy-800">Approve</button>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+     ASSIGN LAWYER MODAL
+     ══════════════════════════════════════════════════════════════ -->
 <div id="modal-assign-lawyer" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
-    <div class="flex items-center justify-between px-6 py-4 border-b">
-      <h3 class="font-bold text-lg">Assign Lawyer to <span id="assignModalId"></span></h3>
-      <button onclick="closeModal('modal-assign-lawyer')" class="text-slate2">✕</button>
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <div>
+        <h3 class="font-bold text-lg">Assign Lawyer</h3>
+        <p class="text-xs text-slate2 mt-0.5">For application <span id="assignModalId" class="font-semibold text-navy"></span></p>
+      </div>
+      <button onclick="closeModal('modal-assign-lawyer')" class="text-slate2 hover:text-navy text-xl leading-none">✕</button>
     </div>
-    <div class="px-6 py-5 space-y-2 text-sm">
-      <input placeholder="Search lawyer..." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-2">
-      <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-offwhite cursor-pointer border border-slate-100">
-        <input type="radio" name="lawyerPick" class="accent-gold">
-        <div><p class="font-medium">Farhana Islam</p><p class="text-xs text-slate2">Legal Reviewer · 42 cases</p></div>
-      </label>
-      <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-offwhite cursor-pointer border border-slate-100">
-        <input type="radio" name="lawyerPick" class="accent-gold">
-        <div><p class="font-medium">Advocate Nusrat Ara</p><p class="text-xs text-slate2">Family Law · 84 cases</p></div>
-      </label>
-      <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-offwhite cursor-pointer border border-slate-100">
-        <input type="radio" name="lawyerPick" class="accent-gold">
-        <div><p class="font-medium">Barrister Sabbir Chowdhury</p><p class="text-xs text-slate2">Corporate Law · 126 cases</p></div>
-      </label>
+
+    <div class="px-6 py-5">
+      <input id="lawyerSearch" placeholder="Search lawyer by name or email..." 
+             oninput="filterLawyerList()"
+             class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm mb-4 outline-none focus:border-gold">
+      <div id="lawyerList" class="max-h-80 overflow-y-auto"></div>
     </div>
-    <div class="px-6 py-4 border-t flex justify-end gap-3">
+
+    <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
       <button onclick="closeModal('modal-assign-lawyer')" class="text-sm font-semibold text-slate2 px-4 py-2">Cancel</button>
-      <button onclick="closeModal('modal-assign-lawyer')" class="bg-navy text-white text-sm font-semibold px-5 py-2.5 rounded-lg">Assign</button>
+      <button id="confirmAssignBtn" onclick="confirmAssignLawyer()" 
+              class="bg-navy text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-navy-800 disabled:opacity-50"
+              disabled>Assign Lawyer</button>
     </div>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+     REVIEW MODAL
+     ══════════════════════════════════════════════════════════════ -->
 <div id="modal-review" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
   <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
     <div class="flex items-center justify-between px-6 py-4 border-b">
@@ -125,32 +375,295 @@
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 <script>
-function renderAffidavitReq() {
-  document.getElementById('affidavitTbody').innerHTML = DATA.affidavitRequests.map(a => `
-    <tr class="hover:bg-offwhite/60">
-      <td class="px-5 py-3.5 font-medium">${a.id}</td>
-      <td class="px-5 py-3.5">${a.user}</td>
-      <td class="px-5 py-3.5 text-slate2">${a.type}</td>
-      <td class="px-5 py-3.5">
-        <div class="w-32 bg-slate-100 h-2 rounded mb-1"><div class="bg-gold h-2 rounded" style="width:${a.progress}%"></div></div>
-        <span class="text-xs text-slate2">${a.progress}%</span>
-      </td>
-      <td class="px-5 py-3.5">
-        <span class="inline-flex items-center gap-1.5 ${a.status==='Completed'?'bg-emerald-50 text-emerald-700':a.status==='Under Review'?'bg-gold-50 text-gold':'bg-slate-100 text-slate2'} text-xs font-semibold px-2.5 py-1 rounded-full">
-          <span class="dot ${a.status==='Completed'?'bg-emerald-500':a.status==='Under Review'?'bg-gold':'bg-slate-400'}"></span>${a.status}
-        </span>
-      </td>
-      <td class="px-5 py-3.5 text-right space-x-1">
-        <button class="text-xs font-semibold text-navy border border-slate-200 px-3 py-1.5 rounded-lg" onclick="openViewModal('${a.id}')">View</button>
-        ${a.lawyer
-          ? `<button class="text-xs font-semibold text-emerald-700 border border-emerald-200 px-3 py-1.5 rounded-lg" onclick="openModal('modal-review')">Review</button>`
-          : `<button class="text-xs font-semibold bg-navy text-white px-3 py-1.5 rounded-lg" onclick="openAssignModal('${a.id}')">Assign Lawyer</button>`}
-      </td>
-    </tr>`).join('');
+/* ═══════════════════════════════════════════════════════════════════
+   AFFIDAVIT REQUESTS — Full Logic
+   ═══════════════════════════════════════════════════════════════════ */
+
+const STAGES = [
+  { key: 'submitted',    label: 'User Submitted',  percent: 20,  cls: 'stage-1' },
+  { key: 'review',       label: 'Document Review', percent: 40,  cls: 'stage-2' },
+  { key: 'verification', label: 'Verification',    percent: 60,  cls: 'stage-3' },
+  { key: 'processing',   label: 'Processing',      percent: 80,  cls: 'stage-4' },
+  { key: 'complete',     label: 'Complete',        percent: 100, cls: 'stage-5' },
+];
+
+const LAWYERS_POOL = [
+  { id: 'LW-2001', name: 'Barrister Sabbir Chowdhury', email: 'sabbir@justifi.com.bd',  area: 'Corporate Law',  cases: 126 },
+  { id: 'LW-2002', name: 'Advocate Nusrat Ara',         email: 'nusrat@justifi.com.bd',  area: 'Family Law',     cases: 84 },
+  { id: 'LW-2003', name: 'Md. Rezaul Karim',            email: 'rezaul@justifi.com.bd',  area: 'Criminal Law',   cases: 39 },
+  { id: 'LW-2004', name: 'Farhana Islam',               email: 'farhana@justifi.com.bd', area: 'Legal Reviewer', cases: 42 },
+  { id: 'LW-2005', name: 'Adv. Tahmina Akhter',         email: 'tahmina@justifi.com.bd', area: 'Property Law',   cases: 41 },
+];
+
+let AFFIDAVITS = [
+  {
+    id: '#AF-20394', user: 'Kamal Uddin Bhuiyan', type: 'Name Change',
+    purpose: 'Correction of spelling in SSC certificate',
+    submitted: '10 Sep 2026', stageIndex: 1, lawyer: null,
+    files: [
+      { name: 'NID_Front.jpg', size: '245 KB', date: '10 Sep 2026' },
+      { name: 'SSC_Certificate.pdf', size: '1.2 MB', date: '10 Sep 2026' }
+    ],
+    notes: 'We are reviewing your submission. Documents are being verified.',
+    fee: 300, platformCharge: 50
+  },
+  {
+    id: '#AF-20401', user: 'Rehana Begum', type: 'Same Person',
+    purpose: 'Declaring multiple names belong to same person',
+    submitted: '10 Sep 2026', stageIndex: 0, lawyer: null,
+    files: [
+      { name: 'NID_Front.jpg', size: '245 KB', date: '10 Sep 2026' },
+      { name: 'Birth_Certificate.pdf', size: '856 KB', date: '10 Sep 2026' }
+    ],
+    notes: 'Awaiting initial document review.',
+    fee: 300, platformCharge: 50
+  },
+  {
+    id: '#AF-20388', user: 'Joynal Abedin', type: 'Land Ownership',
+    purpose: 'Land ownership verification for bank loan',
+    submitted: '08 Sep 2026', stageIndex: 4,
+    lawyer: { name: 'Farhana Islam', email: 'farhana@justifi.com.bd' },
+    files: [
+      { name: 'Title_Deed.pdf', size: '2.4 MB', date: '08 Sep 2026' },
+      { name: 'Tax_Receipt.pdf', size: '125 KB', date: '08 Sep 2026' }
+    ],
+    notes: 'Affidavit completed and delivered on 09 Sep 2026.',
+    fee: 1500, platformCharge: 150
+  },
+  {
+    id: '#AF-20375', user: 'Nasrin Akter', type: 'Address Proof',
+    purpose: 'Address verification for passport application',
+    submitted: '06 Sep 2026', stageIndex: 3,
+    lawyer: { name: 'Barrister Sabbir Chowdhury', email: 'sabbir@justifi.com.bd' },
+    files: [
+      { name: 'Utility_Bill.pdf', size: '420 KB', date: '06 Sep 2026' }
+    ],
+    notes: 'Draft is ready. Final processing in progress.',
+    fee: 800, platformCharge: 100
+  }
+];
+
+/* ─── Apply Filters ─── */
+function applyFilters() {
+  const q       = (document.getElementById('fSearch').value || '').toLowerCase().trim();
+  const status  = document.getElementById('fStatus').value;
+  const type    = document.getElementById('fType').value;
+
+  const filtered = AFFIDAVITS.filter(a => {
+    // Status
+    if (status !== '' && a.stageIndex !== parseInt(status)) return false;
+    // Type
+    if (type && a.type !== type) return false;
+    // Search across ID, user, lawyer name, lawyer email
+    if (q) {
+      const haystack = [
+        a.id, a.user,
+        a.lawyer ? a.lawyer.name : '',
+        a.lawyer ? a.lawyer.email : ''
+      ].join(' ').toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  document.getElementById('resultCount').textContent = filtered.length;
+  renderTable(filtered);
 }
-function openViewModal(id){ document.getElementById('viewModalId').textContent = id; openModal('modal-view-affidavit'); }
-function openAssignModal(id){ document.getElementById('assignModalId').textContent = id; openModal('modal-assign-lawyer'); }
-renderAffidavitReq();
+
+function clearFilters() {
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fStatus').value = '';
+  document.getElementById('fType').value = '';
+  applyFilters();
+}
+
+/* ─── Render Table ─── */
+function renderTable(list) {
+  const tbody = document.getElementById('affidavitTbody');
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate2 text-sm">No results match your filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = list.map(a => {
+    const stage = STAGES[a.stageIndex];
+    const percent = stage.percent;
+
+    const lawyerCell = a.lawyer
+      ? `<div class="min-w-0">
+           <p class="font-medium text-navy text-[13px] truncate">${a.lawyer.name}</p>
+           <p class="text-[11px] text-slate2 truncate">${a.lawyer.email}</p>
+         </div>`
+      : `<span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate2 text-[11px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap">
+           <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Not Assigned
+         </span>`;
+
+    return `
+      <tr class="hover:bg-offwhite/60">
+        <td class="px-4 py-3 font-medium text-[13px]">${a.id}</td>
+        <td class="px-4 py-3 text-[13px] truncate">${a.user}</td>
+        <td class="px-4 py-3 text-slate2 text-[13px] truncate">${a.type}</td>
+        <td class="px-4 py-3">${lawyerCell}</td>
+        <td class="px-4 py-3">
+          <div class="flex items-center gap-2">
+            <div class="mini-progress"><div style="width:${percent}%"></div></div>
+            <span class="text-[11px] text-slate2 font-medium">${percent}%</span>
+          </div>
+        </td>
+        <td class="px-4 py-3">
+          <span class="stage-badge ${stage.cls}">
+            <span class="dot"></span>${stage.label}
+          </span>
+        </td>
+        <td class="px-4 py-3 text-right">
+          <div class="flex items-center justify-end gap-1">
+            <button class="text-[11px] font-semibold text-navy border border-slate-200 px-2.5 py-1.5 rounded-lg hover:bg-offwhite"
+                    onclick="openViewModal('${a.id}')">View</button>
+            ${a.lawyer
+              ? (a.stageIndex === 4
+                  ? `<button class="text-[11px] font-semibold text-emerald-700 border border-emerald-200 px-2.5 py-1.5 rounded-lg hover:bg-emerald-50"
+                             onclick="openModal('modal-review')">Review</button>`
+                  : '')
+              : `<button class="text-[11px] font-semibold bg-navy text-white px-2.5 py-1.5 rounded-lg hover:bg-navy-800"
+                         onclick="openAssignModal('${a.id}')">Assign</button>`}
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+/* ─── View Modal ─── */
+function openViewModal(id) {
+  const a = AFFIDAVITS.find(x => x.id === id);
+  if (!a) return;
+
+  document.getElementById('viewModalSubtitle').textContent = `${a.id} · ${a.user}`;
+  document.getElementById('vType').textContent = a.type;
+  document.getElementById('vPurpose').textContent = a.purpose;
+  document.getElementById('vDate').textContent = a.submitted;
+
+  if (a.lawyer) {
+    document.getElementById('vLawyer').textContent = a.lawyer.name;
+    document.getElementById('vLawyerEmail').textContent = a.lawyer.email;
+  } else {
+    document.getElementById('vLawyer').textContent = 'Not Assigned';
+    document.getElementById('vLawyerEmail').textContent = '';
+  }
+
+  const stepper = document.getElementById('vStepper');
+  stepper.innerHTML = '';
+  STAGES.forEach((stage, i) => {
+    let cls = '';
+    if (i < a.stageIndex) cls = 'done';
+    else if (i === a.stageIndex) cls = 'active';
+
+    stepper.innerHTML += `
+      <div class="stepper-step ${cls}">
+        <div class="stepper-dot">${i < a.stageIndex ? '✓' : (i + 1)}</div>
+        <div class="stepper-label">${stage.label}</div>
+      </div>
+      ${i < STAGES.length - 1 ? `<div class="stepper-line ${i < a.stageIndex ? 'done' : ''}"></div>` : ''}
+    `;
+  });
+
+  document.getElementById('vCurrentStep').textContent =
+    a.stageIndex === 4 ? 'Completed' : `Current step: ${STAGES[a.stageIndex].label}`;
+
+  const filesEl = document.getElementById('vFiles');
+  filesEl.innerHTML = a.files.length > 0
+    ? a.files.map(f => `
+        <div class="file-item">
+          <div class="flex items-center gap-3">
+            <span class="text-slate2">📄</span>
+            <div>
+              <p class="font-medium text-navy">${f.name}</p>
+              <p class="text-[11px] text-slate2">${f.size} · Uploaded ${f.date}</p>
+            </div>
+          </div>
+          <button class="text-gold hover:text-navy text-xs font-semibold">Download</button>
+        </div>`).join('')
+    : `<p class="text-xs text-slate2 italic">No files uploaded yet.</p>`;
+
+  document.getElementById('vNotes').textContent = a.notes || '—';
+  document.getElementById('vFee').textContent = `৳${a.fee}`;
+  document.getElementById('vCharge').textContent = `৳${a.platformCharge}`;
+  document.getElementById('vTotal').textContent = `৳${a.fee + a.platformCharge}`;
+
+  openModal('modal-view-affidavit');
+}
+
+/* ─── Assign Lawyer ─── */
+let currentAssignId = null;
+let selectedLawyerId = null;
+
+function openAssignModal(id) {
+  currentAssignId = id;
+  selectedLawyerId = null;
+  document.getElementById('assignModalId').textContent = id;
+  document.getElementById('lawyerSearch').value = '';
+  document.getElementById('confirmAssignBtn').disabled = true;
+  renderLawyerList(LAWYERS_POOL);
+  openModal('modal-assign-lawyer');
+}
+
+function renderLawyerList(list) {
+  const el = document.getElementById('lawyerList');
+  if (list.length === 0) {
+    el.innerHTML = `<p class="text-center text-sm text-slate2 py-6">No lawyers found.</p>`;
+    return;
+  }
+  el.innerHTML = list.map(l => {
+    const initials = l.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const selected = selectedLawyerId === l.id ? 'selected' : '';
+    return `
+      <div class="lawyer-option ${selected}" data-id="${l.id}" onclick="selectLawyer('${l.id}')">
+        <div class="lawyer-avatar">${initials}</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-sm text-navy">${l.name}</p>
+          <p class="text-xs text-slate2 truncate">${l.email}</p>
+          <p class="text-[11px] text-slate2 mt-0.5">${l.area} · ${l.cases} cases</p>
+        </div>
+        <div class="text-xl ${selected ? 'text-gold' : 'text-slate-300'}">${selected ? '●' : '○'}</div>
+      </div>`;
+  }).join('');
+}
+
+function selectLawyer(id) {
+  selectedLawyerId = id;
+  document.querySelectorAll('.lawyer-option').forEach(el => {
+    const isSel = el.dataset.id === id;
+    el.classList.toggle('selected', isSel);
+    const radio = el.lastElementChild;
+    radio.textContent = isSel ? '●' : '○';
+    radio.className = 'text-xl ' + (isSel ? 'text-gold' : 'text-slate-300');
+  });
+  document.getElementById('confirmAssignBtn').disabled = false;
+}
+
+function filterLawyerList() {
+  const q = document.getElementById('lawyerSearch').value.toLowerCase();
+  const filtered = LAWYERS_POOL.filter(l =>
+    l.name.toLowerCase().includes(q) || l.email.toLowerCase().includes(q)
+  );
+  renderLawyerList(filtered);
+}
+
+function confirmAssignLawyer() {
+  if (!currentAssignId || !selectedLawyerId) return;
+  const lawyer = LAWYERS_POOL.find(l => l.id === selectedLawyerId);
+  const affidavit = AFFIDAVITS.find(a => a.id === currentAssignId);
+  if (!affidavit || !lawyer) return;
+
+  affidavit.lawyer = { name: lawyer.name, email: lawyer.email };
+  if (affidavit.stageIndex === 0) affidavit.stageIndex = 1;
+
+  closeModal('modal-assign-lawyer');
+  applyFilters();
+  showToast(`${lawyer.name} assigned to ${affidavit.id}`, 'success');
+}
+
+/* ─── Init ─── */
+applyFilters();
 </script>
 </body>
 </html>

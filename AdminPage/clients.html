@@ -15,6 +15,78 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ── Action Buttons ── */
+  .btn-action {
+    padding: 4px 10px;
+    font-size: 11px; font-weight: 600;
+    border-radius: 7px;
+    transition: all .15s;
+    display: inline-flex; align-items: center; gap: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-view       { color: #1A2B3C; border: 1.5px solid #E2E8F0; background: #fff; }
+  .btn-view:hover { border-color: #C5A059; background: #FBF6ED; }
+
+  .btn-details       { color: #fff; border: 1.5px solid #1A2B3C; background: #1A2B3C; }
+  .btn-details:hover { background: #152233; }
+
+  .btn-deactivate       { color: #B45309; border: 1.5px solid #FDE68A; background: #FFFBEB; }
+  .btn-deactivate:hover { background: #FEF3C7; border-color: #F59E0B; }
+
+  .btn-activate       { color: #fff; border: 1.5px solid #22C55E; background: #22C55E; }
+  .btn-activate:hover { background: #16A34A; border-color: #16A34A; }
+
+  .btn-block       { color: #B91C1C; border: 1.5px solid #FECACA; background: #FEF2F2; }
+  .btn-block:hover { background: #FEE2E2; border-color: #EF4444; }
+
+  /* ── Confirmation Modal ── */
+  .confirm-icon-wrap {
+    width: 60px; height: 60px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px; font-size: 26px;
+  }
+  .confirm-icon-wrap.deactivate { background: #FEF3C7; color: #B45309; }
+  .confirm-icon-wrap.block      { background: #FEE2E2; color: #B91C1C; }
+  .confirm-icon-wrap.activate   { background: #DCFCE7; color: #166534; }
+
+  .form-label {
+    display: block; font-size: 11px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;
+  }
+  .form-textarea {
+    width: 100%; border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 10px 12px; font-size: 13px; outline: none;
+    transition: border-color .15s; background: #fff;
+    font-family: inherit; resize: vertical; min-height: 90px;
+  }
+  .form-textarea:focus {
+    border-color: #C5A059;
+    box-shadow: 0 0 0 3px rgba(197,160,89,0.12);
+  }
+
+  /* ── Date Filter ── */
+  .date-range-wrap {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 3px 9px 3px 11px; background: #F8FAFC;
+    transition: border-color .15s;
+  }
+  .date-range-wrap:focus-within { border-color: #C5A059; background: #fff; }
+  .date-range-wrap .d-label {
+    font-size: 10.5px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .date-range-wrap input[type="date"] {
+    border: 0; background: transparent; font-size: 12px;
+    color: #1A2B3C; font-weight: 600; outline: none;
+    cursor: pointer; font-family: inherit;
+  }
+  .date-range-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer; opacity: 0.5;
+  }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -31,47 +103,69 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+    <main class="flex-1 overflow-y-auto p-6 space-y-4">
 
+      <!-- Title -->
       <div>
-        <h1 class="text-2xl font-bold">Clients</h1>
-        <p class="text-slate2 text-sm mt-1">14,902 registered clients on JustiFi.</p>
+        <h1 class="text-xl font-bold">Clients</h1>
+        <p class="text-slate2 text-xs mt-0.5">14,902 registered clients on JustiFi.</p>
       </div>
 
-      <div class="grid grid-cols-3 gap-5">
-        <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
-          <p class="text-slate2 text-xs font-medium">Total Users</p>
-          <p class="text-2xl font-bold mt-2">14,902</p>
+      <!-- Stat cards -->
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Total Users</p>
+          <p class="text-xl font-bold mt-1">14,902</p>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
-          <p class="text-slate2 text-xs font-medium">Active Users</p>
-          <p class="text-2xl font-bold mt-2 text-emerald-600">14,210</p>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Active Users</p>
+          <p class="text-xl font-bold mt-1 text-emerald-600" id="statActive">4</p>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
-          <p class="text-slate2 text-xs font-medium">Inactive Users</p>
-          <p class="text-2xl font-bold mt-2 text-slate-400">692</p>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-card border border-slate-100">
+          <p class="text-slate2 text-[11px] font-medium">Inactive Users</p>
+          <p class="text-xl font-bold mt-1 text-slate-400" id="statInactive">1</p>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl p-4 shadow-card border border-slate-100 flex flex-wrap items-center gap-3">
-        <input id="searchClient" placeholder="Search by name or Client ID..." class="flex-1 min-w-[200px] border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none">
-        <select id="filterStatus" class="border border-slate-200 rounded-lg px-3 py-2 text-sm">
+      <!-- Filter bar -->
+      <div class="bg-white rounded-xl px-3 py-2.5 shadow-card border border-slate-100 flex flex-wrap items-center gap-2">
+        <input id="searchClient" placeholder="Search by name or Client ID..."
+               class="flex-1 min-w-[180px] border border-slate-200 rounded-lg px-3 py-1.5 text-[13px] outline-none focus:border-gold">
+
+        <div class="date-range-wrap">
+          <span class="d-label">Joined</span>
+          <input id="dateFrom" type="date" title="From date">
+          <span class="text-slate2 text-xs font-bold">→</span>
+          <input id="dateTo" type="date" title="To date">
+          <button onclick="clearDateFilter()" id="clearDateBtn"
+                  class="text-[11px] font-semibold text-slate2 hover:text-navy ml-1 hidden"
+                  title="Clear date filter">✕</button>
+        </div>
+
+        <select id="filterStatus" class="border border-slate-200 rounded-lg px-3 py-1.5 text-[13px] focus:border-gold outline-none">
           <option value="">All Status</option>
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
+          <option value="Blocked">Blocked</option>
         </select>
+
+        <button onclick="clearAllFilters()" id="clearAllBtn"
+                class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-3 py-1.5 rounded-lg hidden">
+          Clear All
+        </button>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
+      <!-- Table -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
         <table class="w-full text-sm">
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-5 py-3">Name</th>
-              <th class="text-left font-semibold px-5 py-3">ID</th>
-              <th class="text-left font-semibold px-5 py-3">Status</th>
-              <th class="text-left font-semibold px-5 py-3">Joining Date</th>
-              <th class="text-right font-semibold px-5 py-3">View</th>
-              <th class="text-right font-semibold px-5 py-3">Action</th>
+              <th class="text-left font-semibold px-4 py-2.5">Name</th>
+              <th class="text-left font-semibold px-4 py-2.5">ID</th>
+              <th class="text-left font-semibold px-4 py-2.5">Status</th>
+              <th class="text-left font-semibold px-4 py-2.5">Joining Date</th>
+              <th class="text-center font-semibold px-4 py-2.5">Details</th>
+              <th class="text-right font-semibold px-4 py-2.5" style="width: 280px;">Actions</th>
             </tr>
           </thead>
           <tbody id="clientsTbody" class="divide-y divide-slate-100"></tbody>
@@ -82,61 +176,329 @@
   </div>
 </div>
 
-<div id="modal-view-client" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg">
-    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-      <h3 class="font-bold text-lg">Client Details</h3>
-      <button onclick="closeModal('modal-view-client')" class="text-slate2">✕</button>
+<!-- Confirmation Modal -->
+<div id="modal-confirm-action" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+    <div class="px-6 pt-8 pb-6">
+      <div id="confirmIcon" class="confirm-icon-wrap deactivate">⏸</div>
+      <h3 class="text-lg font-bold text-navy text-center" id="confirmTitle">Deactivate Client</h3>
+      <p class="text-sm text-slate2 text-center mt-2 leading-relaxed" id="confirmMessage">
+        Are you sure you want to deactivate <strong class="text-navy">this client</strong>?
+      </p>
+      <div class="mt-5">
+        <label class="form-label">
+          Reason for this action <span class="text-red-500">*</span>
+        </label>
+        <textarea id="confirmReason" class="form-textarea"
+                  placeholder="Briefly describe why you are making this change (min 10 characters)..."></textarea>
+        <p class="text-[11px] text-slate2 mt-1.5" id="confirmHint">
+          This reason will be visible in the client's status history.
+        </p>
+      </div>
     </div>
-    <div id="viewClientBody" class="px-6 py-5 space-y-3 text-sm"></div>
     <div class="px-6 py-4 border-t border-slate-100 flex justify-end gap-3">
-      <button onclick="closeModal('modal-view-client')" class="text-sm font-semibold text-slate2 px-4 py-2">Close</button>
+      <button onclick="closeModal('modal-confirm-action')"
+              class="text-sm font-semibold text-slate2 px-4 py-2">Cancel</button>
+      <button id="confirmActionBtn" onclick="submitAction()"
+              class="text-sm font-semibold text-white px-5 py-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled>Confirm</button>
     </div>
   </div>
 </div>
 
 <script src="js/data.js"></script>
-<script src="js/main.js"></script><script>
+<script src="js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   CLIENTS PAGE
+   ═══════════════════════════════════════════════════════════════════ */
+
+const CLIENTS = [
+  {
+    id: 'CLI-10234', name: 'Mahmudul Karim', email: 'mahmud@mail.com',
+    phone: '+880 1712-345678', address: 'House 12, Road 5, Dhanmondi, Dhaka',
+    status: 'Active', joined: '12 Jan 2025',
+    services: { affidavit: 12, corporateTax: 3, lawyerBooking: 8, landProperty: 2, taxIncome: 5 },
+    ratings: { lawyer: { avg: 4.7, count: 15 }, deed: { avg: 4.5, count: 6 } },
+    history: [
+      { action: 'activate', label: 'Account Activated', date: '12 Jan 2025, 10:30 AM', reason: 'Initial registration — email verified.' }
+    ]
+  },
+  {
+    id: 'CLI-88214', name: 'Abdullah Hasan', email: 'abdullah@mail.com',
+    phone: '+880 1819-556677', address: 'Flat 3B, Gulshan 2, Dhaka',
+    status: 'Inactive', joined: '03 Mar 2025',
+    services: { affidavit: 4, corporateTax: 8, lawyerBooking: 15, landProperty: 6, taxIncome: 11 },
+    ratings: { lawyer: { avg: 4.2, count: 22 }, deed: { avg: 4.0, count: 9 } },
+    history: [
+      { action: 'activate',   label: 'Account Activated',   date: '03 Mar 2025, 09:15 AM', reason: 'Initial registration.' },
+      { action: 'deactivate', label: 'Account Deactivated', date: '18 Sep 2026, 02:42 PM', reason: 'Multiple disputes filed against service providers. Account temporarily restricted pending review.' }
+    ]
+  },
+  {
+    id: 'CLI-10891', name: 'Shirin Rahman', email: 'shirin@mail.com',
+    phone: '+880 1512-334455', address: 'Uttara Sector 10, Dhaka',
+    status: 'Active', joined: '21 Apr 2024',
+    services: { affidavit: 6, corporateTax: 1, lawyerBooking: 4, landProperty: 3, taxIncome: 7 },
+    ratings: { lawyer: { avg: 4.9, count: 11 }, deed: { avg: 4.8, count: 4 } },
+    history: [
+      { action: 'activate', label: 'Account Activated', date: '21 Apr 2024, 11:05 AM', reason: 'Initial registration — verified via NID.' }
+    ]
+  },
+  {
+    id: 'CLI-10892', name: 'Nasrin Akter', email: 'nasrin@mail.com',
+    phone: '+880 1717-889900', address: 'Mohammadpur, Dhaka',
+    status: 'Active', joined: '07 Jul 2024',
+    services: { affidavit: 2, corporateTax: 0, lawyerBooking: 3, landProperty: 1, taxIncome: 9 },
+    ratings: { lawyer: { avg: 4.6, count: 8 }, deed: { avg: 0, count: 0 } },
+    history: [
+      { action: 'activate', label: 'Account Activated', date: '07 Jul 2024, 04:22 PM', reason: 'Initial registration.' }
+    ]
+  },
+  {
+    id: 'CLI-10893', name: 'Tania Islam', email: 'tania@mail.com',
+    phone: '+880 1912-778899', address: 'Banani, Dhaka',
+    status: 'Blocked', joined: '19 Feb 2025',
+    services: { affidavit: 1, corporateTax: 2, lawyerBooking: 5, landProperty: 0, taxIncome: 3 },
+    ratings: { lawyer: { avg: 2.8, count: 9 }, deed: { avg: 3.0, count: 2 } },
+    history: [
+      { action: 'activate', label: 'Account Activated', date: '19 Feb 2025, 08:40 AM', reason: 'Initial registration.' },
+      { action: 'block',    label: 'Account Blocked',   date: '22 Aug 2026, 03:15 PM', reason: 'Suspicious transaction activity detected. Account blocked pending fraud investigation.' }
+    ]
+  }
+];
+
+let currentAction = null;
+
+/* ─── Parse "12 Jan 2025" → Date ─── */
+function parseClientDate(str) {
+  const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+  const parts = str.trim().split(' ');
+  if (parts.length !== 3) return null;
+  const day = parseInt(parts[0], 10);
+  const mon = months[parts[1]];
+  const year = parseInt(parts[2], 10);
+  if (isNaN(day) || mon === undefined || isNaN(year)) return null;
+  return new Date(year, mon, day);
+}
+
+/* ─── Render Table ─── */
 function renderClients() {
-  const q = (document.getElementById('searchClient').value || '').toLowerCase();
-  const s = document.getElementById('filterStatus').value;
-  const rows = DATA.clients.filter(c =>
-    (!q || c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q)) &&
-    (!s || c.status === s));
-  document.getElementById('clientsTbody').innerHTML = rows.map(c => `
-    <tr class="hover:bg-offwhite/60">
-      <td class="px-5 py-3.5 font-medium">${c.name}</td>
-      <td class="px-5 py-3.5 text-slate2">${c.id}</td>
-      <td class="px-5 py-3.5">
-        <span class="inline-flex items-center gap-1.5 ${c.status==='Active'?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate2'} text-xs font-semibold px-2.5 py-1 rounded-full">
-          <span class="dot ${c.status==='Active'?'bg-emerald-500':'bg-slate-400'}"></span>${c.status}
-        </span>
-      </td>
-      <td class="px-5 py-3.5 text-slate2">${c.joined}</td>
-      <td class="px-5 py-3.5 text-right">
-        <button class="text-xs font-semibold text-navy border border-slate-200 px-3 py-1.5 rounded-lg" onclick="viewClient('${c.id}')">View</button>
-      </td>
-      <td class="px-5 py-3.5 text-right">
-        ${c.status === 'Active'
-          ? `<button class="icon-btn gray" title="Deactivate">⏸</button>`
-          : `<button class="icon-btn green" title="Activate">▶</button>`}
-      </td>
-    </tr>`).join('') || `<tr><td colspan="6" class="px-5 py-6 text-center text-slate2 text-sm">No clients found.</td></tr>`;
+  const q     = (document.getElementById('searchClient').value || '').toLowerCase().trim();
+  const s     = document.getElementById('filterStatus').value;
+  const dFrom = document.getElementById('dateFrom').value;
+  const dTo   = document.getElementById('dateTo').value;
+
+  const rows = CLIENTS.filter(c => {
+    if (q && !(c.name.toLowerCase().includes(q) || c.id.toLowerCase().includes(q))) return false;
+    if (s && c.status !== s) return false;
+
+    if (dFrom || dTo) {
+      const cDate = parseClientDate(c.joined);
+      if (!cDate) return false;
+      const fromD = dFrom ? new Date(dFrom) : null;
+      const toD   = dTo   ? new Date(dTo)   : null;
+      if (fromD && cDate < fromD) return false;
+      if (toD   && cDate > toD)   return false;
+    }
+    return true;
+  });
+
+  const clearDateBtn = document.getElementById('clearDateBtn');
+  if (dFrom || dTo) clearDateBtn.classList.remove('hidden');
+  else clearDateBtn.classList.add('hidden');
+
+  const clearAllBtn = document.getElementById('clearAllBtn');
+  if (q || s || dFrom || dTo) clearAllBtn.classList.remove('hidden');
+  else clearAllBtn.classList.add('hidden');
+
+  const tbody = document.getElementById('clientsTbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="px-4 py-8 text-center text-slate2 text-sm">No clients match your filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(c => {
+    const statusTone = c.status === 'Active' ? 'emerald'
+                     : c.status === 'Blocked' ? 'red' : 'slate';
+
+    let actionsHtml = '';
+    if (c.status === 'Active') {
+      actionsHtml = `
+        <button class="btn-action btn-deactivate" onclick="openConfirmAction('${c.id}', 'deactivate')">
+          <span>⏸</span> Deactivate
+        </button>
+        <button class="btn-action btn-block" onclick="openConfirmAction('${c.id}', 'block')">
+          <span>⊘</span> Block
+        </button>`;
+    } else {
+      actionsHtml = `
+        <button class="btn-action btn-activate" onclick="openConfirmAction('${c.id}', 'activate')">
+          <span>▶</span> Activate
+        </button>`;
+      if (c.status === 'Inactive') {
+        actionsHtml += `
+          <button class="btn-action btn-block" onclick="openConfirmAction('${c.id}', 'block')">
+            <span>⊘</span> Block
+          </button>`;
+      }
+    }
+
+    return `
+      <tr class="hover:bg-offwhite/60 transition">
+        <td class="px-4 py-2.5 font-medium text-[13px]">${c.name}</td>
+        <td class="px-4 py-2.5 text-slate2 text-xs">${c.id}</td>
+        <td class="px-4 py-2.5">
+          <span class="inline-flex items-center gap-1.5
+            ${statusTone === 'emerald' ? 'bg-emerald-50 text-emerald-700'
+              : statusTone === 'red' ? 'bg-red-50 text-red-600'
+              : 'bg-slate-100 text-slate2'}
+            text-xs font-semibold px-2.5 py-1 rounded-full">
+            <span class="dot ${statusTone === 'emerald' ? 'bg-emerald-500'
+              : statusTone === 'red' ? 'bg-red-500' : 'bg-slate-400'}"></span>${c.status}
+          </span>
+        </td>
+        <td class="px-4 py-2.5 text-slate2 text-[13px]">${c.joined}</td>
+        <td class="px-4 py-2.5 text-center">
+          <button class="btn-action btn-details"
+                  onclick="goToClientInfo('${c.id}')">
+            Click →
+          </button>
+        </td>
+        <td class="px-4 py-2.5 text-right">
+          <div class="flex items-center justify-end gap-1.5">${actionsHtml}</div>
+        </td>
+      </tr>`;
+  }).join('');
 }
-function viewClient(id) {
-  const c = DATA.clients.find(x => x.id === id);
-  document.getElementById('viewClientBody').innerHTML = `
-    <div class="flex justify-between"><span class="text-slate2">Name</span><span class="font-medium">${c.name}</span></div>
-    <div class="flex justify-between"><span class="text-slate2">Client ID</span><span class="font-medium">${c.id}</span></div>
-    <div class="flex justify-between"><span class="text-slate2">Email</span><span class="font-medium">${c.email}</span></div>
-    <div class="flex justify-between"><span class="text-slate2">Services Used</span><span class="font-medium">${c.services}</span></div>
-    <div class="flex justify-between"><span class="text-slate2">Joined</span><span class="font-medium">${c.joined}</span></div>
-    <div class="flex justify-between"><span class="text-slate2">Status</span><span class="font-medium">${c.status}</span></div>`;
-  openModal('modal-view-client');
+
+/* ─── Navigate to Client Info Page ─── */
+function goToClientInfo(id) {
+  window.location.href = `client-information.html?id=${encodeURIComponent(id)}`;
 }
+
+/* ─── Confirmation Action ─── */
+function openConfirmAction(clientId, action) {
+  const c = CLIENTS.find(x => x.id === clientId);
+  if (!c) return;
+
+  currentAction = { clientId, action, name: c.name };
+
+  const config = {
+    deactivate: {
+      icon: '⏸', iconClass: 'deactivate',
+      title: 'Deactivate Client',
+      message: `Are you sure you want to deactivate <strong class="text-navy">${c.name}</strong>? They will no longer be able to log in, but their data will be preserved.`,
+      btnColor: '#B45309', btnText: 'Deactivate'
+    },
+    activate: {
+      icon: '▶', iconClass: 'activate',
+      title: 'Activate Client',
+      message: `Reactivate <strong class="text-navy">${c.name}</strong>'s account? They will regain access to all platform services.`,
+      btnColor: '#16A34A', btnText: 'Activate'
+    },
+    block: {
+      icon: '⊘', iconClass: 'block',
+      title: 'Block Client',
+      message: `Permanently block <strong class="text-navy">${c.name}</strong>? Their account will be locked and all active sessions terminated.`,
+      btnColor: '#DC2626', btnText: 'Block Client'
+    }
+  }[action];
+
+  const iconEl = document.getElementById('confirmIcon');
+  iconEl.className = `confirm-icon-wrap ${config.iconClass}`;
+  iconEl.textContent = config.icon;
+
+  document.getElementById('confirmTitle').textContent = config.title;
+  document.getElementById('confirmMessage').innerHTML = config.message;
+
+  const btn = document.getElementById('confirmActionBtn');
+  btn.textContent = config.btnText;
+  btn.style.background = config.btnColor;
+  btn.disabled = true;
+
+  const reasonEl = document.getElementById('confirmReason');
+  reasonEl.value = '';
+  reasonEl.oninput = () => {
+    btn.disabled = reasonEl.value.trim().length < 10;
+  };
+
+  document.getElementById('confirmHint').textContent =
+    action === 'activate'
+      ? 'Add a note about why this account is being reactivated.'
+      : 'This reason will be visible in the client\'s status history and audit log.';
+
+  openModal('modal-confirm-action');
+}
+
+function submitAction() {
+  if (!currentAction) return;
+  const { clientId, action } = currentAction;
+  const c = CLIENTS.find(x => x.id === clientId);
+  if (!c) return;
+
+  const reason = document.getElementById('confirmReason').value.trim();
+  if (reason.length < 10) {
+    showToast('Reason must be at least 10 characters', 'error');
+    return;
+  }
+
+  const newStatus = action === 'deactivate' ? 'Inactive' : action === 'activate' ? 'Active' : 'Blocked';
+  c.status = newStatus;
+
+  const labelMap = { deactivate: 'Account Deactivated', activate: 'Account Activated', block: 'Account Blocked' };
+  const now = new Date().toLocaleString('en-GB', {
+    day: '2-digit', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  c.history.push({ action, label: labelMap[action], date: now, reason });
+
+  closeModal('modal-confirm-action');
+  renderClients();
+  updateStats();
+
+  const msgs = {
+    deactivate: `${c.name} deactivated`,
+    activate:   `${c.name} activated`,
+    block:      `${c.name} blocked`
+  };
+  showToast(msgs[action], 'success');
+
+  currentAction = null;
+}
+
+function updateStats() {
+  const active   = CLIENTS.filter(c => c.status === 'Active').length;
+  const inactive = CLIENTS.filter(c => c.status === 'Inactive').length;
+  const el1 = document.getElementById('statActive');
+  const el2 = document.getElementById('statInactive');
+  if (el1) el1.textContent = active;
+  if (el2) el2.textContent = inactive;
+}
+
+/* ─── Clear Filters ─── */
+function clearDateFilter() {
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value   = '';
+  renderClients();
+}
+
+function clearAllFilters() {
+  document.getElementById('searchClient').value = '';
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('dateFrom').value     = '';
+  document.getElementById('dateTo').value       = '';
+  renderClients();
+}
+
+/* ─── Event Listeners + Init ─── */
 document.getElementById('searchClient').addEventListener('input', renderClients);
 document.getElementById('filterStatus').addEventListener('change', renderClients);
+document.getElementById('dateFrom').addEventListener('change', renderClients);
+document.getElementById('dateTo').addEventListener('change', renderClients);
+
 renderClients();
+updateStats();
 </script>
 </body>
 </html>
