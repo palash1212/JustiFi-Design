@@ -1,6 +1,7 @@
 // JustiFi Admin — main.js (compact v3)
 
 // ─────── SIDEBAR DATA ───────
+// ─────── SIDEBAR DATA ───────
 var MENU = [
   { t:'a', l:'Dashboard', f:'dashboard.html' },
   { t:'g', id:'g1', l:'Users / People', i:[
@@ -11,11 +12,8 @@ var MENU = [
   ]},
   { t:'g', id:'g2', l:'Operations', i:[
     { l:'Booking & Consultations', f:'bookings.html' },
-    { l:'Affidavit Services', f:'affidavit-services.html' },
     { l:'Affidavit Requests', f:'affidavit-requests.html', b:12 },
-    { l:'Land & Property Services', f:'land-property-services.html' },
     { l:'Land & Property Requests', f:'land-property-requests.html', b:4 },
-    { l:'Tax & Income Services', f:'tax-income-services.html' },
     { l:'Tax & Income Requests', f:'tax-income-requests.html' }
   ]},
   { t:'g', id:'g3', l:'Security & Compliance', i:[
@@ -29,6 +27,9 @@ var MENU = [
     { l:'User Privilege', f:'user-privilege.html' }
   ]},
   { t:'g', id:'g5', l:'Reports & Analytics', i:[
+    { l:'Affidavit Services', f:'affidavit-services.html' },
+    { l:'Land & Property Services', f:'land-property-services.html' },
+    { l:'Tax & Income Services', f:'tax-income-services.html' },
     { l:'Executive Analytics', f:'executive-analytics.html' },
     { l:'Financial & Revenue Reports', f:'financial-reports.html' },
     { l:'Service & Throughput Reports', f:'throughput-reports.html' }

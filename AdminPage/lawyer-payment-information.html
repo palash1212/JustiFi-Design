@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lawyer Payment Information — JustiFi Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: { navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' }, gold: { DEFAULT:'#C5A059', 50:'#FBF6ED' }, slate2:'#64748B', offwhite:'#F8FAFC' },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .page-hero {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    border-radius: 14px;
+    padding: 18px 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::after {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(197,160,89,0.15), transparent 70%);
+    border-radius: 50%; transform: translate(30%, -30%);
+  }
+  .page-hero::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+
+  .stat-tile {
+    background: #fff; border: 1px solid #EEF1F4;
+    border-radius: 12px; padding: 12px 16px;
+    transition: all .2s; position: relative; overflow: hidden;
+  }
+  .stat-tile::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: currentColor; opacity: 0.8;
+  }
+  .stat-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(26,43,60,0.08);
+  }
+  .stat-tile .num {
+    font-size: 22px; font-weight: 800; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-tile .lbl {
+    font-size: 10.5px; color: #64748B; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-top: 6px;
+  }
+  .stat-tile .icon {
+    position: absolute; right: 12px; top: 12px;
+    font-size: 18px; opacity: 0.15;
+  }
+
+  .section-title {
+    font-size: 11.5px; font-weight: 700; color: #1A2B3C;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .section-title .bar { width: 3px; height: 13px; background: #C5A059; border-radius: 2px; }
+
+  .filter-input, .filter-select {
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 7px 12px; font-size: 13px;
+    outline: none; transition: border-color .15s;
+    background: #F8FAFC; font-family: inherit;
+  }
+  .filter-input:focus, .filter-select:focus {
+    border-color: #C5A059; background: #fff;
+  }
+  .date-range-wrap {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 3px 9px 3px 11px; background: #F8FAFC;
+  }
+  .date-range-wrap:focus-within { border-color: #C5A059; background: #fff; }
+  .date-range-wrap .d-label {
+    font-size: 10.5px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .date-range-wrap input[type="date"] {
+    border: 0; background: transparent; font-size: 12px;
+    color: #1A2B3C; font-weight: 600; outline: none;
+    cursor: pointer; font-family: inherit;
+  }
+  .date-range-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer; opacity: 0.5;
+  }
+
+  .amount-range-wrap {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 3px 9px 3px 11px; background: #F8FAFC;
+  }
+  .amount-range-wrap:focus-within { border-color: #C5A059; background: #fff; }
+  .amount-range-wrap .d-label {
+    font-size: 10.5px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .amount-range-wrap input[type="number"] {
+    border: 0; background: transparent; font-size: 12px;
+    color: #1A2B3C; font-weight: 600; outline: none;
+    width: 70px; font-family: inherit;
+  }
+  .amount-range-wrap input[type="number"]::placeholder { color: #94A3B8; font-weight: 500; }
+
+  .service-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px;
+    background: #F8FAFC;
+    border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    transition: all .15s;
+  }
+  .service-row:hover { border-color: #C5A059; background: #FBF6ED; }
+  .service-row:last-child { margin-bottom: 0; }
+  .service-row .s-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    background: #fff;
+    border: 1px solid #EEF1F4;
+  }
+  .service-row .s-info { flex: 1; margin-left: 10px; }
+  .service-row .s-name { font-size: 12.5px; font-weight: 700; color: #1A2B3C; }
+  .service-row .s-count { font-size: 10px; color: #94A3B8; margin-top: 1px; }
+  .service-row .s-amount { font-size: 13px; font-weight: 700; color: #C5A059; }
+
+  .pay-status {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .pay-status .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .pay-status.received { background: #ECFDF5; color: #047857; }
+  .pay-status.received .dot { background: #10B981; }
+  .pay-status.pending  { background: #FFFBEB; color: #B45309; }
+  .pay-status.pending .dot { background: #F59E0B; }
+  .pay-status.failed   { background: #FEF2F2; color: #B91C1C; }
+  .pay-status.failed .dot { background: #EF4444; }
+  .pay-status.refunded { background: #F1F5F9; color: #64748B; }
+  .pay-status.refunded .dot { background: #94A3B8; }
+
+  .btn-back {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 600; color: #64748B;
+    padding: 5px 11px; border-radius: 7px;
+    border: 1px solid #E2E8F0; background: #fff;
+    transition: all .15s; cursor: pointer;
+  }
+  .btn-back:hover { color: #1A2B3C; border-color: #C5A059; background: #FBF6ED; }
+</style>
+</head>
+<body class="bg-offwhite text-navy">
+<div class="flex h-screen overflow-hidden">
+  <aside id="sidebar-mount" class="w-72 bg-navy text-white flex-shrink-0 flex flex-col"></aside>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+      <div class="flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+        <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2" placeholder="Search client, lawyer, booking, transaction ID...">
+      </div>
+      <div class="flex items-center gap-5">
+        <button class="relative text-slate2 hover:text-navy"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button>
+        <div class="h-6 w-px bg-slate-200"></div>
+        <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
+      </div>
+    </header>
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
+
+      <!-- Back -->
+      <div class="flex items-center justify-between">
+        <button id="backBtn" class="btn-back">
+          ← Back to Lawyer
+        </button>
+      </div>
+
+      <!-- Hero -->
+      <div class="page-hero">
+        <div class="relative z-10 flex items-center justify-between gap-4">
+          <div class="min-w-0">
+            <p class="text-[9.5px] font-bold tracking-widest text-white/50 uppercase">Payment Information · Earnings</p>
+            <h1 class="text-lg font-bold text-white mt-1 truncate" id="lawyerName">Barrister Sabbir Chowdhury</h1>
+            <p class="text-xs text-white/55 mt-0.5 truncate" id="lawyerMeta">LW-2001 · sabbir@justifi.com.bd</p>
+          </div>
+          <div class="text-right flex-shrink-0">
+            <div class="text-white/45 text-[9.5px] font-bold uppercase tracking-wider">Total Earned</div>
+            <div class="text-2xl font-extrabold text-gold leading-tight mt-0.5" id="heroTotalEarned">৳28,45,000</div>
+            <div class="text-[10.5px] text-white/45 mt-0.5" id="heroCaseCount">126 cases</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-3">
+        <div class="stat-tile" style="color: #1A2B3C;">
+          <span class="icon">💰</span>
+          <div class="num" style="color: #1A2B3C;" id="statTotal">126</div>
+          <div class="lbl">Total Cases</div>
+        </div>
+        <div class="stat-tile" style="color: #10B981;">
+          <span class="icon">✅</span>
+          <div class="num" style="color: #16A34A;" id="statReceived">৳26.8L</div>
+          <div class="lbl">Total Received</div>
+        </div>
+        <div class="stat-tile" style="color: #F59E0B;">
+          <span class="icon">⏳</span>
+          <div class="num" style="color: #B45309;" id="statPending">৳1.65L</div>
+          <div class="lbl">Pending Payout</div>
+        </div>
+        <div class="stat-tile" style="color: #EF4444;">
+          <span class="icon">📊</span>
+          <div class="num" style="color: #DC2626;" id="statPlatformFee">৳2.45L</div>
+          <div class="lbl">Platform Fee</div>
+        </div>
+      </div>
+
+      <!-- Two Column -->
+      <div class="grid grid-cols-3 gap-3">
+
+        <!-- LEFT: Filters + Table -->
+        <div class="col-span-2 space-y-3">
+
+          <!-- Filter Bar -->
+          <div class="bg-white rounded-xl px-3 py-2.5 shadow-card border border-slate-100 flex flex-wrap items-center gap-2">
+            <input id="fSearch" placeholder="Search by Payment ID, Case ID, Txn ID, Client..."
+                   class="filter-input flex-1 min-w-[160px]">
+
+            <div class="date-range-wrap">
+              <span class="d-label">Date</span>
+              <input id="fDateFrom" type="date" title="From date">
+              <span class="text-slate2 text-xs font-bold">→</span>
+              <input id="fDateTo" type="date" title="To date">
+              <button onclick="clearDateFilter()" id="clearDateBtn"
+                      class="text-[11px] font-semibold text-slate2 hover:text-navy ml-1 hidden"
+                      title="Clear date filter">✕</button>
+            </div>
+
+            <div class="amount-range-wrap">
+              <span class="d-label">৳</span>
+              <input id="fAmountMin" type="number" placeholder="Min" title="Min amount">
+              <span class="text-slate2 text-xs font-bold">→</span>
+              <input id="fAmountMax" type="number" placeholder="Max" title="Max amount">
+            </div>
+
+            <select id="fStatus" class="filter-select">
+              <option value="">All Status</option>
+              <option value="Received">Received</option>
+              <option value="Pending">Pending</option>
+              <option value="Failed">Failed</option>
+              <option value="Refunded">Refunded</option>
+            </select>
+
+            <button onclick="clearAllFilters()" id="clearAllBtn"
+                    class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-3 py-1.5 rounded-lg hidden">
+              Clear All
+            </button>
+          </div>
+
+          <!-- Table -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+            <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+              <div class="section-title" style="margin-bottom: 0;">
+                <span class="bar"></span> All Payments Received
+              </div>
+              <span class="text-[10.5px] text-slate2">
+                Showing <strong id="visibleCount" class="text-navy">0</strong> of <strong id="totalCount" class="text-navy">0</strong>
+              </span>
+            </div>
+            <table class="w-full text-sm" style="table-layout: fixed;">
+              <colgroup>
+                <col style="width: 13%;">   <!-- Payment ID -->
+                <col style="width: 20%;">   <!-- Client -->
+                <col style="width: 15%;">   <!-- Service -->
+                <col style="width: 12%;">   <!-- Date -->
+                <col style="width: 12%;">   <!-- Amount -->
+                <col style="width: 12%;">   <!-- Your Share -->
+                <col style="width: 12%;">   <!-- Status -->
+                <col style="width: 4%;">    <!-- Txn -->
+              </colgroup>
+              <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
+                <tr>
+                  <th class="text-left font-semibold px-3 py-2.5">Pay ID</th>
+                  <th class="text-left font-semibold px-3 py-2.5">Client</th>
+                  <th class="text-left font-semibold px-3 py-2.5">Service</th>
+                  <th class="text-left font-semibold px-3 py-2.5">Date</th>
+                  <th class="text-left font-semibold px-3 py-2.5">Amount</th>
+                  <th class="text-left font-semibold px-3 py-2.5">Your Share</th>
+                  <th class="text-left font-semibold px-3 py-2.5">Status</th>
+                  <th class="text-right font-semibold px-3 py-2.5">Txn</th>
+                </tr>
+              </thead>
+              <tbody id="paymentsTbody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT: Breakdown + Health -->
+        <div class="space-y-3">
+
+          <!-- Service Breakdown -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Earnings by Service</div>
+            <div id="serviceBreakdown"></div>
+
+            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-[11.5px] font-bold text-slate2 uppercase tracking-wide">Total Earned</span>
+              <span class="text-base font-extrabold text-gold" id="breakdownTotal">৳28,45,000</span>
+            </div>
+          </div>
+
+          <!-- Payment Health -->
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="section-title"><span class="bar"></span> Payment Health</div>
+            <div class="space-y-2.5">
+              <div>
+                <div class="flex justify-between text-[11.5px] mb-1">
+                  <span class="text-slate2">Received Rate</span>
+                  <span class="font-bold text-navy" id="receivedRate">94%</span>
+                </div>
+                <div class="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div id="receivedRateBar" class="h-full bg-emerald-500 rounded-full" style="width: 94%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[11.5px] mb-1">
+                  <span class="text-slate2">Avg. Per Case</span>
+                  <span class="font-bold text-navy" id="avgCase">৳22,579</span>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[11.5px] mb-1">
+                  <span class="text-slate2">Highest Payment</span>
+                  <span class="font-bold text-navy" id="maxPayment">৳45,000</span>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-[11.5px] mb-1">
+                  <span class="text-slate2">Platform Fee Rate</span>
+                  <span class="font-bold text-navy" id="platformFeeRate">10%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   LAWYER PAYMENT INFORMATION — Earnings
+   ═══════════════════════════════════════════════════════════════════ */
+
+const LAWYERS_DB = {
+  'LW-2001': { id: 'LW-2001', name: 'Barrister Sabbir Chowdhury', email: 'sabbir@justifi.com.bd', totalCases: 126 },
+  'LW-2002': { id: 'LW-2002', name: 'Advocate Nusrat Ara',          email: 'nusrat@justifi.com.bd', totalCases: 84 },
+  'LW-2003': { id: 'LW-2003', name: 'Md. Rezaul Karim',            email: 'rezaul@justifi.com.bd', totalCases: 39 },
+  'LW-2004': { id: 'LW-2004', name: 'Adv. Tahmina Akhter',         email: 'tahmina@justifi.com.bd', totalCases: 92 },
+  'LW-2005': { id: 'LW-2005', name: 'Barrister Mahbub Alam',       email: 'mahbub@justifi.com.bd',  totalCases: 65 }
+};
+
+const PAYMENTS_DB = {
+  'LW-2001': [
+    { id: 'PAY-20394', client: 'Mahmudul Karim',  service: 'Corporate Consultation', icon: '⚖️', date: '12 Sep 2026', amount: 1500,  platformFee: 150, share: 1350, status: 'Received', txnId: 'TXN-88214' },
+    { id: 'PAY-20388', client: 'Joynal Abedin',    service: 'Land Verification',      icon: '🏠', date: '08 Sep 2026', amount: 18500, platformFee: 1850, share: 16650, status: 'Received', txnId: 'TXN-88190' },
+    { id: 'PAY-20375', client: 'Nasrin Akter',     service: 'Corporate Filing',       icon: '🏢', date: '06 Sep 2026', amount: 12000, platformFee: 1200, share: 10800, status: 'Received', txnId: 'TXN-88175' },
+    { id: 'PAY-20360', client: 'Shirin Rahman',    service: 'Corporate Consultation', icon: '⚖️', date: '04 Sep 2026', amount: 2500,  platformFee: 250,  share: 2250,  status: 'Received', txnId: 'TXN-88160' },
+    { id: 'PAY-20341', client: 'Habibur Rahman',   service: 'Property Consultation',  icon: '🏠', date: '02 Sep 2026', amount: 3500,  platformFee: 350,  share: 3150,  status: 'Received', txnId: 'TXN-88145' },
+    { id: 'PAY-20320', client: 'Abdullah Hasan',   service: 'Tax Consultation',       icon: '💰', date: '30 Aug 2026', amount: 45000, platformFee: 4500, share: 40500, status: 'Pending',  txnId: 'TXN-88231' },
+    { id: 'PAY-20295', client: 'Ayesha Siddiqua',  service: 'Corporate Registration', icon: '🏢', date: '28 Aug 2026', amount: 15000, platformFee: 1500, share: 13500, status: 'Received', txnId: 'TXN-88078' },
+    { id: 'PAY-20278', client: 'Md. Iqbal Hossain',service: 'Property Verification',  icon: '🏠', date: '25 Aug 2026', amount: 8000,  platformFee: 800,  share: 7200,  status: 'Received', txnId: 'TXN-88054' },
+    { id: 'PAY-20254', client: 'Tania Islam',      service: 'Criminal Consultation',  icon: '⚖️', date: '22 Aug 2026', amount: 3000,  platformFee: 300,  share: 2700,  status: 'Failed',   txnId: 'TXN-88030' },
+    { id: 'PAY-20230', client: 'Nasrin Sultana',   service: 'Tax Filing',             icon: '💰', date: '20 Aug 2026', amount: 1800,  platformFee: 180,  share: 1620,  status: 'Received', txnId: 'TXN-88011' },
+    { id: 'PAY-20211', client: 'Kamrul Hasan',     service: 'Corporate Advisory',     icon: '🏢', date: '18 Aug 2026', amount: 6500,  platformFee: 650,  share: 5850,  status: 'Received', txnId: 'TXN-87995' },
+    { id: 'PAY-20195', client: 'Nasrin Akter',     service: 'Property Consultation',  icon: '🏠', date: '15 Aug 2026', amount: 2200,  platformFee: 220,  share: 1980,  status: 'Received', txnId: 'TXN-87972' },
+    { id: 'PAY-20172', client: 'Habibur Rahman',   service: 'Corporate Consultation', icon: '⚖️', date: '12 Aug 2026', amount: 1500,  platformFee: 150,  share: 1350,  status: 'Received', txnId: 'TXN-87954' },
+    { id: 'PAY-20154', client: 'Rokeya Sultana',   service: 'Tax Consultation',       icon: '💰', date: '10 Aug 2026', amount: 3500,  platformFee: 350,  share: 3150,  status: 'Received', txnId: 'TXN-87932' },
+    { id: 'PAY-20132', client: 'Farzana Akhter',   service: 'Corporate Filing',       icon: '🏢', date: '08 Aug 2026', amount: 9000,  platformFee: 900,  share: 8100,  status: 'Received', txnId: 'TXN-87915' },
+    { id: 'PAY-20115', client: 'Shahidul Islam',   service: 'Property Verification',  icon: '🏠', date: '05 Aug 2026', amount: 12000, platformFee: 1200, share: 10800, status: 'Refunded', txnId: 'TXN-87897' },
+    { id: 'PAY-20097', client: 'Mahmudul Karim',   service: 'Corporate Consultation', icon: '⚖️', date: '03 Aug 2026', amount: 2500,  platformFee: 250,  share: 2250,  status: 'Received', txnId: 'TXN-87878' },
+    { id: 'PAY-20078', client: 'Ayesha Siddiqua',  service: 'Tax Advisory',           icon: '💰', date: '01 Aug 2026', amount: 4200,  platformFee: 420,  share: 3780,  status: 'Received', txnId: 'TXN-87860' },
+    { id: 'PAY-20060', client: 'Tania Islam',      service: 'Property Consultation',  icon: '🏠', date: '28 Jul 2026', amount: 3500,  platformFee: 350,  share: 3150,  status: 'Received', txnId: 'TXN-87841' },
+    { id: 'PAY-20041', client: 'Nasrin Sultana',   service: 'Corporate Registration', icon: '🏢', date: '25 Jul 2026', amount: 15000, platformFee: 1500, share: 13500, status: 'Received', txnId: 'TXN-87820' },
+    { id: 'PAY-20020', client: 'Abdullah Hasan',   service: 'Criminal Consultation',  icon: '⚖️', date: '22 Jul 2026', amount: 3800,  platformFee: 380,  share: 3420,  status: 'Received', txnId: 'TXN-87805' },
+    { id: 'PAY-20005', client: 'Md. Iqbal Hossain',service: 'Tax Filing',             icon: '💰', date: '20 Jul 2026', amount: 2200,  platformFee: 220,  share: 1980,  status: 'Received', txnId: 'TXN-87788' },
+    { id: 'PAY-19988', client: 'Kamrul Hasan',     service: 'Property Verification',  icon: '🏠', date: '18 Jul 2026', amount: 8000,  platformFee: 800,  share: 7200,  status: 'Pending',  txnId: 'TXN-87765' },
+    { id: 'PAY-19965', client: 'Rokeya Sultana',   service: 'Corporate Advisory',     icon: '🏢', date: '15 Jul 2026', amount: 9500,  platformFee: 950,  share: 8550,  status: 'Received', txnId: 'TXN-87745' },
+    { id: 'PAY-19945', client: 'Habibur Rahman',   service: 'Corporate Consultation', icon: '⚖️', date: '12 Jul 2026', amount: 2500,  platformFee: 250,  share: 2250,  status: 'Received', txnId: 'TXN-87728' },
+    { id: 'PAY-19928', client: 'Nasrin Akter',     service: 'Tax Consultation',       icon: '💰', date: '10 Jul 2026', amount: 1800,  platformFee: 180,  share: 1620,  status: 'Received', txnId: 'TXN-87710' },
+    { id: 'PAY-19910', client: 'Mahmudul Karim',   service: 'Corporate Filing',       icon: '🏢', date: '08 Jul 2026', amount: 12000, platformFee: 1200, share: 10800, status: 'Received', txnId: 'TXN-87695' },
+    { id: 'PAY-19895', client: 'Farzana Akhter',   service: 'Property Consultation',  icon: '🏠', date: '05 Jul 2026', amount: 3000,  platformFee: 300,  share: 2700,  status: 'Received', txnId: 'TXN-87678' },
+    { id: 'PAY-19878', client: 'Shahidul Islam',   service: 'Corporate Registration', icon: '🏢', date: '03 Jul 2026', amount: 15000, platformFee: 1500, share: 13500, status: 'Received', txnId: 'TXN-87660' },
+    { id: 'PAY-19860', client: 'Tania Islam',      service: 'Tax Advisory',           icon: '💰', date: '01 Jul 2026', amount: 2500,  platformFee: 250,  share: 2250,  status: 'Received', txnId: 'TXN-87645' },
+    { id: 'PAY-19845', client: 'Nasrin Sultana',   service: 'Criminal Consultation',  icon: '⚖️', date: '28 Jun 2026', amount: 4500,  platformFee: 450,  share: 4050,  status: 'Received', txnId: 'TXN-87630' }
+  ],
+  'LW-2002': [
+    { id: 'PAY-30301', client: 'Shirin Rahman',  service: 'Family Consultation', icon: '⚖️', date: '13 Sep 2026', amount: 2000,  platformFee: 200,  share: 1800,  status: 'Pending',  txnId: '—' },
+    { id: 'PAY-30300', client: 'Abdullah Hasan', service: 'Family Mediation',    icon: '⚖️', date: '10 Sep 2026', amount: 3500,  platformFee: 350,  share: 3150,  status: 'Received', txnId: 'TXN-90301' }
+  ],
+  'LW-2003': [],
+  'LW-2004': [],
+  'LW-2005': []
+};
+
+function getLawyerIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || 'LW-2001';
+}
+
+function formatTk(n) {
+  return '৳' + n.toLocaleString('en-IN');
+}
+
+function formatShort(n) {
+  if (n >= 100000) return '৳' + (n/100000).toFixed(2) + 'L';
+  if (n >= 1000)   return '৳' + (n/1000).toFixed(1) + 'K';
+  return '৳' + n;
+}
+
+function parseDate(str) {
+  const months = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+  const parts = str.trim().split(' ');
+  if (parts.length !== 3) return null;
+  const d = parseInt(parts[0], 10);
+  const m = months[parts[1]];
+  const y = parseInt(parts[2], 10);
+  if (isNaN(d) || m === undefined || isNaN(y)) return null;
+  return new Date(y, m, d);
+}
+
+function statusTone(s) {
+  return { 'Received':'received', 'Pending':'pending', 'Failed':'failed', 'Refunded':'refunded' }[s] || 'pending';
+}
+
+let currentPayments = [];
+let currentLawyer = null;
+let currentFilter = { search: '', dateFrom: '', dateTo: '', amountMin: null, amountMax: null, status: '' };
+
+function init() {
+  const id = getLawyerIdFromUrl();
+  currentLawyer = LAWYERS_DB[id];
+  if (!currentLawyer) {
+    document.querySelector('main').innerHTML = `
+      <div class="p-12 text-center">
+        <p class="text-lg font-bold text-navy">Lawyer not found</p>
+        <a href="lawyers.html" class="text-gold font-semibold underline mt-2 inline-block">← Back to Lawyers</a>
+      </div>`;
+    return;
+  }
+  currentPayments = PAYMENTS_DB[id] || [];
+
+  document.getElementById('lawyerName').textContent = currentLawyer.name;
+  document.getElementById('lawyerMeta').textContent = `${currentLawyer.id} · ${currentLawyer.email}`;
+
+  document.getElementById('backBtn').onclick = () => {
+    window.location.href = `lawyer-information.html?id=${encodeURIComponent(id)}`;
+  };
+
+  computeStats();
+  renderServiceBreakdown();
+  renderPayments();
+
+  document.title = `${currentLawyer.name} — Payment Information`;
+}
+
+function computeStats() {
+  const totalReceived = currentPayments
+    .filter(p => p.status === 'Received')
+    .reduce((s, p) => s + p.share, 0);
+  const totalPending = currentPayments
+    .filter(p => p.status === 'Pending')
+    .reduce((s, p) => s + p.share, 0);
+  const totalPlatformFee = currentPayments
+    .filter(p => p.status === 'Received')
+    .reduce((s, p) => s + p.platformFee, 0);
+
+  document.getElementById('heroTotalEarned').textContent = formatTk(totalReceived + totalPending);
+  document.getElementById('heroCaseCount').textContent = `${currentPayments.length} cases`;
+  document.getElementById('statTotal').textContent = currentPayments.length;
+  document.getElementById('statReceived').textContent = formatShort(totalReceived);
+  document.getElementById('statPending').textContent = formatShort(totalPending);
+  document.getElementById('statPlatformFee').textContent = formatShort(totalPlatformFee);
+
+  // Health
+  const total = currentPayments.length || 1;
+  const receivedCount = currentPayments.filter(p => p.status === 'Received').length;
+  const rate = Math.round(receivedCount / total * 100);
+  document.getElementById('receivedRate').textContent = rate + '%';
+  document.getElementById('receivedRateBar').style.width = rate + '%';
+
+  const avg = receivedCount > 0 ? Math.round(totalReceived / receivedCount) : 0;
+  document.getElementById('avgCase').textContent = formatTk(avg);
+
+  const maxVal = currentPayments.reduce((m, p) => Math.max(m, p.amount), 0);
+  document.getElementById('maxPayment').textContent = formatTk(maxVal);
+}
+
+function renderServiceBreakdown() {
+  const services = {};
+  currentPayments.forEach(p => {
+    if (p.status !== 'Received') return;
+    if (!services[p.service]) {
+      services[p.service] = { count: 0, amount: 0, icon: p.icon };
+    }
+    services[p.service].count++;
+    services[p.service].amount += p.share;
+  });
+
+  const entries = Object.entries(services).sort((a, b) => b[1].amount - a[1].amount);
+  const el = document.getElementById('serviceBreakdown');
+
+  if (entries.length === 0) {
+    el.innerHTML = `<p class="text-xs text-slate2 italic">No earnings yet.</p>`;
+    document.getElementById('breakdownTotal').textContent = '৳0';
+    return;
+  }
+
+  el.innerHTML = entries.map(([name, data]) => `
+    <div class="service-row">
+      <div class="s-icon">${data.icon}</div>
+      <div class="s-info">
+        <div class="s-name">${name}</div>
+        <div class="s-count">${data.count} payment${data.count > 1 ? 's' : ''}</div>
+      </div>
+      <div class="s-amount">${formatTk(data.amount)}</div>
+    </div>
+  `).join('');
+
+  const total = entries.reduce((s, [, d]) => s + d.amount, 0);
+  document.getElementById('breakdownTotal').textContent = formatTk(total);
+}
+
+function renderPayments() {
+  const f = currentFilter;
+  const filtered = currentPayments.filter(p => {
+    if (f.status && p.status !== f.status) return false;
+    if (f.search) {
+      const hay = `${p.id} ${p.txnId} ${p.service} ${p.client}`.toLowerCase();
+      if (!hay.includes(f.search.toLowerCase())) return false;
+    }
+    if (f.dateFrom || f.dateTo) {
+      const d = parseDate(p.date);
+      if (!d) return false;
+      const from = f.dateFrom ? new Date(f.dateFrom) : null;
+      const to   = f.dateTo   ? new Date(f.dateTo)   : null;
+      if (from && d < from) return false;
+      if (to   && d > to)   return false;
+    }
+    if (f.amountMin !== null && p.amount < f.amountMin) return false;
+    if (f.amountMax !== null && p.amount > f.amountMax) return false;
+    return true;
+  });
+
+  const hasDate = f.dateFrom || f.dateTo;
+  const hasAmount = f.amountMin !== null || f.amountMax !== null;
+  const hasAny = f.search || f.status || hasDate || hasAmount;
+
+  document.getElementById('clearDateBtn').classList.toggle('hidden', !hasDate);
+  document.getElementById('clearAllBtn').classList.toggle('hidden', !hasAny);
+
+  document.getElementById('visibleCount').textContent = filtered.length;
+  document.getElementById('totalCount').textContent   = currentPayments.length;
+
+  const tbody = document.getElementById('paymentsTbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="px-3 py-8 text-center text-slate2 text-sm">No payments match your filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(p => `
+    <tr class="hover:bg-offwhite/60 transition">
+      <td class="px-3 py-2.5 font-medium text-[12px] text-navy">${p.id}</td>
+      <td class="px-3 py-2.5 text-[12px] truncate">${p.client}</td>
+      <td class="px-3 py-2.5 text-[11.5px] text-slate2 truncate">${p.icon} ${p.service}</td>
+      <td class="px-3 py-2.5 text-slate2 text-[11.5px]">${p.date}</td>
+      <td class="px-3 py-2.5 text-slate2 text-[11.5px]">${formatTk(p.amount)}</td>
+      <td class="px-3 py-2.5 font-semibold text-[12.5px] text-emerald-600">${formatTk(p.share)}</td>
+      <td class="px-3 py-2.5">
+        <span class="pay-status ${statusTone(p.status)}">
+          <span class="dot"></span>${p.status}
+        </span>
+      </td>
+      <td class="px-3 py-2.5 text-right text-[10.5px] text-slate2 font-mono">${p.txnId}</td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('fSearch').addEventListener('input', (e) => {
+  currentFilter.search = e.target.value;
+  renderPayments();
+});
+document.getElementById('fDateFrom').addEventListener('change', (e) => {
+  currentFilter.dateFrom = e.target.value;
+  renderPayments();
+});
+document.getElementById('fDateTo').addEventListener('change', (e) => {
+  currentFilter.dateTo = e.target.value;
+  renderPayments();
+});
+document.getElementById('fAmountMin').addEventListener('input', (e) => {
+  const v = e.target.value;
+  currentFilter.amountMin = v === '' ? null : Number(v);
+  renderPayments();
+});
+document.getElementById('fAmountMax').addEventListener('input', (e) => {
+  const v = e.target.value;
+  currentFilter.amountMax = v === '' ? null : Number(v);
+  renderPayments();
+});
+document.getElementById('fStatus').addEventListener('change', (e) => {
+  currentFilter.status = e.target.value;
+  renderPayments();
+});
+
+function clearDateFilter() {
+  currentFilter.dateFrom = '';
+  currentFilter.dateTo = '';
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value = '';
+  renderPayments();
+}
+
+function clearAllFilters() {
+  currentFilter = { search: '', dateFrom: '', dateTo: '', amountMin: null, amountMax: null, status: '' };
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value = '';
+  document.getElementById('fAmountMin').value = '';
+  document.getElementById('fAmountMax').value = '';
+  document.getElementById('fStatus').value = '';
+  renderPayments();
+}
+
+init();
+</script>
+</body>
+</html>

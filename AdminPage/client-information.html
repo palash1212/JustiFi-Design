@@ -114,11 +114,9 @@
     border-bottom: 1px solid #F1F5F9;
     font-size: 12.5px;
   }
-  /* Vertical divider between columns */
   .info-cell:nth-child(odd) {
     border-right: 1px solid #F1F5F9;
   }
-  /* Remove bottom border for last row items */
   .info-cell.full-width {
     grid-column: span 2;
     border-right: 0 !important;
@@ -298,11 +296,44 @@
     width: 100%;
   }
   .btn-report:hover { background: #152233; }
+  /* ═══ Payment Report Button (Gold Theme) ═══ */
+.btn-payment-report {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font-size: 11.5px; font-weight: 700;
+  padding: 8px 12px; border-radius: 7px;
+  background: linear-gradient(135deg, #C5A059 0%, #A07D3A 100%);
+  color: #fff;
+  border: none;
+  transition: all .2s;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(197,160,89,0.28);
+  letter-spacing: 0.02em;
+}
+.btn-payment-report:hover {
+  background: linear-gradient(135deg, #A07D3A 0%, #8A6A2F 100%);
+  box-shadow: 0 4px 14px rgba(197,160,89,0.4);
+  transform: translateY(-1px);
+}
+.btn-payment-report:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(197,160,89,0.3);
+}
 
-  /* ═══ Scrollbar for side panel ═══ */
-  .scroll-panel::-webkit-scrollbar { width: 5px; }
-  .scroll-panel::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
-  .scroll-panel::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+  /* ═══ Payment Card ═══ */
+  .payment-card {
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .payment-card:hover {
+    border-color: #C5A059;
+    box-shadow: 0 6px 20px rgba(197,160,89,0.12);
+    transform: translateY(-1px);
+  }
 </style>
 </head>
 <body class="bg-offwhite text-navy">
@@ -338,17 +369,13 @@
         <div class="flex items-center gap-4 relative z-10">
           <div class="hero-avatar" id="heroAvatar">MK</div>
           <div class="flex-1 min-w-0">
-            <!-- Name -->
             <h1 class="text-lg font-bold text-white truncate" id="heroName">Mahmudul Karim</h1>
-            <!-- Client ID + email (below name) -->
             <p class="text-xs text-white/55 mt-0.5 truncate" id="heroMeta">CLI-10234 · mahmud@mail.com</p>
-            <!-- Status + joined -->
             <div class="mt-1.5 flex flex-wrap items-center gap-2.5">
               <span id="heroStatus" class="hero-status active"><span class="dot"></span>Active</span>
               <span class="text-[10.5px] text-white/45">Member since <strong class="text-white/75" id="heroJoined">12 Jan 2025</strong></span>
             </div>
           </div>
-          <!-- Right: Total spent + services -->
           <div class="text-right flex-shrink-0">
             <div class="text-white/45 text-[9.5px] font-bold uppercase tracking-wider">Total Spent</div>
             <div class="text-xl font-extrabold text-gold leading-tight" id="heroSpent">৳1,85,500</div>
@@ -357,7 +384,7 @@
         </div>
       </div>
 
-      <!-- ═══ Service Status Stats (compact) ═══ -->
+      <!-- ═══ Service Status Stats ═══ -->
       <div class="grid grid-cols-5 gap-2.5">
         <div class="stat-tile">
           <div class="num" style="color: #1A2B3C;" id="statTotal">30</div>
@@ -387,7 +414,7 @@
         <!-- LEFT: Main Details -->
         <div class="col-span-2 space-y-3.5">
 
-          <!-- Basic Info (with vertical divider) -->
+          <!-- Basic Info -->
           <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
             <div class="section-title"><span class="bar"></span> Basic Information</div>
             <div class="info-table">
@@ -448,11 +475,11 @@
         <!-- RIGHT: Sidebar -->
         <div class="space-y-3.5">
 
-          <!-- Recent Changes -->
+          <!-- Recent Change (only 1) -->
           <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
             <div class="flex items-center justify-between mb-3">
               <div class="section-title" style="margin-bottom: 0;">
-                <span class="bar"></span> Recent Changes
+                <span class="bar"></span> Recent Change
               </div>
               <button onclick="goToFullReport()"
                       class="text-[10px] font-bold text-gold hover:underline bg-transparent border-0 cursor-pointer">
@@ -464,6 +491,39 @@
             <button onclick="goToFullReport()" class="btn-report mt-2.5">
               📊 View Full Activity Report
             </button>
+          </div>
+
+          <!-- ═══ Payment Information (NEW — clickable) ═══ -->
+          <div class="payment-card" onclick="goToPaymentInfo()">
+            <div class="flex items-center justify-between mb-3">
+              <div class="section-title" style="margin-bottom: 0;">
+                <span class="bar"></span> Payment Information
+              </div>
+              <span class="text-[10px] font-bold text-gold">View all →</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Total Paid</span>
+                <span class="font-bold text-gold" id="payTotalAmount">৳1,85,500</span>
+              </div>
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Total Transactions</span>
+                <span class="font-semibold text-navy" id="payTotalCount">30</span>
+              </div>
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Successful</span>
+                <span class="font-semibold text-emerald-600" id="paySuccessCount">27</span>
+              </div>
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Pending / Due</span>
+                <span class="font-semibold text-amber-600" id="payPendingCount">3</span>
+              </div>
+            </div>
+
+            <button onclick="event.stopPropagation(); goToPaymentInfo();" class="btn-payment-report mt-3">
+  💳 View Full Payment History
+</button>
           </div>
 
           <!-- Verification -->
@@ -649,6 +709,11 @@ function goToFullReport() {
   window.location.href = `client-activity-report.html?id=${encodeURIComponent(id)}`;
 }
 
+function goToPaymentInfo() {
+  const id = getClientIdFromUrl();
+  window.location.href = `client-payment-information.html?id=${encodeURIComponent(id)}`;
+}
+
 function renderClientInfo() {
   const id = getClientIdFromUrl();
   const c = CLIENTS_DB[id];
@@ -739,14 +804,26 @@ function renderClientInfo() {
     `).join('');
   }
 
-  // Recent Changes (max 4)
+  // Recent Changes (ONLY 1 — latest)
   const changesEl = document.getElementById('recentChanges');
-  const recent = (c.changes || []).slice(-4).reverse();
+  const recent = (c.changes || []).slice(-1).reverse();
   if (recent.length === 0) {
     changesEl.innerHTML = `<p class="text-xs text-slate2 italic">No profile changes recorded.</p>`;
   } else {
     changesEl.innerHTML = recent.map(ch => renderChangeItem(ch)).join('');
   }
+
+  // ═══ Payment Summary ═══
+  const payData = {
+    totalAmount:  c.totalSpent || 0,
+    totalCount:   c.serviceStats?.total || totalServices,
+    successCount: c.serviceStats?.complete || 0,
+    pendingCount: (c.serviceStats?.pending || 0) + (c.serviceStats?.ongoing || 0)
+  };
+  document.getElementById('payTotalAmount').textContent   = formatBdt(payData.totalAmount);
+  document.getElementById('payTotalCount').textContent    = payData.totalCount;
+  document.getElementById('paySuccessCount').textContent  = payData.successCount;
+  document.getElementById('payPendingCount').textContent  = payData.pendingCount;
 
   // Status History
   const histEl = document.getElementById('historyList');

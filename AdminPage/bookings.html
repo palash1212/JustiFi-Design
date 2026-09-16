@@ -15,6 +15,291 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ═══ Stat Tiles ═══ */
+  .stat-tile {
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-tile::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+  .stat-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(26,43,60,0.08);
+  }
+  .stat-tile .num { font-size: 22px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat-tile .lbl {
+    font-size: 10.5px; color: #64748B; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-top: 6px;
+  }
+  .stat-tile .icon {
+    position: absolute; right: 12px; top: 12px;
+    font-size: 18px; opacity: 0.15;
+  }
+
+  /* ═══ Filter Bar ═══ */
+  .filter-input, .filter-select {
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 7px 12px; font-size: 13px;
+    outline: none; transition: border-color .15s;
+    background: #F8FAFC; font-family: inherit;
+  }
+  .filter-input:focus, .filter-select:focus {
+    border-color: #C5A059; background: #fff;
+  }
+  .date-range-wrap {
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 3px 9px 3px 11px; background: #F8FAFC;
+    transition: border-color .15s;
+  }
+  .date-range-wrap:focus-within { border-color: #C5A059; background: #fff; }
+  .date-range-wrap .d-label {
+    font-size: 10.5px; font-weight: 700; color: #64748B;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .date-range-wrap input[type="date"] {
+    border: 0; background: transparent; font-size: 12px;
+    color: #1A2B3C; font-weight: 600; outline: none;
+    cursor: pointer; font-family: inherit;
+  }
+  .date-range-wrap input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer; opacity: 0.5;
+  }
+
+  /* ═══ Action Buttons ═══ */
+  .btn-action {
+    padding: 4px 10px;
+    font-size: 11px; font-weight: 600;
+    border-radius: 7px;
+    transition: all .15s;
+    display: inline-flex; align-items: center; gap: 4px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .btn-view {
+    color: #fff; border: 1.5px solid #1A2B3C; background: #1A2B3C;
+  }
+  .btn-view:hover { background: #152233; }
+
+  /* ═══ View Modal ═══ */
+  .view-modal-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(26, 43, 60, 0.55);
+    backdrop-filter: blur(4px); z-index: 100;
+    align-items: center; justify-content: center; padding: 24px;
+  }
+  .view-modal-backdrop.open { display: flex; }
+  .view-modal-card {
+    background: #fff; width: 100%; max-width: 900px;
+    max-height: 92vh; overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(26, 43, 60, 0.25);
+    border-radius: 16px;
+    animation: modalSlideUp 0.3s ease;
+  }
+  @keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(24px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .view-modal-card::-webkit-scrollbar { width: 6px; }
+  .view-modal-card::-webkit-scrollbar-track { background: #F1F5F9; border-radius: 10px; }
+  .view-modal-card::-webkit-scrollbar-thumb { background: #C5A059; border-radius: 10px; }
+
+  /* ═══ Hero Header ═══ */
+  .booking-hero {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    padding: 20px 28px;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+    color: #fff;
+  }
+  .booking-hero::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+  .hero-status-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .hero-status-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .hero-status-badge.confirmed { background: rgba(34,197,94,0.15);  color: #4ADE80; border: 1px solid rgba(34,197,94,0.35); }
+  .hero-status-badge.confirmed .dot { background: #4ADE80; }
+  .hero-status-badge.pending   { background: rgba(197,160,89,0.15); color: #E5C878; border: 1px solid rgba(197,160,89,0.35); }
+  .hero-status-badge.pending .dot { background: #E5C878; }
+  .hero-status-badge.completed { background: rgba(34,197,94,0.15);  color: #4ADE80; border: 1px solid rgba(34,197,94,0.35); }
+  .hero-status-badge.completed .dot { background: #4ADE80; }
+  .hero-status-badge.cancelled { background: rgba(148,163,184,0.15); color: #CBD5E1; border: 1px solid rgba(148,163,184,0.35); }
+  .hero-status-badge.cancelled .dot { background: #CBD5E1; }
+  .hero-status-badge.disputed  { background: rgba(239,68,68,0.15);  color: #FCA5A5; border: 1px solid rgba(239,68,68,0.35); }
+  .hero-status-badge.disputed .dot  { background: #FCA5A5; }
+
+  .hero-meta-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 600;
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* ═══ Section Title ═══ */
+  .section-title {
+    font-size: 11.5px; font-weight: 700; color: #1A2B3C;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 7px;
+    margin-bottom: 10px;
+  }
+  .section-title .bar { width: 3px; height: 13px; background: #C5A059; border-radius: 2px; }
+
+  /* ═══ Info Cells ═══ */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid #EEF1F4;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .info-cell {
+    padding: 8px 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 12.5px;
+  }
+  .info-cell:nth-child(odd) { border-right: 1px solid #F1F5F9; }
+  .info-cell.full { grid-column: span 2; border-right: 0 !important; }
+  .info-cell:last-child { border-bottom: 0; }
+  .info-cell .lbl { color: #64748B; font-weight: 500; font-size: 11px; flex-shrink: 0; }
+  .info-cell .val {
+    color: #1A2B3C; font-weight: 600; text-align: right;
+    font-size: 12.5px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* ═══ Person Card ═══ */
+  .person-card {
+    background: #F8FAFC;
+    border: 1px solid #EEF1F4;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .person-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; color: #fff;
+    flex-shrink: 0;
+  }
+  .person-avatar.client { background: linear-gradient(135deg, #3B82F6, #1E40AF); }
+  .person-avatar.lawyer { background: linear-gradient(135deg, #C5A059, #A07D3A); color: #1A2B3C; }
+  .person-info { flex: 1; min-width: 0; }
+  .person-info .p-role {
+    font-size: 9.5px; color: #94A3B8;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .person-info .p-name { font-size: 13px; font-weight: 700; color: #1A2B3C; margin-top: 1px; }
+  .person-info .p-sub  { font-size: 11px; color: #64748B; margin-top: 1px; }
+
+  /* ═══ Timeline ═══ */
+  .timeline-item {
+    display: flex; gap: 12px;
+    padding: 8px 0;
+    position: relative;
+  }
+  .timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 9px; top: 32px; bottom: -8px;
+    width: 2px;
+    background: #E2E8F0;
+  }
+  .timeline-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; border: 2px solid #22C55E;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #22C55E; font-weight: 700;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .timeline-dot.pending { border-color: #CBD5E1; color: #94A3B8; }
+  .timeline-content { flex: 1; }
+  .timeline-content .t-label { font-size: 12.5px; font-weight: 600; color: #1A2B3C; }
+  .timeline-content .t-time  { font-size: 10.5px; color: #94A3B8; margin-top: 1px; }
+
+  /* ═══ Review Card ═══ */
+  .review-card {
+    background: #FBF6ED;
+    border: 1px solid #F0E0B8;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .review-card .stars { color: #C5A059; font-size: 14px; letter-spacing: 1px; }
+  .review-card .who { font-size: 11.5px; font-weight: 700; color: #1A2B3C; margin-top: 4px; }
+  .review-card .txt { font-size: 12px; color: #475569; line-height: 1.5; margin-top: 6px; }
+
+  /* ═══ Document Item ═══ */
+  .doc-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 12px;
+    background: #F8FAFC;
+    border: 1px solid #EEF1F4;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 12.5px;
+  }
+  .doc-item:last-child { margin-bottom: 0; }
+
+  /* ═══ Payment Row ═══ */
+  .pay-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #F1F5F9;
+    font-size: 12.5px;
+  }
+  .pay-row:last-child { border-bottom: 0; }
+  .pay-row .lbl { color: #64748B; }
+  .pay-row .val { color: #1A2B3C; font-weight: 600; }
+
+  /* ═══ Modal Footer ═══ */
+  .btn-close-modal {
+    padding: 8px 20px;
+    font-size: 13px; font-weight: 600;
+    border-radius: 8px;
+    border: 1px solid #E2E8F0;
+    background: #fff; color: #64748B;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-close-modal:hover { background: #F8FAFC; color: #1A2B3C; border-color: #C5A059; }
+
+  /* ═══ Risk Badge ═══ */
+  .risk-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .risk-badge.low    { background: #ECFDF5; color: #047857; }
+  .risk-badge.medium { background: #FFFBEB; color: #B45309; }
+  .risk-badge.high   { background: #FEF2F2; color: #B91C1C; }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -31,32 +316,99 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+    <main class="flex-1 overflow-y-auto p-5 space-y-3">
 
+      <!-- Title -->
       <div>
-        <h1 class="text-2xl font-bold">Booking & Consultations</h1>
-        <p class="text-slate2 text-sm mt-1">Complete lifecycle of every lawyer booking.</p>
+        <h1 class="text-xl font-bold">Booking & Consultations</h1>
+        <p class="text-slate2 text-xs mt-0.5">Complete lifecycle of every lawyer booking.</p>
       </div>
 
-      <div class="flex gap-1 border-b border-slate-200 overflow-x-auto">
-        <button class="tab-btn active px-4 py-2.5 text-sm whitespace-nowrap">All</button>
-        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap">Pending</button>
-        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap">Confirmed</button>
-        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap">Completed</button>
-        <button class="tab-btn px-4 py-2.5 text-sm whitespace-nowrap">Disputed</button>
+      <!-- ═══ Stats ═══ -->
+      <div class="grid grid-cols-4 gap-3">
+        <div class="stat-tile" style="color: #3B82F6;">
+          <span class="icon">📅</span>
+          <div class="num" id="statTotal" style="color: #1A2B3C;">0</div>
+          <div class="lbl">Total Bookings</div>
+        </div>
+        <div class="stat-tile" style="color: #C5A059;">
+          <span class="icon">⏳</span>
+          <div class="num" id="statPending" style="color: #B45309;">0</div>
+          <div class="lbl">Pending</div>
+        </div>
+        <div class="stat-tile" style="color: #10B981;">
+          <span class="icon">✅</span>
+          <div class="num" id="statCompleted" style="color: #16A34A;">0</div>
+          <div class="lbl">Completed</div>
+        </div>
+        <div class="stat-tile" style="color: #EF4444;">
+          <span class="icon">⊘</span>
+          <div class="num" id="statCancelled" style="color: #DC2626;">0</div>
+          <div class="lbl">Cancelled</div>
+        </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden">
-        <table class="w-full text-sm">
+      <!-- ═══ Filter Bar ═══ -->
+      <div class="bg-white rounded-xl px-3 py-2.5 shadow-card border border-slate-100 flex flex-wrap items-center gap-2">
+        <input id="fSearch" placeholder="Search by Booking ID, client, or lawyer..."
+               class="filter-input flex-1 min-w-[180px]">
+
+        <div class="date-range-wrap">
+          <span class="d-label">Date</span>
+          <input id="fDateFrom" type="date" title="From date">
+          <span class="text-slate2 text-xs font-bold">→</span>
+          <input id="fDateTo" type="date" title="To date">
+          <button onclick="clearDateFilter()" id="clearDateBtn"
+                  class="text-[11px] font-semibold text-slate2 hover:text-navy ml-1 hidden"
+                  title="Clear date filter">✕</button>
+        </div>
+
+        <select id="fStatus" class="filter-select">
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Disputed">Disputed</option>
+        </select>
+
+        <select id="fPayment" class="filter-select">
+          <option value="">All Payments</option>
+          <option value="Paid">Paid</option>
+          <option value="Pending">Pending</option>
+          <option value="Refunded">Refunded</option>
+          <option value="Failed">Failed</option>
+        </select>
+
+        <button onclick="clearAllFilters()" id="clearAllBtn"
+                class="text-xs font-semibold text-slate2 hover:text-navy border border-slate-200 px-3 py-1.5 rounded-lg hidden">
+          Clear All
+        </button>
+      </div>
+
+      <!-- ═══ Table ═══ -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <table class="w-full text-sm" style="table-layout: fixed;">
+          <colgroup>
+            <col style="width: 12%;">   <!-- Booking -->
+            <col style="width: 15%;">   <!-- Client -->
+            <col style="width: 18%;">   <!-- Lawyer -->
+            <col style="width: 13%;">   <!-- Date -->
+            <col style="width: 11%;">   <!-- Mode -->
+            <col style="width: 11%;">   <!-- Payment -->
+            <col style="width: 12%;">   <!-- Status -->
+            <col style="width: 8%;">    <!-- Details -->
+          </colgroup>
           <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
             <tr>
-              <th class="text-left font-semibold px-5 py-3">Booking</th>
-              <th class="text-left font-semibold px-5 py-3">Client</th>
-              <th class="text-left font-semibold px-5 py-3">Lawyer</th>
-              <th class="text-left font-semibold px-5 py-3">Date</th>
-              <th class="text-left font-semibold px-5 py-3">Mode</th>
-              <th class="text-left font-semibold px-5 py-3">Payment</th>
-              <th class="text-right font-semibold px-5 py-3">Status</th>
+              <th class="text-left font-semibold px-4 py-2.5">Booking</th>
+              <th class="text-left font-semibold px-4 py-2.5">Client</th>
+              <th class="text-left font-semibold px-4 py-2.5">Lawyer</th>
+              <th class="text-left font-semibold px-4 py-2.5">Date</th>
+              <th class="text-left font-semibold px-4 py-2.5">Mode</th>
+              <th class="text-left font-semibold px-4 py-2.5">Payment</th>
+              <th class="text-left font-semibold px-4 py-2.5">Status</th>
+              <th class="text-right font-semibold px-4 py-2.5">Details</th>
             </tr>
           </thead>
           <tbody id="bookingsTbody" class="divide-y divide-slate-100"></tbody>
@@ -67,27 +419,579 @@
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+     VIEW MODAL — Full Booking Details
+     ══════════════════════════════════════════════════════════════ -->
+<div id="modal-view-booking" class="view-modal-backdrop">
+  <div class="view-modal-card">
+
+    <!-- Hero -->
+    <div class="booking-hero">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-[9.5px] font-bold tracking-widest text-white/50 uppercase">Booking Details</span>
+        <button onclick="closeModal('modal-view-booking')" class="text-white/60 hover:text-white text-xl leading-none">✕</button>
+      </div>
+
+      <div class="flex items-start justify-between gap-4">
+        <div class="min-w-0">
+          <h2 class="text-lg font-bold text-white truncate" id="vBookingId">#BK-10294</h2>
+          <p class="text-xs text-white/55 mt-0.5" id="vBookingMeta">Corporate Consultation · 12 Sep 2026</p>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <span id="vStatusBadge" class="hero-status-badge confirmed"><span class="dot"></span>Confirmed</span>
+          <span id="vRiskBadge" class="hero-status-badge pending"><span class="dot"></span>Low Risk</span>
+        </div>
+      </div>
+
+      <!-- Quick meta chips -->
+      <div class="flex flex-wrap items-center gap-2 mt-3">
+        <span class="hero-meta-chip" id="vChipDate">📅 12 Sep 2026, 4:00 PM</span>
+        <span class="hero-meta-chip" id="vChipDuration">⏱️ 45 minutes</span>
+        <span class="hero-meta-chip" id="vChipMode">💻 Video Call</span>
+        <span class="hero-meta-chip" id="vChipFee">৳1,500</span>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="px-6 py-5 space-y-5">
+
+      <!-- Client & Lawyer side by side -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <div class="section-title"><span class="bar"></span> Client</div>
+          <div class="person-card">
+            <div class="person-avatar client" id="vClientAvatar">MK</div>
+            <div class="person-info">
+              <div class="p-role">Client</div>
+              <div class="p-name" id="vClientName">Mahmudul Karim</div>
+              <div class="p-sub" id="vClientId">CLI-10234</div>
+              <div class="p-sub" id="vClientEmail">mahmud@mail.com</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title"><span class="bar"></span> Lawyer</div>
+          <div class="person-card">
+            <div class="person-avatar lawyer" id="vLawyerAvatar">SC</div>
+            <div class="person-info">
+              <div class="p-role">Lawyer</div>
+              <div class="p-name" id="vLawyerName">Barrister Sabbir Chowdhury</div>
+              <div class="p-sub" id="vLawyerId">LW-2001</div>
+              <div class="p-sub" id="vLawyerArea">Corporate Law</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appointment Details -->
+      <div>
+        <div class="section-title"><span class="bar"></span> Appointment Details</div>
+        <div class="info-grid">
+          <div class="info-cell"><span class="lbl">Date</span><span class="val" id="vDate">12 Sep 2026</span></div>
+          <div class="info-cell"><span class="lbl">Time</span><span class="val" id="vTime">4:00 PM</span></div>
+          <div class="info-cell"><span class="lbl">Duration</span><span class="val" id="vDuration">45 minutes</span></div>
+          <div class="info-cell"><span class="lbl">Mode</span><span class="val" id="vMode">Video Call</span></div>
+          <div class="info-cell full"><span class="lbl">Location</span><span class="val" id="vLocation">Online (Zoom link shared)</span></div>
+        </div>
+      </div>
+
+      <!-- Case Information -->
+      <div>
+        <div class="section-title"><span class="bar"></span> Case Information</div>
+        <div class="info-grid">
+          <div class="info-cell full"><span class="lbl">Matter Type</span><span class="val" id="vMatter">Corporate Consultation</span></div>
+          <div class="info-cell full" style="align-items: flex-start;">
+            <span class="lbl" style="padding-top: 2px;">Case Summary</span>
+            <span class="val" id="vSummary" style="text-align: right; white-space: normal; overflow: visible;">—</span>
+          </div>
+          <div class="info-cell full" style="align-items: flex-start;">
+            <span class="lbl" style="padding-top: 2px;">Client Notes</span>
+            <span class="val" id="vNotes" style="text-align: right; white-space: normal; overflow: visible; font-style: italic;">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Uploaded Documents -->
+      <div>
+        <div class="section-title"><span class="bar"></span> Uploaded Documents</div>
+        <div id="vDocuments"></div>
+      </div>
+
+      <!-- Payment -->
+      <div>
+        <div class="section-title"><span class="bar"></span> Payment Information</div>
+        <div class="bg-offwhite rounded-xl p-4">
+          <div class="pay-row"><span class="lbl">Consultation Fee</span><span class="val" id="vFee">৳1,500</span></div>
+          <div class="pay-row"><span class="lbl">Platform Charge</span><span class="val" id="vPlatformFee">৳50</span></div>
+          <div class="pay-row"><span class="lbl">Payment Method</span><span class="val" id="vMethod">bKash</span></div>
+          <div class="pay-row"><span class="lbl">Transaction ID</span><span class="val" id="vTxnId">TXN-88214</span></div>
+          <div class="pay-row"><span class="lbl">Payment Status</span><span class="val" id="vPaymentStatus" style="color: #16A34A;">Paid</span></div>
+          <div class="pay-row"><span class="lbl">Paid At</span><span class="val" id="vPaidAt">12 Sep 2026, 03:48 PM</span></div>
+          <div class="pay-row" style="border-top: 2px solid #E2E8F0; margin-top: 4px; padding-top: 10px;">
+            <span class="lbl" style="font-weight: 700; color: #1A2B3C;">Total</span>
+            <span class="val" style="font-size: 15px; color: #C5A059;" id="vTotal">৳1,550</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Timeline -->
+      <div>
+        <div class="section-title"><span class="bar"></span> Booking Timeline</div>
+        <div id="vTimeline"></div>
+      </div>
+
+      <!-- Reviews -->
+      <div id="vReviewsSection">
+        <div class="section-title"><span class="bar"></span> Reviews</div>
+        <div class="grid grid-cols-2 gap-3" id="vReviews"></div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="sticky bottom-0 bg-white border-t border-slate-100 px-6 py-3 flex justify-end">
+      <button onclick="closeModal('modal-view-booking')" class="btn-close-modal">Close</button>
+    </div>
+
+  </div>
+</div>
+
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 <script>
-document.getElementById('bookingsTbody').innerHTML = DATA.bookings.map(b => `
-  <tr class="hover:bg-offwhite/60">
-    <td class="px-5 py-3.5 font-medium">${b.id}</td>
-    <td class="px-5 py-3.5">${b.client}</td>
-    <td class="px-5 py-3.5 text-slate2">${b.lawyer}</td>
-    <td class="px-5 py-3.5">${b.date}</td>
-    <td class="px-5 py-3.5">${b.mode}</td>
-    <td class="px-5 py-3.5">
-      <span class="inline-flex items-center gap-1.5 ${b.payment==='Paid'?'bg-emerald-50 text-emerald-700':b.payment==='Pending'?'bg-gold-50 text-gold':'bg-slate-100 text-slate2'} text-xs font-semibold px-2.5 py-1 rounded-full">
-        <span class="dot ${b.payment==='Paid'?'bg-emerald-500':b.payment==='Pending'?'bg-gold':'bg-slate-400'}"></span>${b.payment}
-      </span>
-    </td>
-    <td class="px-5 py-3.5 text-right">
-      <span class="inline-flex items-center gap-1.5 ${b.status==='Confirmed'?'bg-emerald-50 text-emerald-700':b.status==='Pending'?'bg-gold-50 text-gold':'bg-red-50 text-red-600'} text-xs font-semibold px-2.5 py-1 rounded-full">
-        <span class="dot ${b.status==='Confirmed'?'bg-emerald-500':b.status==='Pending'?'bg-gold':'bg-red-500'}"></span>${b.status}
-      </span>
-    </td>
-  </tr>`).join('');
+/* ═══════════════════════════════════════════════════════════════════
+   BOOKINGS PAGE — Full logic
+   ═══════════════════════════════════════════════════════════════════ */
+
+const BOOKINGS = [
+  {
+    id: '#BK-10294',
+    client: { id: 'CLI-10234', name: 'Mahmudul Karim', email: 'mahmud@mail.com', phone: '+880 1712-345678' },
+    lawyer: { id: 'LW-2001', name: 'Barrister Sabbir Chowdhury', area: 'Corporate Law', email: 'sabbir@justifi.com.bd' },
+    date: '12 Sep 2026', time: '4:00 PM', duration: '45 minutes',
+    mode: 'Video Call', location: 'Online (Zoom link shared)',
+    matterType: 'Corporate Consultation',
+    caseSummary: 'Discussion about company registration and tax structure for a new tech startup.',
+    clientNotes: 'Need guidance on partnership agreement and IP protection.',
+    fee: 1500, platformFee: 50,
+    method: 'bKash', txnId: 'TXN-88214',
+    paidAt: '12 Sep 2026, 03:48 PM',
+    payment: 'Paid', status: 'Confirmed', risk: 'Low',
+    documents: [
+      { name: 'Trade_License.pdf', size: '1.2 MB' },
+      { name: 'NID_Copy.jpg', size: '245 KB' }
+    ],
+    timeline: [
+      { step: 'Booking Created', time: '12 Sep 2026, 03:45 PM', done: true },
+      { step: 'Payment Initiated', time: '12 Sep 2026, 03:46 PM', done: true },
+      { step: 'Payment Successful', time: '12 Sep 2026, 03:48 PM', done: true },
+      { step: 'Lawyer Notified', time: '12 Sep 2026, 03:49 PM', done: true },
+      { step: 'Lawyer Accepted', time: '12 Sep 2026, 03:52 PM', done: true },
+      { step: 'Booking Confirmed', time: '12 Sep 2026, 03:53 PM', done: true }
+    ],
+    clientReview: { rating: 5, text: 'Very professional. Handled the consultation with care.', date: '12 Sep 2026' },
+    lawyerReview: { rating: 5, text: 'Great client. Well prepared and clear communication.', date: '12 Sep 2026' }
+  },
+  {
+    id: '#BK-10301',
+    client: { id: 'CLI-10891', name: 'Shirin Rahman', email: 'shirin@mail.com', phone: '+880 1512-334455' },
+    lawyer: { id: 'LW-2002', name: 'Advocate Nusrat Ara', area: 'Family Law', email: 'nusrat@justifi.com.bd' },
+    date: '13 Sep 2026', time: '11:00 AM', duration: '30 minutes',
+    mode: 'Chamber Visit', location: 'Chattogram Court, Chamber 12',
+    matterType: 'Family Consultation',
+    caseSummary: 'Discussion on divorce proceedings and child custody arrangement.',
+    clientNotes: 'Want to understand legal process and timeline.',
+    fee: 2000, platformFee: 50,
+    method: 'Card', txnId: '—',
+    paidAt: '—',
+    payment: 'Pending', status: 'Pending', risk: 'Low',
+    documents: [
+      { name: 'Marriage_Certificate.pdf', size: '856 KB' }
+    ],
+    timeline: [
+      { step: 'Booking Created', time: '13 Sep 2026, 10:40 AM', done: true },
+      { step: 'Payment Initiated', time: '—', done: false },
+      { step: 'Lawyer Notified', time: '—', done: false },
+      { step: 'Booking Confirmed', time: '—', done: false }
+    ],
+    clientReview: null,
+    lawyerReview: null
+  },
+  {
+    id: '#BK-10288',
+    client: { id: 'CLI-10893', name: 'Tania Islam', email: 'tania@mail.com', phone: '+880 1912-778899' },
+    lawyer: { id: 'LW-2003', name: 'Md. Rezaul Karim', area: 'Criminal Law', email: 'rezaul@justifi.com.bd' },
+    date: '10 Sep 2026', time: '2:00 PM', duration: '60 minutes',
+    mode: 'Video Call', location: 'Online (Google Meet)',
+    matterType: 'Criminal Consultation',
+    caseSummary: 'Initial consultation regarding a criminal defense case.',
+    clientNotes: 'Details discussed during consultation.',
+    fee: 3000, platformFee: 100,
+    method: 'Nagad', txnId: 'TXN-88201',
+    paidAt: '10 Sep 2026, 01:30 PM',
+    payment: 'Refunded', status: 'Disputed', risk: 'High',
+    documents: [
+      { name: 'FIR_Copy.pdf', size: '420 KB' }
+    ],
+    timeline: [
+      { step: 'Booking Created', time: '10 Sep 2026, 01:20 PM', done: true },
+      { step: 'Payment Successful', time: '10 Sep 2026, 01:30 PM', done: true },
+      { step: 'Lawyer Accepted', time: '10 Sep 2026, 01:45 PM', done: true },
+      { step: 'Dispute Raised', time: '10 Sep 2026, 05:00 PM', done: true },
+      { step: 'Refund Initiated', time: '11 Sep 2026, 10:00 AM', done: true }
+    ],
+    clientReview: { rating: 2, text: 'Consultation did not meet expectations.', date: '10 Sep 2026' },
+    lawyerReview: null
+  },
+  {
+    id: '#BK-10275',
+    client: { id: 'CLI-10892', name: 'Nasrin Akter', email: 'nasrin@mail.com', phone: '+880 1717-889900' },
+    lawyer: { id: 'LW-2004', name: 'Adv. Tahmina Akhter', area: 'Property Law', email: 'tahmina@justifi.com.bd' },
+    date: '08 Sep 2026', time: '10:00 AM', duration: '45 minutes',
+    mode: 'Video Call', location: 'Online (Zoom)',
+    matterType: 'Property Consultation',
+    caseSummary: 'Discussion on land mutation and registration process.',
+    clientNotes: 'Required help with property documentation.',
+    fee: 1800, platformFee: 50,
+    method: 'bKash', txnId: 'TXN-88190',
+    paidAt: '08 Sep 2026, 09:45 AM',
+    payment: 'Paid', status: 'Completed', risk: 'Low',
+    documents: [
+      { name: 'Khatian_Copy.pdf', size: '620 KB' },
+      { name: 'Mutation_Order.pdf', size: '900 KB' }
+    ],
+    timeline: [
+      { step: 'Booking Created', time: '08 Sep 2026, 09:40 AM', done: true },
+      { step: 'Payment Successful', time: '08 Sep 2026, 09:45 AM', done: true },
+      { step: 'Lawyer Accepted', time: '08 Sep 2026, 09:50 AM', done: true },
+      { step: 'Consultation Started', time: '08 Sep 2026, 10:00 AM', done: true },
+      { step: 'Consultation Completed', time: '08 Sep 2026, 10:45 AM', done: true }
+    ],
+    clientReview: { rating: 5, text: 'Very knowledgeable. Resolved all my queries.', date: '08 Sep 2026' },
+    lawyerReview: { rating: 5, text: 'Excellent client, well prepared.', date: '08 Sep 2026' }
+  },
+  {
+    id: '#BK-10260',
+    client: { id: 'CLI-88214', name: 'Abdullah Hasan', email: 'abdullah@mail.com', phone: '+880 1819-556677' },
+    lawyer: { id: 'LW-2005', name: 'Barrister Mahbub Alam', area: 'Tax Law', email: 'mahbub@justifi.com.bd' },
+    date: '05 Sep 2026', time: '3:30 PM', duration: '60 minutes',
+    mode: 'Chamber Visit', location: 'Dhaka Tax Tribunal, Room 3',
+    matterType: 'Tax Consultation',
+    caseSummary: 'Discussion on corporate tax filing and compliance.',
+    clientNotes: 'Need help with annual tax return.',
+    fee: 2500, platformFee: 100,
+    method: 'Card', txnId: 'TXN-88150',
+    paidAt: '05 Sep 2026, 03:00 PM',
+    payment: 'Paid', status: 'Cancelled', risk: 'Medium',
+    documents: [
+      { name: 'Financial_Statement.pdf', size: '2.4 MB' }
+    ],
+    timeline: [
+      { step: 'Booking Created', time: '05 Sep 2026, 02:55 PM', done: true },
+      { step: 'Payment Successful', time: '05 Sep 2026, 03:00 PM', done: true },
+      { step: 'Lawyer Accepted', time: '05 Sep 2026, 03:10 PM', done: true },
+      { step: 'Cancelled by Client', time: '05 Sep 2026, 03:20 PM', done: true }
+    ],
+    clientReview: null,
+    lawyerReview: null
+  }
+];
+
+let currentViewId = null;
+
+/* ═══ HELPERS ═══ */
+function parseBkDate(str) {
+  // "12 Sep 2026" → Date object
+  const months = { Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11 };
+  const parts = str.trim().split(' ');
+  if (parts.length !== 3) return null;
+  const d = parseInt(parts[0], 10);
+  const m = months[parts[1]];
+  const y = parseInt(parts[2], 10);
+  if (isNaN(d) || m === undefined || isNaN(y)) return null;
+  return new Date(y, m, d);
+}
+
+function initials(name) {
+  return name.replace(/^(Barrister|Advocate|Adv\.|Md\.|Mr\.|Ms\.|Mrs\.)\s+/i, '')
+    .split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function formatTk(n) {
+  return '৳' + n.toLocaleString('en-IN');
+}
+
+function statusTone(status) {
+  return {
+    'Confirmed':'emerald', 'Completed':'emerald',
+    'Pending':'gold', 'Cancelled':'slate', 'Disputed':'red'
+  }[status] || 'slate';
+}
+
+function paymentTone(payment) {
+  return {
+    'Paid':'emerald', 'Pending':'gold',
+    'Refunded':'slate', 'Failed':'red'
+  }[payment] || 'slate';
+}
+
+/* ═══ RENDER STATS ═══ */
+function renderStats() {
+  const total = BOOKINGS.length;
+  const pending = BOOKINGS.filter(b => b.status === 'Pending').length;
+  const completed = BOOKINGS.filter(b => b.status === 'Completed').length;
+  const cancelled = BOOKINGS.filter(b => b.status === 'Cancelled' || b.status === 'Disputed').length;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statPending').textContent = pending;
+  document.getElementById('statCompleted').textContent = completed;
+  document.getElementById('statCancelled').textContent = cancelled;
+}
+
+/* ═══ RENDER TABLE ═══ */
+function renderBookings() {
+  const q        = (document.getElementById('fSearch').value || '').toLowerCase().trim();
+  const status   = document.getElementById('fStatus').value;
+  const payment  = document.getElementById('fPayment').value;
+  const dateFrom = document.getElementById('fDateFrom').value;
+  const dateTo   = document.getElementById('fDateTo').value;
+
+  const rows = BOOKINGS.filter(b => {
+    if (status && b.status !== status) return false;
+    if (payment && b.payment !== payment) return false;
+    if (q) {
+      const hay = `${b.id} ${b.client.name} ${b.lawyer.name}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (dateFrom || dateTo) {
+      const d = parseBkDate(b.date);
+      if (!d) return false;
+      const f = dateFrom ? new Date(dateFrom) : null;
+      const t = dateTo   ? new Date(dateTo)   : null;
+      if (f && d < f) return false;
+      if (t && d > t) return false;
+    }
+    return true;
+  });
+
+  // Clear buttons
+  const clearDateBtn = document.getElementById('clearDateBtn');
+  if (dateFrom || dateTo) clearDateBtn.classList.remove('hidden');
+  else clearDateBtn.classList.add('hidden');
+
+  const clearAllBtn = document.getElementById('clearAllBtn');
+  if (q || status || payment || dateFrom || dateTo) clearAllBtn.classList.remove('hidden');
+  else clearAllBtn.classList.add('hidden');
+
+  const tbody = document.getElementById('bookingsTbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="px-4 py-8 text-center text-slate2 text-sm">No bookings match your filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = rows.map(b => {
+    const sTone = statusTone(b.status);
+    const pTone = paymentTone(b.payment);
+
+    return `
+      <tr class="hover:bg-offwhite/60 transition">
+        <td class="px-4 py-2.5 font-medium text-[13px]">${b.id}</td>
+        <td class="px-4 py-2.5 text-[13px] truncate">${b.client.name}</td>
+        <td class="px-4 py-2.5 text-slate2 text-[12.5px] truncate">${b.lawyer.name}</td>
+        <td class="px-4 py-2.5 text-slate2 text-[12px]">${b.date}</td>
+        <td class="px-4 py-2.5 text-slate2 text-[12px]">${b.mode}</td>
+        <td class="px-4 py-2.5">
+          <span class="inline-flex items-center gap-1.5
+            ${pTone === 'emerald' ? 'bg-emerald-50 text-emerald-700'
+              : pTone === 'gold'    ? 'bg-gold-50 text-gold'
+              : pTone === 'red'     ? 'bg-red-50 text-red-600'
+              : 'bg-slate-100 text-slate2'}
+            text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
+            <span class="dot ${pTone === 'emerald' ? 'bg-emerald-500'
+              : pTone === 'gold' ? 'bg-gold'
+              : pTone === 'red' ? 'bg-red-500' : 'bg-slate-400'}"></span>${b.payment}
+          </span>
+        </td>
+        <td class="px-4 py-2.5">
+          <span class="inline-flex items-center gap-1.5
+            ${sTone === 'emerald' ? 'bg-emerald-50 text-emerald-700'
+              : sTone === 'gold'  ? 'bg-gold-50 text-gold'
+              : sTone === 'red'   ? 'bg-red-50 text-red-600'
+              : 'bg-slate-100 text-slate2'}
+            text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
+            <span class="dot ${sTone === 'emerald' ? 'bg-emerald-500'
+              : sTone === 'gold' ? 'bg-gold'
+              : sTone === 'red' ? 'bg-red-500' : 'bg-slate-400'}"></span>${b.status}
+          </span>
+        </td>
+        <td class="px-4 py-2.5 text-right">
+          <button class="btn-action btn-view" onclick="openBookingView('${b.id}')">
+            View
+          </button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  renderStats();
+}
+
+/* ═══ OPEN VIEW MODAL ═══ */
+function openBookingView(id) {
+  const b = BOOKINGS.find(x => x.id === id);
+  if (!b) return;
+  currentViewId = id;
+
+  // Hero
+  document.getElementById('vBookingId').textContent = b.id;
+  document.getElementById('vBookingMeta').textContent = `${b.matterType} · ${b.date}`;
+
+  const statusToneMap = {
+    'Confirmed':'confirmed', 'Pending':'pending',
+    'Completed':'completed', 'Cancelled':'cancelled', 'Disputed':'disputed'
+  };
+  document.getElementById('vStatusBadge').className =
+    `hero-status-badge ${statusToneMap[b.status] || 'pending'}`;
+  document.getElementById('vStatusBadge').innerHTML =
+    `<span class="dot"></span>${b.status}`;
+
+  // Risk badge
+  const riskKey = b.risk.toLowerCase();
+  document.getElementById('vRiskBadge').className = `hero-status-badge ${b.risk === 'High' ? 'disputed' : b.risk === 'Medium' ? 'pending' : 'confirmed'}`;
+  document.getElementById('vRiskBadge').innerHTML =
+    `<span class="dot"></span>${b.risk} Risk`;
+
+  // Chips
+  document.getElementById('vChipDate').textContent     = `📅 ${b.date}, ${b.time}`;
+  document.getElementById('vChipDuration').textContent = `⏱️ ${b.duration}`;
+  document.getElementById('vChipMode').textContent     = `💻 ${b.mode}`;
+  document.getElementById('vChipFee').textContent      = `💰 ${formatTk(b.fee + b.platformFee)}`;
+
+  // Client
+  document.getElementById('vClientAvatar').textContent = initials(b.client.name);
+  document.getElementById('vClientName').textContent = b.client.name;
+  document.getElementById('vClientId').textContent = b.client.id;
+  document.getElementById('vClientEmail').textContent = b.client.email;
+
+  // Lawyer
+  document.getElementById('vLawyerAvatar').textContent = initials(b.lawyer.name);
+  document.getElementById('vLawyerName').textContent = b.lawyer.name;
+  document.getElementById('vLawyerId').textContent = b.lawyer.id;
+  document.getElementById('vLawyerArea').textContent = b.lawyer.area;
+
+  // Appointment
+  document.getElementById('vDate').textContent = b.date;
+  document.getElementById('vTime').textContent = b.time;
+  document.getElementById('vDuration').textContent = b.duration;
+  document.getElementById('vMode').textContent = b.mode;
+  document.getElementById('vLocation').textContent = b.location;
+
+  // Case
+  document.getElementById('vMatter').textContent = b.matterType;
+  document.getElementById('vSummary').textContent = b.caseSummary;
+  document.getElementById('vNotes').textContent = b.clientNotes || '—';
+
+  // Documents
+  const docEl = document.getElementById('vDocuments');
+  if (b.documents && b.documents.length > 0) {
+    docEl.innerHTML = b.documents.map(d => `
+      <div class="doc-item">
+        <div class="flex items-center gap-2">
+          <span>📄</span>
+          <div>
+            <div class="font-medium text-navy text-[12.5px]">${d.name}</div>
+            <div class="text-[10.5px] text-slate2">${d.size}</div>
+          </div>
+        </div>
+        <button class="text-gold text-[11px] font-semibold hover:underline">Download</button>
+      </div>
+    `).join('');
+  } else {
+    docEl.innerHTML = `<p class="text-xs text-slate2 italic">No documents uploaded.</p>`;
+  }
+
+  // Payment
+  document.getElementById('vFee').textContent = formatTk(b.fee);
+  document.getElementById('vPlatformFee').textContent = formatTk(b.platformFee);
+  document.getElementById('vMethod').textContent = b.method;
+  document.getElementById('vTxnId').textContent = b.txnId;
+  const payEl = document.getElementById('vPaymentStatus');
+  payEl.textContent = b.payment;
+  payEl.style.color = b.payment === 'Paid' ? '#16A34A'
+                     : b.payment === 'Pending' ? '#B45309'
+                     : b.payment === 'Refunded' ? '#64748B'
+                     : '#DC2626';
+  document.getElementById('vPaidAt').textContent = b.paidAt;
+  document.getElementById('vTotal').textContent = formatTk(b.fee + b.platformFee);
+
+  // Timeline
+  const tlEl = document.getElementById('vTimeline');
+  tlEl.innerHTML = b.timeline.map(t => `
+    <div class="timeline-item">
+      <div class="timeline-dot ${t.done ? '' : 'pending'}">${t.done ? '✓' : '○'}</div>
+      <div class="timeline-content">
+        <div class="t-label">${t.step}</div>
+        <div class="t-time">${t.time}</div>
+      </div>
+    </div>
+  `).join('');
+
+  // Reviews
+  const reviewsEl = document.getElementById('vReviews');
+  const reviewsSection = document.getElementById('vReviewsSection');
+  let reviewHtml = '';
+
+  if (b.clientReview) {
+    reviewHtml += `
+      <div class="review-card">
+        <div class="stars">${'★'.repeat(b.clientReview.rating)}${'☆'.repeat(5 - b.clientReview.rating)}</div>
+        <div class="who">Client's Review · ${b.clientReview.date}</div>
+        <div class="txt">"${b.clientReview.text}"</div>
+      </div>`;
+  }
+  if (b.lawyerReview) {
+    reviewHtml += `
+      <div class="review-card">
+        <div class="stars">${'★'.repeat(b.lawyerReview.rating)}${'☆'.repeat(5 - b.lawyerReview.rating)}</div>
+        <div class="who">Lawyer's Review · ${b.lawyerReview.date}</div>
+        <div class="txt">"${b.lawyerReview.text}"</div>
+      </div>`;
+  }
+
+  if (reviewHtml) {
+    reviewsEl.innerHTML = reviewHtml;
+    reviewsSection.style.display = 'block';
+  } else {
+    reviewsSection.style.display = 'none';
+  }
+
+  openModal('modal-view-booking');
+}
+
+/* ═══ CLEAR FILTERS ═══ */
+function clearDateFilter() {
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value = '';
+  renderBookings();
+}
+
+function clearAllFilters() {
+  document.getElementById('fSearch').value = '';
+  document.getElementById('fStatus').value = '';
+  document.getElementById('fPayment').value = '';
+  document.getElementById('fDateFrom').value = '';
+  document.getElementById('fDateTo').value = '';
+  renderBookings();
+}
+
+/* ═══ EVENT LISTENERS ═══ */
+document.getElementById('fSearch').addEventListener('input', renderBookings);
+document.getElementById('fStatus').addEventListener('change', renderBookings);
+document.getElementById('fPayment').addEventListener('change', renderBookings);
+document.getElementById('fDateFrom').addEventListener('change', renderBookings);
+document.getElementById('fDateTo').addEventListener('change', renderBookings);
+
+/* ═══ INIT ═══ */
+renderBookings();
 </script>
 </body>
 </html>

@@ -16,7 +16,7 @@
 </script>
 <link rel="stylesheet" href="css/style.css">
 <style>
-  /* ═══ Hero (compact) ═══ */
+  /* ═══ Hero ═══ */
   .lawyer-hero {
     background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
     border-radius: 14px;
@@ -72,7 +72,7 @@
     border: 1px solid rgba(197,160,89,0.4);
   }
 
-  /* ═══ Stat Tiles (compact) ═══ */
+  /* ═══ Stat Tiles ═══ */
   .stat-tile {
     background: #F8FAFC; border: 1px solid #EEF1F4;
     border-radius: 10px;
@@ -283,6 +283,41 @@
     width: 100%;
   }
   .btn-report:hover { background: #152233; }
+
+  /* ═══ Payment Report Button (Gold) ═══ */
+  .btn-payment-report {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 11.5px; font-weight: 700;
+    padding: 8px 12px; border-radius: 7px;
+    background: linear-gradient(135deg, #C5A059 0%, #A07D3A 100%);
+    color: #fff;
+    border: none;
+    transition: all .2s;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(197,160,89,0.28);
+    letter-spacing: 0.02em;
+  }
+  .btn-payment-report:hover {
+    background: linear-gradient(135deg, #A07D3A 0%, #8A6A2F 100%);
+    box-shadow: 0 4px 14px rgba(197,160,89,0.4);
+    transform: translateY(-1px);
+  }
+
+  /* ═══ Payment Card ═══ */
+  .payment-card {
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .payment-card:hover {
+    border-color: #C5A059;
+    box-shadow: 0 6px 20px rgba(197,160,89,0.12);
+    transform: translateY(-1px);
+  }
 </style>
 </head>
 <body class="bg-offwhite text-navy">
@@ -313,7 +348,7 @@
         </button>
       </div>
 
-      <!-- ═══ HERO (compact) ═══ -->
+      <!-- HERO -->
       <div class="lawyer-hero">
         <div class="flex items-center gap-4 relative z-10">
           <div class="hero-avatar" id="heroAvatar">SC</div>
@@ -339,7 +374,7 @@
         </div>
       </div>
 
-      <!-- ═══ Case Status Stats ═══ -->
+      <!-- Case Stats -->
       <div class="grid grid-cols-5 gap-2.5">
         <div class="stat-tile">
           <div class="num" style="color: #1A2B3C;" id="statTotal">126</div>
@@ -363,13 +398,13 @@
         </div>
       </div>
 
-      <!-- ═══ Two-Column Layout ═══ -->
+      <!-- Two-Column Layout -->
       <div class="grid grid-cols-3 gap-3.5">
 
-        <!-- LEFT: Main Details -->
+        <!-- LEFT -->
         <div class="col-span-2 space-y-3.5">
 
-          <!-- Basic Info (with vertical divider) -->
+          <!-- Basic Info -->
           <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
             <div class="section-title"><span class="bar"></span> Basic Information</div>
             <div class="info-table">
@@ -418,14 +453,14 @@
 
         </div>
 
-        <!-- RIGHT: Sidebar -->
+        <!-- RIGHT -->
         <div class="space-y-3.5">
 
-          <!-- Recent Changes -->
+          <!-- Recent Change (only 1) -->
           <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
             <div class="flex items-center justify-between mb-3">
               <div class="section-title" style="margin-bottom: 0;">
-                <span class="bar"></span> Recent Changes
+                <span class="bar"></span> Recent Change
               </div>
               <button onclick="goToFullReport()"
                       class="text-[10px] font-bold text-gold hover:underline bg-transparent border-0 cursor-pointer">
@@ -436,6 +471,39 @@
 
             <button onclick="goToFullReport()" class="btn-report mt-2.5">
               📊 View Full Activity Report
+            </button>
+          </div>
+
+          <!-- ═══ Payment / Earnings Card (NEW) ═══ -->
+          <div class="payment-card" onclick="goToPaymentInfo()">
+            <div class="flex items-center justify-between mb-3">
+              <div class="section-title" style="margin-bottom: 0;">
+                <span class="bar"></span> Earnings
+              </div>
+              <span class="text-[10px] font-bold text-gold">View all →</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Total Earned</span>
+                <span class="font-bold text-gold" id="payTotalEarned">৳28,45,000</span>
+              </div>
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Total Cases</span>
+                <span class="font-semibold text-navy" id="payTotalCases">126</span>
+              </div>
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Received</span>
+                <span class="font-semibold text-emerald-600" id="payReceived">৳26,80,000</span>
+              </div>
+              <div class="flex justify-between items-center text-[12.5px]">
+                <span class="text-slate2">Pending Payout</span>
+                <span class="font-semibold text-amber-600" id="payPending">৳1,65,000</span>
+              </div>
+            </div>
+
+            <button onclick="event.stopPropagation(); goToPaymentInfo();" class="btn-payment-report mt-3">
+              💳 View Full Payment History
             </button>
           </div>
 
@@ -553,6 +621,12 @@ const LAWYERS_DB = {
     caseStats: { total: 126, pending: 4, ongoing: 8, won: 108, lost: 18 },
     perf: { success: 85, onTime: 92, satisfaction: 96, response: 88 },
     ratingBreakdown: { 5: 78, 4: 15, 3: 5, 2: 2, 1: 0 },
+    earnings: {
+      totalEarned: 2845000,
+      totalCases: 126,
+      received: 2680000,
+      pending: 165000
+    },
     changes: [
       { field: 'phone',   label: 'Phone Number', oldValue: '+880 1711-000000', newValue: '+880 1711-100200', changedBy: 'user', changedAt: '20 Feb 2024, 11:00 AM', reason: 'Updated contact number.' },
       { field: 'chamber', label: 'Chamber Location', oldValue: 'Old Dhaka Court, Room 12', newValue: 'Dhaka Judge Court, Chamber 204', changedBy: 'user', changedAt: '05 May 2024, 03:15 PM', reason: 'Relocated chamber.' },
@@ -579,6 +653,12 @@ const LAWYERS_DB = {
     caseStats: { total: 84, pending: 2, ongoing: 6, won: 62, lost: 22 },
     perf: { success: 74, onTime: 80, satisfaction: 88, response: 82 },
     ratingBreakdown: { 5: 65, 4: 22, 3: 8, 2: 3, 1: 2 },
+    earnings: {
+      totalEarned: 1245000,
+      totalCases: 84,
+      received: 1180000,
+      pending: 65000
+    },
     changes: [
       { field: 'phone', label: 'Phone Number', oldValue: '+880 1711-000000', newValue: '+880 1711-200300', changedBy: 'user', changedAt: '10 Apr 2025, 02:00 PM', reason: 'Updated contact.' }
     ],
@@ -601,6 +681,12 @@ const LAWYERS_DB = {
     caseStats: { total: 39, pending: 1, ongoing: 3, won: 30, lost: 9 },
     perf: { success: 77, onTime: 85, satisfaction: 82, response: 79 },
     ratingBreakdown: { 5: 50, 4: 28, 3: 15, 2: 5, 1: 2 },
+    earnings: {
+      totalEarned: 468000,
+      totalCases: 39,
+      received: 452000,
+      pending: 16000
+    },
     changes: [],
     history: [
       { action: 'activate', label: 'Lawyer Verified', date: '21 Apr 2024, 11:05 AM', reason: 'All documents verified.' }
@@ -619,6 +705,12 @@ const LAWYERS_DB = {
     caseStats: { total: 92, pending: 3, ongoing: 5, won: 78, lost: 14 },
     perf: { success: 84, onTime: 90, satisfaction: 94, response: 87 },
     ratingBreakdown: { 5: 72, 4: 20, 3: 6, 2: 2, 1: 0 },
+    earnings: {
+      totalEarned: 1820000,
+      totalCases: 92,
+      received: 1745000,
+      pending: 75000
+    },
     changes: [],
     history: [
       { action: 'activate', label: 'Lawyer Verified', date: '07 Jul 2024, 04:22 PM', reason: 'Documents verified.' }
@@ -638,6 +730,12 @@ const LAWYERS_DB = {
     caseStats: { total: 65, pending: 0, ongoing: 0, won: 51, lost: 14 },
     perf: { success: 78, onTime: 82, satisfaction: 85, response: 80 },
     ratingBreakdown: { 5: 58, 4: 24, 3: 10, 2: 5, 1: 3 },
+    earnings: {
+      totalEarned: 968000,
+      totalCases: 65,
+      received: 968000,
+      pending: 0
+    },
     changes: [],
     history: [
       { action: 'activate', label: 'Lawyer Verified',  date: '19 Feb 2025, 08:40 AM', reason: 'Initial verification.' },
@@ -661,9 +759,18 @@ function renderStars(avg) {
   return '★'.repeat(full) + (half ? '☆' : '') + '☆'.repeat(empty);
 }
 
+function formatBdt(n) {
+  return '৳' + n.toLocaleString('en-IN');
+}
+
 function goToFullReport() {
   const id = getLawyerIdFromUrl();
   window.location.href = `lawyer-activity-report.html?id=${encodeURIComponent(id)}`;
+}
+
+function goToPaymentInfo() {
+  const id = getLawyerIdFromUrl();
+  window.location.href = `lawyer-payment-information.html?id=${encodeURIComponent(id)}`;
 }
 
 function renderLawyerInfo() {
@@ -766,14 +873,21 @@ function renderLawyerInfo() {
     `).join('');
   }
 
-  // Recent Changes (max 4)
+  // Recent Changes (ONLY 1 — latest)
   const changesEl = document.getElementById('recentChanges');
-  const recent = (l.changes || []).slice(-4).reverse();
+  const recent = (l.changes || []).slice(-1).reverse();
   if (recent.length === 0) {
     changesEl.innerHTML = `<p class="text-xs text-slate2 italic">No profile changes recorded.</p>`;
   } else {
     changesEl.innerHTML = recent.map(ch => renderChangeItem(ch)).join('');
   }
+
+  // ═══ Earnings Summary ═══
+  const er = l.earnings || { totalEarned: 0, totalCases: 0, received: 0, pending: 0 };
+  document.getElementById('payTotalEarned').textContent = formatBdt(er.totalEarned);
+  document.getElementById('payTotalCases').textContent  = er.totalCases;
+  document.getElementById('payReceived').textContent    = formatBdt(er.received);
+  document.getElementById('payPending').textContent     = formatBdt(er.pending);
 
   // Status History
   const histEl = document.getElementById('historyList');
