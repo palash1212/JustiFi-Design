@@ -15,6 +15,280 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ═══ Role Chip ═══ */
+  .role-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .role-chip:hover {
+    border-color: #C5A059;
+    transform: translateY(-1px);
+  }
+  .role-chip.active {
+    border-color: #C5A059;
+    background: linear-gradient(135deg, #FBF6ED 0%, #fff 100%);
+    box-shadow: 0 4px 12px rgba(197,160,89,0.15);
+  }
+  .role-chip .chip-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .role-chip .chip-name {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1A2B3C;
+  }
+  .role-chip .chip-count {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #94A3B8;
+    margin-top: 1px;
+  }
+  .role-chip.active .chip-count { color: #A07D3A; }
+
+  /* ═══ Custom Checkbox ═══ */
+  .perm-cb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: all .15s;
+    background: #fff;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .perm-cb:hover:not(:checked) { border-color: #C5A059; }
+  .perm-cb:checked {
+    background: #C5A059;
+    border-color: #C5A059;
+  }
+  .perm-cb:checked::after {
+    content: '';
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  .perm-cb.danger:checked {
+    background: #DC2626;
+    border-color: #DC2626;
+  }
+  .perm-cb.green:checked {
+    background: #16A34A;
+    border-color: #16A34A;
+  }
+  .perm-cb.blue:checked {
+    background: #2563EB;
+    border-color: #2563EB;
+  }
+
+  /* ═══ Matrix ═══ */
+  .perm-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .perm-matrix th {
+    padding: 10px 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    background: #F8FAFC;
+    border-bottom: 1px solid #EEF1F4;
+  }
+  .perm-matrix th:first-child {
+    text-align: left;
+    padding-left: 16px;
+    width: 45%;
+  }
+  .perm-matrix td {
+    padding: 10px 12px;
+    font-size: 12.5px;
+    border-bottom: 1px solid #F1F5F9;
+    text-align: center;
+  }
+  .perm-matrix td:first-child {
+    text-align: left;
+    padding-left: 16px;
+  }
+  .perm-matrix tbody tr:hover {
+    background: #FBFDFF;
+  }
+  .perm-matrix .group-row td {
+    background: #F8FAFC;
+    color: #94A3B8;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 16px;
+    border-bottom: 1px solid #EEF1F4;
+    text-align: left;
+  }
+  .page-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .page-cell .p-icon {
+    font-size: 14px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .page-cell .p-name {
+    font-weight: 500;
+    color: #1A2B3C;
+  }
+
+  /* ═══ Info Bar ═══ */
+  .info-bar {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    border-radius: 14px;
+    padding: 16px 24px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .info-bar::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(197,160,89,0.2), transparent 70%);
+    border-radius: 50%; transform: translate(30%, -30%);
+  }
+  .info-bar::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+  .info-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .info-stat .s-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: #C5A059;
+    line-height: 1;
+  }
+  .info-stat .s-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+
+  /* ═══ Special Permission Card ═══ */
+  .special-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    background: #F8FAFC;
+    border: 1px solid #EEF1F4;
+    border-radius: 9px;
+    margin-bottom: 6px;
+    transition: all .15s;
+  }
+  .special-row:last-child { margin-bottom: 0; }
+  .special-row:hover {
+    border-color: #C5A059;
+    background: #FBF6ED;
+  }
+  .special-row .sp-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #1A2B3C;
+  }
+  .special-row .sp-desc {
+    font-size: 10.5px;
+    color: #94A3B8;
+    margin-top: 2px;
+  }
+
+  /* ═══ Toggle Switch ═══ */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #CBD5E1;
+    transition: .3s;
+    border-radius: 999px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .switch input:checked + .slider {
+    background-color: #C5A059;
+  }
+  .switch input:checked + .slider:before {
+    transform: translateX(16px);
+  }
+
+  /* ═══ Save Bar ═══ */
+  .save-bar {
+    position: sticky;
+    bottom: 0;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid #EEF1F4;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 20;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -20px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -31,42 +305,194 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+    <main class="flex-1 overflow-y-auto p-5 space-y-4">
 
-      <div>
-        <h1 class="text-2xl font-bold">Role & Permissions</h1>
-        <p class="text-slate2 text-sm mt-1">Role-based access control across every module.</p>
+      <!-- Title -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-bold">Role & Permissions</h1>
+          <p class="text-slate2 text-xs mt-0.5">Role-based access control — configure page access and action permissions per role.</p>
+        </div>
+        <span id="unsavedIndicator" class="hidden items-center gap-1.5 text-[11px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+          Unsaved changes
+        </span>
       </div>
 
-      <div class="grid grid-cols-4 gap-3">
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">Super Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">Support Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">System Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">Security Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">User Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">Lawyer Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">Service Admin</div>
-        <div class="bg-white rounded-xl p-4 shadow-card border text-sm font-semibold">Transaction Admin</div>
+      <!-- ═══ Role Chips ═══ -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-3">
+        <div class="text-[10px] font-bold text-slate2 uppercase tracking-wide mb-2 px-1">Select Role</div>
+        <div id="roleChips" class="flex flex-wrap gap-2"></div>
       </div>
 
-      <div class="bg-white rounded-2xl p-5 shadow-card border mt-2">
-        <h3 class="font-semibold text-sm mb-4">Permission Matrix — Example Role</h3>
-        <table class="w-full text-sm">
-          <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
-            <tr>
-              <th class="text-left font-semibold px-5 py-3">Module</th>
-              <th class="text-left font-semibold px-5 py-3">Client</th>
-              <th class="text-left font-semibold px-5 py-3">Lawyer</th>
-              <th class="text-left font-semibold px-5 py-3">Deed-Writer</th>
-              <th class="text-right font-semibold px-5 py-3">Admin</th>
-            </tr>
-          </thead>
-          <tbody id="permTbody" class="divide-y divide-slate-100"></tbody>
-        </table>
+      <!-- ═══ Selected Role Info Bar ═══ -->
+      <div class="info-bar">
+        <div class="relative z-10 flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <div id="selectedRoleIcon" class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background: rgba(197,160,89,0.2);">👑</div>
+            <div>
+              <h2 id="selectedRoleName" class="text-lg font-bold text-white">Super Admin</h2>
+              <p id="selectedRoleDesc" class="text-xs text-white/55 mt-0.5">Full system access — can manage everything</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="info-stat">
+              <div>
+                <div class="s-num" id="statPagesAccess">21</div>
+                <div class="s-lbl">Pages Access</div>
+              </div>
+            </div>
+            <div class="info-stat">
+              <div>
+                <div class="s-num" id="statActionsGranted">105</div>
+                <div class="s-lbl">Actions Granted</div>
+              </div>
+            </div>
+            <div class="info-stat">
+              <div>
+                <div class="s-num" id="statUsersInRole">1</div>
+                <div class="s-lbl">Users In Role</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="bg-gold-50 border border-gold/30 rounded-xl px-5 py-4 text-sm text-navy">
-        High-risk permissions (Delete, financial Approve) require re-authentication to grant.
+      <!-- ═══ Permission Matrix ═══ -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-semibold text-sm">Page Access & Action Permissions</h3>
+            <p class="text-[11px] text-slate2 mt-0.5">Grant or revoke access at page and action level</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="selectAll(true)" class="text-[10.5px] font-semibold text-navy border border-slate-200 px-2.5 py-1 rounded-md hover:bg-offwhite">Grant All</button>
+            <button onclick="selectAll(false)" class="text-[10.5px] font-semibold text-slate2 border border-slate-200 px-2.5 py-1 rounded-md hover:bg-offwhite">Revoke All</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="perm-matrix">
+            <thead>
+              <tr>
+                <th>Page / Module</th>
+                <th>View</th>
+                <th>Create</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Approve</th>
+              </tr>
+            </thead>
+            <tbody id="permMatrixBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ Special Permissions ═══ -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-5">
+        <h3 class="font-semibold text-sm mb-3">Special Permissions</h3>
+        <p class="text-[11px] text-slate2 mb-4">Advanced system-level permissions beyond page access</p>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Create Other Admins</div>
+              <div class="sp-desc">Allow creating new admin accounts</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="createAdmins"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Manage Roles & Permissions</div>
+              <div class="sp-desc">Modify RBAC configuration</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="manageRoles"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Delete User Data Permanently</div>
+              <div class="sp-desc">Hard delete, bypasses archive</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="deleteData"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Access Financial Data</div>
+              <div class="sp-desc">View revenue, payouts, settlements</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="financial"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Override Transaction Limits</div>
+              <div class="sp-desc">Approve amounts above threshold</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="txnOverride"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Force Logout Users</div>
+              <div class="sp-desc">Terminate any active session</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="forceLogout"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Export Sensitive Data</div>
+              <div class="sp-desc">CSV/Excel export with full details</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="exportData"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Modify Service Pricing</div>
+              <div class="sp-desc">Change fees and platform charges</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="modifyPricing"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Require MFA</div>
+              <div class="sp-desc">Mandatory multi-factor for this role</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="requireMfa"><span class="slider"></span></label>
+          </div>
+
+          <div class="special-row">
+            <div>
+              <div class="sp-title">Bypass Audit Log</div>
+              <div class="sp-desc">Actions not written to audit trail</div>
+            </div>
+            <label class="switch"><input type="checkbox" class="special-toggle" data-key="bypassAudit"><span class="slider"></span></label>
+          </div>
+        </div>
+
+        <div class="bg-gold-50 border border-gold/30 rounded-lg px-4 py-3 text-[11.5px] text-navy mt-4">
+          ⚠️ <strong>High-risk permissions</strong> (Delete, Approve, Bypass Audit) require MFA re-authentication to grant or modify.
+        </div>
+      </div>
+
+      <!-- ═══ Save Bar ═══ -->
+      <div class="save-bar">
+        <div class="text-[11.5px] text-slate2">
+          Editing permissions for <strong class="text-navy" id="saveBarRole">Super Admin</strong>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="resetCurrentRole()" class="text-xs font-semibold text-slate2 border border-slate-200 px-4 py-2 rounded-lg hover:bg-offwhite">
+            Reset to Default
+          </button>
+          <button onclick="savePermissions()" class="text-xs font-semibold text-white px-5 py-2 rounded-lg" style="background: linear-gradient(135deg, #C5A059 0%, #A07D3A 100%); box-shadow: 0 2px 8px rgba(197,160,89,0.28);">
+            💾 Save Changes
+          </button>
+        </div>
       </div>
 
     </main>
@@ -76,14 +502,351 @@
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 <script>
-document.getElementById('permTbody').innerHTML = DATA.permissions.map(p => `
-  <tr>
-    <td class="px-5 py-3.5 font-medium">${p.module}</td>
-    <td class="px-5 py-3.5">${p.user}</td>
-    <td class="px-5 py-3.5">${p.lawyer}</td>
-    <td class="px-5 py-3.5">${p.deed}</td>
-    <td class="px-5 py-3.5 text-right">${p.admin}</td>
-  </tr>`).join('');
+/* ═══════════════════════════════════════════════════════════════════
+   ROLE & PERMISSIONS
+   ═══════════════════════════════════════════════════════════════════ */
+
+const ACTIONS = ['view', 'create', 'edit', 'delete', 'approve'];
+
+const PAGES_GROUPS = [
+  { section: 'Overview', pages: [
+    { key: 'dashboard', name: 'Dashboard', icon: '📊' }
+  ]},
+  { section: 'User Management', pages: [
+    { key: 'clients', name: 'Clients', icon: '👤' },
+    { key: 'lawyers', name: 'Lawyers', icon: '⚖️' },
+    { key: 'deed-writers', name: 'Deed-Writers', icon: '📜' },
+    { key: 'admin-users', name: 'Admin Users', icon: '👑' }
+  ]},
+  { section: 'Operations', pages: [
+    { key: 'bookings', name: 'Bookings & Consultations', icon: '📅' },
+    { key: 'affidavit-requests', name: 'Affidavit Requests', icon: '📄' },
+    { key: 'land-requests', name: 'Land & Property Requests', icon: '🏠' },
+    { key: 'tax-requests', name: 'Tax & Income Requests', icon: '💰' }
+  ]},
+  { section: 'Services & Analytics', pages: [
+    { key: 'affidavit-services', name: 'Affidavit Services', icon: '📈' },
+    { key: 'land-services', name: 'Land & Property Services', icon: '📈' },
+    { key: 'tax-services', name: 'Tax & Income Services', icon: '📈' },
+    { key: 'executive-analytics', name: 'Executive Analytics', icon: '📊' },
+    { key: 'financial-reports', name: 'Financial Reports', icon: '💵' },
+    { key: 'throughput-reports', name: 'Throughput Reports', icon: '⚡' }
+  ]},
+  { section: 'Security & Compliance', pages: [
+    { key: 'security-center', name: 'Security Center', icon: '🔒' },
+    { key: 'login-sessions', name: 'Login & Active Sessions', icon: '🖥️' },
+    { key: 'audit-logs', name: 'Audit & Activity Logs', icon: '📋' },
+    { key: 'risk-events', name: 'Risk Events', icon: '⚠️' }
+  ]},
+  { section: 'Administration', pages: [
+    { key: 'roles-permissions', name: 'Role & Permissions', icon: '🔑' },
+    { key: 'service-control', name: 'Service Control Center', icon: '🎛️' },
+    { key: 'transaction-monitoring', name: 'Transaction Monitoring', icon: '💳' },
+    { key: 'user-privilege', name: 'User Privilege', icon: '🛡️' }
+  ]}
+];
+
+/* ─── Helper to build empty perms ─── */
+function emptyPagePerms() {
+  const p = {};
+  PAGES_GROUPS.forEach(g => g.pages.forEach(pg => { p[pg.key] = { view:false, create:false, edit:false, delete:false, approve:false }; }));
+  return p;
+}
+function allPagePerms() {
+  const p = {};
+  PAGES_GROUPS.forEach(g => g.pages.forEach(pg => { p[pg.key] = { view:true, create:true, edit:true, delete:true, approve:true }; }));
+  return p;
+}
+function viewOnlyPerms(keys) {
+  const p = emptyPagePerms();
+  keys.forEach(k => { if (p[k]) p[k].view = true; });
+  return p;
+}
+
+/* ─── Default Roles (permissions) ─── */
+const DEFAULT_ROLES = {
+  'client': {
+    name: 'Client', icon: '👤', color: '#3B82F6', bg: '#EFF6FF',
+    desc: 'End users — restricted to their own services and requests',
+    userCount: 14902,
+    pages: viewOnlyPerms(['dashboard','bookings','affidavit-requests','land-requests','tax-requests']),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:false, forceLogout:false, exportData:false, modifyPricing:false, requireMfa:false, bypassAudit:false }
+  },
+  'lawyer': {
+    name: 'Lawyer', icon: '⚖️', color: '#C5A059', bg: '#FBF6ED',
+    desc: 'Legal professionals — access to assigned cases and profile',
+    userCount: 642,
+    pages: viewOnlyPerms(['dashboard','bookings','affidavit-requests','land-requests','tax-requests']),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:false, forceLogout:false, exportData:false, modifyPricing:false, requireMfa:true, bypassAudit:false }
+  },
+  'deed-writer': {
+    name: 'Deed-Writer', icon: '📜', color: '#8B5CF6', bg: '#F5F3FF',
+    desc: 'Document specialists — access to land & property requests',
+    userCount: 128,
+    pages: viewOnlyPerms(['dashboard','land-requests']),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:false, forceLogout:false, exportData:false, modifyPricing:false, requireMfa:true, bypassAudit:false }
+  },
+  'super-admin': {
+    name: 'Super Admin', icon: '👑', color: '#C5A059', bg: '#FBF6ED',
+    desc: 'Full system access — can manage everything',
+    userCount: 1,
+    pages: allPagePerms(),
+    special: { createAdmins:true, manageRoles:true, deleteData:true, financial:true, txnOverride:true, forceLogout:true, exportData:true, modifyPricing:true, requireMfa:true, bypassAudit:false }
+  },
+  'system-admin': {
+    name: 'System Admin', icon: '⚙️', color: '#64748B', bg: '#F1F5F9',
+    desc: 'Technical administration — system, health, and configuration',
+    userCount: 2,
+    pages: (() => {
+      const p = emptyPagePerms();
+      p.dashboard.view = true;
+      p['admin-users'].view = true;
+      p['security-center'].view = true;
+      p['login-sessions'].view = true; p['login-sessions'].delete = true;
+      p['audit-logs'].view = true;
+      p['system-health'] = { view:true, create:false, edit:true, delete:false, approve:false };
+      p['service-control'].view = true; p['service-control'].edit = true;
+      p['roles-permissions'].view = true;
+      p['throughput-reports'].view = true;
+      return p;
+    })(),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:false, forceLogout:true, exportData:false, modifyPricing:false, requireMfa:true, bypassAudit:false }
+  },
+  'security-admin': {
+    name: 'Security Admin', icon: '🔒', color: '#EF4444', bg: '#FEF2F2',
+    desc: 'Security operations — monitoring, incidents, compliance',
+    userCount: 1,
+    pages: (() => {
+      const p = emptyPagePerms();
+      p.dashboard.view = true;
+      p['security-center'].view = true; p['security-center'].edit = true;
+      p['login-sessions'].view = true; p['login-sessions'].delete = true;
+      p['audit-logs'].view = true;
+      p['risk-events'].view = true; p['risk-events'].edit = true;
+      p['transaction-monitoring'].view = true; p['transaction-monitoring'].approve = true;
+      p['user-privilege'].view = true;
+      return p;
+    })(),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:true, forceLogout:true, exportData:true, modifyPricing:false, requireMfa:true, bypassAudit:false }
+  },
+  'user-admin': {
+    name: 'User Admin', icon: '👥', color: '#10B981', bg: '#F0FDF4',
+    desc: 'User management — clients, lawyers, deed-writers',
+    userCount: 3,
+    pages: (() => {
+      const p = emptyPagePemsSafe();
+      p.dashboard.view = true;
+      p.clients.view = true; p.clients.create = true; p.clients.edit = true;
+      p.lawyers.view = true; p.lawyers.create = true; p.lawyers.edit = true; p.lawyers.approve = true;
+      p['deed-writers'].view = true; p['deed-writers'].create = true; p['deed-writers'].edit = true;
+      p['admin-users'].view = true;
+      p['bookings'].view = true;
+      p['affidavit-requests'].view = true;
+      p['land-requests'].view = true;
+      p['tax-requests'].view = true;
+      return p;
+    })(),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:false, forceLogout:false, exportData:true, modifyPricing:false, requireMfa:true, bypassAudit:false }
+  },
+  'support-admin': {
+    name: 'Support Admin', icon: '🛟', color: '#3B82F6', bg: '#EFF6FF',
+    desc: 'Customer support — view and assist users',
+    userCount: 4,
+    pages: (() => {
+      const p = emptyPagePemsSafe();
+      p.dashboard.view = true;
+      p.clients.view = true; p.lawyers.view = true; p['deed-writers'].view = true;
+      p.bookings.view = true; p['affidavit-requests'].view = true;
+      p['land-requests'].view = true; p['tax-requests'].view = true;
+      return p;
+    })(),
+    special: { createAdmins:false, manageRoles:false, deleteData:false, financial:false, txnOverride:false, forceLogout:false, exportData:false, modifyPricing:false, requireMfa:true, bypassAudit:false }
+  }
+};
+
+/* Safety helper (avoid typos) */
+function emptyPagePemsSafe() { return emptyPagePerms(); }
+
+/* ─── State ─── */
+let ROLES = JSON.parse(JSON.stringify(DEFAULT_ROLES));
+let currentRole = 'super-admin';
+let hasUnsavedChanges = false;
+
+/* ─── Render Role Chips ─── */
+function renderRoleChips() {
+  const el = document.getElementById('roleChips');
+  el.innerHTML = Object.entries(ROLES).map(([key, role]) => `
+    <button class="role-chip ${key === currentRole ? 'active' : ''}" onclick="selectRole('${key}')">
+      <div class="chip-icon" style="background: ${role.bg}; color: ${role.color};">${role.icon}</div>
+      <div>
+        <div class="chip-name">${role.name}</div>
+        <div class="chip-count">${role.userCount.toLocaleString()} users</div>
+      </div>
+    </button>
+  `).join('');
+}
+
+/* ─── Select Role ─── */
+function selectRole(key) {
+  if (hasUnsavedChanges) {
+    if (!confirm('You have unsaved changes. Discard them?')) return;
+    hasUnsavedChanges = false;
+  }
+  currentRole = key;
+  document.getElementById('unsavedIndicator').classList.add('hidden');
+  document.getElementById('unsavedIndicator').classList.remove('flex');
+  renderAll();
+}
+
+/* ─── Render Info Bar ─── */
+function renderInfoBar() {
+  const role = ROLES[currentRole];
+  document.getElementById('selectedRoleIcon').textContent = role.icon;
+  document.getElementById('selectedRoleIcon').style.background = role.bg;
+  document.getElementById('selectedRoleName').textContent = role.name;
+  document.getElementById('selectedRoleDesc').textContent = role.desc;
+  document.getElementById('saveBarRole').textContent = role.name;
+
+  // Stats
+  const pagesAccessCount = Object.values(role.pages).filter(p => p.view).length;
+  let actionsGranted = 0;
+  Object.values(role.pages).forEach(p => ACTIONS.forEach(a => { if (p[a]) actionsGranted++; }));
+
+  document.getElementById('statPagesAccess').textContent = pagesAccessCount;
+  document.getElementById('statActionsGranted').textContent = actionsGranted;
+  document.getElementById('statUsersInRole').textContent = role.userCount.toLocaleString();
+}
+
+/* ─── Render Matrix ─── */
+function renderMatrix() {
+  const role = ROLES[currentRole];
+  const tbody = document.getElementById('permMatrixBody');
+  let html = '';
+
+  PAGES_GROUPS.forEach(group => {
+    html += `<tr class="group-row"><td colspan="6">${group.section}</td></tr>`;
+    group.pages.forEach(page => {
+      const perm = role.pages[page.key] || { view:false, create:false, edit:false, delete:false, approve:false };
+      html += `
+        <tr>
+          <td>
+            <div class="page-cell">
+              <span class="p-icon">${page.icon}</span>
+              <span class="p-name">${page.name}</span>
+            </div>
+          </td>
+          ${ACTIONS.map(action => {
+            const cls = action === 'delete' ? 'danger' : action === 'approve' ? 'green' : action === 'create' ? 'blue' : '';
+            return `<td>
+              <input type="checkbox" class="perm-cb ${cls}" data-page="${page.key}" data-action="${action}" ${perm[action] ? 'checked' : ''}>
+            </td>`;
+          }).join('')}
+        </tr>`;
+    });
+  });
+
+  tbody.innerHTML = html;
+
+  // Attach listeners
+  tbody.querySelectorAll('.perm-cb').forEach(cb => {
+    cb.addEventListener('change', onPermChange);
+  });
+}
+
+/* ─── Permission Change ─── */
+function onPermChange(e) {
+  const cb = e.target;
+  const pageKey = cb.dataset.page;
+  const action = cb.dataset.action;
+  const value = cb.checked;
+
+  // Auto-enable view if any other action is checked
+  if (action !== 'view' && value) {
+    ROLES[currentRole].pages[pageKey].view = true;
+    const viewCb = document.querySelector(`.perm-cb[data-page="${pageKey}"][data-action="view"]`);
+    if (viewCb) viewCb.checked = true;
+  }
+
+  // If view is unchecked, disable all others
+  if (action === 'view' && !value) {
+    ACTIONS.forEach(a => {
+      if (a !== 'view') {
+        ROLES[currentRole].pages[pageKey][a] = false;
+        const c = document.querySelector(`.perm-cb[data-page="${pageKey}"][data-action="${a}"]`);
+        if (c) c.checked = false;
+      }
+    });
+  }
+
+  ROLES[currentRole].pages[pageKey][action] = value;
+  markUnsaved();
+  renderInfoBar();
+}
+
+/* ─── Special Toggle Change ─── */
+document.querySelectorAll('.special-toggle').forEach(t => {
+  t.addEventListener('change', (e) => {
+    ROLES[currentRole].special[e.target.dataset.key] = e.target.checked;
+    markUnsaved();
+  });
+});
+
+/* ─── Mark Unsaved ─── */
+function markUnsaved() {
+  hasUnsavedChanges = true;
+  const el = document.getElementById('unsavedIndicator');
+  el.classList.remove('hidden');
+  el.classList.add('flex');
+}
+
+/* ─── Select/Deselect All ─── */
+function selectAll(value) {
+  PAGES_GROUPS.forEach(g => g.pages.forEach(pg => {
+    ACTIONS.forEach(a => { ROLES[currentRole].pages[pg.key][a] = value; });
+  }));
+  renderMatrix();
+  renderInfoBar();
+  markUnsaved();
+  showToast(value ? 'All permissions granted' : 'All permissions revoked', 'info');
+}
+
+/* ─── Reset to Default ─── */
+function resetCurrentRole() {
+  if (!confirm(`Reset ${ROLES[currentRole].name} to default permissions?`)) return;
+  ROLES[currentRole] = JSON.parse(JSON.stringify(DEFAULT_ROLES[currentRole]));
+  renderAll();
+  hasUnsavedChanges = false;
+  document.getElementById('unsavedIndicator').classList.add('hidden');
+  document.getElementById('unsavedIndicator').classList.remove('flex');
+  showToast('Reset to default', 'success');
+}
+
+/* ─── Save ─── */
+function savePermissions() {
+  hasUnsavedChanges = false;
+  document.getElementById('unsavedIndicator').classList.add('hidden');
+  document.getElementById('unsavedIndicator').classList.remove('flex');
+  showToast(`Permissions saved for ${ROLES[currentRole].name}`, 'success');
+}
+
+/* ─── Render Special Toggles ─── */
+function renderSpecialToggles() {
+  const role = ROLES[currentRole];
+  document.querySelectorAll('.special-toggle').forEach(t => {
+    t.checked = !!role.special[t.dataset.key];
+  });
+}
+
+/* ─── Render All ─── */
+function renderAll() {
+  renderRoleChips();
+  renderInfoBar();
+  renderMatrix();
+  renderSpecialToggles();
+}
+
+/* ─── Init ─── */
+renderAll();
 </script>
 </body>
 </html>
