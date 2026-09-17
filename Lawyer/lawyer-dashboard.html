@@ -1,235 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — JustiFi Advocate</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link rel="stylesheet" href="css/lawyer.css" />
-  <style>
-    .dash-hero {
-      background: radial-gradient(circle at 18% 30%, rgba(197, 160, 89, 0.25) 0%, transparent 45%),
-                  linear-gradient(135deg, #041627 0%, #0a2740 100%);
-      border-radius: 16px; padding: 22px 24px; color: #fff;
-      position: relative; overflow: hidden;
-    }
-    .dash-hero::before {
-      content: ""; position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 30px 30px; pointer-events: none;
-    }
-    .dash-hero > * { position: relative; z-index: 1; }
-    .avail-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px; border-radius: 9999px;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
-      background: #dcfce7; color: #166534; border: 1px solid #bbf7d0;
-    }
-    .avail-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e;
-                       box-shadow: 0 0 0 3px rgba(34,197,94,0.25); }
-    .kpi-card {
-      background: #fff; border: 1px solid #eef1f4; border-radius: 16px;
-      padding: 18px; display: flex; flex-direction: column; gap: 10px;
-      transition: all 0.22s;
-    }
-    .kpi-card:hover { transform: translateY(-2px); border-color: rgba(197, 160, 89, 0.4);
-                      box-shadow: 0 10px 26px rgba(197, 160, 89, 0.1); }
-    .kpi-icon { width: 42px; height: 42px; border-radius: 12px;
-                display: flex; align-items: center; justify-content: center;
-                background: #f5e8c8; color: #a07d3a; }
-    .kpi-icon.green { background: #dcfce7; color: #166534; }
-    .kpi-icon.blue  { background: #dbeafe; color: #1e40af; }
-    .kpi-icon.pink  { background: #fce7f3; color: #9d174d; }
-    .kpi-num { font-size: 26px; font-weight: 800; color: #041627; line-height: 1; letter-spacing: -0.5px; }
-    .kpi-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
-    .kpi-trend { font-size: 11.5px; font-weight: 600; margin-top: 2px; }
-    .kpi-trend.up { color: #16a34a; }
-    .kpi-trend.warn { color: #b45309; }
-    .tl-row { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
-    .tl-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .tl-time { width: 74px; flex-shrink: 0; font-size: 12.5px; font-weight: 700;
-               color: #041627; padding-top: 4px; }
-    .tl-time small { display: block; font-size: 10.5px; color: #94a3b8; font-weight: 500; }
-    .tl-dot { width: 10px; height: 10px; border-radius: 50%;
-              background: #C5A059; margin-top: 8px; flex-shrink: 0;
-              box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.18); }
-    .tl-dot.blue { background: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
-    .tl-dot.green { background: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.18); }
-    .bar-chart { display: flex; align-items: flex-end; gap: 12px; height: 130px; padding: 10px 0; }
-    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; }
-    .bar { width: 100%; max-width: 32px; border-radius: 8px 8px 0 0;
-           background: linear-gradient(180deg, #C5A059 0%, #a07d3a 100%);
-           transition: all 0.3s; margin-top: auto; }
-    .bar.muted { background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%); }
-    .bar-day { font-size: 10.5px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
-    .pending-mini { display: flex; gap: 12px; padding: 12px; border-radius: 12px;
-                    border: 1px solid #eef1f4; background: #fff;
-                    transition: all 0.18s; margin-bottom: 10px; cursor: pointer;
-                    text-decoration: none; color: inherit; }
-    .pending-mini:hover { border-color: rgba(197, 160, 89, 0.4); background: #fffdf7; }
-    .act-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
-    .act-item:last-child { border-bottom: none; }
-    .act-ic { width: 34px; height: 34px; border-radius: 10px;
-              background: #f5e8c8; color: #a07d3a;
-              display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .act-ic .material-symbols-outlined { font-size: 18px; }
-    .act-ic.green { background: #dcfce7; color: #166534; }
-    .act-ic.blue  { background: #dbeafe; color: #1e40af; }
-    .act-ic.red   { background: #fee2e2; color: #991b1b; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — JustiFi Advocate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: {
+      navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' },
+      gold: { DEFAULT:'#C5A059', 50:'#FBF6ED', dark:'#A07D3A' },
+      slate2:'#64748B', offwhite:'#F8FAFC'
+    },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/lawyer.css" />
 </head>
+<body class="bg-offwhite text-navy" data-page="lawyer-dashboard">
 
-<body class="lawyer-body" data-page="lawyer-dashboard" data-requires-auth="1"
-      data-header-title="Dashboard"
-      data-header-subtitle="Overview of your consultations and activity">
+<div class="flex h-screen overflow-hidden">
+  <div id="lawyerSidebarPlaceholder"></div>
 
-  <div class="lawyer-shell">
-    <div id="lawyerSidebarPlaceholder"></div>
-    <span class="swipe-hint left material-symbols-outlined">chevron_left</span>
-    <span class="swipe-hint right material-symbols-outlined">chevron_right</span>
+  <div class="flex-1 flex flex-col min-w-0">
+    <div id="lawyerHeaderPlaceholder"></div>
 
-    <div class="lawyer-main">
-      <div id="lawyerHeaderPlaceholder"></div>
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-8">
+        <div class="max-w-[1280px] mx-auto space-y-6">
 
-      <div class="lawyer-content">
-        <div class="max-w-[1200px] mx-auto space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold">Welcome back, Adv. Arefin</h1>
+              <p class="text-slate2 text-sm mt-1">Here's what's happening with your practice today.</p>
+            </div>
+            <a href="service-settings.html"
+               class="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-navy-800 transition-colors">
+              <span class="material-symbols-outlined text-[18px]">tune</span>
+              Manage Availability
+            </a>
+          </div>
 
-          <div class="dash-hero">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p class="text-[11px] font-bold uppercase tracking-widest text-[#C5A059] m-0 mb-1">Welcome back</p>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-white m-0 mb-1">Adv. Arefin Shumit</h2>
-                <p class="text-sm text-white/70 m-0">You have <strong class="text-white">3 new requests</strong> and <strong class="text-white">2 consultations</strong> scheduled today.</p>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">New Requests</p>
+                <span class="w-8 h-8 rounded-lg bg-red-50 text-red-600 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">inbox</span>
+                </span>
               </div>
-              <div class="flex items-center gap-3">
-                <span class="avail-pill"><span class="dot"></span> AVAILABLE</span>
-                <a href="service-settings.html" class="lp-btn" style="background:rgba(255,255,255,0.1);color:#fff;">
-                  <span class="material-symbols-outlined text-[18px]">tune</span> Manage
-                </a>
+              <p class="text-2xl font-bold mt-2">3</p>
+              <p class="text-xs text-amber-600 mt-1">Awaiting your response</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Today's Sessions</p>
+                <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">event</span>
+                </span>
               </div>
+              <p class="text-2xl font-bold mt-2">2</p>
+              <p class="text-xs text-emerald-600 mt-1">Next at 4:30 PM</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">This Month</p>
+                <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">payments</span>
+                </span>
+              </div>
+              <p class="text-2xl font-bold mt-2">৳18,500</p>
+              <p class="text-xs text-emerald-600 mt-1">↑ 24% vs last month</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Client Rating</p>
+                <span class="w-8 h-8 rounded-lg bg-gold-50 text-gold flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">star</span>
+                </span>
+              </div>
+              <p class="text-2xl font-bold mt-2">4.9</p>
+              <p class="text-xs text-slate2 mt-1">From 128 reviews</p>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="kpi-card">
-              <div class="kpi-icon pink"><span class="material-symbols-outlined">inbox</span></div>
-              <div class="kpi-num">3</div>
-              <div><div class="kpi-label">New Requests</div><div class="kpi-trend warn">Awaiting your response</div></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon blue"><span class="material-symbols-outlined">event</span></div>
-              <div class="kpi-num">2</div>
-              <div><div class="kpi-label">Today's Consultations</div><div class="kpi-trend up">Next at 4:30 PM</div></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon green"><span class="material-symbols-outlined">payments</span></div>
-              <div class="kpi-num">৳18,500</div>
-              <div><div class="kpi-label">This Month Earned</div><div class="kpi-trend up">↑ 24% vs last month</div></div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon"><span class="material-symbols-outlined">star</span></div>
-              <div class="kpi-num">4.9</div>
-              <div><div class="kpi-label">Client Rating</div><div class="kpi-trend up">From 128 reviews</div></div>
-            </div>
-          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 space-y-6">
-              <div class="lp-card p-5 sm:p-6">
+            <div class="lg:col-span-2 space-y-5">
+
+              <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-sm font-bold text-primary m-0 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[#a07d3a] text-[20px]">schedule</span>
+                  <h3 class="font-semibold text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gold text-[18px]">schedule</span>
                     Today's Schedule
                   </h3>
-                  <span class="text-xs text-secondary" id="todayDate">—</span>
+                  <span class="text-xs text-slate2" id="todayDate">—</span>
                 </div>
                 <div id="todaySchedule"></div>
               </div>
 
-              <div class="lp-card p-5 sm:p-6">
+              <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
                 <div class="flex items-center justify-between mb-4">
-                  <h3 class="text-sm font-bold text-primary m-0 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[#a07d3a] text-[20px]">inbox</span>
+                  <h3 class="font-semibold text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gold text-[18px]">inbox</span>
                     New Requests
                     <span class="text-[10px] font-bold text-white bg-red-500 px-2 py-0.5 rounded-full">3</span>
                   </h3>
-                  <a href="consultancy-requests.html" class="text-xs text-[#a07d3a] font-bold hover:underline">View All →</a>
+                  <a href="consultancy-requests.html" class="text-xs font-bold text-gold hover:underline">View All →</a>
                 </div>
                 <div id="pendingPreview"></div>
               </div>
 
-              <div class="lp-card p-5 sm:p-6">
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-sm font-bold text-primary m-0 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[#a07d3a] text-[20px]">insights</span>
+              <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="font-semibold text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined text-gold text-[18px]">insights</span>
                     Consultations this week
                   </h3>
-                  <span class="text-xs text-secondary">Total: <strong class="text-primary">12</strong></span>
+                  <span class="text-xs text-slate2">Total: <strong class="text-navy">12</strong></span>
                 </div>
-                <div class="bar-chart">
-                  <div class="bar-wrap"><div class="bar" style="height:40%"></div><span class="bar-day">Sat</span></div>
-                  <div class="bar-wrap"><div class="bar" style="height:60%"></div><span class="bar-day">Sun</span></div>
-                  <div class="bar-wrap"><div class="bar" style="height:35%"></div><span class="bar-day">Mon</span></div>
-                  <div class="bar-wrap"><div class="bar" style="height:75%"></div><span class="bar-day">Tue</span></div>
-                  <div class="bar-wrap"><div class="bar" style="height:55%"></div><span class="bar-day">Wed</span></div>
-                  <div class="bar-wrap"><div class="bar muted" style="height:20%"></div><span class="bar-day">Thu</span></div>
-                  <div class="bar-wrap"><div class="bar muted" style="height:10%"></div><span class="bar-day">Fri</span></div>
+                <div class="flex items-end gap-2 sm:gap-3 h-32">
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-navy/80 rounded-t" style="height:40%"></div><span class="text-[10px] mt-1 text-slate2">Sat</span></div>
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-navy/80 rounded-t" style="height:60%"></div><span class="text-[10px] mt-1 text-slate2">Sun</span></div>
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-navy/80 rounded-t" style="height:35%"></div><span class="text-[10px] mt-1 text-slate2">Mon</span></div>
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-navy/80 rounded-t" style="height:75%"></div><span class="text-[10px] mt-1 text-slate2">Tue</span></div>
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-navy/80 rounded-t" style="height:55%"></div><span class="text-[10px] mt-1 text-slate2">Wed</span></div>
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-slate-200 rounded-t" style="height:20%"></div><span class="text-[10px] mt-1 text-slate2">Thu</span></div>
+                  <div class="flex-1 flex flex-col items-center"><div class="w-full bg-slate-200 rounded-t" style="height:10%"></div><span class="text-[10px] mt-1 text-slate2">Fri</span></div>
                 </div>
               </div>
+
             </div>
 
-            <div class="space-y-6">
-              <div class="lp-card p-5">
-                <h3 class="text-sm font-bold text-primary mb-3 mt-0">Quick Actions</h3>
+            <div class="space-y-5">
+
+              <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+                <h3 class="font-semibold text-sm mb-3">Quick Actions</h3>
                 <div class="space-y-2">
-                  <a href="consultancy-requests.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f8fafc] transition-all text-inherit no-underline">
-                    <span class="act-ic"><span class="material-symbols-outlined">inbox</span></span>
-                    <div class="flex-1"><p class="text-sm font-bold text-primary m-0">Review Requests</p><p class="text-xs text-secondary m-0">3 pending</p></div>
-                    <span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+                  <a href="consultancy-requests.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-offwhite transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                      <span class="material-symbols-outlined text-[18px]">inbox</span>
+                    </span>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-semibold">Review Requests</p>
+                      <p class="text-xs text-slate2">3 pending</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-400 text-[18px]">chevron_right</span>
                   </a>
-                  <a href="affidavit-workspace.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f8fafc] transition-all text-inherit no-underline">
-                    <span class="act-ic"><span class="material-symbols-outlined">description</span></span>
-                    <div class="flex-1"><p class="text-sm font-bold text-primary m-0">Affidavit Workspace</p><p class="text-xs text-secondary m-0">2 drafts in progress</p></div>
-                    <span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+                  <a href="service-settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-offwhite transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+                      <span class="material-symbols-outlined text-[18px]">tune</span>
+                    </span>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-semibold">Service Settings</p>
+                      <p class="text-xs text-slate2">Manage availability</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-400 text-[18px]">chevron_right</span>
                   </a>
-                  <a href="service-settings.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f8fafc] transition-all text-inherit no-underline">
-                    <span class="act-ic blue"><span class="material-symbols-outlined">tune</span></span>
-                    <div class="flex-1"><p class="text-sm font-bold text-primary m-0">Service Settings</p><p class="text-xs text-secondary m-0">Manage availability</p></div>
-                    <span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
-                  </a>
-                  <a href="payment-logs.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-[#f8fafc] transition-all text-inherit no-underline">
-                    <span class="act-ic green"><span class="material-symbols-outlined">payments</span></span>
-                    <div class="flex-1"><p class="text-sm font-bold text-primary m-0">Payment Logs</p><p class="text-xs text-secondary m-0">₹18,500 this month</p></div>
-                    <span class="material-symbols-outlined text-secondary text-[18px]">chevron_right</span>
+                  <a href="payment-logs.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-offwhite transition-colors">
+                    <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                      <span class="material-symbols-outlined text-[18px]">payments</span>
+                    </span>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-semibold">Payment Logs</p>
+                      <p class="text-xs text-slate2">৳18,500 this month</p>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-400 text-[18px]">chevron_right</span>
                   </a>
                 </div>
               </div>
 
-              <div class="lp-card p-5">
-                <h3 class="text-sm font-bold text-primary mb-3 mt-0">Recent Activity</h3>
-                <div>
-                  <div class="act-item">
-                    <span class="act-ic green"><span class="material-symbols-outlined">check</span></span>
-                    <div><p class="text-[13px] font-bold text-primary m-0">Completed consultation</p><p class="text-[11.5px] text-secondary m-0 mt-0.5">with Md. Rahat Hossain</p><p class="text-[10.5px] text-secondary m-0 mt-1">2 hours ago</p></div>
-                  </div>
-                  <div class="act-item">
-                    <span class="act-ic blue"><span class="material-symbols-outlined">event_available</span></span>
-                    <div><p class="text-[13px] font-bold text-primary m-0">Accepted new request</p><p class="text-[11.5px] text-secondary m-0 mt-0.5">Farhana Ahmed · Property Dispute</p><p class="text-[10.5px] text-secondary m-0 mt-1">Yesterday</p></div>
-                  </div>
-                  <div class="act-item">
-                    <span class="act-ic"><span class="material-symbols-outlined">star</span></span>
-                    <div><p class="text-[13px] font-bold text-primary m-0">Received 5-star review</p><p class="text-[11.5px] text-secondary m-0 mt-0.5">"Very professional and thorough"</p><p class="text-[10.5px] text-secondary m-0 mt-1">2 days ago</p></div>
-                  </div>
-                  <div class="act-item">
-                    <span class="act-ic red"><span class="material-symbols-outlined">cancel</span></span>
-                    <div><p class="text-[13px] font-bold text-primary m-0">Request rejected</p><p class="text-[11.5px] text-secondary m-0 mt-0.5">Outside my practice area</p><p class="text-[10.5px] text-secondary m-0 mt-1">3 days ago</p></div>
-                  </div>
+              <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+                <h3 class="font-semibold text-sm mb-3">Recent Activity</h3>
+                <div class="space-y-3 text-sm">
+                  <div class="flex gap-3"><span class="w-2 h-2 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0"></span>
+                    <div><p class="font-semibold text-[13px]">Completed consultation</p><p class="text-xs text-slate2">with Md. Rahat Hossain · 2h ago</p></div></div>
+                  <div class="flex gap-3"><span class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>
+                    <div><p class="font-semibold text-[13px]">Accepted new request</p><p class="text-xs text-slate2">Farhana Ahmed · yesterday</p></div></div>
+                  <div class="flex gap-3"><span class="w-2 h-2 rounded-full bg-gold mt-1.5 flex-shrink-0"></span>
+                    <div><p class="font-semibold text-[13px]">Received 5-star review</p><p class="text-xs text-slate2">From Rahat Hossain · 2 days ago</p></div></div>
+                  <div class="flex gap-3"><span class="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></span>
+                    <div><p class="font-semibold text-[13px]">Request rejected</p><p class="text-xs text-slate2">Outside practice area · 3 days ago</p></div></div>
                 </div>
               </div>
+
             </div>
           </div>
 
@@ -239,72 +196,76 @@
       <div id="lawyerFooterPlaceholder"></div>
     </div>
   </div>
+</div>
 
-  <script src="js/lawyer-partials.js"></script>
-  <script src="js/swipe-nav.js"></script>
+<script src="js/data.js"></script>
+<script src="js/lawyer-partials.js"></script>
 
-  <script>
-    var todaySchedule = [
-      { time: '10:30 AM', duration: '45 min', clientName: 'Farhana Ahmed', matterType: 'Property Dispute', mode: 'Online Video Call', meetLink: 'https://meet.google.com/xyz-abc-def' },
-      { time: '04:30 PM', duration: '45 min', clientName: 'Md. Rahat Hossain', matterType: 'Family Law', mode: 'Chamber Visit', meetLink: null }
-    ];
+<script>
+  var todaySchedule = [
+    { time: '10:30 AM', duration: '45 min', clientName: 'Farhana Ahmed', matterType: 'Property Dispute', mode: 'Online Video Call', meetLink: 'https://meet.google.com/xyz-abc-def' },
+    { time: '04:30 PM', duration: '45 min', clientName: 'Md. Rahat Hossain', matterType: 'Family Law', mode: 'Chamber Visit', meetLink: null }
+  ];
 
-    var pendingRequests = [
-      { id: 1, clientName: 'Mehedi Hasan', clientInitials: 'MH', matterType: 'Property Dispute', requestedAt: '2 hours ago', mode: 'Online Video Call', preferredDate: 'Sep 20, 2026', preferredTime: '4:30 PM', fee: '৳3,500' },
-      { id: 2, clientName: 'Nusrat Jahan', clientInitials: 'NJ', matterType: 'Family Law — Divorce', requestedAt: 'Yesterday', mode: 'Chamber Visit', preferredDate: 'Sep 22, 2026', preferredTime: '11:00 AM', fee: '৳3,500' },
-      { id: 3, clientName: 'Rashed Karim', clientInitials: 'RK', matterType: 'Corporate Advisory', requestedAt: '2 days ago', mode: 'Online Video Call', preferredDate: 'Sep 25, 2026', preferredTime: '10:00 AM', fee: '৳5,000' }
-    ];
-
-    function renderTodaySchedule() {
-      var wrap = document.getElementById('todaySchedule');
-      if (!wrap) return;
-      if (todaySchedule.length === 0) {
-        wrap.innerHTML = '<p class="text-sm text-secondary italic m-0 text-center py-6">No consultations scheduled for today. Enjoy the day!</p>';
-        return;
-      }
-      wrap.innerHTML = todaySchedule.map(function (s) {
-        var dotClass = s.mode === 'Online Video Call' ? 'blue' : 'green';
-        return '<div class="tl-row">' +
-                 '<div class="tl-time">' + s.time + '<small>' + s.duration + '</small></div>' +
-                 '<div class="tl-dot ' + dotClass + '"></div>' +
-                 '<div class="flex-1 min-w-0">' +
-                   '<p class="text-sm font-bold text-primary m-0">' + s.clientName + '</p>' +
-                   '<p class="text-xs text-secondary m-0 mt-0.5">' + s.matterType + ' · ' + s.mode + '</p>' +
-                 '</div>' +
-                 (s.meetLink
-                   ? '<a href="' + s.meetLink + '" target="_blank" class="lp-btn lp-btn-primary" style="padding:6px 12px;font-size:11.5px;text-decoration:none;">' +
-                       '<span class="material-symbols-outlined text-[15px]">video_call</span> Join</a>'
-                   : '<span class="text-[11px] font-bold text-[#a07d3a] bg-[#f5e8c8] px-3 py-1 rounded-full">Chamber</span>') +
-               '</div>';
-      }).join('');
+  function renderTodaySchedule() {
+    var wrap = document.getElementById('todaySchedule');
+    if (!wrap) return;
+    if (todaySchedule.length === 0) {
+      wrap.innerHTML = '<p class="text-sm text-slate2 italic text-center py-6">No consultations today. Enjoy!</p>';
+      return;
     }
+    wrap.innerHTML = todaySchedule.map(function (s) {
+      var isOnline = s.mode === 'Online Video Call';
+      return '<div class="flex items-center gap-4 py-3 border-b border-slate-100 last:border-0">' +
+        '<div class="w-20 flex-shrink-0">' +
+          '<p class="text-sm font-bold">' + s.time + '</p>' +
+          '<p class="text-xs text-slate2">' + s.duration + '</p>' +
+        '</div>' +
+        '<span class="w-2 h-2 rounded-full flex-shrink-0 ' + (isOnline ? 'bg-blue-500' : 'bg-gold') + '"></span>' +
+        '<div class="flex-1 min-w-0">' +
+          '<p class="text-sm font-semibold">' + s.clientName + '</p>' +
+          '<p class="text-xs text-slate2 mt-0.5">' + s.matterType + ' · ' + s.mode + '</p>' +
+        '</div>' +
+        (s.meetLink
+          ? '<a href="' + s.meetLink + '" target="_blank" class="inline-flex items-center gap-1.5 bg-navy text-white text-[11.5px] font-semibold px-3 py-1.5 rounded-lg hover:bg-navy-800 transition-colors">' +
+              '<span class="material-symbols-outlined text-[14px]">video_call</span> Join</a>'
+          : '<span class="inline-flex items-center gap-1.5 bg-gold-50 text-gold-dark text-[11px] font-bold px-3 py-1 rounded-full border border-gold/30">' +
+              '<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>Chamber</span>') +
+        '</div>';
+    }).join('');
+  }
 
-    function renderPendingPreview() {
-      var wrap = document.getElementById('pendingPreview');
-      if (!wrap) return;
-      wrap.innerHTML = pendingRequests.map(function (r) {
-        return '<a href="consultancy-requests.html" class="pending-mini">' +
-                 '<div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-[13px] flex-shrink-0" style="background:#f5e8c8;color:#a07d3a;">' + r.clientInitials + '</div>' +
-                 '<div class="flex-1 min-w-0">' +
-                   '<div class="flex items-center justify-between gap-2 mb-0.5">' +
-                     '<p class="text-sm font-bold text-primary m-0 truncate">' + r.clientName + '</p>' +
-                     '<span class="text-[10.5px] text-secondary flex-shrink-0">' + r.requestedAt + '</span>' +
-                   '</div>' +
-                   '<p class="text-xs text-secondary m-0 truncate">' + r.matterType + ' · ' + r.mode + '</p>' +
-                   '<p class="text-[11px] text-secondary m-0 mt-1">' + r.preferredDate + ' · ' + r.preferredTime +
-                     ' <span class="ml-2 font-bold text-[#a07d3a]">' + r.fee + '</span></p>' +
-                 '</div>' +
-               '</a>';
-      }).join('');
-    }
+  function renderPendingPreview() {
+    var wrap = document.getElementById('pendingPreview');
+    if (!wrap) return;
+    var pending = ADVOCATE_DATA.requests.filter(function(r) { return r.status === 'new'; }).slice(0, 3);
+    wrap.innerHTML = pending.map(function (r) {
+      return '<a href="consultancy-requests.html" class="block p-3 rounded-xl border border-slate-100 mb-2 transition-all hover:bg-gold-50 hover:border-gold/40">' +
+        '<div class="flex items-center gap-3">' +
+          '<div class="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-[13px] flex-shrink-0 bg-gold-50 text-gold-dark">' + r.clientInitials + '</div>' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-center justify-between gap-2 mb-0.5">' +
+              '<p class="text-sm font-bold truncate">' + r.clientName + '</p>' +
+            '</div>' +
+            '<p class="text-xs text-slate2 truncate">' + r.matterType + '</p>' +
+            '<div class="flex items-center gap-3 mt-1.5 text-[11px] text-slate2">' +
+              '<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[12px]">event</span>' + r.scheduledDate + '</span>' +
+              '<span class="ml-auto font-bold text-gold-dark">৳' + r.fee.toLocaleString() + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</a>';
+    }).join('');
+  }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var d = new Date();
-      var el = document.getElementById('todayDate');
-      if (el) el.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-      renderTodaySchedule();
-      renderPendingPreview();
-    });
-  </script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var d = new Date();
+    var el = document.getElementById('todayDate');
+    if (el) el.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    renderTodaySchedule();
+    renderPendingPreview();
+  });
+</script>
+
 </body>
 </html>

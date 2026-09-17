@@ -1,63 +1,162 @@
-<aside class="lawyer-sidebar" id="lawyerSidebar">
-  <div class="sidebar-brand">
-    <a href="lawyer-dashboard.html" class="brand-link">
-      <span class="scale">⚖</span>
-      <div>
-        <span class="brand-name">JustiFi</span>
-        <span class="brand-sub">Advocate Portal</span>
+<!-- Mobile-only backdrop -->
+<div id="sidebarBackdrop"
+     class="hidden fixed inset-0 bg-black/50 z-40 md:hidden"
+     aria-hidden="true"></div>
+
+<aside id="lawyerSidebar"
+       class="lawyer-sidebar w-72 bg-navy text-white flex-shrink-0 flex flex-col
+              fixed md:sticky top-0 h-screen z-50
+              -translate-x-full md:translate-x-0 md:!translate-x-0
+              transition-transform duration-300 shadow-2xl md:shadow-none"
+       aria-label="Advocate sidebar navigation">
+
+  <!-- Brand -->
+  <div class="h-16 flex items-center justify-between gap-2.5 px-5 border-b border-white/10 flex-shrink-0">
+    <div class="flex items-center gap-2.5">
+      <span class="text-[26px] leading-none" style="color:#C5A059;">⚖</span>
+      <div class="leading-tight">
+        <span class="block font-extrabold text-[16px] tracking-tight">JustiFi</span>
+        <span class="block text-[9.5px] font-bold tracking-[1.4px] uppercase" style="color:#C5A059;">Advocate Portal</span>
       </div>
-    </a>
+    </div>
+    <button type="button"
+            class="md:hidden text-white/70 hover:text-white hover:bg-white/10 rounded-lg p-1.5 transition-colors"
+            onclick="closeLawyerSidebar()"
+            aria-label="Close menu">
+      <span class="material-symbols-outlined text-[20px]">close</span>
+    </button>
   </div>
 
-  <nav class="sidebar-nav">
-    <a href="lawyer-dashboard.html" class="s-nav-item" data-page="lawyer-dashboard">
-      <span class="material-symbols-outlined">dashboard</span>
+  <!-- Navigation -->
+  <nav class="flex-1 px-3 py-4 overflow-y-auto text-[13.5px] space-y-1">
+
+    <a href="lawyer-dashboard.html" data-page="lawyer-dashboard"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">dashboard</span>
       <span>Dashboard</span>
     </a>
 
-    <a href="consultancy-history.html" class="s-nav-item" data-page="consultancy-history">
-      <span class="material-symbols-outlined">history</span>
+    <a href="consultancy-history.html" data-page="consultancy-history"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">history</span>
       <span>Consultancy History</span>
     </a>
 
-    <a href="consultancy-requests.html" class="s-nav-item" data-page="consultancy-requests">
-      <span class="material-symbols-outlined">inbox</span>
+    <a href="consultancy-requests.html" data-page="consultancy-requests"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">inbox</span>
       <span>Consultancy Requests</span>
-      <span class="badge-count">3</span>
+      <span class="ml-auto bg-gold text-navy text-[10px] font-bold px-1.5 rounded-full">3</span>
     </a>
 
-    <a href="affidavit-workspace.html" class="s-nav-item" data-page="affidavit-workspace">
-      <span class="material-symbols-outlined">description</span>
+    <a href="affidavit-workspace.html" data-page="affidavit-workspace"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">description</span>
       <span>Affidavit Workspace</span>
     </a>
 
-    <a href="vat-tax-manage.html" class="s-nav-item" data-page="vat-tax-manage">
-      <span class="material-symbols-outlined">receipt_long</span>
+    <a href="vat-tax-manage.html" data-page="vat-tax-manage"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">receipt_long</span>
       <span>VAT &amp; Tax Manage</span>
     </a>
 
-    <a href="service-settings.html" class="s-nav-item" data-page="service-settings">
-      <span class="material-symbols-outlined">tune</span>
+    <a href="service-settings.html" data-page="service-settings"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">tune</span>
       <span>Service Settings</span>
     </a>
 
-    <a href="payment-logs.html" class="s-nav-item" data-page="payment-logs">
-      <span class="material-symbols-outlined">payments</span>
+    <a href="payment-logs.html" data-page="payment-logs"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">payments</span>
       <span>Payment Table Log</span>
     </a>
 
-    <div class="s-divider"></div>
+    <div class="h-px bg-white/10 my-2"></div>
 
-    <a href="lawyer-profile.html" class="s-nav-item" data-page="lawyer-profile">
-      <span class="material-symbols-outlined">person</span>
+    <a href="lawyer-profile.html" data-page="lawyer-profile"
+       class="s-nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white/70 hover:bg-white/5 hover:text-white transition-colors">
+      <span class="material-symbols-outlined text-[20px]">person</span>
       <span>Profile</span>
     </a>
+
   </nav>
 
-  <div class="sidebar-footer">
-    <button type="button" class="s-nav-item logout" onclick="lawyerLogout()">
-      <span class="material-symbols-outlined">logout</span>
+  <!-- Logout -->
+  <div class="px-3 pb-4 pt-3 border-t border-white/10 flex-shrink-0">
+    <button type="button" onclick="lawyerLogout()"
+            class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-red-300 hover:bg-red-500/10 hover:text-red-200 transition-colors">
+      <span class="material-symbols-outlined text-[20px]">logout</span>
       <span>Logout</span>
     </button>
   </div>
+
 </aside>
+
+<!--
+  ============================================================
+  ACTIVE STATE — golden highlight for the current page's link.
+  Uses TWO selectors (id + class) so it works even if only one
+  of them is present in the DOM at any point.
+  ============================================================
+-->
+<style>
+  /* ---------- Active link : golden pill ---------- */
+  #lawyerSidebar a.s-nav-item.active,
+  .lawyer-sidebar a.s-nav-item.active {
+    background: #C5A059 !important;
+    color: #1A2B3C !important;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(197, 160, 89, 0.35);
+  }
+
+  /* Icon inside the active item is filled + dark */
+  #lawyerSidebar a.s-nav-item.active .material-symbols-outlined,
+  .lawyer-sidebar a.s-nav-item.active .material-symbols-outlined {
+    color: #1A2B3C;
+    font-variation-settings: 'FILL' 1;
+  }
+
+  /* The gold "3" badge flips to dark on the active item */
+  #lawyerSidebar a.s-nav-item.active span.bg-gold,
+  .lawyer-sidebar a.s-nav-item.active span.bg-gold {
+    background: #1A2B3C !important;
+    color: #C5A059 !important;
+  }
+
+  /* Subtle left accent bar for extra clarity */
+  #lawyerSidebar a.s-nav-item {
+    position: relative;
+  }
+  #lawyerSidebar a.s-nav-item.active::before {
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background: #C5A059;
+    border-radius: 4px;
+  }
+
+  /* ---------- Hover feedback ---------- */
+  #lawyerSidebar a.s-nav-item:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+  }
+
+  /* ---------- Instant click feedback (before navigation) ---------- */
+  #lawyerSidebar a.s-nav-item.click-feedback {
+    background: rgba(197, 160, 89, 0.25) !important;
+    color: #ffffff !important;
+    transition: background 0.15s ease;
+  }
+
+  /* ---------- Keyboard focus ---------- */
+  #lawyerSidebar a.s-nav-item:focus-visible {
+    outline: 3px solid #C5A059;
+    outline-offset: 2px;
+  }
+</style>

@@ -1,307 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consultancy History — JustiFi Advocate</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link rel="stylesheet" href="css/lawyer.css" />
-  <style>
-    .flt-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 16px; border-radius: 9999px;
-      font-size: 12.5px; font-weight: 700;
-      border: 1.5px solid #e2e8f0; background: #fff; color: #64748b;
-      cursor: pointer; transition: all 0.18s; white-space: nowrap; font-family: inherit;
-    }
-    .flt-pill:hover { border-color: #C5A059; color: #a07d3a; }
-    .flt-pill.active { background: #041627; color: #fff; border-color: #041627; }
-    .flt-pill .cnt { background: rgba(255,255,255,0.15); padding: 1px 8px; border-radius: 9999px; font-size: 11px; }
-    .flt-pill.active .cnt { background: rgba(255,255,255,0.2); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Consultancy History — JustiFi Advocate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: {
+      navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' },
+      gold: { DEFAULT:'#C5A059', 50:'#FBF6ED', dark:'#A07D3A' },
+      slate2:'#64748B', offwhite:'#F8FAFC'
+    },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/lawyer.css" />
 
-    .search-wrap { position: relative; flex: 1; min-width: 220px; }
-    .search-wrap input {
-      width: 100%; padding: 11px 14px 11px 42px;
-      border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff;
-      font-size: 13.5px; font-family: inherit; color: #041627;
-      transition: all 0.18s;
-    }
-    .search-wrap input::placeholder { color: #94a3b8; }
-    .search-wrap input:focus { outline: none; border-color: #C5A059; box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15); }
-    .search-wrap .material-symbols-outlined {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      font-size: 20px; color: #94a3b8; pointer-events: none;
-    }
-    .search-clear {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer;
-      color: #94a3b8; padding: 4px; border-radius: 6px; display: none;
-    }
-    .search-clear.show { display: flex; }
-    .search-clear:hover { background: #f1f3f5; color: #041627; }
-
-    .hist-card {
-      background: #fff; border: 1.5px solid #eef1f4; border-radius: 16px;
-      padding: 18px; display: flex; flex-direction: column; gap: 14px;
-      transition: all 0.22s;
-    }
-    .hist-card:hover { border-color: rgba(197, 160, 89, 0.4); transform: translateY(-2px);
-                       box-shadow: 0 10px 30px rgba(197, 160, 89, 0.08); }
-
-    .upcoming-card {
-      background: linear-gradient(135deg, #ffffff 0%, #fffdf7 100%);
-      border: 1.5px solid rgba(197, 160, 89, 0.35);
-      border-radius: 16px;
-      padding: 18px;
-      display: flex; flex-direction: column; gap: 14px;
-      transition: all 0.22s;
-      position: relative; overflow: hidden;
-    }
-    .upcoming-card::before {
-      content: ""; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 4px; background: #C5A059;
-    }
-    .upcoming-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(197, 160, 89, 0.6);
-      box-shadow: 0 12px 32px rgba(197, 160, 89, 0.15);
-    }
-    .upcoming-card.is-online::before { background: #3b82f6; }
-    .upcoming-card.is-online { border-color: rgba(59, 130, 246, 0.35); background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%); }
-    .upcoming-card.is-online.is-today::before { background: #22c55e; }
-    .upcoming-card.is-online.is-today { border-color: rgba(34, 197, 94, 0.45); background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%); }
-
-    .countdown-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 11px; border-radius: 9999px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
-      background: #fff7ed; color: #c2410c;
-      border: 1px solid #fed7aa;
-    }
-    .countdown-pill.today { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
-    .countdown-pill.soon  { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
-
-    .avatar-badge {
-      width: 46px; height: 46px; border-radius: 50%;
-      background: linear-gradient(135deg, #C5A059 0%, #d4af5e 100%);
-      color: #fff; font-weight: 800; font-size: 15px;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .status-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: 9999px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
-    }
-    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
-    .status-upcoming       { background: #dbeafe; color: #1e40af; }
-    .status-upcoming .dot  { background: #3b82f6; }
-    .status-completed      { background: #dcfce7; color: #166534; }
-    .status-completed .dot { background: #22c55e; }
-    .status-rejected       { background: #fee2e2; color: #991b1b; }
-    .status-rejected .dot  { background: #ef4444; }
-    .status-cancelled      { background: #f3f4f6; color: #4b5563; }
-    .status-cancelled .dot { background: #6b7280; }
-    .status-rescheduled    { background: #ede9fe; color: #5b21b6; }
-    .status-rescheduled .dot { background: #8b5cf6; }
-
-    /* Mode badges: Online (blue) vs Chamber (amber) */
-    .mode-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 4px 11px; border-radius: 9999px;
-      font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px;
-      white-space: nowrap;
-    }
-    .mode-badge .material-symbols-outlined {
-      font-size: 13px;
-      font-variation-settings: 'FILL' 1, 'wght' 500;
-    }
-    .mode-badge.online {
-      background: #dbeafe; color: #1e40af;
-      border: 1px solid #93c5fd;
-    }
-    .mode-badge.chamber {
-      background: #fef3c7; color: #92400e;
-      border: 1px solid #fcd34d;
-    }
-
-    .star-row { display: flex; align-items: center; gap: 2px; }
-    .star-row .material-symbols-outlined { font-size: 16px; color: #C5A059; font-variation-settings: 'FILL' 1; }
-
-    .kpi-mini {
-      display: flex; align-items: center; gap: 14px;
-      background: #fff; border: 1.5px solid #eef1f4;
-      border-radius: 14px; padding: 14px 16px; transition: all 0.2s;
-    }
-    .kpi-mini:hover { border-color: rgba(197, 160, 89, 0.4); transform: translateY(-1px); }
-    .kpi-mini-ic { width: 40px; height: 40px; border-radius: 11px;
-                   display: flex; align-items: center; justify-content: center;
-                   background: #f5e8c8; color: #a07d3a; flex-shrink: 0; }
-    .kpi-mini-ic.green { background: #dcfce7; color: #166534; }
-    .kpi-mini-ic.blue  { background: #dbeafe; color: #1e40af; }
-    .kpi-mini-num { font-size: 22px; font-weight: 800; color: #041627; line-height: 1; letter-spacing: -0.4px; }
-    .kpi-mini-label { font-size: 10.5px; font-weight: 700; text-transform: uppercase;
-                      letter-spacing: 0.5px; color: #64748b; margin-top: 2px; }
-
-    .section-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 4px;
-    }
-    .section-header .sh-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: #f5e8c8; color: #a07d3a;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .section-header h2 {
-      font-size: 16px; font-weight: 800; color: #041627; margin: 0;
-      letter-spacing: -0.2px;
-    }
-    .section-header .sh-count {
-      background: #f1f5f9; color: #475569;
-      padding: 2px 10px; border-radius: 9999px;
-      font-size: 11px; font-weight: 700; margin-left: 4px;
-    }
-
-    .h-tl { position: relative; padding-left: 26px; }
-    .h-tl-item { position: relative; padding-bottom: 20px; }
-    .h-tl-item:last-child { padding-bottom: 0; }
-    .h-tl-item::before { content: ""; position: absolute; left: 5px; top: 16px; bottom: -6px;
-                         width: 2px; background: #eef1f4; }
-    .h-tl-item:last-child::before { display: none; }
-    .h-tl-dot { position: absolute; left: 0; top: 4px; width: 12px; height: 12px;
-                border-radius: 50%; background: #C5A059; border: 3px solid #fff;
-                box-shadow: 0 0 0 2px rgba(197,160,89,0.25); }
-    .h-tl-dot.green { background: #22c55e; box-shadow: 0 0 0 2px rgba(34,197,94,0.25); }
-    .h-tl-dot.red   { background: #ef4444; box-shadow: 0 0 0 2px rgba(239,68,68,0.25); }
-    .h-tl-dot.blue  { background: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.25); }
-
-    .note-bubble { padding: 10px 12px; border-radius: 12px; font-size: 12.5px;
-                   line-height: 1.55; margin-bottom: 8px; max-width: 92%; }
-    .note-bubble.user { background: #f1f5f9; color: #334155; border-bottom-left-radius: 4px; }
-    .note-bubble.lawyer { background: #fffdf7; color: #78350f;
-                          border: 1px solid #f5e8c8; border-bottom-right-radius: 4px;
-                          margin-left: auto; }
-    .note-bubble .meta { display: block; font-size: 10.5px; font-weight: 600; color: #94a3b8; margin-top: 4px; }
-    .note-bubble.lawyer .meta { color: #a07d3a; }
-
-    .empty-state { text-align: center; padding: 40px 20px; color: #64748b; }
-    .empty-state .material-symbols-outlined { font-size: 48px; color: #cbd5e1; display: block; margin: 0 auto 10px; }
-
-    .result-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; font-size: 12.5px; color: #64748b;
-    }
-    .result-bar strong { color: #041627; }
-  </style>
+<style>
+  .note-bubble { padding:10px 12px; border-radius:12px; font-size:12.5px; line-height:1.55; margin-bottom:8px; max-width:92%; }
+  .note-bubble.user { background:#F1F5F9; color:#334155; border-bottom-left-radius:4px; }
+  .note-bubble.lawyer { background:#FBF6ED; color:#78350F; border:1px solid #F5E8C8; border-bottom-right-radius:4px; margin-left:auto; }
+  .note-bubble .meta { display:block; font-size:10.5px; font-weight:600; color:#94A3B8; margin-top:4px; }
+  .note-bubble.lawyer .meta { color:#A07D3A; }
+  .badge-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.2px; }
+  .badge-pill .dot { width:6px; height:6px; border-radius:50%; }
+  .badge-gold { background:#FBF6ED; color:#A07D3A; } .badge-gold .dot { background:#C5A059; }
+  .badge-blue { background:#EBF5FF; color:#1E40AF; } .badge-blue .dot { background:#3B82F6; }
+  .badge-purple { background:#F5F3FF; color:#6D28D9; } .badge-purple .dot { background:#8B5CF6; }
+  .badge-green { background:#ECFDF5; color:#047857; } .badge-green .dot { background:#10B981; }
+  .badge-red { background:#FEF2F2; color:#B91C1C; } .badge-red .dot { background:#EF4444; }
+  .badge-slate { background:#F1F5F9; color:#64748B; } .badge-slate .dot { background:#94A3B8; }
+  .mode-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 11px; border-radius:9999px; font-size:10.5px; font-weight:700; letter-spacing:.2px; white-space:nowrap; }
+  .mode-badge .material-symbols-outlined { font-size:13px; }
+  .mode-badge.online { background:#EBF5FF; color:#1E40AF; border:1px solid #BFDBFE; }
+  .mode-badge.chamber { background:#FBF6ED; color:#92400E; border:1px solid #FCD34D; }
+</style>
 </head>
+<body class="bg-offwhite text-navy" data-page="consultancy-history">
 
-<body class="lawyer-body" data-page="consultancy-history" data-requires-auth="1"
-      data-header-title="Consultancy History"
-      data-header-subtitle="Upcoming sessions and past consultations">
+<div class="flex h-screen overflow-hidden">
+  <div id="lawyerSidebarPlaceholder"></div>
 
-  <div class="lawyer-shell">
-    <div id="lawyerSidebarPlaceholder"></div>
-    <span class="swipe-hint left material-symbols-outlined">chevron_left</span>
-    <span class="swipe-hint right material-symbols-outlined">chevron_right</span>
+  <div class="flex-1 flex flex-col min-w-0">
+    <div id="lawyerHeaderPlaceholder"></div>
 
-    <div class="lawyer-main">
-      <div id="lawyerHeaderPlaceholder"></div>
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-8">
+        <div class="max-w-[1280px] mx-auto space-y-6">
 
-      <div class="lawyer-content">
-        <div class="max-w-[1200px] mx-auto space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold">Consultancy History</h1>
+            <p class="text-slate2 text-sm mt-1">Upcoming sessions and your complete consultation archive.</p>
+          </div>
 
-          <!-- KPIs -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="kpi-mini">
-              <div class="kpi-mini-ic blue"><span class="material-symbols-outlined">event</span></div>
-              <div><div class="kpi-mini-num" id="kpiUpcoming">0</div><div class="kpi-mini-label">Upcoming</div></div>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Upcoming</p>
+                <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">event_upcoming</span></span>
+              </div>
+              <p class="text-2xl font-bold mt-2" id="kpiUpcoming">0</p>
             </div>
-            <div class="kpi-mini">
-              <div class="kpi-mini-ic green"><span class="material-symbols-outlined">check_circle</span></div>
-              <div><div class="kpi-mini-num" id="kpiCompleted">0</div><div class="kpi-mini-label">Completed</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Completed</p>
+                <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">check_circle</span></span>
+              </div>
+              <p class="text-2xl font-bold mt-2 text-emerald-600" id="kpiCompleted">0</p>
             </div>
-            <div class="kpi-mini">
-              <div class="kpi-mini-ic"><span class="material-symbols-outlined">payments</span></div>
-              <div><div class="kpi-mini-num" id="kpiEarned">৳0</div><div class="kpi-mini-label">Total Earned</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Total Earned</p>
+                <span class="w-8 h-8 rounded-lg bg-gold-50 text-gold flex items-center justify-center"><span class="material-symbols-outlined text-[18px]">payments</span></span>
+              </div>
+              <p class="text-2xl font-bold mt-2" id="kpiEarned">৳0</p>
             </div>
-            <div class="kpi-mini">
-              <div class="kpi-mini-ic"><span class="material-symbols-outlined">star</span></div>
-              <div><div class="kpi-mini-num" id="kpiRating">—</div><div class="kpi-mini-label">Avg. Rating</div></div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Avg. Rating</p>
+                <span class="w-8 h-8 rounded-lg bg-gold-50 text-gold flex items-center justify-center"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">star</span></span>
+              </div>
+              <p class="text-2xl font-bold mt-2" id="kpiRating">—</p>
             </div>
           </div>
 
-          <!-- Search + filters -->
-          <div class="lp-card p-4 sm:p-5">
+          <!-- Search & Sort -->
+          <div class="bg-white rounded-2xl p-4 shadow-card border border-slate-100">
             <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
-              <div class="search-wrap">
-                <span class="material-symbols-outlined">search</span>
-                <input type="text" id="searchInput"
-                       placeholder="Search by client, matter type, or service..."
-                       oninput="onSearchChange()" />
-                <button type="button" class="search-clear" id="searchClear" onclick="clearSearch()">
-                  <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+              <div class="relative flex-1 min-w-[220px]">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                <input type="text" id="searchInput" placeholder="Search by client, matter type..." oninput="onSearchChange()"
+                       class="w-full pl-10 pr-10 py-2.5 border-[1.5px] border-slate-200 rounded-lg bg-white text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+                <button type="button" id="searchClear" onclick="clearSearch()"
+                        class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:bg-slate-100 hover:text-navy p-1 rounded-md">
+                  <span class="material-symbols-outlined text-[16px]">close</span>
                 </button>
               </div>
               <div class="flex items-center gap-2 flex-shrink-0">
-                <label class="text-xs font-bold text-secondary uppercase tracking-wider">Sort</label>
-                <select id="sortSelect" class="lp-input" style="padding:9px 34px 9px 12px;font-size:13px;min-width:170px;background:#fff;"
-                        onchange="render()">
+                <label class="text-xs font-bold text-slate2 uppercase tracking-wider">Sort</label>
+                <select id="sortSelect" onchange="render()" class="px-3 py-2.5 border-[1.5px] border-slate-200 rounded-lg bg-white text-[13px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15" style="min-width:170px">
                   <option value="date-asc">Date · Nearest first</option>
                   <option value="date-desc">Date · Most recent first</option>
                 </select>
               </div>
             </div>
+          </div>
 
-            <div class="flex flex-wrap gap-2 items-center mt-4 pt-4 border-t border-[#eef1f4]">
-              <button class="flt-pill active" data-filter="all" onclick="setFilter('all', this)">All History <span class="cnt" id="cntAll">0</span></button>
-              <button class="flt-pill" data-filter="completed" onclick="setFilter('completed', this)">Completed <span class="cnt" id="cntCompleted">0</span></button>
-              <button class="flt-pill" data-filter="rejected" onclick="setFilter('rejected', this)">Rejected <span class="cnt" id="cntRejected">0</span></button>
-              <button class="flt-pill" data-filter="cancelled" onclick="setFilter('cancelled', this)">Cancelled <span class="cnt" id="cntCancelled">0</span></button>
-              <button class="flt-pill" data-filter="rescheduled" onclick="setFilter('rescheduled', this)">Rescheduled <span class="cnt" id="cntResched">0</span></button>
+          <!-- Profile-style status tabs -->
+          <div class="filter-tab-bar">
+            <div class="filter-tab-scroll" id="statusFilters" role="tablist" aria-label="History filter">
+              <button class="filter-tab active" data-filter="all"          onclick="setFilter('all', this)">
+                <span class="material-symbols-outlined">list_alt</span> All History
+                <span class="count" id="cntAll">0</span>
+              </button>
+              <button class="filter-tab" data-filter="completed"            onclick="setFilter('completed', this)">
+                <span class="material-symbols-outlined">check_circle</span> Completed
+                <span class="count" id="cntCompleted">0</span>
+              </button>
+              <button class="filter-tab" data-filter="rejected"             onclick="setFilter('rejected', this)">
+                <span class="material-symbols-outlined">cancel</span> Rejected
+                <span class="count" id="cntRejected">0</span>
+              </button>
+              <button class="filter-tab" data-filter="cancelled"            onclick="setFilter('cancelled', this)">
+                <span class="material-symbols-outlined">block</span> Cancelled
+                <span class="count" id="cntCancelled">0</span>
+              </button>
+              <button class="filter-tab" data-filter="rescheduled"          onclick="setFilter('rescheduled', this)">
+                <span class="material-symbols-outlined">event_repeat</span> Rescheduled
+                <span class="count" id="cntResched">0</span>
+              </button>
             </div>
           </div>
 
           <!-- UPCOMING SESSIONS -->
           <section>
-            <div class="section-header">
-              <div class="sh-icon" style="background:#dbeafe;color:#1e40af;">
-                <span class="material-symbols-outlined">event_upcoming</span>
+            <div class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-navy to-navy-800 text-white mb-4">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0" style="background:rgba(197,160,89,0.2);color:#C5A059;">
+                <span class="material-symbols-outlined text-[24px]">event_upcoming</span>
               </div>
-              <h2>Upcoming Sessions</h2>
-              <span class="sh-count" id="upcomingCount">0</span>
-              <span class="text-xs text-secondary ml-auto">Nearest sessions first</span>
+              <div class="flex-1 min-w-0">
+                <h2 class="text-[17px] font-extrabold flex items-center gap-2.5">
+                  Upcoming Sessions
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold" style="background:#C5A059;color:#1A2B3C;" id="upcomingCount">0</span>
+                </h2>
+                <p class="text-xs text-white/60 mt-1">Accepted sessions whose start time hasn't come yet — nearest first.</p>
+              </div>
             </div>
-            <p class="text-xs text-secondary mt-1 mb-3" style="margin-left:46px;">
-              Accepted sessions whose start time hasn't come yet. Once a session starts, it moves to Requests → Awaiting Feedback.
-            </p>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="upcomingGrid"></div>
-            <div class="empty-state hidden" id="upcomingEmpty">
-              <span class="material-symbols-outlined">event_available</span>
-              <h3 class="text-sm font-bold text-primary m-0 mb-1">No upcoming sessions</h3>
-              <p class="text-xs m-0">New accepted requests will appear here.</p>
+            <div class="hidden text-center py-10" id="upcomingEmpty">
+              <span class="material-symbols-outlined text-[48px] text-slate-300">event_available</span>
+              <h3 class="font-bold text-sm mt-3 mb-1">No upcoming sessions</h3>
+              <p class="text-xs text-slate2">New accepted requests will appear here.</p>
             </div>
           </section>
 
+          <!-- Divider -->
+          <div class="flex items-center gap-4 py-2">
+            <div class="flex-1 h-px" style="background:linear-gradient(90deg, transparent, rgba(197,160,89,0.4), transparent);"></div>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest"
+                 style="background:linear-gradient(135deg, #FBF6ED 0%, #fff 100%);border:1.5px solid rgba(197,160,89,0.35);color:#A07D3A;">
+              <span class="material-symbols-outlined text-[14px]">arrow_downward</span> Older sessions below
+            </div>
+            <div class="flex-1 h-px" style="background:linear-gradient(90deg, transparent, rgba(197,160,89,0.4), transparent);"></div>
+          </div>
+
           <!-- PAST CONSULTATIONS -->
           <section>
-            <div class="section-header mt-2">
-              <div class="sh-icon"><span class="material-symbols-outlined">history</span></div>
-              <h2>Past Consultations</h2>
-              <span class="sh-count" id="pastCount">0</span>
+            <div class="bg-white rounded-2xl shadow-card border border-slate-100 mb-4 px-5 py-4">
+              <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">history</span>
+                </div>
+                <div class="flex-1">
+                  <h2 class="font-bold text-[17px] flex items-center gap-2">
+                    Past Consultations
+                    <span class="bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full text-[11px] font-bold" id="pastCount">0</span>
+                  </h2>
+                  <p class="text-xs text-slate2 mt-1">Completed, cancelled, rejected, and rescheduled history.</p>
+                </div>
+              </div>
             </div>
 
-            <div class="result-bar mt-3 mb-3">
-              <span>Showing <strong id="resultCount">0</strong> of <strong id="totalCount">0</strong> past sessions</span>
-              <span id="activeFilterLabel" class="text-secondary">All history</span>
+            <div class="flex items-center justify-between text-xs text-slate2 mb-3 px-1">
+              <span>Showing <strong class="text-navy" id="resultCount">0</strong> of <strong class="text-navy" id="totalCount">0</strong> past sessions</span>
+              <span id="activeFilterLabel">All history</span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="historyGrid"></div>
-            <div class="empty-state hidden" id="emptyState">
-              <span class="material-symbols-outlined">history</span>
-              <h3 class="text-sm font-bold text-primary m-0 mb-1">No past consultations found</h3>
-              <p class="text-xs m-0">Try adjusting your search or filter.</p>
+            <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden divide-y divide-slate-100" id="historyGrid"></div>
+
+            <div class="hidden text-center py-10" id="emptyState">
+              <span class="material-symbols-outlined text-[48px] text-slate-300">history</span>
+              <h3 class="font-bold text-sm mt-3 mb-1">No past consultations found</h3>
+              <p class="text-xs text-slate2">Try adjusting your search or filter.</p>
             </div>
           </section>
 
@@ -311,817 +205,694 @@
       <div id="lawyerFooterPlaceholder"></div>
     </div>
   </div>
+</div>
 
-  <!-- View modal -->
-  <div class="lp-modal-overlay" id="viewModal">
-    <div class="lp-modal" style="max-width:680px;">
-      <button class="lp-modal-close" onclick="closeView()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header info">
-        <div class="lp-modal-icon info"><span class="material-symbols-outlined" id="vIcon">gavel</span></div>
-        <div>
-          <h3 class="lp-modal-title" id="vTitle">Consultation Details</h3>
-          <p class="lp-modal-subtitle" id="vSubtitle">—</p>
-        </div>
+<!-- ============ VIEW MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[200] items-center justify-center p-5 overflow-y-auto"
+     id="viewModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[700px] max-h-[calc(100vh-40px)] overflow-y-auto shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeView()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">gavel</span>
       </div>
-      <div class="lp-modal-body" id="vBody" style="max-height:64vh;overflow-y:auto;"></div>
-      <div class="lp-modal-footer" id="vFooter">
-        <button type="button" class="lp-btn lp-btn-outline" onclick="closeView()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Cancel upcoming modal -->
-  <div class="lp-modal-overlay" id="cancelUpcomingModal" style="z-index:210;">
-    <div class="lp-modal" style="max-width:520px;">
-      <button class="lp-modal-close" onclick="closeCancelUpcoming()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header danger">
-        <div class="lp-modal-icon danger"><span class="material-symbols-outlined">event_busy</span></div>
-        <div>
-          <h3 class="lp-modal-title">Cancel Appointment</h3>
-          <p class="lp-modal-subtitle" id="cancelUpSubtitle">An apology note is required.</p>
-        </div>
-      </div>
-      <div class="lp-modal-body">
-        <div class="lp-warning-box danger" style="margin-bottom:16px;">
-          <strong>Important:</strong> The client will be fully refunded and notified. Please provide a short apology note explaining the situation.
-        </div>
-        <div class="lp-modal-field" style="margin-bottom:0;">
-          <label>Apology note to client <span class="req">*</span></label>
-          <textarea id="cancelUpNote" class="lp-input" rows="4" placeholder="e.g., I'm truly sorry, but an emergency court hearing came up at the same time..."></textarea>
-          <p class="field-error" id="cancelUpNoteErr">Please provide an apology note.</p>
-        </div>
-      </div>
-      <div class="lp-modal-footer">
-        <button class="lp-btn lp-btn-outline" onclick="closeCancelUpcoming()">Back</button>
-        <button class="lp-btn lp-btn-danger" onclick="confirmCancelUpcoming()">
-          <span class="material-symbols-outlined text-[18px]">cancel</span> Confirm Cancellation
-        </button>
+      <div>
+        <h3 class="text-[17px] font-bold" id="vTitle">Consultation Details</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="vSubtitle">—</p>
       </div>
     </div>
+    <div class="px-6 pt-5 pb-2" id="vBody" style="max-height:64vh;overflow-y:auto"></div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end" id="vFooter"></div>
   </div>
+</div>
 
-  <script src="js/lawyer-partials.js"></script>
-  <script src="js/swipe-nav.js"></script>
+<!-- ============ CANCEL UPCOMING MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="cancelUpcomingModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[520px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeCancelUpcoming()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-red-50 text-red-700 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">event_busy</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Cancel Appointment</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="cancelUpSubtitle">An apology note is required.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="bg-red-50 border-l-4 border-red-600 text-red-900 text-[12.5px] rounded-lg px-3.5 py-3 mb-4">
+        <strong>Important:</strong> Client will be fully refunded. Please provide a short apology note.
+      </div>
+      <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Apology note to client <span class="text-red-600">*</span></label>
+      <textarea id="cancelUpNote" rows="4" placeholder="e.g., Emergency court hearing came up..."
+                class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+      <p class="field-error text-[11.5px] text-red-600 mt-1" id="cancelUpNoteErr">Please provide an apology note.</p>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeCancelUpcoming()">Back</button>
+      <button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-red-100" onclick="confirmCancelUpcoming()">
+        <span class="material-symbols-outlined text-[18px]">cancel</span> Confirm Cancellation
+      </button>
+    </div>
+  </div>
+</div>
 
-  <script>
-    /* ============================================================
-       UPCOMING
-       ============================================================ */
-    var UPCOMING = [
-      { id:201, clientName:'Farhana Ahmed', clientInitials:'FA', clientPhone:'+880 1711-444444', clientEmail:'farhana@example.com',
-        matterType:'Property Dispute', service:'Legal Consultation', mode:'Online Video Call',
-        scheduledDate:'2026-09-14', scheduledTime:'16:30', duration:45,
-        caseSummary:'Verifying a title deed for a plot in Gazipur. Need confirmation before purchase.',
-        existingCase:false, files:[{name:'Title_Deed.pdf',size:'2.3 MB'}],
-        fee:3500, platformCharge:150, requestedAt:'2026-09-10T11:00:00',
-        status:'accepted',
-        userNotes:[{text:'I have already paid the token money — really need a quick review.', at:'2026-09-11T09:00:00'}],
-        lawyerNotesSent:[{text:'Please have the title deed and mutation certificate ready for the call.', at:'2026-09-11T10:00:00'}],
-        meetingLink:'https://meet.google.com/xyz-abc-def',
-        lawyerNote:'Please have the title deed and mutation certificate ready for the call.',
-        feedback:null },
+<!-- ============ RESCHEDULE MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="rescheduleModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[540px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeReschedule()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">event_repeat</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Reschedule Consultation</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="reschSubtitle">Propose a new date and time.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="grid grid-cols-2 gap-3 mb-3.5">
+        <div>
+          <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">New Date <span class="text-red-600">*</span></label>
+          <input type="date" id="reschDate" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <p class="field-error text-[11.5px] text-red-600 mt-1" id="reschDateErr">Please choose a date.</p>
+        </div>
+        <div>
+          <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">New Time <span class="text-red-600">*</span></label>
+          <input type="time" id="reschTime" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <p class="field-error text-[11.5px] text-red-600 mt-1" id="reschTimeErr">Please choose a time.</p>
+        </div>
+      </div>
+      <div id="reschLinkField" class="mb-3.5">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+          New Meeting Link <span class="text-slate-400 font-normal text-[11px] normal-case tracking-normal ml-1">(optional)</span>
+        </label>
+        <div class="flex gap-2 mb-2">
+          <button type="button" id="btnMeet" onclick="setLinkProvider('meet')"
+                  class="flex-1 px-3 py-2 rounded-lg border-[1.5px] border-slate-200 text-[12.5px] font-semibold text-slate2 hover:border-gold transition-colors inline-flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">videocam</span> Google Meet
+          </button>
+          <button type="button" id="btnZoom" onclick="setLinkProvider('zoom')"
+                  class="flex-1 px-3 py-2 rounded-lg border-[1.5px] border-slate-200 text-[12.5px] font-semibold text-slate2 hover:border-gold transition-colors inline-flex items-center justify-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">videocam</span> Zoom
+          </button>
+        </div>
+        <input type="url" id="reschLink" placeholder="https://meet.google.com/xyz-abc-def"
+               class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+        <p class="text-[11px] text-slate-400 mt-1.5">
+          Leave blank to keep the previous meeting link. If filled, it <strong>replaces</strong> the old one.
+        </p>
+      </div>
+      <div>
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+          Reason for Reschedule <span class="text-red-600">*</span>
+        </label>
+        <textarea id="reschNote" rows="3" placeholder="e.g., A court hearing came up at the same time..."
+                  class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="reschNoteErr">Please provide a reason.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeReschedule()">Back</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="confirmReschedule()">
+        <span class="material-symbols-outlined text-[18px]">event_repeat</span> Send Proposal
+      </button>
+    </div>
+  </div>
+</div>
 
-      { id:202, clientName:'Rashed Karim', clientInitials:'RK', clientPhone:'+880 1711-333333', clientEmail:'rashed@example.com',
-        matterType:'Corporate Advisory', service:'Business Registration', mode:'Online Video Call',
-        scheduledDate:'2026-09-18', scheduledTime:'10:00', duration:45,
-        caseSummary:'Need help incorporating a private limited company and setting up RJSC filings.',
-        existingCase:false, files:[{name:'Business_Plan.pdf',size:'2.1 MB'},{name:'NID_Front.jpg',size:'245 KB'}],
-        fee:5000, platformCharge:150, requestedAt:'2026-09-12T09:15:00',
-        status:'accepted',
-        userNotes:[], lawyerNotesSent:[],
-        meetingLink:'https://meet.google.com/abc-defg-hij',
-        lawyerNote:null, feedback:null },
+<!-- ============ NOTES MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[220] items-center justify-center p-5 overflow-y-auto"
+     id="notesModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[600px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeNotesModal()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">forum</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Notes &amp; Communication</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="notesSubtitle">—</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <div id="notesThread" class="bg-offwhite rounded-xl px-3.5 pt-3.5 pb-1.5 border border-slate-100" style="min-height:180px;max-height:340px;overflow-y:auto"></div>
+      <div class="mt-4">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Send a note <span class="text-red-600">*</span></label>
+        <textarea id="notesInput" rows="3" placeholder="Ask for documents, share updates..."
+                  oninput="document.getElementById('notesInputErr').classList.remove('show'); this.classList.remove('invalid');"
+                  class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="notesInputErr">Please type a note before sending.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeNotesModal()">Close</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="sendNoteFromModal()">
+        <span class="material-symbols-outlined text-[18px]">send</span> Send Note
+      </button>
+    </div>
+  </div>
+</div>
 
-      { id:203, clientName:'Imran Hossain', clientInitials:'IH', clientPhone:'+880 1711-555555', clientEmail:'imran@example.com',
-        matterType:'Criminal Bail', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-09-20', scheduledTime:'14:00', duration:45,
-        caseSummary:'Anticipatory bail application for a business partner accused of financial fraud.',
-        existingCase:true, files:[{name:'FIR_Copy.pdf',size:'1.5 MB'}],
-        fee:5000, platformCharge:150, requestedAt:'2026-09-11T16:20:00',
-        status:'accepted',
-        userNotes:[], lawyerNotesSent:[],
-        meetingLink:null, lawyerNote:null, feedback:null }
-    ];
+<script src="js/data.js"></script>
+<script src="js/lawyer-partials.js"></script>
 
-    /* ============================================================
-       HISTORY
-       ============================================================ */
-    var HISTORY = [
-      { id:101, clientName:'Md. Rahat Hossain', clientInitials:'RH', clientPhone:'+880 1711-666666', clientEmail:'rahat@example.com',
-        matterType:'Property Dispute', service:'Legal Consultation', mode:'Online Video Call',
-        scheduledDate:'2026-09-12', scheduledTime:'16:30', duration:45,
-        caseSummary:'Title verification for land in Gazipur — buyer wanted confirmation before purchase.',
-        existingCase:false, files:[{name:'Title_Deed.pdf',size:'2.3 MB'}],
-        fee:3500, platformCharge:150, earned:3150,
-        requestedAt:'2026-09-08T10:00:00', status:'completed',
-        acceptedAt:'2026-09-08T14:20:00', completedAt:'2026-09-12T17:15:00',
-        userNotes:[{text:'Thank you so much for your time.', at:'2026-09-12T18:00:00'}],
-        lawyerNotesSent:[{text:'Please have the title deed ready.', at:'2026-09-08T14:30:00'}],
-        meetingLink:'https://meet.google.com/xyz-abc-def',
-        feedback:{decision:'Case resolved / advice provided', note:'Verified CS and RS records. Title chain is clean; mutation is up to date.', files:[{name:'Opinion_Letter.pdf',size:'320 KB'}], at:'2026-09-12T17:15:00'},
-        rating:5, review:'Extremely professional and explained everything clearly. Highly recommended.' },
+<script>
+  var UPCOMING = ADVOCATE_DATA.upcoming;
+  var HISTORY = ADVOCATE_DATA.history;
+  var currentFilter = 'all';
+  var searchTerm = '';
+  var cancelUpcomingTarget = null;
+  var rescheduleTarget = null;
+  var notesTargetId = null;
+  var linkProvider = null;
 
-      { id:102, clientName:'Farhana Ahmed', clientInitials:'FA', clientPhone:'+880 1711-777777', clientEmail:'farhana@example.com',
-        matterType:'Family Law — Mahr', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-09-05', scheduledTime:'11:00', duration:45,
-        caseSummary:'Needed advice on recovering Mahr after divorce.',
-        existingCase:false, files:[],
-        fee:3500, platformCharge:150, earned:3150,
-        requestedAt:'2026-09-01T09:00:00', status:'completed',
-        acceptedAt:'2026-09-01T12:00:00', completedAt:'2026-09-05T12:00:00',
-        userNotes:[], lawyerNotesSent:[], meetingLink:null,
-        feedback:{decision:'Partial resolution — further action needed', note:'Advised on Mahr recovery procedure. Prepared a draft demand notice.', files:[], at:'2026-09-05T12:00:00'},
-        rating:5, review:'Very professional and thorough. Explained every step.' },
-
-      { id:103, clientName:'Imran Hossain', clientInitials:'IH', clientPhone:'+880 1711-888888', clientEmail:'imran@example.com',
-        matterType:'Corporate — RJSC Filing', service:'Business Registration', mode:'Online Video Call',
-        scheduledDate:'2026-08-28', scheduledTime:'14:00', duration:45,
-        caseSummary:'Wanted help with registering a new private limited company.',
-        existingCase:false, files:[{name:'Business_Plan.pdf',size:'1.8 MB'}],
-        fee:5000, platformCharge:150, earned:4500,
-        requestedAt:'2026-08-24T16:00:00', status:'completed',
-        acceptedAt:'2026-08-25T10:00:00', completedAt:'2026-08-28T15:00:00',
-        userNotes:[], lawyerNotesSent:[{text:'Please bring the proposed company name options.', at:'2026-08-25T10:30:00'}],
-        meetingLink:null,
-        feedback:{decision:'Case resolved / advice provided', note:'Reviewed company structure and name availability.', files:[{name:'RJSC_Checklist.pdf',size:'180 KB'}], at:'2026-08-28T15:00:00'},
-        rating:4, review:'Helpful session. Would appreciate a follow-up email with the checklist.' },
-
-      { id:104, clientName:'Sabrina Akhter', clientInitials:'SA', clientPhone:'+880 1711-999999', clientEmail:'sabrina@example.com',
-        matterType:'Criminal Bail', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-09-25', scheduledTime:'15:30', duration:45,
-        caseSummary:'Sought advice on anticipatory bail for her brother.',
-        existingCase:true, files:[],
-        fee:5000, platformCharge:150, earned:0,
-        requestedAt:'2026-09-15T11:00:00', status:'rejected', rejectedAt:'2026-09-15T14:00:00',
-        rejectionReason:'Outside my practice area — I focus on corporate and property law.',
-        userNotes:[], lawyerNotesSent:[], meetingLink:null, feedback:null },
-
-      { id:105, clientName:'Tanvir Rahman', clientInitials:'TR', clientPhone:'+880 1711-101010', clientEmail:'tanvir@example.com',
-        matterType:'Corporate — Tax Advisory', service:'Tax Advisory', mode:'Online Video Call',
-        scheduledDate:'2026-08-14', scheduledTime:'10:00', duration:45,
-        caseSummary:'VAT registration for a new e-commerce startup.',
-        existingCase:false, files:[],
-        fee:3500, platformCharge:150, earned:1750,
-        requestedAt:'2026-08-10T09:30:00', status:'cancelled',
-        acceptedAt:'2026-08-10T11:00:00', cancelledAt:'2026-08-13T18:00:00',
-        cancelledReason:'Client cancelled — personal emergency.', refundPercent:50,
-        userNotes:[], lawyerNotesSent:[], meetingLink:null, feedback:null },
-
-      { id:106, clientName:'Nusrat Jahan', clientInitials:'NJ', clientPhone:'+880 1711-202020', clientEmail:'nusrat@example.com',
-        matterType:'Property Dispute', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-08-14', scheduledTime:'11:00', duration:45,
-        caseSummary:'Land partition dispute with relatives.',
-        existingCase:false, files:[],
-        fee:3500, platformCharge:150, earned:0,
-        requestedAt:'2026-08-05T10:00:00', status:'rescheduled',
-        acceptedAt:'2026-08-05T15:00:00', rescheduledAt:'2026-08-08T09:00:00',
-        rescheduleReason:'Supreme Court hearing scheduled at the same time.',
-        rescheduledTo:{date:'2026-08-14',time:'11:00'},
-        userNotes:[], lawyerNotesSent:[], meetingLink:null, feedback:null }
-    ];
-
-    /* ============================================================
-       STATE
-       ============================================================ */
-    var currentFilter = 'all';
-    var searchTerm = '';
-    var cancelUpcomingTarget = null;
-
-    /* ============================================================
-       HELPERS
-       ============================================================ */
-    function apptStart(r) { return new Date(r.scheduledDate + 'T' + r.scheduledTime + ':00'); }
-    function feedbackOpensAt(r) {
-      var d = apptStart(r);
-      d.setMinutes(d.getMinutes() + 1);
-      return d;
+  function apptStart(r) { return new Date(r.scheduledDate + 'T' + r.scheduledTime + ':00'); }
+  function feedbackOpensAt(r) { var d = apptStart(r); d.setMinutes(d.getMinutes() + 1); return d; }
+  function isStillUpcoming(r) { return new Date() < feedbackOpensAt(r); }
+  function isOnline(r) { return r.mode === 'Online Video Call'; }
+  function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }); }
+  function fmtDateShort(iso) { if (!iso) return '—'; var d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' }); }
+  function fmtTime(t) { if (!t) return '—'; var p = t.split(':'); var h = parseInt(p[0],10), m = p[1];
+    var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m + ' ' + ampm; }
+  function fmtRelTime(iso) {
+    if (!iso) return '';
+    var diff = Date.now() - new Date(iso).getTime();
+    var min = Math.floor(diff / 60000);
+    if (min < 60) return min + 'm ago';
+    var hr = Math.floor(min / 60);
+    if (hr < 24) return hr + 'h ago';
+    var d = Math.floor(hr / 24);
+    if (d < 30) return d + 'd ago';
+    return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  }
+  function fmtExactTime(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return d.toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+  }
+  function countdownTo(r) {
+    var ms = apptStart(r) - new Date();
+    if (ms < 0) return { label: 'Started', cls: 'red' };
+    var mins = Math.floor(ms / 60000);
+    var hrs = Math.floor(mins / 60);
+    var days = Math.floor(hrs / 24);
+    if (days === 0) {
+      if (hrs === 0) return { label: 'In ' + mins + ' min', cls: 'red' };
+      return { label: 'Today · ' + hrs + 'h', cls: 'green' };
     }
-    function isStillUpcoming(r) { return new Date() < feedbackOpensAt(r); }
-    function isOnline(r) { return r.mode === 'Online Video Call'; }
+    if (days === 1) return { label: 'Tomorrow', cls: 'green' };
+    return { label: 'In ' + days + ' days', cls: 'gold' };
+  }
+  function getStatusConfig(s) {
+    var map = {
+      upcoming: { label:'Upcoming', cls:'badge-blue' },
+      completed: { label:'Completed', cls:'badge-green' },
+      rejected: { label:'Rejected', cls:'badge-red' },
+      cancelled: { label:'Cancelled', cls:'badge-slate' },
+      rescheduled: { label:'Rescheduled', cls:'badge-purple' }
+    };
+    return map[s] || map.completed;
+  }
+  function modeBadgeHTML(r) {
+    return isOnline(r)
+      ? '<span class="mode-badge online"><span class="material-symbols-outlined">videocam</span> Online</span>'
+      : '<span class="mode-badge chamber"><span class="material-symbols-outlined">location_on</span> Chamber</span>';
+  }
+  function countdownPillHTML(cls, label) {
+    var colors = { green: 'bg-emerald-50 text-emerald-700', red: 'bg-red-50 text-red-700', gold: 'bg-gold-50 text-gold-dark' };
+    return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ' + (colors[cls] || colors.gold) + '">' +
+             '<span class="material-symbols-outlined text-[12px]">schedule</span>' + label + '</span>';
+  }
 
-    function fmtDate(iso) {
-      if (!iso) return '—';
-      var d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
-    }
-    function fmtDateShort(iso) {
-      if (!iso) return '—';
-      var d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
-    }
-    function fmtTime(t) {
-      if (!t) return '—';
-      var p = t.split(':'); var h = parseInt(p[0],10); var m = p[1];
-      var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
-      return h + ':' + m + ' ' + ampm;
-    }
-    function fmtRelTime(iso) {
-      if (!iso) return '';
-      var diff = Date.now() - new Date(iso).getTime();
-      var min = Math.floor(diff / 60000);
-      if (min < 60) return min + 'm ago';
-      var hr = Math.floor(min / 60);
-      if (hr < 24) return hr + 'h ago';
-      var d = Math.floor(hr / 24);
-      if (d < 30) return d + 'd ago';
-      return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
-    }
-    function countdownTo(r) {
-      var ms = apptStart(r) - new Date();
-      if (ms < 0) return { label: 'Started', cls: 'soon' };
-      var mins = Math.floor(ms / 60000);
-      var hrs = Math.floor(mins / 60);
-      var days = Math.floor(hrs / 24);
-      if (days === 0) {
-        if (hrs === 0) return { label: 'In ' + mins + ' min', cls: 'soon' };
-        return { label: 'Today · ' + hrs + 'h', cls: 'today' };
-      }
-      if (days === 1) return { label: 'Tomorrow', cls: 'today' };
-      return { label: 'In ' + days + ' days', cls: '' };
-    }
-    function getStatusConfig(s) {
-      var map = {
-        upcoming:    { label:'Upcoming',    cls:'status-upcoming' },
-        completed:   { label:'Completed',   cls:'status-completed' },
-        rejected:    { label:'Rejected',    cls:'status-rejected' },
-        cancelled:   { label:'Cancelled',   cls:'status-cancelled' },
-        rescheduled: { label:'Rescheduled', cls:'status-rescheduled' }
-      };
-      return map[s] || map.completed;
-    }
-    function modeBadgeHTML(r) {
-      return isOnline(r)
-        ? '<span class="mode-badge online"><span class="material-symbols-outlined">videocam</span> Online</span>'
-        : '<span class="mode-badge chamber"><span class="material-symbols-outlined">location_on</span> Chamber</span>';
-    }
+  function onSearchChange() {
+    searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    document.getElementById('searchClear').classList.toggle('hidden', !searchTerm);
+    render();
+  }
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    searchTerm = '';
+    document.getElementById('searchClear').classList.add('hidden');
+    render();
+  }
+  function matchesSearch(r) {
+    if (!searchTerm) return true;
+    var hay = [r.clientName, r.matterType, r.service, r.clientEmail, r.clientPhone].join(' ').toLowerCase();
+    return hay.indexOf(searchTerm) !== -1;
+  }
+  function setFilter(f, el) {
+    currentFilter = f;
+    document.querySelectorAll('#statusFilters .filter-tab').forEach(function (b) { b.classList.toggle('active', b === el); });
+    render();
+  }
 
-    /* ============================================================
-       SEARCH
-       ============================================================ */
-    function onSearchChange() {
-      searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-      document.getElementById('searchClear').classList.toggle('show', searchTerm.length > 0);
-      render();
+  function updateKPIs() {
+    document.getElementById('kpiUpcoming').textContent = UPCOMING.filter(isStillUpcoming).length;
+    document.getElementById('kpiCompleted').textContent = HISTORY.filter(function(h){return h.status==='completed';}).length;
+    var earned = HISTORY.reduce(function(s,h){return s + (h.earned||0);}, 0);
+    var rated = HISTORY.filter(function(h){return h.rating;});
+    var avg = rated.length ? (rated.reduce(function(s,h){return s+h.rating;},0)/rated.length).toFixed(1) : '—';
+    document.getElementById('kpiEarned').textContent = '৳' + earned.toLocaleString();
+    document.getElementById('kpiRating').textContent = avg;
+  }
+  function updateCounts() {
+    document.getElementById('cntAll').textContent = HISTORY.length;
+    document.getElementById('cntCompleted').textContent = HISTORY.filter(function(h){return h.status==='completed';}).length;
+    document.getElementById('cntRejected').textContent = HISTORY.filter(function(h){return h.status==='rejected';}).length;
+    document.getElementById('cntCancelled').textContent = HISTORY.filter(function(h){return h.status==='cancelled';}).length;
+    document.getElementById('cntResched').textContent = HISTORY.filter(function(h){return h.status==='rescheduled';}).length;
+  }
+
+  function render() {
+    updateKPIs(); updateCounts();
+    renderUpcoming(); renderPast();
+  }
+
+  function renderUpcoming() {
+    var grid = document.getElementById('upcomingGrid');
+    var empty = document.getElementById('upcomingEmpty');
+    var count = document.getElementById('upcomingCount');
+    var list = UPCOMING.filter(function (r) {
+      if (!isStillUpcoming(r)) return false;
+      return matchesSearch(r);
+    });
+    list.sort(function (a, b) { return apptStart(a) - apptStart(b); });
+    count.textContent = list.length;
+    if (list.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    grid.innerHTML = list.map(upcomingCardHTML).join('');
+  }
+
+  function upcomingCardHTML(r) {
+    var cd = countdownTo(r);
+    var online = isOnline(r);
+    var nearTime = (apptStart(r) - new Date()) <= 15 * 60 * 1000;
+    var isToday = cd.cls === 'green';
+    var bandBg = isToday ? 'bg-gradient-to-r from-emerald-900 to-emerald-700' : 'bg-gradient-to-r from-navy to-navy-800';
+    var timeBg = isToday ? 'bg-white text-emerald-700' : 'bg-gold text-navy';
+    var joinBtn = '';
+    if (online && r.meetingLink) {
+      joinBtn = '<a href="' + r.meetingLink + '" target="_blank" class="' + (nearTime ? 'bg-gold text-white' : 'border border-slate-200 text-navy hover:bg-offwhite') + ' px-3.5 py-2 rounded-lg text-[12px] font-semibold inline-flex items-center gap-1.5 transition-colors">' +
+                  '<span class="material-symbols-outlined text-[16px]">' + (nearTime ? 'video_call' : 'videocam') + '</span> ' + (nearTime ? 'Join Now' : 'Meet Link') + '</a>';
     }
-    function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      searchTerm = '';
-      document.getElementById('searchClear').classList.remove('show');
-      render();
-    }
-    function matchesSearch(r) {
-      if (!searchTerm) return true;
-      var hay = [r.clientName, r.matterType, r.service, r.clientEmail, r.clientPhone].join(' ').toLowerCase();
-      return hay.indexOf(searchTerm) !== -1;
-    }
+    var notesCount = (r.userNotes || []).length + (r.lawyerNotesSent || []).length;
+    var notesBtn = '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openNotesModal(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">forum</span> Notes' + (notesCount > 0 ? ' (' + notesCount + ')' : '') + '</button>';
 
-    /* ============================================================
-       KPIs + COUNTS
-       ============================================================ */
-    function updateKPIs() {
-      document.getElementById('kpiUpcoming').textContent = UPCOMING.filter(isStillUpcoming).length;
-      document.getElementById('kpiCompleted').textContent = HISTORY.filter(function(h){return h.status==='completed';}).length;
-      var earned = HISTORY.reduce(function(s,h){return s + (h.earned||0);}, 0);
-      var rated = HISTORY.filter(function(h){return h.rating;});
-      var avg = rated.length ? (rated.reduce(function(s,h){return s+h.rating;},0)/rated.length).toFixed(1) : '—';
-      document.getElementById('kpiEarned').textContent = '৳' + earned.toLocaleString();
-      document.getElementById('kpiRating').textContent = avg;
-    }
-    function updateCounts() {
-      document.getElementById('cntAll').textContent       = HISTORY.length;
-      document.getElementById('cntCompleted').textContent = HISTORY.filter(function(h){return h.status==='completed';}).length;
-      document.getElementById('cntRejected').textContent  = HISTORY.filter(function(h){return h.status==='rejected';}).length;
-      document.getElementById('cntCancelled').textContent = HISTORY.filter(function(h){return h.status==='cancelled';}).length;
-      document.getElementById('cntResched').textContent   = HISTORY.filter(function(h){return h.status==='rescheduled';}).length;
-    }
-    function setFilter(f, el) {
-      currentFilter = f;
-      document.querySelectorAll('.flt-pill').forEach(function (b) { b.classList.toggle('active', b === el); });
-      render();
-    }
-
-    /* ============================================================
-       RENDER
-       ============================================================ */
-    function render() {
-      updateKPIs();
-      updateCounts();
-      renderUpcoming();
-      renderPast();
-    }
-
-    function renderUpcoming() {
-      var grid = document.getElementById('upcomingGrid');
-      var empty = document.getElementById('upcomingEmpty');
-      var count = document.getElementById('upcomingCount');
-      if (!grid) return;
-
-      var list = UPCOMING.filter(function (r) {
-        if (!isStillUpcoming(r)) return false;
-        return matchesSearch(r);
-      });
-
-      list.sort(function (a, b) { return apptStart(a) - apptStart(b); });
-      count.textContent = list.length;
-
-      if (list.length === 0) {
-        grid.innerHTML = '';
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-      grid.innerHTML = list.map(upcomingCardHTML).join('');
-    }
-
-    function upcomingCardHTML(r) {
-      var cd = countdownTo(r);
-      var isToday = cd.cls === 'today';
-      var online = isOnline(r);
-      var nearTime = (apptStart(r) - new Date()) <= 15 * 60 * 1000;
-
-      var joinBtn = '';
-      if (online && r.meetingLink) {
-        joinBtn = '<a href="' + r.meetingLink + '" target="_blank" class="lp-btn ' + (nearTime ? 'lp-btn-primary' : 'lp-btn-outline') + '" style="font-size:12px;padding:8px 14px;text-decoration:none;">' +
-                    '<span class="material-symbols-outlined text-[16px]">' + (nearTime ? 'video_call' : 'videocam') + '</span> ' + (nearTime ? 'Join Now' : 'Meet Link') +
-                  '</a>';
-      }
-
-      var cardCls = 'upcoming-card';
-      if (online) cardCls += ' is-online';
-      if (isToday) cardCls += ' is-today';
-
-      return '<div class="' + cardCls + '">' +
+    return '<div class="bg-white rounded-2xl shadow-card border overflow-hidden ' + (online ? 'border-blue-200' : 'border-gold/30') + '">' +
+      '<div class="flex items-center justify-between gap-3 px-5 py-3 text-white ' + bandBg + '">' +
+        '<div class="flex items-center gap-2 text-sm font-bold"><span class="material-symbols-outlined text-[16px] ' + (isToday ? 'text-emerald-200' : 'text-gold') + '">event</span>' + fmtDateShort(r.scheduledDate) + '</div>' +
+        '<div class="flex items-center gap-1.5 px-3 py-1 rounded-full font-extrabold text-[14px] ' + timeBg + '"><span class="material-symbols-outlined text-[14px]">schedule</span>' + fmtTime(r.scheduledTime) + '</div>' +
+      '</div>' +
+      '<div class="p-5 flex flex-col gap-3.5">' +
         '<div class="flex items-start justify-between gap-3">' +
           '<div class="flex items-center gap-3 min-w-0">' +
-            '<div class="avatar-badge">' + r.clientInitials + '</div>' +
-            '<div class="min-w-0">' +
-              '<p class="text-sm font-bold text-primary m-0 truncate">' + r.clientName + '</p>' +
-              '<p class="text-xs text-secondary m-0 truncate">' + r.matterType + '</p>' +
-            '</div>' +
+            '<div class="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-[14px] flex-shrink-0 bg-gradient-to-br from-gold to-[#d4af5e] text-white">' + r.clientInitials + '</div>' +
+            '<div class="min-w-0"><p class="text-sm font-bold truncate">' + r.clientName + '</p><p class="text-xs text-slate2 truncate">' + r.matterType + '</p></div>' +
           '</div>' +
-          '<div class="flex flex-col items-end gap-1.5 flex-shrink-0">' +
-            '<span class="countdown-pill ' + cd.cls + '">' +
-              '<span class="material-symbols-outlined" style="font-size:12px;">schedule</span>' + cd.label +
-            '</span>' +
-            modeBadgeHTML(r) +
-          '</div>' +
+          '<div class="flex flex-col items-end gap-1.5 flex-shrink-0">' + countdownPillHTML(cd.cls, cd.label) + modeBadgeHTML(r) + '</div>' +
         '</div>' +
-
-        '<div class="grid grid-cols-2 gap-2.5">' +
-          '<div class="info-row" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:#94a3b8;">event</span>' + fmtDateShort(r.scheduledDate) + '</div>' +
-          '<div class="info-row" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:#94a3b8;">schedule</span>' + fmtTime(r.scheduledTime) + '</div>' +
-          '<div class="info-row" style="grid-column: 1 / -1;display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:' + (online ? '#1e40af' : '#92400e') + ';">' + (online ? 'videocam' : 'location_on') + '</span>' +
-            '<span style="font-weight:600;color:#041627;">' + r.mode + '</span></div>' +
-          '<div class="info-row" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:#94a3b8;">payments</span><strong class="text-[#a07d3a]">৳' + r.fee.toLocaleString() + '</strong></div>' +
+        '<div class="grid grid-cols-2 gap-2.5 text-[12.5px] text-slate2">' +
+          '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] ' + (online ? 'text-blue-700' : 'text-amber-700') + '">' + (online ? 'videocam' : 'location_on') + '</span>' + r.mode + '</div>' +
+          '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">payments</span><strong class="text-gold-dark">৳' + r.fee.toLocaleString() + '</strong></div>' +
         '</div>' +
-
-        '<p class="text-xs text-secondary m-0 leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + r.caseSummary + '</p>' +
-
-        '<div class="flex items-center justify-between pt-3 border-t border-[#f5e8c8] flex-wrap gap-2">' +
-          '<span class="text-[11px] text-secondary">Booked ' + fmtRelTime(r.requestedAt) + '</span>' +
+        '<p class="text-xs text-slate2 leading-relaxed line-clamp-2">' + r.caseSummary + '</p>' +
+        '<div class="flex items-center justify-between pt-3 border-t border-slate-100 flex-wrap gap-2">' +
+          '<span class="text-[11px] text-slate2">Booked ' + fmtRelTime(r.requestedAt) + '</span>' +
           '<div class="flex gap-2 flex-wrap justify-end">' +
-            '<button type="button" class="lp-btn lp-btn-outline" style="font-size:12px;padding:8px 14px;" onclick="openUpcomingView(' + r.id + ')">' +
-              '<span class="material-symbols-outlined text-[16px]">visibility</span> View' +
-            '</button>' +
-            '<button type="button" class="lp-btn lp-btn-danger" style="font-size:12px;padding:8px 14px;" onclick="openCancelUpcoming(' + r.id + ')">' +
-              '<span class="material-symbols-outlined text-[16px]">event_busy</span> Cancel' +
-            '</button>' +
+            '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openUpcomingView(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
+            notesBtn +
+            '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openReschedule(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">event_repeat</span> Reschedule</button>' +
+            '<button class="px-3.5 py-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-[12px] font-semibold inline-flex items-center gap-1.5" onclick="openCancelUpcoming(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">event_busy</span> Cancel</button>' +
             joinBtn +
           '</div>' +
         '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function renderPast() {
+    var grid = document.getElementById('historyGrid');
+    var empty = document.getElementById('emptyState');
+    var list = HISTORY.filter(function (h) {
+      var passFilter = currentFilter === 'all' || h.status === currentFilter;
+      return passFilter && matchesSearch(h);
+    });
+    var sortBy = document.getElementById('sortSelect').value;
+    list.sort(function (a, b) {
+      if (sortBy === 'date-asc') return apptStart(a) - apptStart(b);
+      return apptStart(b) - apptStart(a);
+    });
+    document.getElementById('resultCount').textContent = list.length;
+    document.getElementById('totalCount').textContent = HISTORY.length;
+    document.getElementById('pastCount').textContent = HISTORY.length;
+
+    var filterLabelMap = { all:'All history', completed:'Completed', rejected:'Rejected', cancelled:'Cancelled', rescheduled:'Rescheduled' };
+    var sortLabel = sortBy === 'date-asc' ? 'date (oldest first)' : 'date (most recent first)';
+    document.getElementById('activeFilterLabel').textContent = (filterLabelMap[currentFilter] || 'All') + ' · ' + sortLabel;
+
+    if (list.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    grid.innerHTML = list.map(pastRowHTML).join('');
+  }
+
+  function pastRowHTML(h) {
+    var s = getStatusConfig(h.status);
+    var online = isOnline(h);
+    var stars = '';
+    if (h.rating) for (var i = 1; i <= 5; i++) stars += '<span class="material-symbols-outlined text-[13px]" style="' + (i<=h.rating?'color:#C5A059;font-variation-settings:\'FILL\' 1;':'color:#E2E8F0;') + '">star</span>';
+
+    var earned = '';
+    if (h.status === 'completed' && h.earned) earned = '<span class="text-[13px] font-extrabold text-gold-dark">+ ৳' + h.earned.toLocaleString() + '</span>';
+    else if (h.status === 'cancelled' && h.earned) earned = '<span class="text-[13px] font-extrabold text-gold-dark">+ ৳' + h.earned.toLocaleString() + '</span>';
+    else earned = '<span class="text-[12px] text-slate2">No earnings</span>';
+
+    return '<div class="flex flex-wrap items-center gap-3 sm:gap-4 p-4 hover:bg-offwhite transition-colors">' +
+      '<div class="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-[13px] flex-shrink-0 bg-gradient-to-br from-gold to-[#d4af5e] text-white">' + h.clientInitials + '</div>' +
+      '<div class="flex-1 min-w-[140px]">' +
+        '<p class="text-sm font-bold m-0 truncate">' + h.clientName + '</p>' +
+        '<p class="text-xs text-slate2 m-0 truncate">' + h.matterType + '</p>' +
+      '</div>' +
+      '<div class="hidden sm:flex flex-col min-w-[130px]">' +
+        '<p class="text-[13px] font-semibold m-0">' + fmtDate(h.scheduledDate) + '</p>' +
+        '<p class="text-[11.5px] text-slate2 m-0">' + fmtTime(h.scheduledTime) + '</p>' +
+      '</div>' +
+      '<div class="hidden md:flex items-center min-w-[100px]">' + modeBadgeHTML(h) + '</div>' +
+      '<div class="hidden lg:flex items-center gap-0.5 min-w-[90px]">' + (stars ? stars : '<span class="text-[11px] text-slate2 italic">No rating</span>') + '</div>' +
+      '<div class="flex items-center min-w-[130px]"><span class="badge-pill ' + s.cls + '"><span class="dot"></span>' + s.label + '</span></div>' +
+      '<div class="hidden lg:block text-right min-w-[100px]">' + earned + '</div>' +
+      '<button class="px-3.5 py-1.5 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-white hover:border-gold transition-colors inline-flex items-center gap-1.5 flex-shrink-0" onclick="openPastView(' + h.id + ')">' +
+        '<span class="material-symbols-outlined text-[16px]">visibility</span> View' +
+      '</button>' +
+    '</div>';
+  }
+
+  function openModal(id) { var m = document.getElementById(id); m.classList.remove('hidden'); m.classList.add('show'); document.body.style.overflow = 'hidden'; }
+  function closeModal(id) { var m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('show'); document.body.style.overflow = ''; }
+
+  function openUpcomingView(id) {
+    var r = UPCOMING.find(function (x) { return x.id === id; }); if (!r) return;
+    var online = isOnline(r);
+    document.getElementById('vTitle').textContent = r.clientName;
+    document.getElementById('vSubtitle').textContent = r.matterType + ' · ' + r.service + ' · Upcoming';
+    var cd = countdownTo(r);
+    var nearTime = (apptStart(r) - new Date()) <= 15 * 60 * 1000;
+
+    var thread = [];
+    (r.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
+    (r.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
+    thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
+    var threadHtml = thread.length ? thread.map(function (n) {
+      return '<div class="note-bubble ' + n.from + '">' + (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text + '<span class="meta">' + fmtExactTime(n.at) + '</span></div>';
+    }).join('') : '<p class="text-xs text-slate2 italic">No notes yet.</p>';
+
+    var filesHtml = r.files.length ? r.files.map(function (f) {
+      return '<div class="flex items-center gap-3 p-2.5 rounded-lg bg-offwhite border border-slate-100 mb-2"><span class="material-symbols-outlined text-[16px] text-gold-dark">description</span><div><div class="text-[12.5px] font-semibold">' + f.name + '</div><div class="text-[11px] text-slate-400">' + f.size + '</div></div></div>';
+    }).join('') : '<p class="text-xs text-slate2 italic">No documents attached.</p>';
+
+    var body =
+      '<div class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl mb-4 bg-gradient-to-r from-navy to-navy-800 text-white">' +
+        '<div class="flex items-center gap-2 text-sm font-bold"><span class="material-symbols-outlined text-[16px] text-gold">event</span>' + fmtDate(r.scheduledDate) + '</div>' +
+        '<div class="flex items-center gap-1.5 px-3 py-1 rounded-full font-extrabold bg-gold text-navy text-[14px]"><span class="material-symbols-outlined text-[14px]">schedule</span>' + fmtTime(r.scheduledTime) + '</div>' +
+      '</div>' +
+      '<div class="flex items-center justify-between gap-3 mb-4 flex-wrap">' +
+        '<div class="flex items-center gap-2 flex-wrap"><span class="badge-pill badge-blue"><span class="dot"></span>Upcoming</span>' + modeBadgeHTML(r) + '</div>' +
+        countdownPillHTML(cd.cls, cd.label) +
+      '</div>' +
+      '<div class="grid grid-cols-2 gap-3 mb-4">' +
+        '<div class="bg-offwhite p-3 rounded-lg border border-slate-100"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Client</p><p class="text-[13px] font-semibold">' + r.clientName + '</p><p class="text-[11.5px] text-slate2">' + r.clientPhone + '</p></div>' +
+        '<div class="bg-offwhite p-3 rounded-lg border border-slate-100"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Mode</p><p class="text-[13px] font-semibold">' + r.mode + '</p><p class="text-[11.5px] text-slate2">' + (online ? 'Video call' : 'In-person') + '</p></div>' +
+      '</div>' +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100 mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Case Summary</p><p class="text-[13px] leading-relaxed">' + r.caseSummary + '</p></div>' +
+      (online && r.meetingLink
+        ? '<div class="bg-blue-50 border border-blue-200 p-3 rounded-lg mb-4 flex items-center gap-3"><span class="material-symbols-outlined text-blue-700">videocam</span><div class="flex-1 min-w-0"><p class="text-xs font-bold text-blue-700 mb-0.5">Meeting Link</p><a href="' + r.meetingLink + '" target="_blank" class="text-xs text-blue-700 break-all">' + r.meetingLink + '</a></div>' + (nearTime ? '<a href="' + r.meetingLink + '" target="_blank" class="bg-gold text-white px-3.5 py-2 rounded-lg text-[12px] font-semibold" style="text-decoration:none">Join Now</a>' : '') + '</div>'
+        : (!online
+          ? '<div class="bg-gold-50 border border-amber-300 p-3 rounded-lg mb-4 flex items-center gap-3"><span class="material-symbols-outlined text-amber-700">location_on</span><div class="flex-1"><p class="text-xs font-bold text-amber-800 mb-0.5">Chamber Visit</p><p class="text-xs text-amber-800">In-person session at your chamber.</p></div></div>'
+          : '')) +
+      '<div class="mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-2">Client Files</p>' + filesHtml + '</div>' +
+      '<div class="mb-4"><div class="flex justify-between items-center mb-2"><p class="text-[10.5px] font-bold text-slate2 uppercase">Notes &amp; Messages</p><button class="text-[11.5px] font-bold text-gold-dark hover:underline" onclick="closeView(); openNotesModal(' + r.id + ')"><span class="material-symbols-outlined text-[14px] align-middle">add_comment</span> Open Full Thread</button></div><div>' + threadHtml + '</div></div>' +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100">' +
+        '<div class="flex justify-between text-[12.5px]"><span class="text-slate2">Consultation Fee</span><span class="font-semibold">৳' + r.fee.toLocaleString() + '</span></div>' +
+        '<div class="flex justify-between text-[12.5px] mt-1.5"><span class="text-slate2">You will earn</span><span class="font-extrabold text-gold-dark">৳' + Math.round(r.fee * 0.9).toLocaleString() + '</span></div>' +
       '</div>';
-    }
 
-    function renderPast() {
-      var grid = document.getElementById('historyGrid');
-      var empty = document.getElementById('emptyState');
-      if (!grid) return;
+    document.getElementById('vBody').innerHTML = body;
+    document.getElementById('vFooter').innerHTML =
+      '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeView()">Close</button>' +
+      '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite inline-flex items-center gap-2" onclick="closeView(); openNotesModal(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">forum</span> Notes</button>' +
+      '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite inline-flex items-center gap-2" onclick="closeView(); openReschedule(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">event_repeat</span> Reschedule</button>' +
+      '<button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="closeView(); openCancelUpcoming(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">event_busy</span> Cancel</button>' +
+      (online && r.meetingLink ? '<a href="' + r.meetingLink + '" target="_blank" class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" style="text-decoration:none"><span class="material-symbols-outlined text-[18px]">video_call</span> Join Meet</a>' : '');
+    openModal('viewModal');
+  }
 
-      var list = HISTORY.filter(function (h) {
-        var passFilter = currentFilter === 'all' || h.status === currentFilter;
-        var passSearch = matchesSearch(h);
-        return passFilter && passSearch;
-      });
+  function openPastView(id) {
+    var h = HISTORY.find(function (x) { return x.id === id; }); if (!h) return;
+    var s = getStatusConfig(h.status);
+    var online = isOnline(h);
+    document.getElementById('vTitle').textContent = h.clientName;
+    document.getElementById('vSubtitle').textContent = h.matterType + ' · ' + h.service;
 
-      var sortBy = document.getElementById('sortSelect').value;
-      list.sort(function (a, b) {
-        if (sortBy === 'date-asc') return apptStart(a) - apptStart(b);
-        return apptStart(b) - apptStart(a);
-      });
+    var events = [];
+    events.push({ icon:'fiber_new', cls:'gold', title:'Request submitted', sub: fmtExactTime(h.requestedAt) });
+    if (h.acceptedAt) events.push({ icon:'event_available', cls:'blue', title:'Accepted by you', sub: fmtExactTime(h.acceptedAt) });
+    if (h.rescheduledAt) events.push({ icon:'event_repeat', cls:'purple', title:'Rescheduled', sub: fmtExactTime(h.rescheduledAt) });
+    if (h.rejectedAt) events.push({ icon:'cancel', cls:'red', title:'Rejected', sub: fmtExactTime(h.rejectedAt) });
+    if (h.cancelledAt) events.push({ icon:'block', cls:'red', title:'Cancelled', sub: fmtExactTime(h.cancelledAt) });
+    if (h.completedAt) events.push({ icon:'done_all', cls:'green', title:'Session completed', sub: fmtExactTime(h.completedAt) });
 
-      document.getElementById('resultCount').textContent = list.length;
-      document.getElementById('totalCount').textContent = HISTORY.length;
-      document.getElementById('pastCount').textContent = HISTORY.length;
+    var dotColors = {
+      gold: 'bg-gold-50 border-gold text-gold-dark',
+      blue: 'bg-blue-50 border-blue-500 text-blue-700',
+      green: 'bg-emerald-50 border-emerald-500 text-emerald-700',
+      red: 'bg-red-50 border-red-500 text-red-700',
+      purple: 'bg-violet-50 border-violet-500 text-violet-700'
+    };
 
-      var filterLabelMap = {
-        all: 'All history', completed: 'Completed', rejected: 'Rejected',
-        cancelled: 'Cancelled', rescheduled: 'Rescheduled'
-      };
-      var sortLabel = sortBy === 'date-asc' ? 'date (oldest first)' : 'date (most recent first)';
-      document.getElementById('activeFilterLabel').textContent =
-        (filterLabelMap[currentFilter] || 'All') + ' · ' + sortLabel;
-
-      if (list.length === 0) {
-        grid.innerHTML = '';
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-      grid.innerHTML = list.map(pastCardHTML).join('');
-    }
-
-    function pastCardHTML(h) {
-      var s = getStatusConfig(h.status);
-      var online = isOnline(h);
-      var stars = '';
-      if (h.rating) for (var i = 1; i <= 5; i++) stars += '<span class="material-symbols-outlined" style="' + (i<=h.rating?'':'color:#e2e8f0;') + '">star</span>';
-
-      var earnedOrStatus;
-      if (h.status === 'completed') earnedOrStatus = '<span class="text-[12px] font-extrabold text-[#a07d3a]">+ ৳' + h.earned.toLocaleString() + '</span>';
-      else if (h.status === 'cancelled' && h.earned) earnedOrStatus = '<span class="text-[12px] font-extrabold text-[#a07d3a]">+ ৳' + h.earned.toLocaleString() + '</span>';
-      else earnedOrStatus = '<span class="text-[12px] text-secondary">No earnings</span>';
-
-      return '<div class="hist-card">' +
-        '<div class="flex items-start justify-between gap-3">' +
-          '<div class="flex items-center gap-3 min-w-0">' +
-            '<div class="avatar-badge">' + h.clientInitials + '</div>' +
-            '<div class="min-w-0">' +
-              '<p class="text-sm font-bold text-primary m-0 truncate">' + h.clientName + '</p>' +
-              '<p class="text-xs text-secondary m-0 truncate">' + h.matterType + '</p>' +
+    var timelineHtml =
+      '<div class="relative py-1">' +
+        '<div class="absolute left-5 top-3 bottom-3 w-0.5 rounded" style="background:linear-gradient(180deg,#C5A059 0%,#e2e8f0 60%,#e2e8f0 100%)"></div>' +
+        events.map(function (e) {
+          return '<div class="flex gap-4 relative pb-5 last:pb-0">' +
+            '<div class="relative flex-shrink-0 w-[42px] flex justify-center">' +
+              '<div class="w-[42px] h-[42px] rounded-full flex items-center justify-center border-[2.5px] z-[2] bg-white shadow-[0_0_0_4px_#fff] ' + dotColors[e.cls] + '">' +
+                '<span class="material-symbols-outlined text-[18px]">' + e.icon + '</span></div>' +
             '</div>' +
-          '</div>' +
-          '<div class="flex flex-col items-end gap-1.5 flex-shrink-0">' +
-            '<span class="status-badge ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' +
-            modeBadgeHTML(h) +
-          '</div>' +
-        '</div>' +
-        '<div class="grid grid-cols-2 gap-2.5">' +
-          '<div class="info-row" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:#94a3b8;">event</span>' + fmtDate(h.scheduledDate) + '</div>' +
-          '<div class="info-row" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:#94a3b8;">schedule</span>' + fmtTime(h.scheduledTime) + '</div>' +
-          '<div class="info-row" style="grid-column: 1 / -1;display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:' + (online ? '#1e40af' : '#92400e') + ';">' + (online ? 'videocam' : 'location_on') + '</span>' +
-            '<span style="font-weight:600;color:#041627;">' + h.mode + '</span></div>' +
-          '<div class="info-row" style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:#64748b;">' +
-            '<span class="material-symbols-outlined" style="font-size:16px;color:#94a3b8;">payments</span>৳' + h.fee.toLocaleString() + '</div>' +
-        '</div>' +
-        (h.rating
-          ? '<div class="flex items-center justify-between gap-2">' +
-              '<div class="star-row">' + stars + '</div>' +
-              '<span class="text-[11.5px] text-secondary truncate">"' +
-                (h.review.length > 40 ? h.review.substring(0,40) + '…' : h.review) + '"</span>' +
-            '</div>'
-          : '') +
-        '<div class="flex items-center justify-between pt-3 border-t border-[#eef1f4]">' +
-          '<span class="text-[11px] text-secondary">' +
-            (h.status === 'completed' ? 'Completed ' + fmtRelTime(h.completedAt) :
-             h.status === 'rejected' ? 'Rejected ' + fmtRelTime(h.rejectedAt) :
-             h.status === 'cancelled' ? 'Cancelled ' + fmtRelTime(h.cancelledAt) :
-             'Rescheduled ' + fmtRelTime(h.rescheduledAt)) +
-          '</span>' +
-          '<div class="flex items-center gap-3">' + earnedOrStatus +
-            '<button type="button" class="lp-btn lp-btn-outline" style="font-size:12px;padding:6px 14px;" onclick="openPastView(' + h.id + ')">' +
-              '<span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
-    }
-
-    /* ============================================================
-       VIEW MODAL — upcoming
-       ============================================================ */
-    function openUpcomingView(id) {
-      var r = UPCOMING.find(function (x) { return x.id === id; });
-      if (!r) return;
-      var online = isOnline(r);
-
-      document.getElementById('vTitle').textContent = r.clientName;
-      document.getElementById('vSubtitle').textContent = r.matterType + ' · ' + r.service + ' · Upcoming';
-
-      var cd = countdownTo(r);
-      var nearTime = (apptStart(r) - new Date()) <= 15 * 60 * 1000;
-
-      var thread = [];
-      (r.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
-      (r.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
-      thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
-      var threadHtml = thread.length
-        ? thread.map(function (n) {
-            return '<div class="note-bubble ' + n.from + '">' +
-                     (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text +
-                     '<span class="meta">' + fmtRelTime(n.at) + '</span></div>';
-          }).join('')
-        : '<p class="text-xs text-secondary italic m-0">No notes yet.</p>';
-
-      var filesHtml = r.files.length
-        ? r.files.map(function (f) {
-            return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #eef1f4;font-size:12.5px;margin-bottom:8px;">' +
-                     '<span class="material-symbols-outlined" style="font-size:18px;color:#a07d3a;">description</span>' +
-                     '<div><div style="font-weight:600;color:#041627;">' + f.name + '</div>' +
-                     '<div style="font-size:11px;color:#94a3b8;">' + f.size + '</div></div></div>';
-          }).join('')
-        : '<p style="font-size:12px;color:#64748b;font-style:italic;margin:0;">No documents attached.</p>';
-
-      var body =
-        '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;">' +
-          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
-            '<span class="status-badge status-upcoming"><span class="dot"></span>Upcoming</span>' +
-            modeBadgeHTML(r) +
-          '</div>' +
-          '<span class="countdown-pill ' + cd.cls + '"><span class="material-symbols-outlined" style="font-size:12px;">schedule</span>' + cd.label + '</span>' +
-        '</div>' +
-
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 4px;">Scheduled</p>' +
-            '<p style="font-size:13.5px;font-weight:600;color:#041627;margin:0;">' + fmtDate(r.scheduledDate) + '</p>' +
-            '<p style="font-size:12px;color:#64748b;margin:0;">' + fmtTime(r.scheduledTime) + ' · ' + r.mode + '</p></div>' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 4px;">Client</p>' +
-            '<p style="font-size:13.5px;font-weight:600;color:#041627;margin:0;">' + r.clientName + '</p>' +
-            '<p style="font-size:12px;color:#64748b;margin:0;">' + r.clientPhone + '</p></div>' +
-        '</div>' +
-
-        '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 6px;">Case Summary</p>' +
-          '<p style="font-size:13.5px;color:#041627;margin:0;line-height:1.6;">' + r.caseSummary + '</p></div>' +
-
-        (online && r.meetingLink
-          ? '<div style="background:#f0f9ff;border:1px solid #bae6fd;padding:12px;border-radius:12px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">' +
-              '<span class="material-symbols-outlined" style="color:#0369a1;">videocam</span>' +
-              '<div style="flex:1;min-width:0;"><p style="font-size:12px;font-weight:700;color:#0369a1;margin:0 0 2px;">Meeting Link</p>' +
-                '<a href="' + r.meetingLink + '" target="_blank" style="font-size:12px;color:#0369a1;word-break:break-all;">' + r.meetingLink + '</a>' +
-              '</div>' +
-              (nearTime ? '<a href="' + r.meetingLink + '" target="_blank" class="lp-btn lp-btn-primary" style="font-size:12px;padding:8px 14px;text-decoration:none;">Join Now</a>' : '') +
-            '</div>'
-          : '') +
-
-        (!online
-          ? '<div style="background:#fef3c7;border:1px solid #fcd34d;padding:12px;border-radius:12px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">' +
-              '<span class="material-symbols-outlined" style="color:#92400e;">location_on</span>' +
-              '<div style="flex:1;"><p style="font-size:12px;font-weight:700;color:#92400e;margin:0 0 2px;">Chamber Visit</p>' +
-                '<p style="font-size:12px;color:#78350f;margin:0;">This is an in-person session at your chamber.</p>' +
-              '</div>' +
-            '</div>'
-          : '') +
-
-        '<div style="margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 8px;">Client Files</p>' +
-          filesHtml +
-        '</div>' +
-
-        '<div style="margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 8px;">Notes &amp; Messages</p>' +
-          '<div>' + threadHtml + '</div>' +
-        '</div>' +
-
-        '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-          '<div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:#64748b;">Consultation Fee</span>' +
-            '<span style="font-size:13.5px;font-weight:600;color:#041627;">৳' + r.fee.toLocaleString() + '</span></div>' +
-          '<div style="display:flex;justify-content:space-between;margin-top:6px;"><span style="font-size:12px;color:#64748b;">You will earn</span>' +
-            '<span style="font-size:13.5px;font-weight:800;color:#a07d3a;">৳' + Math.round(r.fee * 0.9).toLocaleString() + '</span></div>' +
-        '</div>';
-
-      document.getElementById('vBody').innerHTML = body;
-
-      var footer = '<button type="button" class="lp-btn lp-btn-outline" onclick="closeView()">Close</button>' +
-                   '<button type="button" class="lp-btn lp-btn-danger" onclick="closeView(); openCancelUpcoming(' + r.id + ')">' +
-                     '<span class="material-symbols-outlined text-[18px]">event_busy</span> Cancel Appointment</button>' +
-                   (online && r.meetingLink
-                     ? '<a href="' + r.meetingLink + '" target="_blank" class="lp-btn lp-btn-primary" style="text-decoration:none;">' +
-                         '<span class="material-symbols-outlined text-[18px]">video_call</span> Join Meet</a>'
-                     : '');
-      document.getElementById('vFooter').innerHTML = footer;
-
-      document.getElementById('viewModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-
-    /* ============================================================
-       VIEW MODAL — past
-       ============================================================ */
-    function openPastView(id) {
-      var h = HISTORY.find(function (x) { return x.id === id; });
-      if (!h) return;
-      var s = getStatusConfig(h.status);
-      var online = isOnline(h);
-
-      document.getElementById('vTitle').textContent = h.clientName;
-      document.getElementById('vSubtitle').textContent = h.matterType + ' · ' + h.service;
-
-      var stepIndex = h.status === 'completed' ? 2 : 0;
-      var stepLabels = ['Requested','Accepted','Completed'];
-      var stepperHtml = '<div style="display:flex;align-items:center;margin:4px 0 18px;">' +
-        stepLabels.map(function (label, i) {
-          var cls = i < stepIndex ? 'done' : (i === stepIndex ? 'active' : '');
-          var line = i < stepLabels.length-1 ? '<div style="flex:1;height:2.5px;background:' + (i<stepIndex?'#041627':'#e2e8f0') + ';margin:0 2px;margin-bottom:22px;min-width:12px;border-radius:2px;"></div>' : '';
-          return '<div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;min-width:0;">' +
-                   '<div style="width:32px;height:32px;border-radius:50%;background:' + (cls==='done'?'#041627':(cls==='active'?'#C5A059':'#fff')) + ';border:2px solid ' + (cls==='done'?'#041627':(cls==='active'?'#C5A059':'#e2e8f0')) + ';color:' + (cls?'#fff':'#94a3b8') + ';display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;">' + (cls==='done'?'✓':(i+1)) + '</div>' +
-                   '<div style="font-size:9.5px;font-weight:700;text-transform:uppercase;color:' + (cls?'#041627':'#94a3b8') + ';text-align:center;white-space:nowrap;">' + label + '</div>' +
-                 '</div>' + line;
+            '<div class="flex-1 min-w-0 pt-1"><p class="text-[13.5px] font-bold">' + e.title + '</p><p class="text-[11.5px] text-slate2 mt-0.5 flex items-center gap-1.5"><span class="material-symbols-outlined text-[13px]">schedule</span>' + e.sub + '</p></div></div>';
         }).join('') + '</div>';
 
-      var filesHtml = h.files.length
-        ? h.files.map(function (f) {
-            return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;border:1px solid #eef1f4;font-size:12.5px;margin-bottom:8px;">' +
-                     '<span class="material-symbols-outlined" style="font-size:18px;color:#a07d3a;">description</span>' +
-                     '<div><div style="font-weight:600;color:#041627;">' + f.name + '</div>' +
-                     '<div style="font-size:11px;color:#94a3b8;">' + f.size + '</div></div></div>';
-          }).join('')
-        : '<p style="font-size:12px;color:#64748b;font-style:italic;margin:0;">No documents attached.</p>';
+    var filesHtml = h.files.length ? h.files.map(function (f) {
+      return '<div class="flex items-center gap-3 p-2.5 rounded-lg bg-offwhite border border-slate-100 mb-2"><span class="material-symbols-outlined text-[16px] text-gold-dark">description</span><div><div class="text-[12.5px] font-semibold">' + f.name + '</div><div class="text-[11px] text-slate-400">' + f.size + '</div></div></div>';
+    }).join('') : '<p class="text-xs text-slate2 italic">No documents.</p>';
 
-      var thread = [];
-      (h.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
-      (h.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
-      thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
-      var threadHtml = thread.length
-        ? thread.map(function (n) {
-            return '<div class="note-bubble ' + n.from + '">' +
-                     (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text +
-                     '<span class="meta">' + fmtRelTime(n.at) + '</span></div>';
-          }).join('')
-        : '<p style="font-size:12px;color:#64748b;font-style:italic;margin:0;">No notes.</p>';
+    var thread = [];
+    (h.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
+    (h.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
+    thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
+    var threadHtml = thread.length ? thread.map(function (n) {
+      return '<div class="note-bubble ' + n.from + '">' + (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text + '<span class="meta">' + fmtExactTime(n.at) + '</span></div>';
+    }).join('') : '<p class="text-xs text-slate2 italic">No notes.</p>';
 
-      var events = [];
-      events.push({ icon:'fiber_new', cls:'', title:'Request submitted', sub: fmtRelTime(h.requestedAt) });
-      if (h.acceptedAt) events.push({ icon:'event_available', cls:'blue', title:'Accepted', sub: fmtRelTime(h.acceptedAt) });
-      if (h.rejectedAt) events.push({ icon:'cancel', cls:'red', title:'Rejected', sub: fmtRelTime(h.rejectedAt) });
-      if (h.rescheduledAt) events.push({ icon:'event_repeat', cls:'blue', title:'Rescheduled', sub: fmtRelTime(h.rescheduledAt) });
-      if (h.cancelledAt) events.push({ icon:'block', cls:'red', title:'Cancelled', sub: fmtRelTime(h.cancelledAt) });
-      if (h.completedAt) events.push({ icon:'done_all', cls:'green', title:'Completed', sub: fmtRelTime(h.completedAt) });
-
-      var timelineHtml = events.map(function (e) {
-        return '<div class="h-tl-item"><span class="h-tl-dot ' + (e.cls||'') + '"></span>' +
-                 '<p style="font-size:13px;font-weight:700;color:#041627;margin:0;">' + e.title + '</p>' +
-                 '<p style="font-size:11.5px;color:#64748b;margin:2px 0 0;">' + e.sub + '</p></div>';
-      }).join('');
-
-      var feedbackHtml = '';
-      if (h.feedback) {
-        feedbackHtml =
-          '<div style="background:#f0fdf4;border-left:4px solid #22c55e;padding:14px 16px;border-radius:0 10px 10px 0;margin-bottom:16px;">' +
-            '<p style="font-size:11px;font-weight:700;color:#166534;text-transform:uppercase;margin:0 0 6px;">Your Feedback</p>' +
-            '<p style="font-size:13px;font-weight:800;color:#041627;margin:0 0 4px;">' + h.feedback.decision + '</p>' +
-            '<p style="font-size:13px;color:#14532d;margin:0;line-height:1.6;">' + h.feedback.note + '</p>' +
-          '</div>';
-      }
-
-      var reviewHtml = '';
-      if (h.rating) {
-        var stars = '';
-        for (var i = 1; i <= 5; i++) stars += '<span class="material-symbols-outlined" style="font-size:16px;' + (i<=h.rating?'color:#C5A059;font-variation-settings:\'FILL\' 1;':'color:#e2e8f0;') + '">star</span>';
-        reviewHtml = '<div style="background:#fffdf7;border:1px solid #f5e8c8;padding:14px;border-radius:12px;margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#a07d3a;text-transform:uppercase;margin:0 0 8px;">Client Feedback</p>' +
-          '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">' + stars +
-            '<span style="font-size:12px;font-weight:800;color:#041627;margin-left:6px;">' + h.rating + '.0</span></div>' +
-          '<p style="font-size:13px;color:#041627;margin:0;font-style:italic;">"' + h.review + '"</p>' +
-        '</div>';
-      }
-
-      var body =
-        '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;">' +
-          '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
-            '<span class="status-badge ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' +
-            modeBadgeHTML(h) +
-          '</div>' +
-          '<span style="font-size:12px;color:#64748b;">Booking #' + h.id + '</span>' +
-        '</div>' +
-        stepperHtml +
-        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 4px;">Scheduled</p>' +
-            '<p style="font-size:13.5px;font-weight:600;color:#041627;margin:0;">' + fmtDate(h.scheduledDate) + '</p>' +
-            '<p style="font-size:12px;color:#64748b;margin:0;">' + fmtTime(h.scheduledTime) + ' · ' + h.mode + '</p></div>' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 4px;">Client</p>' +
-            '<p style="font-size:13.5px;font-weight:600;color:#041627;margin:0;">' + h.clientName + '</p>' +
-            '<p style="font-size:12px;color:#64748b;margin:0;">' + h.clientPhone + '</p></div>' +
-        '</div>' +
-        '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 6px;">Case Summary</p>' +
-          '<p style="font-size:13.5px;color:#041627;margin:0;line-height:1.6;">' + h.caseSummary + '</p></div>' +
-        '<div style="margin-bottom:16px;"><p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 8px;">Client Files</p>' + filesHtml + '</div>' +
-        '<div style="margin-bottom:16px;"><p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 8px;">Notes</p>' + '<div>' + threadHtml + '</div></div>' +
-        reviewHtml + feedbackHtml +
-        (h.rejectionReason
-          ? '<div style="background:#fee2e2;border-left:4px solid #dc2626;padding:12px;border-radius:0 10px 10px 0;margin-bottom:16px;">' +
-              '<p style="font-size:11px;font-weight:700;color:#991b1b;margin:0 0 4px;">Rejection Reason</p>' +
-              '<p style="font-size:13px;color:#7f1d1d;margin:0;">' + h.rejectionReason + '</p></div>' : '') +
-        (h.cancelledReason
-          ? '<div style="background:#f3f4f6;border-left:4px solid #6b7280;padding:12px;border-radius:0 10px 10px 0;margin-bottom:16px;">' +
-              '<p style="font-size:11px;font-weight:700;color:#4b5563;margin:0 0 4px;">Cancellation</p>' +
-              '<p style="font-size:13px;color:#374151;margin:0;">' + h.cancelledReason + '</p></div>' : '') +
-        '<div style="margin-bottom:16px;"><p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 10px;">Timeline</p>' +
-          '<div class="h-tl">' + timelineHtml + '</div></div>' +
-        '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-          '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:#64748b;">Consultation Fee</span>' +
-            '<span style="font-size:13.5px;font-weight:600;color:#041627;">৳' + h.fee.toLocaleString() + '</span></div>' +
-          '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:#64748b;">Platform Charge</span>' +
-            '<span style="font-size:13.5px;color:#64748b;">৳150</span></div>' +
-          (h.refundPercent ? '<div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-size:12px;color:#64748b;">Partial refund</span>' +
-            '<span style="font-size:13.5px;color:#dc2626;">- ' + h.refundPercent + '%</span></div>' : '') +
-          '<div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #eef1f4;">' +
-            '<span style="font-size:12px;font-weight:700;color:#041627;">You earned</span>' +
-            '<span style="font-size:15px;font-weight:800;color:#a07d3a;">৳' + h.earned.toLocaleString() + '</span></div>' +
-        '</div>';
-
-      document.getElementById('vBody').innerHTML = body;
-      document.getElementById('vFooter').innerHTML =
-        '<button type="button" class="lp-btn lp-btn-outline" onclick="closeView()">Close</button>';
-
-      document.getElementById('viewModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
+    var reviewHtml = '';
+    if (h.rating) {
+      var stars = '';
+      for (var i = 1; i <= 5; i++) stars += '<span class="material-symbols-outlined text-[15px]" style="' + (i<=h.rating?'color:#C5A059;font-variation-settings:\'FILL\' 1;':'color:#E2E8F0;') + '">star</span>';
+      reviewHtml = '<div class="bg-gold-50 border border-gold/30 p-3.5 rounded-xl mb-4"><p class="text-[10.5px] font-bold text-gold-dark uppercase mb-2">Client Feedback</p><div class="flex items-center gap-1 mb-1.5">' + stars + '<span class="text-[12px] font-extrabold ml-1.5">' + h.rating + '.0</span></div><p class="text-[13px] italic">"' + h.review + '"</p></div>';
     }
 
-    function closeView() {
-      document.getElementById('viewModal').classList.remove('show');
-      document.body.style.overflow = '';
+    var feedbackHtml = '';
+    if (h.feedback) {
+      feedbackHtml = '<div class="bg-emerald-50 border-l-4 border-emerald-500 p-3.5 rounded-r-xl mb-4"><p class="text-[11px] font-bold text-emerald-700 uppercase mb-1">Your Feedback</p><p class="text-[13px] font-extrabold mb-1">' + h.feedback.decision + '</p><p class="text-[13px] text-emerald-900 leading-relaxed">' + h.feedback.note + '</p></div>';
     }
 
-    /* ============================================================
-       CANCEL UPCOMING
-       ============================================================ */
-    function openCancelUpcoming(id) {
-      var r = UPCOMING.find(function (x) { return x.id === id; });
-      if (!r) return;
-      cancelUpcomingTarget = r;
-      document.getElementById('cancelUpSubtitle').textContent = r.clientName + ' · ' + fmtDate(r.scheduledDate) + ' at ' + fmtTime(r.scheduledTime);
-      document.getElementById('cancelUpNote').value = '';
-      document.getElementById('cancelUpNoteErr').classList.remove('show');
-      document.getElementById('cancelUpNote').classList.remove('invalid');
-      document.getElementById('cancelUpcomingModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeCancelUpcoming() {
-      document.getElementById('cancelUpcomingModal').classList.remove('show');
-      document.body.style.overflow = '';
-      cancelUpcomingTarget = null;
-    }
-    function confirmCancelUpcoming() {
-      if (!cancelUpcomingTarget) return;
-      var note = document.getElementById('cancelUpNote').value.trim();
-      if (!note) {
-        document.getElementById('cancelUpNote').classList.add('invalid');
-        document.getElementById('cancelUpNoteErr').classList.add('show');
-        return;
-      }
-      var moved = {
-        id: cancelUpcomingTarget.id + 1000,
-        clientName: cancelUpcomingTarget.clientName,
-        clientInitials: cancelUpcomingTarget.clientInitials,
-        clientPhone: cancelUpcomingTarget.clientPhone,
-        clientEmail: cancelUpcomingTarget.clientEmail,
-        matterType: cancelUpcomingTarget.matterType,
-        service: cancelUpcomingTarget.service,
-        mode: cancelUpcomingTarget.mode,
-        scheduledDate: cancelUpcomingTarget.scheduledDate,
-        scheduledTime: cancelUpcomingTarget.scheduledTime,
-        caseSummary: cancelUpcomingTarget.caseSummary,
-        files: cancelUpcomingTarget.files,
-        fee: cancelUpcomingTarget.fee,
-        earned: 0,
-        requestedAt: cancelUpcomingTarget.requestedAt,
-        status: 'cancelled',
-        cancelledAt: new Date().toISOString(),
-        cancelledReason: note,
-        userNotes: [], lawyerNotesSent: [], meetingLink: null, feedback: null
-      };
-      HISTORY.push(moved);
-      var idx = UPCOMING.indexOf(cancelUpcomingTarget);
-      if (idx > -1) UPCOMING.splice(idx, 1);
-      closeCancelUpcoming();
-      render();
-      alert('Appointment cancelled. Client refunded and notified.');
-    }
+    var body =
+      '<div class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl mb-4 bg-gradient-to-r from-navy to-navy-800 text-white">' +
+        '<div class="flex items-center gap-2 text-sm font-bold"><span class="material-symbols-outlined text-[16px] text-gold">event</span>' + fmtDate(h.scheduledDate) + '</div>' +
+        '<div class="flex items-center gap-1.5 px-3 py-1 rounded-full font-extrabold bg-gold text-navy text-[14px]"><span class="material-symbols-outlined text-[14px]">schedule</span>' + fmtTime(h.scheduledTime) + '</div>' +
+      '</div>' +
+      '<div class="flex items-center justify-between gap-3 mb-4 flex-wrap">' +
+        '<div class="flex items-center gap-2 flex-wrap"><span class="badge-pill ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' + modeBadgeHTML(h) + '</div>' +
+        '<span class="text-xs text-slate2">Booking #' + h.id + '</span>' +
+      '</div>' +
+      '<div class="grid grid-cols-2 gap-3 mb-4">' +
+        '<div class="bg-offwhite p-3 rounded-lg border border-slate-100"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Client</p><p class="text-[13px] font-semibold">' + h.clientName + '</p></div>' +
+        '<div class="bg-offwhite p-3 rounded-lg border border-slate-100"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Mode</p><p class="text-[13px] font-semibold">' + h.mode + '</p></div>' +
+      '</div>' +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100 mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Case Summary</p><p class="text-[13px] leading-relaxed">' + h.caseSummary + '</p></div>' +
+      '<div class="bg-white p-4 pt-4 pb-1 rounded-xl border border-slate-100 mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-3.5 flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-gold-dark">timeline</span> Session Timeline</p>' + timelineHtml + '</div>' +
+      '<div class="mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-2">Client Files</p>' + filesHtml + '</div>' +
+      '<div class="mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-2">Notes</p><div>' + threadHtml + '</div></div>' +
+      reviewHtml + feedbackHtml +
+      (h.rejectionReason ? '<div class="bg-red-50 border-l-4 border-red-600 p-3 rounded-r-xl mb-4"><p class="text-[11px] font-bold text-red-700 mb-1">Rejection Reason</p><p class="text-[13px] text-red-900">' + h.rejectionReason + '</p></div>' : '') +
+      (h.cancelledReason ? '<div class="bg-slate-100 border-l-4 border-slate-500 p-3 rounded-r-xl mb-4"><p class="text-[11px] font-bold text-slate-600 mb-1">Cancellation</p><p class="text-[13px] text-slate-700">' + h.cancelledReason + '</p></div>' : '') +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100">' +
+        '<div class="flex justify-between text-[12.5px] mb-1.5"><span class="text-slate2">Consultation Fee</span><span class="font-semibold">৳' + h.fee.toLocaleString() + '</span></div>' +
+        '<div class="flex justify-between text-[12.5px] mb-1.5"><span class="text-slate2">Platform Charge</span><span class="text-slate2">৳150</span></div>' +
+        (h.refundPercent ? '<div class="flex justify-between text-[12.5px] mb-1.5"><span class="text-slate2">Partial refund</span><span class="text-red-600">- ' + h.refundPercent + '%</span></div>' : '') +
+        '<div class="flex justify-between pt-2 border-t border-slate-100"><span class="text-[12.5px] font-bold">You earned</span><span class="text-[15px] font-extrabold text-gold-dark">৳' + h.earned.toLocaleString() + '</span></div>' +
+      '</div>';
 
-    /* ============================================================
-       CLOSE HANDLERS
-       ============================================================ */
-    document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape') return;
-      if (document.getElementById('cancelUpcomingModal').classList.contains('show')) return closeCancelUpcoming();
-      if (document.getElementById('viewModal').classList.contains('show')) return closeView();
+    document.getElementById('vBody').innerHTML = body;
+    document.getElementById('vFooter').innerHTML = '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeView()">Close</button>';
+    openModal('viewModal');
+  }
+  function closeView() { closeModal('viewModal'); }
+
+  function openCancelUpcoming(id) {
+    var r = UPCOMING.find(function (x) { return x.id === id; }); if (!r) return;
+    cancelUpcomingTarget = r;
+    document.getElementById('cancelUpSubtitle').textContent = r.clientName + ' · ' + fmtDate(r.scheduledDate) + ' at ' + fmtTime(r.scheduledTime);
+    document.getElementById('cancelUpNote').value = '';
+    document.getElementById('cancelUpNoteErr').classList.remove('show');
+    document.getElementById('cancelUpNote').classList.remove('invalid');
+    openModal('cancelUpcomingModal');
+  }
+  function closeCancelUpcoming() { closeModal('cancelUpcomingModal'); cancelUpcomingTarget = null; }
+  function confirmCancelUpcoming() {
+    if (!cancelUpcomingTarget) return;
+    var note = document.getElementById('cancelUpNote').value.trim();
+    if (!note) { document.getElementById('cancelUpNote').classList.add('invalid'); document.getElementById('cancelUpNoteErr').classList.add('show'); return; }
+    var moved = Object.assign({}, cancelUpcomingTarget);
+    moved.id = cancelUpcomingTarget.id + 1000;
+    moved.status = 'cancelled';
+    moved.cancelledAt = new Date().toISOString();
+    moved.cancelledReason = note;
+    moved.earned = 0;
+    HISTORY.push(moved);
+    var idx = UPCOMING.indexOf(cancelUpcomingTarget);
+    if (idx > -1) UPCOMING.splice(idx, 1);
+    closeCancelUpcoming(); render();
+    alert('Appointment cancelled.');
+  }
+
+  function openReschedule(id) {
+    var r = UPCOMING.find(function (x) { return x.id === id; }); if (!r) return;
+    rescheduleTarget = r;
+    linkProvider = null;
+    document.getElementById('reschSubtitle').textContent = r.clientName + ' · ' + r.matterType;
+    document.getElementById('reschDate').value = r.scheduledDate;
+    document.getElementById('reschTime').value = r.scheduledTime;
+    document.getElementById('reschLink').value = '';
+    document.getElementById('reschNote').value = '';
+    var needLink = isOnline(r);
+    document.getElementById('reschLinkField').style.display = needLink ? 'block' : 'none';
+    document.getElementById('btnMeet').classList.remove('provider-active');
+    document.getElementById('btnZoom').classList.remove('provider-active');
+    ['reschDateErr','reschTimeErr','reschNoteErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
+    ['reschDate','reschTime','reschLink','reschNote'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
+    openModal('rescheduleModal');
+  }
+  function closeReschedule() { closeModal('rescheduleModal'); rescheduleTarget = null; }
+
+  function setLinkProvider(provider) {
+    linkProvider = provider;
+    var meet = document.getElementById('btnMeet');
+    var zoom = document.getElementById('btnZoom');
+    var input = document.getElementById('reschLink');
+    meet.classList.remove('provider-active');
+    zoom.classList.remove('provider-active');
+    meet.style.cssText = 'border:1.5px solid #e2e8f0;color:#64748B;';
+    zoom.style.cssText = 'border:1.5px solid #e2e8f0;color:#64748B;';
+    if (provider === 'meet') {
+      meet.style.cssText = 'border:1.5px solid #C5A059;color:#A07D3A;background:#FBF6ED;';
+      input.placeholder = 'https://meet.google.com/xyz-abc-def';
+      input.focus();
+    } else if (provider === 'zoom') {
+      zoom.style.cssText = 'border:1.5px solid #C5A059;color:#A07D3A;background:#FBF6ED;';
+      input.placeholder = 'https://zoom.us/j/1234567890';
+      input.focus();
+    }
+  }
+
+  function confirmReschedule() {
+    if (!rescheduleTarget) return;
+    var d = document.getElementById('reschDate').value;
+    var t = document.getElementById('reschTime').value;
+    var link = document.getElementById('reschLink').value.trim();
+    var note = document.getElementById('reschNote').value.trim();
+
+    var ok = true;
+    if (!d) { document.getElementById('reschDate').classList.add('invalid'); document.getElementById('reschDateErr').classList.add('show'); ok = false; }
+    if (!t) { document.getElementById('reschTime').classList.add('invalid'); document.getElementById('reschTimeErr').classList.add('show'); ok = false; }
+    if (!note) { document.getElementById('reschNote').classList.add('invalid'); document.getElementById('reschNoteErr').classList.add('show'); ok = false; }
+    if (!ok) return;
+
+    rescheduleTarget.status = 'rescheduled';
+    rescheduleTarget.rescheduleReason = note;
+    rescheduleTarget.rescheduledTo = { date: d, time: t };
+    if (link) rescheduleTarget.meetingLink = link;
+
+    closeReschedule(); render();
+    alert('Reschedule proposal sent!');
+  }
+
+  function openNotesModal(id) {
+    var r = UPCOMING.find(function (x) { return x.id === id; }); if (!r) return;
+    notesTargetId = id;
+    document.getElementById('notesSubtitle').textContent = r.clientName + ' · ' + r.matterType;
+    var thread = [];
+    (r.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
+    (r.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
+    thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
+    var threadHtml = thread.length ? thread.map(function (n) {
+      return '<div class="note-bubble ' + n.from + '">' + (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text + '<span class="meta">' + fmtExactTime(n.at) + '</span></div>';
+    }).join('') : '<p class="text-[12.5px] text-slate2 italic mb-2">No messages yet. Start the conversation below.</p>';
+    document.getElementById('notesThread').innerHTML = threadHtml;
+    document.getElementById('notesInput').value = '';
+    document.getElementById('notesInputErr').classList.remove('show');
+    document.getElementById('notesInput').classList.remove('invalid');
+    openModal('notesModal');
+    setTimeout(function () {
+      var th = document.getElementById('notesThread');
+      if (th) th.scrollTop = th.scrollHeight;
+    }, 80);
+  }
+  function closeNotesModal() { closeModal('notesModal'); notesTargetId = null; }
+  function sendNoteFromModal() {
+    if (!notesTargetId) return;
+    var r = UPCOMING.find(function (x) { return x.id === notesTargetId; }); if (!r) return;
+    var text = document.getElementById('notesInput').value.trim();
+    if (!text) { document.getElementById('notesInput').classList.add('invalid'); document.getElementById('notesInputErr').classList.add('show'); return; }
+    r.lawyerNotesSent = r.lawyerNotesSent || [];
+    r.lawyerNotesSent.push({ text: text, at: new Date().toISOString() });
+    var id = notesTargetId;
+    closeNotesModal(); render(); openNotesModal(id);
+  }
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!document.getElementById('notesModal').classList.contains('hidden')) return closeNotesModal();
+    if (!document.getElementById('rescheduleModal').classList.contains('hidden')) return closeReschedule();
+    if (!document.getElementById('cancelUpcomingModal').classList.contains('hidden')) return closeCancelUpcoming();
+    if (!document.getElementById('viewModal').classList.contains('hidden')) return closeView();
+  });
+  document.querySelectorAll('.lp-modal-overlay').forEach(function (o) {
+    o.addEventListener('click', function (e) {
+      if (e.target !== o) return;
+      if (o.id === 'viewModal') closeView();
+      if (o.id === 'cancelUpcomingModal') closeCancelUpcoming();
+      if (o.id === 'rescheduleModal') closeReschedule();
+      if (o.id === 'notesModal') closeNotesModal();
     });
-    document.querySelectorAll('.lp-modal-overlay').forEach(function (o) {
-      o.addEventListener('click', function (e) {
-        if (e.target !== o) return;
-        if (o.id === 'viewModal') closeView();
-        if (o.id === 'cancelUpcomingModal') closeCancelUpcoming();
-      });
-    });
+  });
 
-    /* ============================================================
-       INIT
-       ============================================================ */
-    document.addEventListener('DOMContentLoaded', function () {
-      render();
-      setInterval(render, 30 * 1000);
-    });
-  </script>
+  document.addEventListener('DOMContentLoaded', function () {
+    render();
+    setInterval(render, 30 * 1000);
+  });
+</script>
+
 </body>
 </html>

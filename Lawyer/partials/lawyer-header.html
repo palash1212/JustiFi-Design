@@ -1,40 +1,70 @@
-<header class="lawyer-header" id="lawyerHeader">
-  <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" aria-label="Toggle menu">
-    <span class="material-symbols-outlined">menu</span>
+<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between
+               px-6 flex-shrink-0 sticky top-0 z-30" id="lawyerHeader">
+
+  <button class="md:hidden text-navy hover:bg-slate-100 p-1.5 rounded-lg" id="mobileSidebarToggle" aria-label="Toggle menu">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </svg>
   </button>
 
-  <div class="header-greeting">
-    <h1 class="greet-title" id="headerGreetTitle">Welcome back</h1>
-    <p class="greet-sub" id="headerGreetSub">Manage your services from one place</p>
+  <div class="hidden sm:flex items-center gap-3 w-96 bg-offwhite border border-slate-200 rounded-lg px-3 py-2">
+    <svg class="w-4 h-4 text-slate2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <input class="bg-transparent text-sm outline-none w-full placeholder:text-slate2"
+           placeholder="Search cases, clients, bookings...">
   </div>
 
-  <div class="header-right">
-    <span class="status-pill" id="headerStatusPill">
-      <span class="dot"></span> Online
-    </span>
+  <div class="flex items-center gap-5 ml-auto">
 
-    <button class="header-icon-btn" aria-label="Notifications">
-      <span class="material-symbols-outlined">notifications</span>
-      <span class="notif-dot"></span>
+    <div class="hidden md:flex items-center gap-2 text-sm">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+      <span class="text-slate2">Available</span>
+    </div>
+
+    <button class="relative text-slate2 hover:text-navy transition-colors">
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 01-3.46 0"/>
+      </svg>
+      <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
     </button>
 
-    <div class="header-avatar-wrap">
-      <div class="header-avatar" id="headerAvatar">AS</div>
-      <div class="header-dropdown" id="headerDropdown">
-        <a href="lawyer-profile.html">
-          <span class="material-symbols-outlined">person</span> My Profile
+    <div class="h-6 w-px bg-slate-200"></div>
+
+    <div class="relative">
+      <button id="headerAvatar"
+              class="w-9 h-9 rounded-full bg-gold flex items-center justify-center
+                     text-navy font-bold text-sm hover:opacity-90 transition-opacity">
+        AS
+      </button>
+      <div id="headerDropdown"
+           class="hidden absolute top-12 right-0 bg-white border border-slate-200
+                  rounded-xl shadow-xl min-w-[210px] py-1.5 z-50">
+        <a href="lawyer-profile.html"
+           class="flex items-center gap-3 px-4 py-2.5 text-sm text-navy hover:bg-offwhite transition-colors">
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          My Profile
         </a>
-        <a href="service-settings.html">
-          <span class="material-symbols-outlined">tune</span> Service Settings
+        <a href="service-settings.html"
+           class="flex items-center gap-3 px-4 py-2.5 text-sm text-navy hover:bg-offwhite transition-colors">
+          <svg class="w-4 h-4 text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Service Settings
         </a>
-        <a href="#">
-          <span class="material-symbols-outlined">help</span> Help &amp; Support
-        </a>
-        <div class="header-dd-divider"></div>
-        <a href="#" onclick="lawyerLogout(); return false;">
-          <span class="material-symbols-outlined">logout</span> Logout
+        <div class="h-px bg-slate-200 my-1"></div>
+        <a href="#" onclick="lawyerLogout(); return false;"
+           class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+          Logout
         </a>
       </div>
     </div>
+
   </div>
 </header>

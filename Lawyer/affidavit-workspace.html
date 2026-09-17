@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Affidavit Workspace — JustiFi Advocate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: {
+      navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' },
+      gold: { DEFAULT:'#C5A059', 50:'#FBF6ED', dark:'#A07D3A' },
+      slate2:'#64748B', offwhite:'#F8FAFC'
+    },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/lawyer.css" />
+
+<style>
+  /* ---------- Note bubbles ---------- */
+  .note-bubble { padding:10px 12px; border-radius:12px; font-size:12.5px; line-height:1.55; margin-bottom:8px; max-width:92%; }
+  .note-bubble.user { background:#F1F5F9; color:#334155; border-bottom-left-radius:4px; }
+  .note-bubble.lawyer { background:#FBF6ED; color:#78350F; border:1px solid #F5E8C8; border-bottom-right-radius:4px; margin-left:auto; }
+  .note-bubble .meta { display:block; font-size:10.5px; font-weight:600; color:#94A3B8; margin-top:4px; }
+  .note-bubble.lawyer .meta { color:#A07D3A; }
+
+  /* ---------- Status badge pills ---------- */
+  .badge-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.2px; }
+  .badge-pill .dot { width:6px; height:6px; border-radius:50%; }
+  .badge-gold   { background:#FBF6ED; color:#A07D3A; }  .badge-gold   .dot { background:#C5A059; }
+  .badge-blue   { background:#EBF5FF; color:#1E40AF; }  .badge-blue   .dot { background:#3B82F6; }
+  .badge-purple { background:#F5F3FF; color:#6D28D9; }  .badge-purple .dot { background:#8B5CF6; }
+  .badge-green  { background:#ECFDF5; color:#047857; }  .badge-green  .dot { background:#10B981; }
+  .badge-red    { background:#FEF2F2; color:#B91C1C; }  .badge-red    .dot { background:#EF4444; }
+  .badge-slate  { background:#F1F5F9; color:#64748B; }  .badge-slate  .dot { background:#94A3B8; }
+
+  /* ---------- Priority chip ---------- */
+  .priority-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:.3px; }
+  .priority-chip.high { background:#FEF2F2; color:#B91C1C; border:1px solid #FECACA; }
+  .priority-chip.normal { background:#F1F5F9; color:#64748B; border:1px solid #E2E8F0; }
+
+  /* ---------- Paper-style draft preview ---------- */
+  .draft-paper {
+    background: #FFFDF8;
+    border: 1px solid #E7E2D4;
+    border-radius: 10px;
+    padding: 22px 20px;
+    font-family: Georgia, "Times New Roman", serif;
+    color: #1c1a15;
+    max-height: 460px;
+    overflow-y: auto;
+    line-height: 1.7;
+    font-size: 13px;
+  }
+  .draft-paper .doc-title { text-align:center; font-weight:700; font-size:15px; letter-spacing:.05em; text-transform:uppercase; margin-bottom:2px; }
+  .draft-paper .doc-sub { text-align:center; font-size:11px; color:#6b6455; font-style:italic; margin-bottom:16px; }
+  .draft-paper .doc-body p { text-align:justify; margin-bottom:12px; }
+  .draft-paper .doc-sign { display:flex; justify-content:space-between; gap:20px; margin-top:26px; flex-wrap:wrap; }
+  .draft-paper .doc-sign .block { text-align:center; min-width:130px; }
+  .draft-paper .doc-sign .line { border-top:1px solid #443f33; width:130px; margin:0 auto 4px; }
+  .draft-paper .doc-sign .lbl { font-size:10.5px; color:#6b6455; }
+
+  /* ---------- Draft upload zone ---------- */
+  .draft-upload-zone {
+    border: 2px dashed #CBD5E1;
+    border-radius: 12px;
+    padding: 26px 20px;
+    text-align: center;
+    background: #F8FAFC;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .draft-upload-zone:hover { border-color: #C5A059; background: #FBF6ED; }
+  .draft-upload-zone.dragover { border-color: #C5A059; background: #FBF6ED; transform: scale(1.01); }
+  .draft-upload-zone .icon { font-size: 40px; color: #C5A059; display: block; margin-bottom: 6px; }
+
+  /* ---------- Draft file preview ---------- */
+  .draft-file-preview {
+    background: #FFFDF8;
+    border: 1px solid #E7E2D4;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .draft-file-preview img {
+    max-width: 100%;
+    max-height: 420px;
+    border-radius: 8px;
+    border: 1px solid #E7E2D4;
+    display: block;
+    margin: 0 auto;
+  }
+  .draft-file-preview iframe {
+    width: 100%;
+    height: 420px;
+    border: 1px solid #E7E2D4;
+    border-radius: 8px;
+  }
+  .draft-file-preview .file-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 8px;
+    margin-top: 10px;
+    font-size: 12px;
+    border: 1px solid #E7E2D4;
+  }
+
+  /* ---------- Progress stepper ---------- */
+  .aff-stepper { display:flex; align-items:flex-start; width:100%; }
+  .aff-stepper .step { display:flex; flex-direction:column; align-items:center; flex:1; min-width:0; position:relative; }
+  .aff-stepper .dot {
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:12px;
+    border:2px solid #E2E8F0; background:#fff; color:#94A3B8;
+    flex-shrink:0;
+  }
+  .aff-stepper .step.done .dot { background:#1A2B3C; border-color:#1A2B3C; color:#fff; }
+  .aff-stepper .step.active .dot { background:#C5A059; border-color:#C5A059; color:#fff; box-shadow:0 0 0 4px rgba(197,160,89,.22); }
+  .aff-stepper .step .lbl { margin-top:6px; font-size:9.5px; font-weight:600; text-transform:uppercase; letter-spacing:.4px; color:#94A3B8; text-align:center; line-height:1.2; }
+  .aff-stepper .step.done .lbl, .aff-stepper .step.active .lbl { color:#1A2B3C; }
+  .aff-stepper .bar { flex:1; height:2.5px; background:#E2E8F0; margin:0 2px; margin-bottom:22px; min-width:10px; border-radius:2px; }
+  .aff-stepper .bar.done { background:#1A2B3C; }
+
+  /* ---------- Remarks block (visible to client) ---------- */
+  .remarks-block {
+    background: linear-gradient(135deg, #FBF6ED 0%, #fff 100%);
+    border-left: 4px solid #C5A059;
+    border-radius: 0 12px 12px 0;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #4a3a10;
+    line-height: 1.65;
+  }
+
+  /* ---------- Pagination ---------- */
+  .aff-pagination { display:flex; justify-content:center; align-items:center; gap:6px; margin: 20px 0 4px; flex-wrap:wrap; }
+  .aff-page-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:38px; height:38px; border-radius:9999px;
+    border:1px solid #E2E8F0; background:#fff;
+    color:#041627; font-size:14px; font-weight:500;
+    transition: all .2s; cursor:pointer; user-select:none;
+    font-family: inherit;
+  }
+  .aff-page-btn:hover:not(.active):not(.disabled) { background:#F1F3F5; border-color:#C5A059; }
+  .aff-page-btn.active { background:#041627; color:#fff; border-color:#041627; }
+  .aff-page-btn.disabled { opacity:.35; cursor:not-allowed; pointer-events:none; }
+  .aff-page-btn .material-symbols-outlined { font-size:20px; }
+  .aff-page-dots { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; color:#505f76; font-weight:500; }
+  @media (max-width: 640px) {
+    .aff-page-btn { width:34px; height:34px; font-size:12px; }
+    .aff-page-btn .material-symbols-outlined { font-size:18px; }
+    .aff-page-dots { width:34px; height:34px; font-size:12px; }
+  }
+</style>
+</head>
+<body class="bg-offwhite text-navy" data-page="affidavit-workspace">
+
+<div class="flex h-screen overflow-hidden">
+  <div id="lawyerSidebarPlaceholder"></div>
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <div id="lawyerHeaderPlaceholder"></div>
+
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-8">
+        <div class="max-w-[1280px] mx-auto space-y-6">
+
+          <!-- ============ PAGE HEADER ============ -->
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold">Affidavit Workspace</h1>
+              <p class="text-slate2 text-sm mt-1">Ongoing drafts front and centre — completed, cancelled, and rejected archived below.</p>
+            </div>
+            <button type="button"
+                    class="inline-flex items-center gap-2 bg-navy text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-navy-800 transition-colors"
+                    onclick="alert('New affidavit drafts are created when clients submit requests.')">
+              <span class="material-symbols-outlined text-[18px]">add</span>
+              New Draft
+            </button>
+          </div>
+
+          <!-- ============ KPI CARDS ============ -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Ongoing Drafts</p>
+                <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">edit_note</span>
+                </span>
+              </div>
+              <p class="text-2xl font-bold mt-2" id="kpiOngoing">0</p>
+              <p class="text-xs text-blue-600 mt-1">In progress</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Ready for Signature</p>
+                <span class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">draw</span>
+                </span>
+              </div>
+              <p class="text-2xl font-bold mt-2 text-amber-600" id="kpiReady">0</p>
+              <p class="text-xs text-slate2 mt-1">Awaiting client</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Completed</p>
+                <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                </span>
+              </div>
+              <p class="text-2xl font-bold mt-2 text-emerald-600" id="kpiCompleted">0</p>
+              <p class="text-xs text-slate2 mt-1">Delivered</p>
+            </div>
+            <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+              <div class="flex items-center justify-between">
+                <p class="text-slate2 text-xs font-medium">Total Earned</p>
+                <span class="w-8 h-8 rounded-lg bg-gold-50 text-gold flex items-center justify-center">
+                  <span class="material-symbols-outlined text-[18px]">payments</span>
+                </span>
+              </div>
+              <p class="text-2xl font-bold mt-2" id="kpiEarned">৳0</p>
+              <p class="text-xs text-slate2 mt-1">From affidavits</p>
+            </div>
+          </div>
+
+          <!-- ============ SEARCH & SORT ============ -->
+          <div class="bg-white rounded-2xl p-4 shadow-card border border-slate-100">
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+              <div class="relative flex-1 min-w-[220px]">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                <input type="text" id="searchInput" placeholder="Search by client, reference number, or affidavit type..." oninput="onSearchChange()"
+                       class="w-full pl-10 pr-10 py-2.5 border-[1.5px] border-slate-200 rounded-lg bg-white text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+                <button type="button" id="searchClear" onclick="clearSearch()"
+                        class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:bg-slate-100 hover:text-navy p-1 rounded-md">
+                  <span class="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <label class="text-xs font-bold text-slate2 uppercase tracking-wider">Sort</label>
+                <select id="sortSelect" onchange="onSortChange()"
+                        class="px-3 py-2.5 border-[1.5px] border-slate-200 rounded-lg bg-white text-[13px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15" style="min-width:170px">
+                  <option value="date-desc">Newest first</option>
+                  <option value="date-asc">Oldest first</option>
+                  <option value="status">Status</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ STATUS FILTER TABS ============ -->
+          <div class="filter-tab-bar">
+            <div class="filter-tab-scroll" id="statusFilters" role="tablist" aria-label="Affidavit status">
+              <button class="filter-tab active" data-filter="all"        onclick="setFilter('all', this)">
+                <span class="material-symbols-outlined">list_alt</span> All
+                <span class="count" id="cntAll">0</span>
+              </button>
+              <button class="filter-tab" data-filter="ongoing"            onclick="setFilter('ongoing', this)">
+                <span class="material-symbols-outlined">edit_note</span> Ongoing
+                <span class="count" id="cntOngoing">0</span>
+              </button>
+              <button class="filter-tab" data-filter="ready"              onclick="setFilter('ready', this)">
+                <span class="material-symbols-outlined">draw</span> Ready for Signature
+                <span class="count" id="cntReady">0</span>
+              </button>
+              <button class="filter-tab" data-filter="completed"          onclick="setFilter('completed', this)">
+                <span class="material-symbols-outlined">check_circle</span> Completed
+                <span class="count" id="cntCompleted">0</span>
+              </button>
+              <button class="filter-tab" data-filter="cancelled"          onclick="setFilter('cancelled', this)">
+                <span class="material-symbols-outlined">block</span> Cancelled
+                <span class="count" id="cntCancelled">0</span>
+              </button>
+              <button class="filter-tab" data-filter="rejected"           onclick="setFilter('rejected', this)">
+                <span class="material-symbols-outlined">cancel</span> Rejected
+                <span class="count" id="cntRejected">0</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- ============================================================
+               SECTION 1 — ONGOING (CARD GRID)
+          ============================================================ -->
+          <section id="ongoingSection">
+            <div class="flex items-center gap-4 px-5 py-4 rounded-2xl bg-gradient-to-r from-navy to-navy-800 text-white mb-4">
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                   style="background:rgba(197,160,89,0.2);color:#C5A059;">
+                <span class="material-symbols-outlined text-[24px]">edit_note</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <h2 class="text-[17px] font-extrabold flex items-center gap-2.5">
+                  Ongoing Affidavits
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold"
+                        style="background:#C5A059;color:#1A2B3C;" id="ongoingCount">0</span>
+                </h2>
+                <p class="text-xs text-white/60 mt-1">Drafts in your queue — start drafting, edit, or move to "Ready for Signature".</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="ongoingGrid"></div>
+            <div class="hidden text-center py-10" id="ongoingEmpty">
+              <span class="material-symbols-outlined text-[48px] text-slate-300">task_alt</span>
+              <h3 class="font-bold text-sm mt-3 mb-1">No ongoing affidavits</h3>
+              <p class="text-xs text-slate2">You're all caught up! New requests will appear here.</p>
+            </div>
+          </section>
+
+          <!-- ============================================================
+               DIVIDER
+          ============================================================ -->
+          <div id="historyDivider" class="flex items-center gap-4 py-2">
+            <div class="flex-1 h-px" style="background:linear-gradient(90deg, transparent, rgba(197,160,89,0.4), transparent);"></div>
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-widest"
+                 style="background:linear-gradient(135deg, #FBF6ED 0%, #fff 100%);border:1.5px solid rgba(197,160,89,0.35);color:#A07D3A;">
+              <span class="material-symbols-outlined text-[14px]">arrow_downward</span> Affidavit history below
+            </div>
+            <div class="flex-1 h-px" style="background:linear-gradient(90deg, transparent, rgba(197,160,89,0.4), transparent);"></div>
+          </div>
+
+          <!-- ============================================================
+               SECTION 2 — HISTORY (ROWS + PAGINATION)
+          ============================================================ -->
+          <section id="historySection">
+            <div class="bg-white rounded-2xl shadow-card border border-slate-100 mb-4 px-5 py-4">
+              <div class="flex items-center gap-4">
+                <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+                  <span class="material-symbols-outlined text-[24px]">history</span>
+                </div>
+                <div class="flex-1">
+                  <h2 class="font-bold text-[17px] flex items-center gap-2">
+                    Affidavit History
+                    <span class="bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-full text-[11px] font-bold" id="historyTotalCount">0</span>
+                  </h2>
+                  <p class="text-xs text-slate2 mt-1">Ready for signature, completed, cancelled, and rejected affidavits.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-xs text-slate2 mb-3 px-1">
+              <span>Showing <strong class="text-navy" id="historyResultCount">0</strong> of <strong class="text-navy" id="historyTotalCountInline">0</strong> archived</span>
+              <span id="activeFilterLabel">All history</span>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-card border border-slate-100 overflow-hidden divide-y divide-slate-100"
+                 id="historyGrid"></div>
+
+            <!-- Pagination -->
+            <div class="aff-pagination" id="historyPagination"></div>
+
+            <div class="hidden text-center py-10" id="historyEmpty">
+              <span class="material-symbols-outlined text-[48px] text-slate-300">history</span>
+              <h3 class="font-bold text-sm mt-3 mb-1">No archived affidavits</h3>
+              <p class="text-xs text-slate2">Try adjusting your filter.</p>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+      <div id="lawyerFooterPlaceholder"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     VIEW MODAL
+     ============================================================ -->
+<div class="lp-modal-overlay fixed inset-0 z-[200] items-center justify-center p-5 overflow-y-auto"
+     id="viewModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[820px] max-h-[calc(100vh-40px)] overflow-y-auto shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeView()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">description</span>
+      </div>
+      <div class="min-w-0 flex-1">
+        <h3 class="text-[17px] font-bold truncate" id="vTitle">Affidavit Details</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="vSubtitle">—</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2" id="vBody" style="max-height:70vh;overflow-y:auto"></div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end" id="vFooter"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CANCEL MODAL
+     ============================================================ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="cancelModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[520px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeCancel()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-red-50 text-red-700 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">event_busy</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Cancel Affidavit Draft</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="cancelSubtitle">A short reason helps the client understand.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="bg-red-50 border-l-4 border-red-600 text-red-900 text-[12.5px] rounded-lg px-3.5 py-3 mb-4">
+        <strong>Note:</strong> The client will be notified and refunded per platform policy. A clear reason reduces disputes.
+      </div>
+      <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Reason for cancelling <span class="text-red-600">*</span></label>
+      <textarea id="cancelReason" rows="4" placeholder="e.g., Insufficient supporting documents provided..."
+                class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+      <p class="field-error text-[11.5px] text-red-600 mt-1" id="cancelReasonErr">Please provide a reason.</p>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeCancel()">Back</button>
+      <button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-red-100" onclick="confirmCancel()">
+        <span class="material-symbols-outlined text-[18px]">cancel</span> Confirm Cancellation
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADVANCE STAGE MODAL — dynamic, shows different fields
+     depending on from → to transition
+     ============================================================ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="advanceModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[600px] max-h-[calc(100vh-40px)] overflow-y-auto shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeAdvance()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">arrow_forward</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold" id="advTitle">Advance Stage</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="advSubtitle">—</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2" id="advBody"></div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeAdvance()">Back</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" id="advConfirmBtn" onclick="confirmAdvance()">
+        <span class="material-symbols-outlined text-[18px]">check</span>
+        <span id="advConfirmLabel">Confirm</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     NOTE MODAL
+     ============================================================ -->
+<div class="lp-modal-overlay fixed inset-0 z-[220] items-center justify-center p-5 overflow-y-auto"
+     id="noteModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[480px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeNote()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">chat</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Send Note to Client</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="noteSubtitle">—</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Note <span class="text-red-600">*</span></label>
+      <textarea id="noteText" rows="4" placeholder="Ask for documents, confirm details..."
+                class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+      <p class="field-error text-[11.5px] text-red-600 mt-1" id="noteTextErr">Please write a note.</p>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeNote()">Cancel</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="confirmNote()">
+        <span class="material-symbols-outlined text-[18px]">send</span> Send Note
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/lawyer-partials.js"></script>
+
+<script>
+/* ============================================================
+   CONFIG
+============================================================ */
+var HISTORY_PER_PAGE = 10;
+
+/* ============================================================
+   AFFIDAVIT DATASET — 2 ongoing + 13 history = 15 total
+============================================================ */
+var AFFIDAVITS = [
+  /* ---------- ONGOING ---------- */
+  {
+    id: 1, ref: 'AFD-2026-0912',
+    clientName: 'Md. Rahat Hossain', clientInitials: 'RH',
+    clientPhone: '+880 1711-666666', clientEmail: 'rahat@example.com',
+    affidavitType: 'Name Correction / Title Correction',
+    purpose: 'Correct spelling of name in SSC certificate from "Rahat Hossain" to "Rahat Hossain Sarker".',
+    priority: 'high', status: 'drafting',
+    submittedDate: '2026-09-10', submittedAt: '2026-09-10T10:15:00',
+    dueDate: '2026-09-20',
+    fee: 4500, platformCharge: 150, earned: 0,
+    files: [
+      { name: 'SSC_Certificate.pdf', size: '1.2 MB' },
+      { name: 'NID_Front.jpg', size: '245 KB' },
+      { name: 'Birth_Certificate.pdf', size: '856 KB' }
+    ],
+    draftFile: null,               // { name, size, type, dataUrl }
+    draftText: 'That my name has been incorrectly recorded as "Rahat Hossain" in my SSC Certificate bearing Roll No. 123456.\n\nThat my actual and correct name as per my NID and Birth Registration Certificate is "Rahat Hossain Sarker".\n\nThat both names refer to one and the same person, that is, myself.\n\nThat this affidavit is made to declare my correct name for all official purposes.',
+    lawyerNotesSent: [ { text: 'Please confirm the exact spelling as it appears on your NID.', at: '2026-09-11T09:30:00' } ],
+    userNotes: [ { text: 'Confirmed — NID shows "Rahat Hossain Sarker".', at: '2026-09-11T10:15:00' } ],
+    timeline: [
+      { label: 'Submitted', at: '2026-09-10T10:15:00', state: 'done' },
+      { label: 'Info Received', at: '2026-09-11T10:15:00', state: 'done' },
+      { label: 'Drafting', at: '2026-09-12T14:00:00', state: 'active' },
+      { label: 'Ready for Signature', at: null, state: 'pending' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: null, lawyerRemarks: null,
+    rejectionReason: null, cancelledReason: null, completedAt: null
+  },
+  {
+    id: 7, ref: 'AFD-2026-0915',
+    clientName: 'Kamal Uddin', clientInitials: 'KU',
+    clientPhone: '+880 1711-777888', clientEmail: 'kamal@example.com',
+    affidavitType: 'General Declaratory',
+    purpose: 'Declare that two differently spelled names on rental agreements refer to the same tenant.',
+    priority: 'normal', status: 'new',
+    submittedDate: '2026-09-15', submittedAt: '2026-09-15T09:00:00',
+    dueDate: '2026-09-25',
+    fee: 3000, platformCharge: 150, earned: 0,
+    files: [ { name: 'Rental_Agreement.pdf', size: '920 KB' } ],
+    draftFile: null, draftText: '',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-09-15T09:00:00', state: 'active' },
+      { label: 'Info Received', at: null, state: 'pending' },
+      { label: 'Drafting', at: null, state: 'pending' },
+      { label: 'Ready for Signature', at: null, state: 'pending' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: null, lawyerRemarks: null,
+    rejectionReason: null, cancelledReason: null, completedAt: null
+  },
+
+  /* ---------- HISTORY — READY FOR SIGNATURE ---------- */
+  {
+    id: 2, ref: 'AFD-2026-0908',
+    clientName: 'Farhana Ahmed', clientInitials: 'FA',
+    clientPhone: '+880 1711-444444', clientEmail: 'farhana@example.com',
+    affidavitType: 'Same Person Affidavit',
+    purpose: 'Declare that names on different documents belong to the same person for passport application.',
+    priority: 'normal', status: 'ready',
+    submittedDate: '2026-09-06', submittedAt: '2026-09-06T14:20:00',
+    dueDate: '2026-09-15',
+    fee: 3500, platformCharge: 150, earned: 0,
+    files: [ { name: 'Passport_Copy.pdf', size: '1.8 MB' }, { name: 'NID_Front.jpg', size: '245 KB' } ],
+    draftFile: null,
+    draftText: 'That I am the holder of NID No. 19842691234567890 issued in the name of "Farhana Ahmed".\n\nThat my academic certificates bear the name "Farhana Akter".\n\nThat both names refer to one and the same person, that is, myself.\n\nThat this affidavit is made for the purpose of my passport application.',
+    lawyerNotesSent: [ { text: 'Draft is ready. Please visit the Notary on Sep 18 to sign.', at: '2026-09-13T11:00:00' } ],
+    userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-09-06T14:20:00', state: 'done' },
+      { label: 'Info Received', at: '2026-09-07T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-09-10T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-09-13T11:00:00', state: 'active' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: {
+      court: 'Dhaka Notary Public Office',
+      chamber: 'Room 204, Bar Council Bhaban, Dhaka',
+      presenceDate: '2026-09-18',
+      timeFrom: '10:00',
+      timeTo: '12:00',
+      contactPerson: 'Mr. Karim (Notary Assistant)',
+      contactPhone: '+880 1811 555 555'
+    },
+    lawyerRemarks: 'Please bring the original SSC certificate along with two passport-size photographs. Arrive 15 minutes early for ID verification.',
+    rejectionReason: null, cancelledReason: null, completedAt: null
+  },
+
+  /* ---------- HISTORY — COMPLETED ---------- */
+  {
+    id: 3, ref: 'AFD-2026-0890',
+    clientName: 'Imran Hossain', clientInitials: 'IH',
+    clientPhone: '+880 1711-555555', clientEmail: 'imran@example.com',
+    affidavitType: 'Financial Support / Income Declaration',
+    purpose: 'Income declaration affidavit for a UK student visa application.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-08-28', submittedAt: '2026-08-28T09:00:00',
+    dueDate: '2026-09-05',
+    fee: 5000, platformCharge: 150, earned: 4500,
+    files: [ { name: 'Bank_Statement.pdf', size: '3.2 MB' }, { name: 'Tax_Return.pdf', size: '1.4 MB' } ],
+    draftFile: null,
+    draftText: 'That I am a permanent resident of Bangladesh and I am the lawful father of the applicant.\n\nThat I am the sole sponsor of my son\'s education in the United Kingdom.\n\nThat my total annual income from business and rental sources is approximately BDT 45,00,000.\n\nThat the above information is true to the best of my knowledge and belief.',
+    lawyerNotesSent: [ { text: 'Notarized and stamped. Digital copy sent to your email.', at: '2026-09-04T16:00:00' } ],
+    userNotes: [ { text: 'Received — thank you!', at: '2026-09-04T17:20:00' } ],
+    timeline: [
+      { label: 'Submitted', at: '2026-08-28T09:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-08-29T10:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-09-01T11:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-09-03T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-09-04T16:00:00', state: 'done' }
+    ],
+    courtInfo: {
+      court: 'Dhaka Notary Public Office',
+      chamber: 'Room 108, Bar Council Bhaban, Dhaka',
+      presenceDate: '2026-09-04',
+      timeFrom: '09:00',
+      timeTo: '11:00',
+      contactPerson: 'Mrs. Nasrin (Notary Assistant)',
+      contactPhone: '+880 1811 222 333'
+    },
+    lawyerRemarks: 'Executed successfully. Client attended on time and signed all three copies.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-09-04T16:00:00'
+  },
+  {
+    id: 4, ref: 'AFD-2026-0875',
+    clientName: 'Nusrat Jahan', clientInitials: 'NJ',
+    clientPhone: '+880 1711-202020', clientEmail: 'nusrat@example.com',
+    affidavitType: 'Unmarried / Marital Status',
+    purpose: 'Declare current unmarried status for a foreign employment contract.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-08-20', submittedAt: '2026-08-20T11:30:00',
+    dueDate: '2026-08-28',
+    fee: 3500, platformCharge: 150, earned: 3150,
+    files: [ { name: 'NID_Front.jpg', size: '245 KB' }, { name: 'Employment_Contract.pdf', size: '980 KB' } ],
+    draftFile: null,
+    draftText: 'That I am an adult Bangladeshi citizen by birth, currently residing at Mohammadpur, Dhaka.\n\nThat I am unmarried and no marital relationship exists as of the date of this affidavit.\n\nThat this affidavit is executed to satisfy the requirements of my prospective employer abroad.',
+    lawyerNotesSent: [], userNotes: [ { text: 'Please expedite, my deadline is next week.', at: '2026-08-22T08:00:00' } ],
+    timeline: [
+      { label: 'Submitted', at: '2026-08-20T11:30:00', state: 'done' },
+      { label: 'Info Received', at: '2026-08-21T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-08-23T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-08-25T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-08-27T11:00:00', state: 'done' }
+    ],
+    courtInfo: {
+      court: 'Dhaka Notary Public Office',
+      chamber: 'Room 204, Bar Council Bhaban, Dhaka',
+      presenceDate: '2026-08-27',
+      timeFrom: '10:00',
+      timeTo: '12:00',
+      contactPerson: 'Mr. Karim (Notary Assistant)',
+      contactPhone: '+880 1811 555 555'
+    },
+    lawyerRemarks: 'Completed on priority due to client\'s deadline. Documents delivered the same evening.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-08-27T11:00:00'
+  },
+  {
+    id: 8, ref: 'AFD-2026-0836',
+    clientName: 'Rashed Karim', clientInitials: 'RK',
+    clientPhone: '+880 1711-333333', clientEmail: 'rashed@example.com',
+    affidavitType: 'Same Person Affidavit',
+    purpose: 'Match name on academic certificate with passport for a work visa.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-08-02', submittedAt: '2026-08-02T10:00:00',
+    dueDate: '2026-08-12',
+    fee: 3500, platformCharge: 150, earned: 3150,
+    files: [], draftFile: null,
+    draftText: 'That my passport bears the name "Rashed Karim" while my HSC certificate reads "Rashedul Karim".\n\nThat both refer to the same person, that is, myself.\n\nThat this affidavit is executed for my work visa application.',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-08-02T10:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-08-03T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-08-05T11:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-08-08T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-08-10T12:00:00', state: 'done' }
+    ],
+    courtInfo: { court: 'Dhaka Notary Public Office', chamber: 'Room 108', presenceDate: '2026-08-10', timeFrom: '09:00', timeTo: '10:30', contactPerson: 'Mr. Rafiq', contactPhone: '+880 1811 444 444' },
+    lawyerRemarks: 'Client signed without issue. Copy dispatched via courier.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-08-10T12:00:00'
+  },
+  {
+    id: 9, ref: 'AFD-2026-0820',
+    clientName: 'Sabrina Akhter', clientInitials: 'SA',
+    clientPhone: '+880 1711-999999', clientEmail: 'sabrina@example.com',
+    affidavitType: 'Address / Passport / Visa Proof',
+    purpose: 'Address proof for a Japan student visa.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-07-25', submittedAt: '2026-07-25T14:00:00',
+    dueDate: '2026-08-04',
+    fee: 3000, platformCharge: 150, earned: 2700,
+    files: [], draftFile: null,
+    draftText: 'That I am a permanent resident of the address stated in this affidavit.\n\nThat this affidavit serves as address proof for my Japan student visa application.',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-07-25T14:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-07-26T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-07-28T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-07-30T13:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-08-02T10:00:00', state: 'done' }
+    ],
+    courtInfo: { court: 'Dhaka Notary Public Office', chamber: 'Room 204', presenceDate: '2026-08-02', timeFrom: '10:00', timeTo: '11:30', contactPerson: 'Mr. Karim', contactPhone: '+880 1811 555 555' },
+    lawyerRemarks: 'Delivered on time.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-08-02T10:00:00'
+  },
+  {
+    id: 10, ref: 'AFD-2026-0805',
+    clientName: 'Anisur Khan', clientInitials: 'AK',
+    clientPhone: '+880 1711-303030', clientEmail: 'anis@example.com',
+    affidavitType: 'Financial Support / Income Declaration',
+    purpose: 'Income declaration for a Canada PR application.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-07-10', submittedAt: '2026-07-10T11:00:00',
+    dueDate: '2026-07-20',
+    fee: 5000, platformCharge: 150, earned: 4500,
+    files: [], draftFile: null,
+    draftText: 'That I am the sole financial sponsor for my dependent family members.\n\nThat my annual income from all legitimate sources exceeds BDT 30,00,000.',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-07-10T11:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-07-11T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-07-13T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-07-16T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-07-18T12:00:00', state: 'done' }
+    ],
+    courtInfo: { court: 'Dhaka Notary Public Office', chamber: 'Room 108', presenceDate: '2026-07-18', timeFrom: '09:30', timeTo: '11:00', contactPerson: 'Mrs. Nasrin', contactPhone: '+880 1811 222 333' },
+    lawyerRemarks: 'Executed successfully.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-07-18T12:00:00'
+  },
+  {
+    id: 11, ref: 'AFD-2026-0789',
+    clientName: 'Sharmin Nahar', clientInitials: 'SN',
+    clientPhone: '+880 1711-404040', clientEmail: 'sharmin@example.com',
+    affidavitType: 'Unmarried / Marital Status',
+    purpose: 'Unmarried status declaration for Umrah visa.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-07-01', submittedAt: '2026-07-01T09:00:00',
+    dueDate: '2026-07-10',
+    fee: 3000, platformCharge: 150, earned: 2700,
+    files: [], draftFile: null,
+    draftText: 'That I am unmarried as of the date of this affidavit.\n\nThat this affidavit is executed for my Umrah visa application.',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-07-01T09:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-07-02T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-07-04T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-07-06T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-07-08T11:00:00', state: 'done' }
+    ],
+    courtInfo: { court: 'Dhaka Notary Public Office', chamber: 'Room 204', presenceDate: '2026-07-08', timeFrom: '10:00', timeTo: '11:00', contactPerson: 'Mr. Karim', contactPhone: '+880 1811 555 555' },
+    lawyerRemarks: 'Executed successfully.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-07-08T11:00:00'
+  },
+  {
+    id: 12, ref: 'AFD-2026-0770',
+    clientName: 'Rafiqul Islam', clientInitials: 'RI',
+    clientPhone: '+880 1711-505050', clientEmail: 'rafiq@example.com',
+    affidavitType: 'General Declaratory',
+    purpose: 'General declaratory affidavit for opening a bank locker.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-06-20', submittedAt: '2026-06-20T10:30:00',
+    dueDate: '2026-06-30',
+    fee: 3000, platformCharge: 150, earned: 2700,
+    files: [], draftFile: null,
+    draftText: 'That I am the lawful holder of the identity documents submitted to the bank.\n\nThat the information provided is true and correct.',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-06-20T10:30:00', state: 'done' },
+      { label: 'Info Received', at: '2026-06-21T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-06-23T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-06-26T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-06-28T11:00:00', state: 'done' }
+    ],
+    courtInfo: { court: 'Dhaka Notary Public Office', chamber: 'Room 108', presenceDate: '2026-06-28', timeFrom: '09:00', timeTo: '10:30', contactPerson: 'Mrs. Nasrin', contactPhone: '+880 1811 222 333' },
+    lawyerRemarks: 'Executed successfully.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-06-28T11:00:00'
+  },
+  {
+    id: 13, ref: 'AFD-2026-0751',
+    clientName: 'Tasnim Chowdhury', clientInitials: 'TC',
+    clientPhone: '+880 1711-606060', clientEmail: 'tasnim@example.com',
+    affidavitType: 'Address / Passport / Visa Proof',
+    purpose: 'Address proof for a Malaysia work permit.',
+    priority: 'normal', status: 'completed',
+    submittedDate: '2026-06-10', submittedAt: '2026-06-10T14:00:00',
+    dueDate: '2026-06-20',
+    fee: 3000, platformCharge: 150, earned: 2700,
+    files: [], draftFile: null,
+    draftText: 'That I am a permanent resident of the address stated above.\n\nThat this affidavit serves as address proof for my work permit application.',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-06-10T14:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-06-11T09:00:00', state: 'done' },
+      { label: 'Drafting', at: '2026-06-13T10:00:00', state: 'done' },
+      { label: 'Ready for Signature', at: '2026-06-16T14:00:00', state: 'done' },
+      { label: 'Completed', at: '2026-06-18T11:00:00', state: 'done' }
+    ],
+    courtInfo: { court: 'Dhaka Notary Public Office', chamber: 'Room 204', presenceDate: '2026-06-18', timeFrom: '10:00', timeTo: '11:30', contactPerson: 'Mr. Karim', contactPhone: '+880 1811 555 555' },
+    lawyerRemarks: 'Executed successfully.',
+    rejectionReason: null, cancelledReason: null, completedAt: '2026-06-18T11:00:00'
+  },
+
+  /* ---------- HISTORY — CANCELLED ---------- */
+  {
+    id: 5, ref: 'AFD-2026-0861',
+    clientName: 'Tanvir Rahman', clientInitials: 'TR',
+    clientPhone: '+880 1711-101010', clientEmail: 'tanvir@example.com',
+    affidavitType: 'Address / Passport / Visa Proof',
+    purpose: 'Address proof affidavit for Schengen visa application.',
+    priority: 'normal', status: 'cancelled',
+    submittedDate: '2026-08-12', submittedAt: '2026-08-12T15:00:00',
+    dueDate: '2026-08-20',
+    fee: 3000, platformCharge: 150, earned: 0,
+    files: [], draftFile: null, draftText: '',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-08-12T15:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-08-13T09:00:00', state: 'done' },
+      { label: 'Drafting', at: null, state: 'pending' },
+      { label: 'Ready for Signature', at: null, state: 'pending' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: null, lawyerRemarks: null,
+    rejectionReason: null,
+    cancelledReason: 'Client cancelled — decided to use a different legal service.',
+    completedAt: null, cancelledAt: '2026-08-14T10:00:00'
+  },
+  {
+    id: 14, ref: 'AFD-2026-0744',
+    clientName: 'Jahangir Alam', clientInitials: 'JA',
+    clientPhone: '+880 1711-707070', clientEmail: 'jahangir@example.com',
+    affidavitType: 'Property / Land Ownership',
+    purpose: 'Property ownership affidavit for a bank guarantee.',
+    priority: 'normal', status: 'cancelled',
+    submittedDate: '2026-06-02', submittedAt: '2026-06-02T10:00:00',
+    dueDate: '2026-06-12',
+    fee: 4000, platformCharge: 150, earned: 0,
+    files: [], draftFile: null, draftText: '',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-06-02T10:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-06-03T09:00:00', state: 'done' },
+      { label: 'Drafting', at: null, state: 'pending' },
+      { label: 'Ready for Signature', at: null, state: 'pending' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: null, lawyerRemarks: null,
+    rejectionReason: null,
+    cancelledReason: 'Client cancelled — decided to handle the matter through their existing lawyer.',
+    completedAt: null, cancelledAt: '2026-06-04T15:00:00'
+  },
+
+  /* ---------- HISTORY — REJECTED ---------- */
+  {
+    id: 6, ref: 'AFD-2026-0842',
+    clientName: 'Sabrina Akhter', clientInitials: 'SA',
+    clientPhone: '+880 1711-999999', clientEmail: 'sabrina@example.com',
+    affidavitType: 'Property / Land Ownership',
+    purpose: 'Land ownership affidavit for a bank loan application.',
+    priority: 'normal', status: 'rejected',
+    submittedDate: '2026-08-05', submittedAt: '2026-08-05T10:30:00',
+    dueDate: '2026-08-15',
+    fee: 4000, platformCharge: 150, earned: 0,
+    files: [ { name: 'Khatian_Copy.pdf', size: '1.4 MB' } ],
+    draftFile: null, draftText: '',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-08-05T10:30:00', state: 'done' },
+      { label: 'Info Received', at: '2026-08-06T09:00:00', state: 'done' },
+      { label: 'Drafting', at: null, state: 'pending' },
+      { label: 'Ready for Signature', at: null, state: 'pending' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: null, lawyerRemarks: null,
+    rejectionReason: 'This affidavit falls outside my current practice scope — land ownership declarations are best handled by a property-law specialist. I have forwarded the case to our property team.',
+    cancelledReason: null, completedAt: null, rejectedAt: '2026-08-06T14:00:00'
+  },
+  {
+    id: 15, ref: 'AFD-2026-0730',
+    clientName: 'Monir Hossain', clientInitials: 'MH',
+    clientPhone: '+880 1711-808080', clientEmail: 'monir@example.com',
+    affidavitType: 'Criminal Bail Support',
+    purpose: 'Supporting affidavit for a bail application.',
+    priority: 'normal', status: 'rejected',
+    submittedDate: '2026-05-25', submittedAt: '2026-05-25T09:00:00',
+    dueDate: '2026-06-05',
+    fee: 5000, platformCharge: 150, earned: 0,
+    files: [], draftFile: null, draftText: '',
+    lawyerNotesSent: [], userNotes: [],
+    timeline: [
+      { label: 'Submitted', at: '2026-05-25T09:00:00', state: 'done' },
+      { label: 'Info Received', at: '2026-05-26T09:00:00', state: 'done' },
+      { label: 'Drafting', at: null, state: 'pending' },
+      { label: 'Ready for Signature', at: null, state: 'pending' },
+      { label: 'Completed', at: null, state: 'pending' }
+    ],
+    courtInfo: null, lawyerRemarks: null,
+    rejectionReason: 'Notary affidavits are not accepted for bail applications — a formal bail petition is the correct legal instrument. I have recommended the client to a criminal-law specialist.',
+    cancelledReason: null, completedAt: null, rejectedAt: '2026-05-26T15:00:00'
+  }
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+var currentFilter = 'all';
+var searchTerm = '';
+var currentHistoryPage = 1;
+var viewTargetId = null;
+var cancelTarget = null;
+var advanceTarget = null;
+var noteTarget = null;
+
+/* ============================================================
+   HELPERS
+============================================================ */
+function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }); }
+function fmtDateShort(iso) { if (!iso) return '—'; var d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' }); }
+function fmtTime12(t) { if (!t) return '—'; var p = t.split(':'); var h = parseInt(p[0],10), m = p[1];
+  var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m + ' ' + ampm; }
+function fmtTimeRange(from, to) {
+  if (!from && !to) return '—';
+  if (from && to) return fmtTime12(from) + ' – ' + fmtTime12(to);
+  return fmtTime12(from || to);
+}
+function fmtExact(iso) { if (!iso) return ''; var d = new Date(iso);
+  return d.toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }); }
+function fmtRelTime(iso) {
+  if (!iso) return '';
+  var diff = Date.now() - new Date(iso).getTime();
+  var min = Math.floor(diff / 60000);
+  if (min < 1) return 'just now';
+  if (min < 60) return min + 'm ago';
+  var hr = Math.floor(min / 60);
+  if (hr < 24) return hr + 'h ago';
+  var d = Math.floor(hr / 24);
+  if (d < 30) return d + 'd ago';
+  return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+function daysUntil(iso) { if (!iso) return null; var diff = new Date(iso + 'T00:00:00') - new Date(); return Math.ceil(diff / 86400000); }
+function isOverdue(a) { var du = daysUntil(a.dueDate); return du !== null && du < 0 && isOngoing(a); }
+function getStatusConfig(s) {
+  var map = {
+    new:       { label:'New', cls:'badge-gold', icon:'fiber_new' },
+    drafting:  { label:'Drafting', cls:'badge-blue', icon:'edit_note' },
+    ready:     { label:'Ready for Signature', cls:'badge-purple', icon:'draw' },
+    completed: { label:'Completed', cls:'badge-green', icon:'check_circle' },
+    cancelled: { label:'Cancelled', cls:'badge-slate', icon:'block' },
+    rejected:  { label:'Rejected', cls:'badge-red', icon:'cancel' }
+  };
+  return map[s] || map.new;
+}
+function statusGroup(s) {
+  if (s === 'new' || s === 'drafting') return 'ongoing';
+  if (s === 'ready') return 'ready';
+  if (s === 'completed') return 'completed';
+  if (s === 'cancelled') return 'cancelled';
+  if (s === 'rejected') return 'rejected';
+  return 'all';
+}
+function isOngoing(a) { return a.status === 'new' || a.status === 'drafting'; }
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/* ============================================================
+   KPIs + COUNTS
+============================================================ */
+function updateKPIs() {
+  var ongoing = AFFIDAVITS.filter(function (a) { return isOngoing(a); }).length;
+  var ready   = AFFIDAVITS.filter(function (a) { return a.status === 'ready'; }).length;
+  var done    = AFFIDAVITS.filter(function (a) { return a.status === 'completed'; }).length;
+  var earned  = AFFIDAVITS.reduce(function (s, a) { return s + (a.earned || 0); }, 0);
+  document.getElementById('kpiOngoing').textContent   = ongoing;
+  document.getElementById('kpiReady').textContent     = ready;
+  document.getElementById('kpiCompleted').textContent = done;
+  document.getElementById('kpiEarned').textContent    = '৳' + earned.toLocaleString();
+}
+function updateCounts() {
+  var c = { all: AFFIDAVITS.length, ongoing: 0, ready: 0, completed: 0, cancelled: 0, rejected: 0 };
+  AFFIDAVITS.forEach(function (a) { c[statusGroup(a.status)]++; });
+  document.getElementById('cntAll').textContent       = c.all;
+  document.getElementById('cntOngoing').textContent   = c.ongoing;
+  document.getElementById('cntReady').textContent     = c.ready;
+  document.getElementById('cntCompleted').textContent = c.completed;
+  document.getElementById('cntCancelled').textContent = c.cancelled;
+  document.getElementById('cntRejected').textContent  = c.rejected;
+}
+
+/* ============================================================
+   SEARCH / FILTER / SORT
+============================================================ */
+function onSearchChange() {
+  searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+  document.getElementById('searchClear').classList.toggle('hidden', !searchTerm);
+  currentHistoryPage = 1; // reset page when search changes
+  render();
+}
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  searchTerm = '';
+  document.getElementById('searchClear').classList.add('hidden');
+  currentHistoryPage = 1;
+  render();
+}
+function onSortChange() { currentHistoryPage = 1; render(); }
+function matchesSearch(a) {
+  if (!searchTerm) return true;
+  var hay = [a.clientName, a.ref, a.affidavitType, a.purpose, a.clientEmail, a.clientPhone].join(' ').toLowerCase();
+  return hay.indexOf(searchTerm) !== -1;
+}
+function setFilter(f, el) {
+  currentFilter = f;
+  currentHistoryPage = 1; // reset page when filter changes
+  document.querySelectorAll('#statusFilters .filter-tab').forEach(function (b) { b.classList.toggle('active', b === el); });
+  render();
+}
+
+/* ============================================================
+   MASTER RENDER
+============================================================ */
+function render() {
+  updateKPIs();
+  updateCounts();
+  renderOngoing();
+  renderHistory();
+}
+
+/* ============================================================
+   ONGOING
+============================================================ */
+function renderOngoing() {
+  var section = document.getElementById('ongoingSection');
+  var divider = document.getElementById('historyDivider');
+  var grid = document.getElementById('ongoingGrid');
+  var empty = document.getElementById('ongoingEmpty');
+  var count = document.getElementById('ongoingCount');
+
+  var showSection = (currentFilter === 'all' || currentFilter === 'ongoing');
+  section.style.display = showSection ? '' : 'none';
+  divider.style.display = showSection ? '' : 'none';
+  if (!showSection) return;
+
+  var list = AFFIDAVITS.filter(function (a) { return isOngoing(a) && matchesSearch(a); });
+
+  var sortBy = document.getElementById('sortSelect').value;
+  if (sortBy === 'date-desc')     list.sort(function (a, b) { return new Date(b.submittedAt) - new Date(a.submittedAt); });
+  else if (sortBy === 'date-asc') list.sort(function (a, b) { return new Date(a.submittedAt) - new Date(b.submittedAt); });
+  else if (sortBy === 'status')   list.sort(function (a, b) { return (a.status === 'drafting' ? 1 : 0) - (b.status === 'drafting' ? 1 : 0); });
+
+  count.textContent = list.length;
+
+  if (list.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  grid.innerHTML = list.map(ongoingCardHTML).join('');
+}
+
+/* ============================================================
+   HISTORY (with pagination)
+============================================================ */
+function renderHistory() {
+  var section = document.getElementById('historySection');
+  var grid = document.getElementById('historyGrid');
+  var empty = document.getElementById('historyEmpty');
+  var totalCount = document.getElementById('historyTotalCount');
+  var totalInline = document.getElementById('historyTotalCountInline');
+  var resultCount = document.getElementById('historyResultCount');
+  var pagination = document.getElementById('historyPagination');
+
+  var list = AFFIDAVITS.filter(function (a) {
+    if (isOngoing(a)) return false;
+    if (currentFilter === 'ongoing') return false;
+    var passFilter = currentFilter === 'all' || statusGroup(a.status) === currentFilter;
+    return passFilter && matchesSearch(a);
+  });
+
+  var sortBy = document.getElementById('sortSelect').value;
+  if (sortBy === 'date-desc')     list.sort(function (a, b) { return new Date(b.submittedAt) - new Date(a.submittedAt); });
+  else if (sortBy === 'date-asc') list.sort(function (a, b) { return new Date(a.submittedAt) - new Date(b.submittedAt); });
+  else if (sortBy === 'status') {
+    var order = { ready: 0, completed: 1, cancelled: 2, rejected: 3 };
+    list.sort(function (a, b) { return (order[a.status] || 9) - (order[b.status] || 9); });
+  }
+
+  var totalHistory = AFFIDAVITS.filter(function (a) { return !isOngoing(a); }).length;
+  totalCount.textContent = totalHistory;
+  totalInline.textContent = totalHistory;
+
+  var filterLabelMap = { all:'All history', ready:'Ready for Signature', completed:'Completed', cancelled:'Cancelled', rejected:'Rejected', ongoing:'Ongoing only' };
+  var sortLabelMap = { 'date-desc':'newest first', 'date-asc':'oldest first', 'status':'by status' };
+  document.getElementById('activeFilterLabel').textContent =
+    (filterLabelMap[currentFilter] || 'All') + ' · ' + (sortLabelMap[sortBy] || '');
+
+  section.style.display = (currentFilter === 'ongoing') ? 'none' : '';
+
+  // Pagination math
+  var totalItems = list.length;
+  var totalPages = Math.max(1, Math.ceil(totalItems / HISTORY_PER_PAGE));
+  if (currentHistoryPage > totalPages) currentHistoryPage = totalPages;
+  if (currentHistoryPage < 1) currentHistoryPage = 1;
+
+  var start = (currentHistoryPage - 1) * HISTORY_PER_PAGE;
+  var end = start + HISTORY_PER_PAGE;
+  var pageItems = list.slice(start, end);
+
+  resultCount.textContent = totalItems;
+
+  if (totalItems === 0) {
+    grid.innerHTML = '';
+    pagination.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  grid.innerHTML = pageItems.map(historyRowHTML).join('');
+  renderHistoryPagination(totalPages, totalItems);
+}
+
+function renderHistoryPagination(totalPages, totalItems) {
+  var pagination = document.getElementById('historyPagination');
+
+  // No pagination controls if only one page
+  if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+  var html = '';
+
+  // Prev
+  html += '<button class="aff-page-btn ' + (currentHistoryPage === 1 ? 'disabled' : '') +
+          '" onclick="goToHistoryPage(' + (currentHistoryPage - 1) + ')" aria-label="Previous page">' +
+          '<span class="material-symbols-outlined">chevron_left</span></button>';
+
+  // Page numbers with ellipsis
+  var startPage = Math.max(1, currentHistoryPage - 2);
+  var endPage = Math.min(totalPages, currentHistoryPage + 2);
+
+  if (startPage > 1) {
+    html += '<button class="aff-page-btn' + (1 === currentHistoryPage ? ' active' : '') +
+            '" onclick="goToHistoryPage(1)">1</button>';
+    if (startPage > 2) html += '<span class="aff-page-dots">…</span>';
+  }
+
+  for (var i = startPage; i <= endPage; i++) {
+    html += '<button class="aff-page-btn' + (i === currentHistoryPage ? ' active' : '') +
+            '" onclick="goToHistoryPage(' + i + ')">' + i + '</button>';
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) html += '<span class="aff-page-dots">…</span>';
+    html += '<button class="aff-page-btn' + (totalPages === currentHistoryPage ? ' active' : '') +
+            '" onclick="goToHistoryPage(' + totalPages + ')">' + totalPages + '</button>';
+  }
+
+  // Next
+  html += '<button class="aff-page-btn ' + (currentHistoryPage === totalPages ? 'disabled' : '') +
+          '" onclick="goToHistoryPage(' + (currentHistoryPage + 1) + ')" aria-label="Next page">' +
+          '<span class="material-symbols-outlined">chevron_right</span></button>';
+
+  pagination.innerHTML = html;
+}
+
+function goToHistoryPage(page) {
+  var list = AFFIDAVITS.filter(function (a) {
+    if (isOngoing(a)) return false;
+    if (currentFilter === 'ongoing') return false;
+    var passFilter = currentFilter === 'all' || statusGroup(a.status) === currentFilter;
+    return passFilter && matchesSearch(a);
+  });
+  var totalPages = Math.max(1, Math.ceil(list.length / HISTORY_PER_PAGE));
+  if (page < 1 || page > totalPages) return;
+  currentHistoryPage = page;
+  renderHistory();
+  // Smooth-scroll to the top of the history section
+  var section = document.getElementById('historySection');
+  if (section) section.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ============================================================
+   ONGOING CARD
+============================================================ */
+function ongoingCardHTML(a) {
+  var s = getStatusConfig(a.status);
+  var overdue = isOverdue(a);
+  var du = daysUntil(a.dueDate);
+  var priorityLabel = a.priority === 'high' ? 'High Priority' : 'Normal';
+
+  var actions =
+    '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openView(' + a.id + ')">' +
+      '<span class="material-symbols-outlined text-[16px]">visibility</span> View' +
+    '</button>' +
+    '<button class="px-3.5 py-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-[12px] font-semibold hover:bg-red-100 inline-flex items-center gap-1.5" onclick="openCancel(' + a.id + ')">' +
+      '<span class="material-symbols-outlined text-[16px]">block</span> Cancel' +
+    '</button>';
+
+  if (a.status === 'new') {
+    actions += '<button class="px-4 py-2 bg-navy text-white rounded-lg text-[12px] font-semibold hover:bg-navy-800 inline-flex items-center gap-1.5" onclick="openAdvance(' + a.id + ')"><span class="material-symbols-outlined text-[16px]">edit_note</span> Start Drafting</button>';
+  } else {
+    actions += '<button class="px-4 py-2 bg-navy text-white rounded-lg text-[12px] font-semibold hover:bg-navy-800 inline-flex items-center gap-1.5" onclick="openAdvance(' + a.id + ')"><span class="material-symbols-outlined text-[16px]">arrow_forward</span> Mark Ready</button>';
+  }
+
+  var dueBadge = '';
+  if (du !== null) {
+    if (du < 0) dueBadge = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-50 text-red-700"><span class="material-symbols-outlined text-[12px]">error</span> Overdue by ' + Math.abs(du) + 'd</span>';
+    else if (du <= 3) dueBadge = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700"><span class="material-symbols-outlined text-[12px]">schedule</span> Due in ' + du + 'd</span>';
+    else dueBadge = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-600"><span class="material-symbols-outlined text-[12px]">schedule</span> Due ' + fmtDateShort(a.dueDate) + '</span>';
+  }
+
+  var draftChip = a.draftFile
+    ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700"><span class="material-symbols-outlined text-[12px]">check_circle</span> Draft uploaded</span>'
+    : '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700"><span class="material-symbols-outlined text-[12px]">upload_file</span> Draft pending</span>';
+
+  return '<div class="bg-white rounded-2xl shadow-card border overflow-hidden ' + (overdue ? 'border-red-300' : 'border-slate-100') + '">' +
+
+    '<div class="flex items-center justify-between gap-3 px-5 py-3 bg-gradient-to-r from-navy to-navy-800 text-white">' +
+      '<div class="flex items-center gap-2 text-[12.5px] font-bold"><span class="material-symbols-outlined text-[15px] text-gold">description</span>' + a.ref + '</div>' +
+      '<div class="flex items-center gap-2"><span class="priority-chip ' + a.priority + '">' + priorityLabel + '</span><span class="text-[11px] text-white/70">' + fmtDateShort(a.submittedDate) + '</span></div>' +
+    '</div>' +
+
+    '<div class="p-5 flex flex-col gap-3.5">' +
+      '<div class="flex items-start justify-between gap-3">' +
+        '<div class="flex items-center gap-3 min-w-0">' +
+          '<div class="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-[14px] flex-shrink-0 bg-gradient-to-br from-gold to-[#d4af5e] text-white">' + a.clientInitials + '</div>' +
+          '<div class="min-w-0"><p class="text-sm font-bold truncate">' + a.clientName + '</p><p class="text-xs text-slate2 truncate">' + a.affidavitType + '</p></div>' +
+        '</div>' +
+        '<span class="badge-pill ' + s.cls + ' flex-shrink-0"><span class="dot"></span>' + s.label + '</span>' +
+      '</div>' +
+
+      '<p class="text-xs text-slate2 leading-relaxed line-clamp-2">' + a.purpose + '</p>' +
+
+      '<div class="flex items-center justify-between gap-2 flex-wrap">' +
+        dueBadge + draftChip +
+        '<span class="text-[11px] text-slate2 inline-flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">attach_file</span>' + a.files.length + ' file' + (a.files.length === 1 ? '' : 's') + '</span>' +
+      '</div>' +
+
+      '<div class="flex items-center justify-between pt-3 border-t border-slate-100 flex-wrap gap-2">' +
+        '<span class="text-[11px] text-slate2">Fee ৳' + a.fee.toLocaleString() + '</span>' +
+        '<div class="flex gap-2 flex-wrap justify-end">' + actions + '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* ============================================================
+   HISTORY ROW
+============================================================ */
+function historyRowHTML(a) {
+  var s = getStatusConfig(a.status);
+  var earnings = (a.status === 'completed' && a.earned)
+    ? '<span class="text-[13px] font-extrabold text-gold-dark">+ ৳' + a.earned.toLocaleString() + '</span>'
+    : '<span class="text-[12px] text-slate2">No earnings</span>';
+
+  var milestoneDate, milestoneLabel;
+  if (a.status === 'completed' && a.completedAt) { milestoneDate = a.completedAt.split('T')[0]; milestoneLabel = 'Completed'; }
+  else if (a.status === 'cancelled' && a.cancelledAt) { milestoneDate = a.cancelledAt.split('T')[0]; milestoneLabel = 'Cancelled'; }
+  else if (a.status === 'rejected' && a.rejectedAt) { milestoneDate = a.rejectedAt.split('T')[0]; milestoneLabel = 'Rejected'; }
+  else { milestoneDate = a.dueDate; milestoneLabel = 'Due date'; }
+
+  return '<div class="flex flex-wrap items-center gap-3 sm:gap-4 p-4 hover:bg-offwhite transition-colors">' +
+
+    '<div class="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-[13px] flex-shrink-0 bg-gradient-to-br from-gold to-[#d4af5e] text-white">' + a.clientInitials + '</div>' +
+
+    '<div class="flex-1 min-w-[140px]">' +
+      '<p class="text-sm font-bold m-0 truncate">' + a.clientName + '</p>' +
+      '<p class="text-xs text-slate2 m-0 truncate">' + a.affidavitType + '</p>' +
+    '</div>' +
+
+    '<div class="hidden sm:flex flex-col min-w-[120px]">' +
+      '<p class="text-[13px] font-semibold m-0">' + a.ref + '</p>' +
+      '<p class="text-[11.5px] text-slate2 m-0">Submitted ' + fmtDateShort(a.submittedDate) + '</p>' +
+    '</div>' +
+
+    '<div class="hidden lg:flex flex-col min-w-[130px]">' +
+      '<p class="text-[13px] font-semibold m-0">' + fmtDateShort(milestoneDate) + '</p>' +
+      '<p class="text-[11.5px] text-slate2 m-0">' + milestoneLabel + '</p>' +
+    '</div>' +
+
+    '<div class="flex items-center min-w-[140px]"><span class="badge-pill ' + s.cls + '"><span class="dot"></span>' + s.label + '</span></div>' +
+
+    '<div class="hidden lg:block text-right min-w-[100px]">' + earnings + '</div>' +
+
+    '<button class="px-3.5 py-1.5 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-white hover:border-gold transition-colors inline-flex items-center gap-1.5 flex-shrink-0" onclick="openView(' + a.id + ')">' +
+      '<span class="material-symbols-outlined text-[16px]">visibility</span> View' +
+    '</button>' +
+  '</div>';
+}
+
+/* ============================================================
+   MODAL PLUMBING
+============================================================ */
+function openModal(id) { var m = document.getElementById(id); m.classList.remove('hidden'); m.classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { var m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('show'); document.body.style.overflow = ''; }
+
+/* ============================================================
+   VIEW MODAL
+============================================================ */
+function openView(id) {
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+  viewTargetId = id;
+
+  var s = getStatusConfig(a.status);
+  document.getElementById('vTitle').textContent = a.clientName;
+  document.getElementById('vSubtitle').textContent = a.affidavitType + ' · ' + a.ref;
+
+  /* Stepper */
+  var stepOrder = ['Submitted', 'Info Received', 'Drafting', 'Ready for Signature', 'Completed'];
+  var completedIdx = 0;
+  a.timeline.forEach(function (t, i) { if (t.state === 'done') completedIdx = Math.max(completedIdx, i + 1); });
+  var activeIdx = -1;
+  a.timeline.forEach(function (t, i) { if (t.state === 'active') activeIdx = i; });
+  if (activeIdx === -1 && completedIdx < stepOrder.length) activeIdx = completedIdx;
+
+  var stepperHtml = '<div class="aff-stepper mb-4">';
+  stepOrder.forEach(function (label, i) {
+    var isDone = i < completedIdx;
+    var isActive = i === activeIdx && !isDone;
+    var cls = isDone ? 'done' : (isActive ? 'active' : '');
+    stepperHtml += '<div class="step ' + cls + '"><div class="dot">' + (isDone ? '✓' : (i + 1)) + '</div><div class="lbl">' + label + '</div></div>';
+    if (i < stepOrder.length - 1) stepperHtml += '<div class="bar ' + (isDone ? 'done' : '') + '"></div>';
+  });
+  stepperHtml += '</div>';
+
+  /* Client files */
+  var filesHtml = a.files.length
+    ? a.files.map(function (f) {
+        return '<div class="flex items-center gap-3 p-2.5 rounded-lg bg-offwhite border border-slate-100 mb-2"><span class="material-symbols-outlined text-[16px] text-gold-dark">description</span><div><div class="text-[12.5px] font-semibold">' + escapeHtml(f.name) + '</div><div class="text-[11px] text-slate-400">' + escapeHtml(f.size) + '</div></div></div>';
+      }).join('')
+    : '<p class="text-xs text-slate2 italic">No documents uploaded.</p>';
+
+  /* Notes thread */
+  var thread = [];
+  (a.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
+  (a.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
+  thread.sort(function (x, y) { return new Date(x.at) - new Date(y.at); });
+  var threadHtml = thread.length
+    ? thread.map(function (n) {
+        return '<div class="note-bubble ' + n.from + '">' + (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + escapeHtml(n.text) + '<span class="meta">' + fmtExact(n.at) + '</span></div>';
+      }).join('')
+    : '<p class="text-xs text-slate2 italic">No notes yet.</p>';
+
+  /* ---------- DRAFT PREVIEW / UPLOAD ---------- */
+  var isEditable = (a.status === 'new' || a.status === 'drafting');
+  var draftHtml = '';
+
+  if (a.draftFile) {
+    // File is uploaded → show preview
+    var isImg = a.draftFile.type.indexOf('image/') === 0;
+    var isPdf = a.draftFile.type === 'application/pdf';
+    var preview = '';
+    if (isImg) {
+      preview = '<img src="' + a.draftFile.dataUrl + '" alt="Affidavit draft preview" />';
+    } else if (isPdf) {
+      preview = '<iframe src="' + a.draftFile.dataUrl + '" title="PDF preview"></iframe>';
+    } else {
+      preview = '<div class="text-center py-8"><span class="material-symbols-outlined text-[48px] text-slate-400">draft</span><p class="text-xs text-slate2 mt-2">Preview not supported for this file type.</p></div>';
+    }
+    draftHtml =
+      '<div class="draft-file-preview">' +
+        preview +
+        '<div class="file-meta">' +
+          '<div class="flex items-center gap-2 min-w-0">' +
+            '<span class="material-symbols-outlined text-[16px] text-gold-dark">' + (isImg ? 'image' : isPdf ? 'picture_as_pdf' : 'attach_file') + '</span>' +
+            '<span class="font-semibold truncate">' + escapeHtml(a.draftFile.name) + '</span>' +
+            '<span class="text-slate2">· ' + escapeHtml(a.draftFile.size) + '</span>' +
+          '</div>' +
+          (isEditable
+            ? '<button class="text-red-600 hover:text-red-800 font-semibold inline-flex items-center gap-1" onclick="removeDraftFile(' + a.id + ')"><span class="material-symbols-outlined text-[14px]">delete</span> Remove</button>'
+            : '') +
+        '</div>' +
+        (isEditable
+          ? '<div class="mt-2"><label class="inline-flex items-center gap-2 text-[12px] font-semibold text-gold-dark hover:underline cursor-pointer"><span class="material-symbols-outlined text-[16px]">swap_horiz</span> Replace file<input type="file" class="hidden" accept="image/*,.pdf" onchange="handleDraftUpload(' + a.id + ', this)"></label></div>'
+          : '') +
+      '</div>';
+  } else if (a.draftText) {
+    // No file but old text draft exists → render paper preview
+    var points = a.draftText.split('\n\n').filter(function (p) { return p.trim(); });
+    draftHtml =
+      '<div class="draft-paper">' +
+        '<div class="doc-title">Affidavit</div>' +
+        '<div class="doc-sub">' + escapeHtml(a.affidavitType) + '</div>' +
+        '<div class="doc-body">' + points.map(function (p) { return '<p>' + escapeHtml(p) + '</p>'; }).join('') + '</div>' +
+        '<div class="doc-sign"><div class="block"><div class="line"></div><div class="lbl">Deponent Signature</div></div><div class="block"><div class="line"></div><div class="lbl">Notary / Advocate</div></div></div>' +
+      '</div>' +
+      (isEditable
+        ? '<div class="mt-3">' +
+            '<div class="draft-upload-zone" onclick="this.querySelector(\'input\').click()" ondragover="event.preventDefault(); this.classList.add(\'dragover\')" ondragleave="this.classList.remove(\'dragover\')" ondrop="event.preventDefault(); this.classList.remove(\'dragover\'); handleDraftDrop(' + a.id + ', event)">' +
+              '<span class="icon material-symbols-outlined">cloud_upload</span>' +
+              '<p class="text-[12.5px] text-slate2">Upload a scanned affidavit draft (image or PDF) for dynamic preview</p>' +
+              '<input type="file" class="hidden" accept="image/*,.pdf" onchange="handleDraftUpload(' + a.id + ', this)">' +
+            '</div>' +
+          '</div>'
+        : '');
+  } else {
+    // No file, no text → show upload zone
+    if (isEditable) {
+      draftHtml =
+        '<div class="draft-upload-zone" onclick="this.querySelector(\'input\').click()" ondragover="event.preventDefault(); this.classList.add(\'dragover\')" ondragleave="this.classList.remove(\'dragover\')" ondrop="event.preventDefault(); this.classList.remove(\'dragover\'); handleDraftDrop(' + a.id + ', event)">' +
+          '<span class="icon material-symbols-outlined">cloud_upload</span>' +
+          '<p class="text-[13px] font-semibold text-navy">Click to upload or drag &amp; drop</p>' +
+          '<p class="text-[11px] text-slate2 mt-1">JPG, PNG or PDF · max 10 MB</p>' +
+          '<input type="file" class="hidden" accept="image/*,.pdf" onchange="handleDraftUpload(' + a.id + ', this)">' +
+        '</div>';
+    } else {
+      draftHtml = '<div class="bg-offwhite border border-dashed border-slate-300 rounded-lg p-6 text-center"><span class="material-symbols-outlined text-[32px] text-slate-400">description</span><p class="text-xs text-slate2 mt-2">No draft preview available.</p></div>';
+    }
+  }
+
+  /* ---------- COURT / NOTARY INFO ---------- */
+  var courtHtml = '';
+  if (a.courtInfo) {
+    courtHtml =
+      '<div class="bg-offwhite rounded-xl border border-slate-100 p-4 mb-4">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-3 flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-gold-dark">account_balance</span> Court / Notary Presence</p>' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[13px]">' +
+          '<div><span class="text-slate2 text-[11px] uppercase block">Court</span>' + escapeHtml(a.courtInfo.court) + '</div>' +
+          '<div><span class="text-slate2 text-[11px] uppercase block">Room / Chamber</span>' + escapeHtml(a.courtInfo.chamber) + '</div>' +
+          '<div><span class="text-slate2 text-[11px] uppercase block">Date</span>' + fmtDate(a.courtInfo.presenceDate) + '</div>' +
+          '<div><span class="text-slate2 text-[11px] uppercase block">Time</span>' + fmtTimeRange(a.courtInfo.timeFrom, a.courtInfo.timeTo) + '</div>' +
+          '<div><span class="text-slate2 text-[11px] uppercase block">Contact</span>' + escapeHtml(a.courtInfo.contactPerson || '—') + '</div>' +
+          '<div><span class="text-slate2 text-[11px] uppercase block">Phone</span>' + escapeHtml(a.courtInfo.contactPhone || '—') + '</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* ---------- LAWYER REMARKS (client-visible) ---------- */
+  var remarksHtml = '';
+  if (a.lawyerRemarks) {
+    remarksHtml =
+      '<div class="mb-4">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-2 flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-gold-dark">sticky_note_2</span> Lawyer Remarks <span class="text-[10px] font-normal text-slate2 normal-case tracking-normal">(visible to client)</span></p>' +
+        '<div class="remarks-block">' + escapeHtml(a.lawyerRemarks) + '</div>' +
+      '</div>';
+  }
+
+  /* ---------- BILLING ---------- */
+  var isPaid = ['new','drafting','ready','completed'].indexOf(a.status) !== -1;
+  var billingHtml = '';
+  if (isPaid) {
+    billingHtml =
+      '<div class="bg-primary/5 rounded-xl p-4 mb-4">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-3 flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-gold-dark">payments</span> Billing</p>' +
+        '<div class="space-y-1 text-sm">' +
+          '<div class="flex justify-between py-1"><span class="text-secondary">Affidavit Fee</span><span class="font-medium">৳' + a.fee.toLocaleString() + '</span></div>' +
+          '<div class="flex justify-between py-1"><span class="text-secondary">Platform Charge</span><span class="font-medium">৳' + a.platformCharge + '</span></div>' +
+          '<div class="flex justify-between border-t border-outline-variant/50 pt-2 font-bold"><span>Client Paid</span><span class="text-gold">৳' + (a.fee + a.platformCharge).toLocaleString() + '</span></div>' +
+          (a.status === 'completed' ? '<div class="flex justify-between text-emerald-700 font-semibold pt-1"><span>You Earned</span><span>৳' + a.earned.toLocaleString() + '</span></div>' : '') +
+        '</div>' +
+      '</div>';
+  }
+
+  /* Reason blocks */
+  var reasonHtml = '';
+  if (a.rejectionReason) {
+    reasonHtml = '<div class="bg-red-50 border-l-4 border-red-600 p-3.5 rounded-r-xl mb-4"><p class="text-[11px] font-bold text-red-700 uppercase mb-1">Rejection Reason</p><p class="text-[13px] text-red-900 leading-relaxed">' + escapeHtml(a.rejectionReason) + '</p></div>';
+  }
+  if (a.cancelledReason) {
+    reasonHtml = '<div class="bg-slate-100 border-l-4 border-slate-500 p-3.5 rounded-r-xl mb-4"><p class="text-[11px] font-bold text-slate-600 uppercase mb-1">Cancellation</p><p class="text-[13px] text-slate-700 leading-relaxed">' + escapeHtml(a.cancelledReason) + '</p></div>';
+  }
+
+  /* ---------- ASSEMBLE MODAL ---------- */
+  var body =
+    '<div class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl mb-4 bg-gradient-to-r from-navy to-navy-800 text-white">' +
+      '<div class="flex items-center gap-2 text-sm font-bold"><span class="material-symbols-outlined text-[16px] text-gold">receipt_long</span>' + escapeHtml(a.ref) + '</div>' +
+      '<span class="badge-pill ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' +
+    '</div>' +
+
+    '<div class="bg-white rounded-xl border border-slate-100 p-4 mb-4">' +
+      '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-3.5 flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-gold-dark">timeline</span> Progress</p>' +
+      stepperHtml +
+    '</div>' +
+
+    '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">' +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Client</p>' +
+        '<p class="text-[13px] font-semibold">' + escapeHtml(a.clientName) + '</p>' +
+        '<p class="text-[11.5px] text-slate2">' + escapeHtml(a.clientPhone) + '</p>' +
+        '<p class="text-[11.5px] text-slate2">' + escapeHtml(a.clientEmail) + '</p>' +
+      '</div>' +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Submitted / Due</p>' +
+        '<p class="text-[13px] font-semibold">' + fmtDate(a.submittedDate) + '</p>' +
+        '<p class="text-[11.5px] text-slate2">Due ' + fmtDate(a.dueDate) + '</p>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="bg-offwhite p-3 rounded-lg border border-slate-100 mb-4">' +
+      '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Purpose</p>' +
+      '<p class="text-[13px] leading-relaxed">' + escapeHtml(a.purpose) + '</p>' +
+    '</div>' +
+
+    '<div class="mb-4">' +
+      '<p class="text-[10.5px] font-bold text-slate2 uppercase mb-2">Client Files (' + a.files.length + ')</p>' +
+      filesHtml +
+    '</div>' +
+
+    '<div class="mb-4">' +
+      '<div class="flex items-center justify-between mb-2">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase">Draft Preview</p>' +
+        (isEditable && a.draftFile
+          ? '<button class="text-[11.5px] font-bold text-gold-dark hover:underline" onclick="openDraftUploadPrompt(' + a.id + ')"><span class="material-symbols-outlined text-[14px] align-middle">upload</span> Re-upload</button>'
+          : '') +
+      '</div>' +
+      draftHtml +
+    '</div>' +
+
+    courtHtml +
+    remarksHtml +
+
+    '<div class="mb-4">' +
+      '<div class="flex items-center justify-between mb-2">' +
+        '<p class="text-[10.5px] font-bold text-slate2 uppercase">Notes &amp; Messages</p>' +
+        '<button class="text-[11.5px] font-bold text-gold-dark hover:underline" onclick="closeView(); openNote(' + a.id + ')"><span class="material-symbols-outlined text-[14px] align-middle">add_comment</span> Send Note</button>' +
+      '</div>' +
+      '<div>' + threadHtml + '</div>' +
+    '</div>' +
+
+    reasonHtml + billingHtml;
+
+  document.getElementById('vBody').innerHTML = body;
+
+  /* Footer actions */
+  var footer = '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeView()">Close</button>';
+  if (a.status === 'new' || a.status === 'drafting') {
+    footer +=
+      '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite inline-flex items-center gap-2" onclick="closeView(); openNote(' + a.id + ')"><span class="material-symbols-outlined text-[18px]">forum</span> Note</button>' +
+      '<button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="closeView(); openCancel(' + a.id + ')"><span class="material-symbols-outlined text-[18px]">block</span> Cancel</button>' +
+      '<button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="closeView(); openAdvance(' + a.id + ')"><span class="material-symbols-outlined text-[18px]">arrow_forward</span> ' + (a.status === 'new' ? 'Start Drafting' : 'Mark Ready') + '</button>';
+  } else if (a.status === 'ready') {
+    footer +=
+      '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite inline-flex items-center gap-2" onclick="closeView(); openNote(' + a.id + ')"><span class="material-symbols-outlined text-[18px]">forum</span> Note</button>' +
+      '<button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="closeView(); openAdvance(' + a.id + ')"><span class="material-symbols-outlined text-[18px]">check_circle</span> Mark Completed</button>';
+  } else if (a.status === 'completed') {
+    footer +=
+      '<button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="downloadAffidavit(' + a.id + ')"><span class="material-symbols-outlined text-[18px]">download</span> Download Final PDF</button>';
+  }
+  document.getElementById('vFooter').innerHTML = footer;
+
+  openModal('viewModal');
+}
+function closeView() { closeModal('viewModal'); }
+
+/* ============================================================
+   DRAFT FILE UPLOAD HANDLERS
+============================================================ */
+function handleDraftUpload(id, input) {
+  var file = input.files[0];
+  if (!file) return;
+  processDraftFile(id, file);
+  input.value = '';
+}
+
+function handleDraftDrop(id, event) {
+  var file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
+  if (!file) return;
+  processDraftFile(id, file);
+}
+
+function processDraftFile(id, file) {
+  var MAX = 10 * 1024 * 1024; // 10 MB
+  var isImage = file.type.indexOf('image/') === 0;
+  var isPdf = file.type === 'application/pdf';
+
+  if (!isImage && !isPdf) { alert('Only JPG, PNG or PDF files are allowed.'); return; }
+  if (file.size > MAX) { alert('File is larger than 10 MB. Please compress and try again.'); return; }
+
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    a.draftFile = {
+      name: file.name,
+      size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
+      type: file.type,
+      dataUrl: e.target.result
+    };
+    render();
+    if (viewTargetId === id) { closeView(); openView(id); }
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeDraftFile(id) {
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+  if (!confirm('Remove this draft file?')) return;
+  a.draftFile = null;
+  render();
+  closeView(); openView(id);
+}
+
+function openDraftUploadPrompt(id) {
+  // Trigger the hidden input inside the view modal
+  var input = document.querySelector('#viewModal input[type="file"][accept*="image"]');
+  if (input) input.click();
+}
+
+/* ============================================================
+   CANCEL MODAL
+============================================================ */
+function openCancel(id) {
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+  cancelTarget = id;
+  document.getElementById('cancelSubtitle').textContent = a.clientName + ' · ' + a.ref;
+  document.getElementById('cancelReason').value = '';
+  document.getElementById('cancelReasonErr').classList.remove('show');
+  document.getElementById('cancelReason').classList.remove('invalid');
+  openModal('cancelModal');
+}
+function closeCancel() { closeModal('cancelModal'); cancelTarget = null; }
+function confirmCancel() {
+  if (!cancelTarget) return;
+  var reason = document.getElementById('cancelReason').value.trim();
+  if (!reason) {
+    document.getElementById('cancelReason').classList.add('invalid');
+    document.getElementById('cancelReasonErr').classList.add('show');
+    return;
+  }
+  var a = AFFIDAVITS.find(function (x) { return x.id === cancelTarget; });
+  if (a) {
+    a.status = 'cancelled';
+    a.cancelledReason = reason;
+    a.cancelledAt = new Date().toISOString();
+  }
+  closeCancel();
+  closeView();
+  currentHistoryPage = 1;
+  render();
+}
+function downloadAffidavit(id) {
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+  alert('Downloading final affidavit PDF — ' + a.ref + '\nClient: ' + a.clientName);
+}
+
+/* ============================================================
+   ADVANCE STAGE MODAL — DYNAMIC
+   - new  → drafting       : simple confirm
+   - drafting → ready      : REQUIRES date, time range, room/chamber, remarks
+   - ready → completed     : simple confirm
+============================================================ */
+function openAdvance(id) {
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+  advanceTarget = id;
+
+  var titleText = '';
+  var subtitleText = '';
+  var confirmLabel = '';
+  var bodyHtml = '';
+
+  var arrowHtml = function (from, to) {
+    return '<div class="flex items-center justify-center gap-4 py-3 mb-4">' +
+      '<div class="flex flex-col items-center gap-1.5"><div class="w-11 h-11 rounded-full bg-navy text-white flex items-center justify-center font-bold text-sm">' + from.charAt(0) + '</div><span class="text-[10px] font-bold uppercase text-slate2">' + from + '</span></div>' +
+      '<span class="material-symbols-outlined text-gold text-[28px]">arrow_forward</span>' +
+      '<div class="flex flex-col items-center gap-1.5"><div class="w-11 h-11 rounded-full bg-gold text-white flex items-center justify-center font-bold text-sm">' + to.charAt(0) + '</div><span class="text-[10px] font-bold uppercase text-navy">' + to + '</span></div>' +
+    '</div>';
+  };
+
+  if (a.status === 'new') {
+    titleText = 'Move to Drafting';
+    subtitleText = a.clientName + ' · ' + a.ref;
+    confirmLabel = 'Start Drafting';
+    bodyHtml = arrowHtml('New', 'Drafting') +
+      '<p class="text-[13px] text-slate2 leading-relaxed mb-4 text-center">Start drafting the affidavit. The client will be notified.</p>' +
+      '<div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg px-3.5 py-3 text-[12.5px] text-amber-900"><strong>Important:</strong> Make sure you have all required client documents before starting. You will be asked for signature details when moving to "Ready for Signature".</div>';
+  } else if (a.status === 'drafting') {
+    titleText = 'Move to Ready for Signature';
+    subtitleText = a.clientName + ' · ' + a.ref;
+    confirmLabel = 'Mark Ready';
+    bodyHtml = arrowHtml('Drafting', 'Ready for Signature') +
+      '<p class="text-[13px] text-slate2 leading-relaxed mb-4 text-center">Provide the signature appointment details below. These are shown to the client on their affidavit vault.</p>' +
+      '<div class="space-y-3.5">' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">' +
+          '<div>' +
+            '<label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Signature Date <span class="text-red-600">*</span></label>' +
+            '<input type="date" id="advDate" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">' +
+            '<p class="field-error text-[11.5px] text-red-600 mt-1" id="advDateErr">Please choose a date.</p>' +
+          '</div>' +
+          '<div>' +
+            '<label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Court Room / Chamber No. <span class="text-red-600">*</span></label>' +
+            '<input type="text" id="advRoom" placeholder="e.g. Room 204, Bar Council Bhaban" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">' +
+            '<p class="field-error text-[11.5px] text-red-600 mt-1" id="advRoomErr">Please enter the room or chamber number.</p>' +
+          '</div>' +
+        '</div>' +
+        '<div>' +
+          '<label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Presence Time Range <span class="text-red-600">*</span></label>' +
+          '<div class="flex items-center gap-2">' +
+            '<input type="time" id="advTimeFrom" class="flex-1 px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">' +
+            '<span class="text-slate-400 font-bold">→</span>' +
+            '<input type="time" id="advTimeTo" class="flex-1 px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">' +
+          '</div>' +
+          '<p class="field-error text-[11.5px] text-red-600 mt-1" id="advTimeErr">Please provide both start and end times.</p>' +
+        '</div>' +
+        '<div>' +
+          '<label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Remarks / Feedback <span class="text-red-600">*</span> <span class="text-[10px] font-normal text-slate-400 normal-case tracking-normal">(visible to client)</span></label>' +
+          '<textarea id="advRemarks" rows="3" placeholder="e.g., Please bring the original SSC certificate along with two passport-size photographs." class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>' +
+          '<p class="field-error text-[11.5px] text-red-600 mt-1" id="advRemarksErr">Please provide remarks for the client.</p>' +
+        '</div>' +
+      '</div>';
+  } else if (a.status === 'ready') {
+    titleText = 'Mark Completed';
+    subtitleText = a.clientName + ' · ' + a.ref;
+    confirmLabel = 'Mark Completed';
+    bodyHtml = arrowHtml('Ready', 'Completed') +
+      '<p class="text-[13px] text-slate2 leading-relaxed mb-4 text-center">Mark this affidavit as completed and delivered to the client.</p>' +
+      '<div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg px-3.5 py-3 text-[12.5px] text-amber-900"><strong>Important:</strong> This will finalize the affidavit and release payment to your account.</div>';
+  } else {
+    return;
+  }
+
+  document.getElementById('advTitle').textContent = titleText;
+  document.getElementById('advSubtitle').textContent = subtitleText;
+  document.getElementById('advConfirmLabel').textContent = confirmLabel;
+  document.getElementById('advBody').innerHTML = bodyHtml;
+
+  openModal('advanceModal');
+}
+function closeAdvance() { closeModal('advanceModal'); advanceTarget = null; }
+
+function confirmAdvance() {
+  if (!advanceTarget) return;
+  var a = AFFIDAVITS.find(function (x) { return x.id === advanceTarget; });
+  if (!a) return;
+
+  if (a.status === 'new') {
+    a.status = 'drafting';
+    a.timeline[1] = { label: 'Info Received', at: new Date().toISOString(), state: 'done' };
+    a.timeline[2] = { label: 'Drafting', at: new Date().toISOString(), state: 'active' };
+    a.draftText = a.draftText || 'Draft in progress. Upload the scanned affidavit below for the client to preview.';
+  } else if (a.status === 'drafting') {
+    /* -------- Validate all signature-detail inputs -------- */
+    var dateVal = document.getElementById('advDate').value;
+    var roomVal = document.getElementById('advRoom').value.trim();
+    var timeFrom = document.getElementById('advTimeFrom').value;
+    var timeTo   = document.getElementById('advTimeTo').value;
+    var remarks  = document.getElementById('advRemarks').value.trim();
+
+    var ok = true;
+    function markErr(id, bad) {
+      var el = document.getElementById(id);
+      var err = document.getElementById(id + 'Err');
+      if (bad) { el.classList.add('invalid'); err.classList.remove('hidden'); err.classList.add('show'); ok = false; }
+      else { el.classList.remove('invalid'); err.classList.add('hidden'); err.classList.remove('show'); }
+    }
+    markErr('advDate', !dateVal);
+    markErr('advRoom', !roomVal);
+    markErr('advTimeFrom', !timeFrom);
+    markErr('advTimeTo', !timeTo);
+    markErr('advRemarks', !remarks);
+
+    if (!ok) { alert('Please fill in all required signature details.'); return; }
+
+    // Additional check: end time must be after start time
+    if (timeTo <= timeFrom) {
+      document.getElementById('advTimeTo').classList.add('invalid');
+      alert('End time must be after start time.');
+      return;
+    }
+
+    a.status = 'ready';
+    a.timeline[2] = { label: 'Drafting', at: a.timeline[2].at || new Date().toISOString(), state: 'done' };
+    a.timeline[3] = { label: 'Ready for Signature', at: new Date().toISOString(), state: 'active' };
+    a.courtInfo = {
+      court: a.courtInfo && a.courtInfo.court ? a.courtInfo.court : 'Dhaka Notary Public Office',
+      chamber: roomVal,
+      presenceDate: dateVal,
+      timeFrom: timeFrom,
+      timeTo: timeTo,
+      contactPerson: a.courtInfo && a.courtInfo.contactPerson ? a.courtInfo.contactPerson : 'Notary Assistant',
+      contactPhone: a.courtInfo && a.courtInfo.contactPhone ? a.courtInfo.contactPhone : '+880 1811 555 555'
+    };
+    a.lawyerRemarks = remarks;
+  } else if (a.status === 'ready') {
+    a.status = 'completed';
+    a.timeline[3] = { label: 'Ready for Signature', at: a.timeline[3].at || new Date().toISOString(), state: 'done' };
+    a.timeline[4] = { label: 'Completed', at: new Date().toISOString(), state: 'done' };
+    a.completedAt = new Date().toISOString();
+    a.earned = Math.round(a.fee * 0.9);
+  }
+
+  closeAdvance();
+  closeView();
+  currentHistoryPage = 1;
+  render();
+}
+
+/* ============================================================
+   NOTE MODAL
+============================================================ */
+function openNote(id) {
+  var a = AFFIDAVITS.find(function (x) { return x.id === id; });
+  if (!a) return;
+  noteTarget = id;
+  document.getElementById('noteSubtitle').textContent = 'To ' + a.clientName + ' · ' + a.ref;
+  document.getElementById('noteText').value = '';
+  document.getElementById('noteTextErr').classList.remove('show');
+  document.getElementById('noteText').classList.remove('invalid');
+  openModal('noteModal');
+}
+function closeNote() { closeModal('noteModal'); noteTarget = null; }
+function confirmNote() {
+  if (!noteTarget) return;
+  var text = document.getElementById('noteText').value.trim();
+  if (!text) {
+    document.getElementById('noteText').classList.add('invalid');
+    document.getElementById('noteTextErr').classList.add('show');
+    return;
+  }
+  var a = AFFIDAVITS.find(function (x) { return x.id === noteTarget; });
+  if (a) {
+    a.lawyerNotesSent = a.lawyerNotesSent || [];
+    a.lawyerNotesSent.push({ text: text, at: new Date().toISOString() });
+  }
+  var id = noteTarget;
+  closeNote();
+  render();
+  openView(id);
+}
+
+/* ============================================================
+   GLOBAL KEYBOARD / OVERLAY CLICK
+============================================================ */
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+  if (!document.getElementById('noteModal').classList.contains('hidden'))    return closeNote();
+  if (!document.getElementById('advanceModal').classList.contains('hidden')) return closeAdvance();
+  if (!document.getElementById('cancelModal').classList.contains('hidden'))  return closeCancel();
+  if (!document.getElementById('viewModal').classList.contains('hidden'))    return closeView();
+});
+
+document.querySelectorAll('.lp-modal-overlay').forEach(function (o) {
+  o.addEventListener('click', function (e) {
+    if (e.target !== o) return;
+    if (o.id === 'viewModal')    closeView();
+    if (o.id === 'cancelModal')  closeCancel();
+    if (o.id === 'advanceModal') closeAdvance();
+    if (o.id === 'noteModal')    closeNote();
+  });
+});
+
+/* ============================================================
+   INIT
+============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  render();
+});
+</script>
+
+</body>
+</html>

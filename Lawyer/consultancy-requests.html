@@ -1,227 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Consultancy Requests — JustiFi Advocate</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link rel="stylesheet" href="css/lawyer.css" />
-  <style>
-    .flt-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 16px; border-radius: 9999px;
-      font-size: 12.5px; font-weight: 700;
-      border: 1.5px solid #e2e8f0; background: #fff; color: #64748b;
-      cursor: pointer; transition: all 0.18s; white-space: nowrap;
-      font-family: inherit;
-    }
-    .flt-pill:hover { border-color: #C5A059; color: #a07d3a; }
-    .flt-pill.active { background: #041627; color: #fff; border-color: #041627; }
-    .flt-pill .cnt { background: rgba(255,255,255,0.15); padding: 1px 8px; border-radius: 9999px; font-size: 11px; }
-    .flt-pill.active .cnt { background: rgba(255,255,255,0.2); }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Consultancy Requests — JustiFi Advocate</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter','sans-serif'] },
+    colors: {
+      navy: { DEFAULT:'#1A2B3C', 50:'#EBEEF2', 800:'#152233' },
+      gold: { DEFAULT:'#C5A059', 50:'#FBF6ED', dark:'#A07D3A' },
+      slate2:'#64748B', offwhite:'#F8FAFC'
+    },
+    boxShadow: { card: '0 1px 3px 0 rgba(26,43,60,0.08), 0 1px 2px -1px rgba(26,43,60,0.06)' }
+  } } }
+</script>
+<link rel="stylesheet" href="css/lawyer.css" />
 
-    .search-wrap { position: relative; flex: 1; min-width: 220px; }
-    .search-wrap input {
-      width: 100%; padding: 11px 14px 11px 42px;
-      border: 1.5px solid #e2e8f0; border-radius: 12px; background: #fff;
-      font-size: 13.5px; font-family: inherit; color: #041627;
-      transition: all 0.18s;
-    }
-    .search-wrap input::placeholder { color: #94a3b8; }
-    .search-wrap input:focus { outline: none; border-color: #C5A059; box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15); }
-    .search-wrap .material-symbols-outlined {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      font-size: 20px; color: #94a3b8; pointer-events: none;
-    }
-    .search-clear {
-      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer;
-      color: #94a3b8; padding: 4px; border-radius: 6px; display: none;
-    }
-    .search-clear.show { display: flex; }
-    .search-clear:hover { background: #f1f3f5; color: #041627; }
-
-    .req-card {
-      background: #fff; border: 1.5px solid #eef1f4; border-radius: 16px;
-      padding: 18px; display: flex; flex-direction: column; gap: 14px;
-      transition: all 0.22s;
-    }
-    .req-card:hover { border-color: rgba(197, 160, 89, 0.4); transform: translateY(-2px);
-                      box-shadow: 0 10px 30px rgba(197, 160, 89, 0.08); }
-    .req-card.pulse-ready {
-      border-color: rgba(197, 160, 89, 0.6);
-      box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.12);
-    }
-    .avatar-badge {
-      width: 46px; height: 46px; border-radius: 50%;
-      background: linear-gradient(135deg, #C5A059 0%, #d4af5e 100%);
-      color: #fff; font-weight: 800; font-size: 15px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; letter-spacing: -0.3px;
-    }
-    .status-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: 9999px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
-    }
-    .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
-    .status-new            { background: #fef3c7; color: #92400e; }
-    .status-new .dot       { background: #f59e0b; }
-    .status-awaiting       { background: #dbeafe; color: #1e40af; }
-    .status-awaiting .dot  { background: #3b82f6; }
-    .status-rescheduled    { background: #ede9fe; color: #5b21b6; }
-    .status-rescheduled .dot { background: #8b5cf6; }
-
-    /* Mode badges: Online (blue) vs Chamber (amber) */
-    .mode-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 4px 11px; border-radius: 9999px;
-      font-size: 10.5px; font-weight: 700; letter-spacing: 0.2px;
-      white-space: nowrap;
-    }
-    .mode-badge .material-symbols-outlined {
-      font-size: 13px;
-      font-variation-settings: 'FILL' 1, 'wght' 500;
-    }
-    .mode-badge.online {
-      background: #dbeafe; color: #1e40af;
-      border: 1px solid #93c5fd;
-    }
-    .mode-badge.chamber {
-      background: #fef3c7; color: #92400e;
-      border: 1px solid #fcd34d;
-    }
-
-    .info-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #64748b; }
-    .info-row .material-symbols-outlined { font-size: 16px; color: #94a3b8; }
-
-    .file-chip {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 12px; border-radius: 10px;
-      background: #f8fafc; border: 1px solid #eef1f4;
-      font-size: 12.5px; margin-bottom: 8px;
-    }
-    .file-chip .material-symbols-outlined { font-size: 18px; color: #a07d3a; }
-
-    .step-track { display: flex; align-items: center; margin: 4px 0 18px; }
-    .step-node { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 0; }
-    .step-circle {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: #fff; border: 2px solid #e2e8f0;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 800; font-size: 12px; color: #94a3b8;
-      flex-shrink: 0; transition: all 0.25s;
-    }
-    .step-node.done .step-circle { background: #041627; border-color: #041627; color: #fff; }
-    .step-node.done .step-circle::after { content: "✓"; font-size: 12px; font-weight: 800; }
-    .step-node.done .step-circle span { display: none; }
-    .step-node.active .step-circle { background: #C5A059; border-color: #C5A059; color: #fff;
-                                      box-shadow: 0 0 0 4px rgba(197,160,89,0.2); }
-    .step-node .step-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase;
-                             letter-spacing: 0.4px; color: #94a3b8; text-align: center; white-space: nowrap; }
-    .step-node.done .step-label, .step-node.active .step-label { color: #041627; }
-    .step-line { flex: 1; height: 2.5px; background: #e2e8f0;
-                 margin: 0 2px; margin-bottom: 22px; border-radius: 2px; min-width: 12px; }
-    .step-line.done { background: #041627; }
-
-    .note-bubble {
-      padding: 10px 12px; border-radius: 12px;
-      font-size: 12.5px; line-height: 1.55; margin-bottom: 8px; max-width: 92%;
-    }
-    .note-bubble.user { background: #f1f5f9; color: #334155; border-bottom-left-radius: 4px; }
-    .note-bubble.lawyer { background: #fffdf7; color: #78350f;
-                          border: 1px solid #f5e8c8; border-bottom-right-radius: 4px;
-                          margin-left: auto; }
-    .note-bubble .meta { display: block; font-size: 10.5px; font-weight: 600; color: #94a3b8; margin-top: 4px; }
-    .note-bubble.lawyer .meta { color: #a07d3a; }
-
-    .feedback-callout {
-      background: linear-gradient(135deg, #fffdf7 0%, #ffffff 70%);
-      border: 1.5px solid rgba(197, 160, 89, 0.4);
-      border-radius: 14px; padding: 14px 16px;
-      display: flex; align-items: center; gap: 14px;
-    }
-    .feedback-callout .fc-icon {
-      width: 42px; height: 42px; border-radius: 12px;
-      background: #C5A059; color: #fff;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .empty-state { text-align: center; padding: 60px 20px; color: #64748b; }
-    .empty-state .material-symbols-outlined { font-size: 56px; color: #cbd5e1; display: block; margin: 0 auto 12px; }
-
-    .result-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; font-size: 12.5px; color: #64748b; margin-top: 4px;
-    }
-    .result-bar strong { color: #041627; }
-
-    @media (max-width: 640px) {
-      .step-circle { width: 28px; height: 28px; font-size: 11px; }
-      .step-node .step-label { font-size: 8px; }
-    }
-  </style>
+<style>
+  .note-bubble { padding:10px 12px; border-radius:12px; font-size:12.5px; line-height:1.55; margin-bottom:8px; max-width:92%; }
+  .note-bubble.user { background:#F1F5F9; color:#334155; border-bottom-left-radius:4px; }
+  .note-bubble.lawyer { background:#FBF6ED; color:#78350F; border:1px solid #F5E8C8; border-bottom-right-radius:4px; margin-left:auto; }
+  .note-bubble .meta { display:block; font-size:10.5px; font-weight:600; color:#94A3B8; margin-top:4px; }
+  .note-bubble.lawyer .meta { color:#A07D3A; }
+  .badge-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:9999px; font-size:11px; font-weight:700; letter-spacing:.2px; }
+  .badge-pill .dot { width:6px; height:6px; border-radius:50%; }
+  .badge-gold { background:#FBF6ED; color:#A07D3A; } .badge-gold .dot { background:#C5A059; }
+  .badge-blue { background:#EBF5FF; color:#1E40AF; } .badge-blue .dot { background:#3B82F6; }
+  .badge-purple { background:#F5F3FF; color:#6D28D9; } .badge-purple .dot { background:#8B5CF6; }
+  .mode-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 11px; border-radius:9999px; font-size:10.5px; font-weight:700; letter-spacing:.2px; white-space:nowrap; }
+  .mode-badge .material-symbols-outlined { font-size:13px; }
+  .mode-badge.online { background:#EBF5FF; color:#1E40AF; border:1px solid #BFDBFE; }
+  .mode-badge.chamber { background:#FBF6ED; color:#92400E; border:1px solid #FCD34D; }
+</style>
 </head>
+<body class="bg-offwhite text-navy" data-page="consultancy-requests">
 
-<body class="lawyer-body" data-page="consultancy-requests" data-requires-auth="1"
-      data-header-title="Consultancy Requests"
-      data-header-subtitle="Actionable items — new, rescheduled & awaiting feedback">
+<div class="flex h-screen overflow-hidden">
+  <div id="lawyerSidebarPlaceholder"></div>
 
-  <div class="lawyer-shell">
-    <div id="lawyerSidebarPlaceholder"></div>
-    <span class="swipe-hint left material-symbols-outlined">chevron_left</span>
-    <span class="swipe-hint right material-symbols-outlined">chevron_right</span>
+  <div class="flex-1 flex flex-col min-w-0">
+    <div id="lawyerHeaderPlaceholder"></div>
 
-    <div class="lawyer-main">
-      <div id="lawyerHeaderPlaceholder"></div>
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-4 md:p-8">
+        <div class="max-w-[1280px] mx-auto space-y-6">
 
-      <div class="lawyer-content">
-        <div class="max-w-[1200px] mx-auto space-y-6">
+          <div>
+            <h1 class="text-2xl font-bold">Consultancy Requests</h1>
+            <p class="text-slate2 text-sm mt-1">Actionable items — new, rescheduled, and awaiting feedback.</p>
+          </div>
 
-          <!-- SEARCH + SORT + FILTERS -->
-          <div class="lp-card p-4 sm:p-5">
+          <!-- Search & Sort -->
+          <div class="bg-white rounded-2xl p-4 shadow-card border border-slate-100">
             <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
-              <div class="search-wrap">
-                <span class="material-symbols-outlined">search</span>
-                <input type="text" id="searchInput"
-                       placeholder="Search by client name, matter type, or service..."
-                       oninput="onSearchChange()" />
-                <button type="button" class="search-clear" id="searchClear" onclick="clearSearch()">
-                  <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+              <div class="relative flex-1 min-w-[220px]">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+                <input type="text" id="searchInput" placeholder="Search by client name, matter type, or service..." oninput="onSearchChange()"
+                       class="w-full pl-10 pr-10 py-2.5 border-[1.5px] border-slate-200 rounded-lg bg-white text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+                <button type="button" id="searchClear" onclick="clearSearch()"
+                        class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:bg-slate-100 hover:text-navy p-1 rounded-md">
+                  <span class="material-symbols-outlined text-[16px]">close</span>
                 </button>
               </div>
               <div class="flex items-center gap-2 flex-shrink-0">
-                <label class="text-xs font-bold text-secondary uppercase tracking-wider">Sort</label>
-                <select id="sortSelect" class="lp-input" style="padding:9px 34px 9px 12px;font-size:13px;min-width:170px;background:#fff;"
-                        onchange="render()">
+                <label class="text-xs font-bold text-slate2 uppercase tracking-wider">Sort</label>
+                <select id="sortSelect" onchange="render()"
+                        class="px-3 py-2.5 border-[1.5px] border-slate-200 rounded-lg bg-white text-[13px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15" style="min-width:170px">
                   <option value="date-asc">Date · Nearest first</option>
                   <option value="date-desc">Date · Farthest first</option>
                   <option value="requested-desc">Newest requested</option>
                 </select>
               </div>
             </div>
+          </div>
 
-            <div class="flex flex-wrap gap-2 items-center mt-4 pt-4 border-t border-[#eef1f4]">
-              <button class="flt-pill active" data-filter="all" onclick="setFilter('all', this)">All <span class="cnt" id="cntAll">0</span></button>
-              <button class="flt-pill" data-filter="new" onclick="setFilter('new', this)">New Requests <span class="cnt" id="cntNew">0</span></button>
-              <button class="flt-pill" data-filter="rescheduled" onclick="setFilter('rescheduled', this)">Reschedule Proposals <span class="cnt" id="cntResched">0</span></button>
-              <button class="flt-pill" data-filter="awaiting_feedback" onclick="setFilter('awaiting_feedback', this)">Awaiting Feedback <span class="cnt" id="cntAwait">0</span></button>
+          <!-- Profile-style status tab bar -->
+          <div class="filter-tab-bar">
+            <div class="filter-tab-scroll" id="statusFilters" role="tablist" aria-label="Request status filter">
+              <button class="filter-tab active" data-filter="all"                onclick="setFilter('all', this)">
+                <span class="material-symbols-outlined">list_alt</span> All
+                <span class="count" id="cntAll">0</span>
+              </button>
+              <button class="filter-tab" data-filter="new"                       onclick="setFilter('new', this)">
+                <span class="material-symbols-outlined">fiber_new</span> New Requests
+                <span class="count" id="cntNew">0</span>
+              </button>
+              <button class="filter-tab" data-filter="rescheduled"               onclick="setFilter('rescheduled', this)">
+                <span class="material-symbols-outlined">event_repeat</span> Reschedule
+                <span class="count" id="cntResched">0</span>
+              </button>
+              <button class="filter-tab" data-filter="awaiting_feedback"         onclick="setFilter('awaiting_feedback', this)">
+                <span class="material-symbols-outlined">rate_review</span> Awaiting Feedback
+                <span class="count" id="cntAwait">0</span>
+              </button>
             </div>
           </div>
 
-          <div class="result-bar">
-            <span>Showing <strong id="resultCount">0</strong> of <strong id="totalCount">0</strong> actionable items</span>
-            <span id="activeFilterLabel" class="text-secondary">All · sorted by date</span>
+          <div class="flex items-center justify-between text-xs text-slate2 px-1">
+            <span>Showing <strong class="text-navy" id="resultCount">0</strong> of <strong class="text-navy" id="totalCount">0</strong> actionable items</span>
+            <span id="activeFilterLabel">All · sorted by date</span>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="requestsGrid"></div>
 
-          <div class="empty-state hidden" id="emptyState">
-            <span class="material-symbols-outlined">task_alt</span>
-            <h3 class="text-base font-bold text-primary m-0 mb-1">You're all caught up!</h3>
-            <p class="text-sm m-0">No new requests, reschedule proposals, or feedback pending.</p>
+          <div class="hidden text-center py-12" id="emptyState">
+            <span class="material-symbols-outlined text-[56px] text-slate-300">task_alt</span>
+            <h3 class="font-bold mt-4 mb-1">You're all caught up!</h3>
+            <p class="text-sm text-slate2">No new requests, reschedule proposals, or feedback pending.</p>
           </div>
 
         </div>
@@ -230,1033 +119,745 @@
       <div id="lawyerFooterPlaceholder"></div>
     </div>
   </div>
+</div>
 
-  <!-- View modal -->
-  <div class="lp-modal-overlay" id="viewModal">
-    <div class="lp-modal" style="max-width:680px;">
-      <button class="lp-modal-close" onclick="closeView()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header info">
-        <div class="lp-modal-icon info"><span class="material-symbols-outlined" id="vIcon">gavel</span></div>
-        <div>
-          <h3 class="lp-modal-title" id="vTitle">Consultation Request</h3>
-          <p class="lp-modal-subtitle" id="vSubtitle">—</p>
-        </div>
+<!-- ============ VIEW MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[200] items-center justify-center p-5 overflow-y-auto"
+     id="viewModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[680px] max-h-[calc(100vh-40px)] overflow-y-auto shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeView()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">gavel</span>
       </div>
-      <div class="lp-modal-body" id="vBody" style="max-height:62vh;overflow-y:auto;"></div>
-      <div class="lp-modal-footer" id="vFooter"></div>
-    </div>
-  </div>
-
-  <!-- Accept modal (new request) -->
-  <div class="lp-modal-overlay" id="acceptModal" style="z-index:210;">
-    <div class="lp-modal" style="max-width:540px;">
-      <button class="lp-modal-close" onclick="closeAccept()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header info">
-        <div class="lp-modal-icon info"><span class="material-symbols-outlined">event_available</span></div>
-        <div>
-          <h3 class="lp-modal-title">Accept Consultation</h3>
-          <p class="lp-modal-subtitle" id="accSubtitle">Confirm details for this session.</p>
-        </div>
-      </div>
-      <div class="lp-modal-body">
-        <div class="lp-modal-grid-2" style="margin-bottom:14px;">
-          <div class="lp-modal-field" style="margin-bottom:0;">
-            <label>Confirmed Date <span class="req">*</span></label>
-            <input type="date" id="accDate" class="lp-input" />
-            <p class="field-error" id="accDateErr">Please choose a date.</p>
-          </div>
-          <div class="lp-modal-field" style="margin-bottom:0;">
-            <label>Confirmed Time <span class="req">*</span></label>
-            <input type="time" id="accTime" class="lp-input" />
-            <p class="field-error" id="accTimeErr">Please choose a time.</p>
-          </div>
-        </div>
-        <div class="lp-modal-field" id="accLinkField" style="margin-bottom:14px;">
-          <label>Meeting Link <span class="req">*</span></label>
-          <input type="url" id="accLink" class="lp-input" placeholder="https://meet.google.com/xyz-abc-def" />
-          <p class="helper">Google Meet / Zoom link — client will join through JustiFi.</p>
-          <p class="field-error" id="accLinkErr">Please add a meeting link.</p>
-        </div>
-        <div class="lp-modal-field" style="margin-bottom:0;">
-          <label>Note to Client <span class="opt">(optional)</span></label>
-          <textarea id="accNote" class="lp-input" rows="3" placeholder="e.g., Please keep your property documents ready for review..."></textarea>
-        </div>
-      </div>
-      <div class="lp-modal-footer">
-        <button class="lp-btn lp-btn-outline" onclick="closeAccept()">Back</button>
-        <button class="lp-btn lp-btn-primary" onclick="confirmAccept()">
-          <span class="material-symbols-outlined text-[18px]">check</span> Confirm &amp; Accept
-        </button>
+      <div>
+        <h3 class="text-[17px] font-bold" id="vTitle">Consultation Request</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="vSubtitle">—</p>
       </div>
     </div>
+    <div class="px-6 pt-5 pb-2" id="vBody" style="max-height:62vh;overflow-y:auto"></div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end" id="vFooter"></div>
   </div>
+</div>
 
-  <!-- Accept Reschedule Proposal modal -->
-  <div class="lp-modal-overlay" id="acceptRescheduleModal" style="z-index:210;">
-    <div class="lp-modal" style="max-width:540px;">
-      <button class="lp-modal-close" onclick="closeAcceptReschedule()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header info">
-        <div class="lp-modal-icon info"><span class="material-symbols-outlined">event_repeat</span></div>
-        <div>
-          <h3 class="lp-modal-title">Accept Reschedule Proposal</h3>
-          <p class="lp-modal-subtitle" id="accReschSubtitle">Confirm the new proposed slot.</p>
-        </div>
+<!-- ============ ACCEPT MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="acceptModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[540px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeAccept()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">event_available</span>
       </div>
-      <div class="lp-modal-body">
-        <div class="lp-warning-box" style="background:#ede9fe;border-left-color:#8b5cf6;color:#5b21b6;margin-bottom:16px;">
-          <strong>Proposed new slot:</strong>
-          <span id="accReschProposed"></span>
-        </div>
-
-        <div class="lp-modal-grid-2" style="margin-bottom:14px;">
-          <div class="lp-modal-field" style="margin-bottom:0;">
-            <label>Confirmed Date <span class="req">*</span></label>
-            <input type="date" id="accReschDate" class="lp-input" />
-            <p class="field-error" id="accReschDateErr">Please choose a date.</p>
-          </div>
-          <div class="lp-modal-field" style="margin-bottom:0;">
-            <label>Confirmed Time <span class="req">*</span></label>
-            <input type="time" id="accReschTime" class="lp-input" />
-            <p class="field-error" id="accReschTimeErr">Please choose a time.</p>
-          </div>
-        </div>
-
-        <div class="lp-modal-field" id="accReschLinkField" style="margin-bottom:14px;">
-          <label>New Meeting Link <span class="req">*</span></label>
-          <input type="url" id="accReschLink" class="lp-input" placeholder="https://meet.google.com/xyz-abc-def" />
-          <p class="helper">This will <strong>replace the previous meeting link</strong>. The client will use this new link for the rescheduled session.</p>
-          <p class="field-error" id="accReschLinkErr">Please add the new meeting link.</p>
-        </div>
-
-        <div class="lp-modal-field" style="margin-bottom:0;">
-          <label>Note to Client <span class="opt">(optional)</span></label>
-          <textarea id="accReschNote" class="lp-input" rows="3" placeholder="e.g., Looking forward to our rescheduled call — please have the documents ready."></textarea>
-        </div>
-      </div>
-      <div class="lp-modal-footer">
-        <button class="lp-btn lp-btn-outline" onclick="closeAcceptReschedule()">Back</button>
-        <button class="lp-btn lp-btn-primary" onclick="confirmAcceptReschedule()">
-          <span class="material-symbols-outlined text-[18px]">check</span> Confirm &amp; Accept
-        </button>
+      <div>
+        <h3 class="text-[17px] font-bold">Accept Consultation</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="accSubtitle">Confirm details for this session.</p>
       </div>
     </div>
-  </div>
-
-  <!-- Reject modal -->
-  <div class="lp-modal-overlay" id="rejectModal" style="z-index:210;">
-    <div class="lp-modal" style="max-width:540px;">
-      <button class="lp-modal-close" onclick="closeReject()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header danger">
-        <div class="lp-modal-icon danger"><span class="material-symbols-outlined" id="rejIcon">cancel</span></div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="grid grid-cols-2 gap-3 mb-3.5">
         <div>
-          <h3 class="lp-modal-title" id="rejTitle">Reject Request</h3>
-          <p class="lp-modal-subtitle" id="rejSubtitle">Please provide a reason — this is shown to the client.</p>
+          <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Confirmed Date <span class="text-red-600">*</span></label>
+          <input type="date" id="accDate" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <p class="field-error text-[11.5px] text-red-600 mt-1" id="accDateErr">Please choose a date.</p>
+        </div>
+        <div>
+          <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Confirmed Time <span class="text-red-600">*</span></label>
+          <input type="time" id="accTime" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <p class="field-error text-[11.5px] text-red-600 mt-1" id="accTimeErr">Please choose a time.</p>
         </div>
       </div>
-      <div class="lp-modal-body">
-        <div class="lp-warning-box danger" id="rejWarning" style="margin-bottom:16px;"></div>
-        <div class="lp-modal-field" id="rejReasonField">
-          <label>Reason <span class="req">*</span></label>
-          <select id="rejReason" class="lp-input" style="margin-bottom:8px;">
-            <option value="">Select a reason...</option>
-            <option>Outside my practice area</option>
-            <option>Already at full capacity for these dates</option>
-            <option>Conflict of interest</option>
-            <option>Insufficient information provided</option>
-            <option>Requires specialized expertise</option>
-            <option>Personal emergency</option>
-            <option>Court hearing conflict</option>
-            <option>Other (specify below)</option>
-          </select>
-          <p class="field-error" id="rejReasonErr">Please choose a reason.</p>
-        </div>
-        <div class="lp-modal-field" style="margin-bottom:0;">
-          <label id="rejNoteLabel">Additional details <span class="opt">(optional)</span></label>
-          <textarea id="rejNote" class="lp-input" rows="4" placeholder="e.g., I recommend you book a civil law specialist..."></textarea>
-          <p class="field-error" id="rejNoteErr">Please provide an apology note.</p>
-        </div>
+      <div id="accLinkField" class="mb-3.5">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Meeting Link <span class="text-red-600">*</span></label>
+        <input type="url" id="accLink" placeholder="https://meet.google.com/xyz-abc-def"
+               class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+        <p class="text-[11px] text-slate-400 mt-1.5">Google Meet / Zoom link — client will join through JustiFi.</p>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="accLinkErr">Please add a meeting link.</p>
       </div>
-      <div class="lp-modal-footer">
-        <button class="lp-btn lp-btn-outline" onclick="closeReject()">Back</button>
-        <button class="lp-btn lp-btn-danger" onclick="confirmReject()">
-          <span class="material-symbols-outlined text-[18px]">cancel</span>
-          <span id="rejConfirmLabel">Confirm Rejection</span>
-        </button>
+      <div>
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Note to Client <span class="text-slate-400 font-normal text-[11px] normal-case tracking-normal ml-1">(optional)</span></label>
+        <textarea id="accNote" rows="3" placeholder="e.g., Please keep your documents ready..."
+                  class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
       </div>
     </div>
-  </div>
-
-  <!-- Feedback modal -->
-  <div class="lp-modal-overlay" id="feedbackModal" style="z-index:210;">
-    <div class="lp-modal" style="max-width:560px;">
-      <button class="lp-modal-close" onclick="closeFeedback()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header info">
-        <div class="lp-modal-icon info"><span class="material-symbols-outlined">rate_review</span></div>
-        <div>
-          <h3 class="lp-modal-title">Submit Consultation Feedback</h3>
-          <p class="lp-modal-subtitle" id="fbSubtitle">—</p>
-        </div>
-      </div>
-      <div class="lp-modal-body">
-        <div class="lp-warning-box" style="margin-bottom:16px;">
-          <strong>Confirm:</strong> Are you sure this consultation meeting has been completed?
-          Once submitted, the appointment will be marked as <strong>Completed</strong> and the client will be notified.
-        </div>
-        <div class="lp-modal-field">
-          <label>Session Outcome <span class="req">*</span></label>
-          <select id="fbDecision" class="lp-input">
-            <option value="">Select outcome...</option>
-            <option>Case resolved / advice provided</option>
-            <option>Partial resolution — further action needed</option>
-            <option>Referred to specialist</option>
-            <option>Client did not attend</option>
-            <option>Other</option>
-          </select>
-          <p class="field-error" id="fbDecisionErr">Please select an outcome.</p>
-        </div>
-        <div class="lp-modal-field">
-          <label>Detailed Feedback <span class="req">*</span></label>
-          <textarea id="fbNote" class="lp-input" rows="5" placeholder="Summarise what was discussed, advice given, and next steps..."></textarea>
-          <p class="field-error" id="fbNoteErr">Please provide detailed feedback.</p>
-        </div>
-        <div class="lp-modal-field">
-          <label>Attach Files <span class="opt">(optional)</span></label>
-          <input type="file" id="fbFiles" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="lp-input" style="padding:8px 12px;" />
-        </div>
-        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-          <input type="checkbox" id="fbConfirm" class="mt-0.5" style="width:16px;height:16px;accent-color:#C5A059;" />
-          <span class="text-[12.5px] text-primary leading-relaxed">I confirm that this consultation has been completed and I'm submitting my final feedback.</span>
-        </label>
-        <p class="field-error" id="fbConfirmErr">You must confirm the meeting is completed.</p>
-      </div>
-      <div class="lp-modal-footer">
-        <button class="lp-btn lp-btn-outline" onclick="closeFeedback()">Cancel</button>
-        <button class="lp-btn lp-btn-primary" onclick="confirmFeedback()">
-          <span class="material-symbols-outlined text-[18px]">done_all</span> Submit &amp; Complete
-        </button>
-      </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeAccept()">Back</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="confirmAccept()">
+        <span class="material-symbols-outlined text-[18px]">check</span> Confirm &amp; Accept
+      </button>
     </div>
   </div>
+</div>
 
-  <!-- Send Note modal -->
-  <div class="lp-modal-overlay" id="noteModal" style="z-index:220;">
-    <div class="lp-modal" style="max-width:480px;">
-      <button class="lp-modal-close" onclick="closeNote()"><span class="material-symbols-outlined">close</span></button>
-      <div class="lp-modal-header info">
-        <div class="lp-modal-icon info"><span class="material-symbols-outlined">chat</span></div>
-        <div>
-          <h3 class="lp-modal-title">Send Note to Client</h3>
-          <p class="lp-modal-subtitle" id="noteSubtitle">—</p>
-        </div>
+<!-- ============ ACCEPT RESCHEDULE MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="acceptRescheduleModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[540px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeAcceptReschedule()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">event_repeat</span>
       </div>
-      <div class="lp-modal-body">
-        <div class="lp-modal-field" style="margin-bottom:0;">
-          <label>Your Note <span class="req">*</span></label>
-          <textarea id="noteText" class="lp-input" rows="4" placeholder="Type your message to the client..."></textarea>
-          <p class="field-error" id="noteTextErr">Please write a note before sending.</p>
-        </div>
-      </div>
-      <div class="lp-modal-footer">
-        <button class="lp-btn lp-btn-outline" onclick="closeNote()">Cancel</button>
-        <button class="lp-btn lp-btn-primary" onclick="confirmNote()">
-          <span class="material-symbols-outlined text-[18px]">send</span> Send Note
-        </button>
+      <div>
+        <h3 class="text-[17px] font-bold">Accept Reschedule Proposal</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="accReschSubtitle">Confirm the new proposed slot.</p>
       </div>
     </div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="bg-violet-50 border-l-4 border-violet-500 text-violet-900 text-[12.5px] rounded-lg px-3.5 py-3 mb-4">
+        <strong>Proposed new slot:</strong> <span id="accReschProposed"></span>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-3.5">
+        <div>
+          <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Confirmed Date <span class="text-red-600">*</span></label>
+          <input type="date" id="accReschDate" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <p class="field-error text-[11.5px] text-red-600 mt-1" id="accReschDateErr">Please choose a date.</p>
+        </div>
+        <div>
+          <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Confirmed Time <span class="text-red-600">*</span></label>
+          <input type="time" id="accReschTime" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <p class="field-error text-[11.5px] text-red-600 mt-1" id="accReschTimeErr">Please choose a time.</p>
+        </div>
+      </div>
+      <div id="accReschLinkField" class="mb-3.5">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">New Meeting Link <span class="text-red-600">*</span></label>
+        <input type="url" id="accReschLink" placeholder="https://meet.google.com/xyz-abc-def"
+               class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+        <p class="text-[11px] text-slate-400 mt-1.5">This <strong>replaces the previous link</strong>. Client will use this new link.</p>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="accReschLinkErr">Please add the new meeting link.</p>
+      </div>
+      <div>
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Note to Client <span class="text-slate-400 font-normal text-[11px] normal-case tracking-normal ml-1">(optional)</span></label>
+        <textarea id="accReschNote" rows="3" placeholder="Looking forward to our rescheduled call..."
+                  class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+      </div>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeAcceptReschedule()">Back</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="confirmAcceptReschedule()">
+        <span class="material-symbols-outlined text-[18px]">check</span> Confirm &amp; Accept
+      </button>
+    </div>
   </div>
+</div>
 
-  <script src="js/lawyer-partials.js"></script>
-  <script src="js/swipe-nav.js"></script>
+<!-- ============ REJECT MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="rejectModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[540px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeReject()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-red-50 text-red-700 flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">cancel</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold" id="rejTitle">Reject Request</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="rejSubtitle">Please provide a reason.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="bg-red-50 border-l-4 border-red-600 text-red-900 text-[12.5px] rounded-lg px-3.5 py-3 mb-4" id="rejWarning"></div>
+      <div id="rejReasonField" class="mb-4">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Reason <span class="text-red-600">*</span></label>
+        <select id="rejReason" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <option value="">Select a reason...</option>
+          <option>Outside my practice area</option>
+          <option>Already at full capacity</option>
+          <option>Conflict of interest</option>
+          <option>Insufficient information</option>
+          <option>Requires specialized expertise</option>
+          <option>Personal emergency</option>
+          <option>Court hearing conflict</option>
+          <option>Other</option>
+        </select>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="rejReasonErr">Please choose a reason.</p>
+      </div>
+      <div>
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5" id="rejNoteLabel">Additional details <span class="text-slate-400 font-normal text-[11px] normal-case tracking-normal ml-1">(optional)</span></label>
+        <textarea id="rejNote" rows="4" placeholder="Recommended alternative specialist..."
+                  class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="rejNoteErr">Please provide an apology note.</p>
+      </div>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeReject()">Back</button>
+      <button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-red-100" onclick="confirmReject()">
+        <span class="material-symbols-outlined text-[18px]">cancel</span>
+        <span id="rejConfirmLabel">Confirm Rejection</span>
+      </button>
+    </div>
+  </div>
+</div>
 
-  <script>
-    /* ============================================================
-       DATA
-       ============================================================ */
-    var REQUESTS = [
-      { id:1, clientName:'Mehedi Hasan', clientInitials:'MH', clientPhone:'+880 1711-111111', clientEmail:'mehedi@example.com',
-        matterType:'Property Dispute', service:'Legal Consultation', mode:'Online Video Call',
-        scheduledDate:'2026-10-20', scheduledTime:'16:30', duration:45,
-        caseSummary:'My brother and I have a dispute over our ancestral property in Dhaka. Need advice on partition, legal rights and next steps.',
-        existingCase:false, files:[{name:'Khatian_Copy.pdf',size:'1.2 MB'},{name:'NID_Front.jpg',size:'245 KB'}],
-        fee:3500, platformCharge:150, requestedAt:'2026-09-14T10:30:00', status:'new',
-        userNotes:[{text:'Please let me know if you need any additional documents.', at:'2026-09-14T10:35:00'}],
-        lawyerNotesSent:[], meetingLink:null, lawyerNote:null,
-        rejectionReason:null, rescheduleReason:null, rescheduledTo:null, feedback:null },
+<!-- ============ FEEDBACK MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[210] items-center justify-center p-5 overflow-y-auto"
+     id="feedbackModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[560px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeFeedback()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">rate_review</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Submit Consultation Feedback</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="fbSubtitle">—</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-900 text-[12.5px] rounded-lg px-3.5 py-3 mb-4">
+        <strong>Confirm:</strong> Are you sure this consultation has been completed? The appointment will be marked Completed and the client will be notified.
+      </div>
+      <div class="mb-4">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Session Outcome <span class="text-red-600">*</span></label>
+        <select id="fbDecision" class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15">
+          <option value="">Select outcome...</option>
+          <option>Case resolved / advice provided</option>
+          <option>Partial resolution — further action needed</option>
+          <option>Referred to specialist</option>
+          <option>Client did not attend</option>
+          <option>Other</option>
+        </select>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="fbDecisionErr">Please select an outcome.</p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Detailed Feedback <span class="text-red-600">*</span></label>
+        <textarea id="fbNote" rows="5" placeholder="Summarise what was discussed..."
+                  class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+        <p class="field-error text-[11.5px] text-red-600 mt-1" id="fbNoteErr">Please provide detailed feedback.</p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Attach Files <span class="text-slate-400 font-normal text-[11px] normal-case tracking-normal ml-1">(optional)</span></label>
+        <input type="file" id="fbFiles" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+               class="w-full px-3.5 py-2 border-[1.5px] border-slate-200 rounded-lg text-[13px]">
+      </div>
+      <label class="flex items-start gap-2.5 cursor-pointer">
+        <input type="checkbox" id="fbConfirm" class="w-4 h-4 mt-0.5 accent-gold">
+        <span class="text-[12.5px] leading-relaxed">I confirm this consultation has been completed and I'm submitting final feedback.</span>
+      </label>
+      <p class="field-error text-[11.5px] text-red-600 mt-1" id="fbConfirmErr">You must confirm the meeting is completed.</p>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeFeedback()">Cancel</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="confirmFeedback()">
+        <span class="material-symbols-outlined text-[18px]">done_all</span> Submit &amp; Complete
+      </button>
+    </div>
+  </div>
+</div>
 
-      { id:2, clientName:'Nusrat Jahan', clientInitials:'NJ', clientPhone:'+880 1711-222222', clientEmail:'nusrat@example.com',
-        matterType:'Family Law — Divorce', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-10-22', scheduledTime:'11:00', duration:45,
-        caseSummary:'Seeking guidance on filing for divorce and child custody arrangements.',
-        existingCase:true, files:[{name:'Marriage_Certificate.pdf',size:'820 KB'}],
-        fee:3500, platformCharge:150, requestedAt:'2026-09-13T15:00:00', status:'new',
-        userNotes:[], lawyerNotesSent:[], meetingLink:null, lawyerNote:null,
-        rejectionReason:null, rescheduleReason:null, rescheduledTo:null, feedback:null },
+<!-- ============ NOTE MODAL ============ -->
+<div class="lp-modal-overlay fixed inset-0 z-[220] items-center justify-center p-5 overflow-y-auto"
+     id="noteModal" style="background:rgba(26,43,60,0.5);backdrop-filter:blur(3px);">
+  <div class="bg-white rounded-2xl w-full max-w-[480px] shadow-2xl relative" onclick="event.stopPropagation()">
+    <button type="button" class="modal-close-btn" aria-label="Close dialog" onclick="closeNote()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-start gap-3.5 pr-16">
+      <div class="w-11 h-11 rounded-xl bg-gold-50 text-gold-dark flex items-center justify-center flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">chat</span>
+      </div>
+      <div>
+        <h3 class="text-[17px] font-bold">Send Note to Client</h3>
+        <p class="text-[12.5px] text-slate2 mt-0.5" id="noteSubtitle">—</p>
+      </div>
+    </div>
+    <div class="px-6 pt-5 pb-2">
+      <label class="block text-[11.5px] font-bold text-slate-700 uppercase tracking-wider mb-1.5">Your Note <span class="text-red-600">*</span></label>
+      <textarea id="noteText" rows="4" placeholder="Type your message to the client..."
+                class="w-full px-3.5 py-2.5 border-[1.5px] border-slate-200 rounded-lg text-[13.5px] resize-y focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/15"></textarea>
+      <p class="field-error text-[11.5px] text-red-600 mt-1" id="noteTextErr">Please write a note before sending.</p>
+    </div>
+    <div class="px-6 pt-4 pb-5 border-t border-slate-100 flex flex-wrap gap-2.5 justify-end">
+      <button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeNote()">Cancel</button>
+      <button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2 hover:bg-navy-800" onclick="confirmNote()">
+        <span class="material-symbols-outlined text-[18px]">send</span> Send Note
+      </button>
+    </div>
+  </div>
+</div>
 
-      { id:3, clientName:'Farhana Ahmed', clientInitials:'FA', clientPhone:'+880 1711-444444', clientEmail:'farhana@example.com',
-        matterType:'Property Dispute', service:'Legal Consultation', mode:'Online Video Call',
-        scheduledDate:'2026-09-14', scheduledTime:'16:30', duration:45,
-        caseSummary:'Verifying a title deed for a plot in Gazipur. Need confirmation before purchase.',
-        existingCase:false, files:[{name:'Title_Deed.pdf',size:'2.3 MB'}],
-        fee:3500, platformCharge:150, requestedAt:'2026-09-10T11:00:00', status:'accepted',
-        userNotes:[{text:'I have already paid the token money — really need a quick review.', at:'2026-09-11T09:00:00'}],
-        lawyerNotesSent:[{text:'Please have the title deed and mutation certificate ready for the call.', at:'2026-09-11T10:00:00'}],
-        meetingLink:'https://meet.google.com/xyz-abc-def',
-        lawyerNote:'Please have the title deed and mutation certificate ready for the call.',
-        rejectionReason:null, rescheduleReason:null, rescheduledTo:null, feedback:null },
+<script src="js/data.js"></script>
+<script src="js/lawyer-partials.js"></script>
 
-      { id:4, clientName:'Md. Rahat Hossain', clientInitials:'RH', clientPhone:'+880 1711-666666', clientEmail:'rahat@example.com',
-        matterType:'Property Dispute', service:'Legal Consultation', mode:'Online Video Call',
-        scheduledDate:'2026-09-10', scheduledTime:'16:30', duration:45,
-        caseSummary:'Title verification for land in Gazipur — buyer wanted confirmation before purchase.',
-        existingCase:false, files:[{name:'Title_Deed.pdf',size:'2.3 MB'}],
-        fee:3500, platformCharge:150, requestedAt:'2026-09-08T10:00:00', status:'accepted',
-        userNotes:[{text:'Thank you so much for your time — the seller is pushing me to decide.', at:'2026-09-11T08:00:00'}],
-        lawyerNotesSent:[{text:'Please have the title deed ready for the call.', at:'2026-09-08T14:20:00'}],
-        meetingLink:'https://meet.google.com/xyz-abc-def',
-        lawyerNote:'Please have the title deed ready for the call.',
-        rejectionReason:null, rescheduleReason:null, rescheduledTo:null, feedback:null },
+<script>
+  var REQUESTS = ADVOCATE_DATA.requests;
+  var VISIBLE_STATUSES = ['new', 'rescheduled', 'awaiting_feedback'];
+  var currentFilter = 'all';
+  var searchTerm = '';
+  var acceptTarget = null, rejectTarget = null, feedbackTarget = null, noteTarget = null;
+  var acceptRescheduleTarget = null;
 
-      { id:5, clientName:'Imran Hossain', clientInitials:'IH', clientPhone:'+880 1711-555555', clientEmail:'imran@example.com',
-        matterType:'Criminal Bail', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-09-28', scheduledTime:'14:00', duration:45,
-        caseSummary:'Anticipatory bail application for a business partner accused of financial fraud.',
-        existingCase:true, files:[{name:'FIR_Copy.pdf',size:'1.5 MB'}],
-        fee:5000, platformCharge:150, requestedAt:'2026-09-11T16:20:00', status:'rescheduled',
-        userNotes:[], lawyerNotesSent:[{text:'I have a court hearing at the same time. Sending a new proposal shortly.', at:'2026-09-12T10:00:00'}],
-        meetingLink:null, lawyerNote:null,
-        rejectionReason:null, rescheduleReason:'Court hearing scheduled at the same time',
-        rescheduledTo:{date:'2026-09-30',time:'11:00'}, feedback:null },
-
-      { id:6, clientName:'Sabrina Akhter', clientInitials:'SA', clientPhone:'+880 1711-999999', clientEmail:'sabrina@example.com',
-        matterType:'Criminal Bail', service:'Legal Consultation', mode:'Chamber Visit',
-        scheduledDate:'2026-09-25', scheduledTime:'15:30', duration:45,
-        caseSummary:'Sought advice on anticipatory bail for her brother.',
-        existingCase:true, files:[],
-        fee:5000, platformCharge:150, requestedAt:'2026-09-15T11:00:00', status:'rejected',
-        userNotes:[], lawyerNotesSent:[], meetingLink:null, lawyerNote:null,
-        rejectionReason:'Outside my practice area — I focus on corporate and property law.',
-        rescheduleReason:null, rescheduledTo:null, feedback:null, rejectedAt:'2026-09-15T14:00:00' }
-    ];
-
-    var VISIBLE_STATUSES = ['new', 'rescheduled', 'awaiting_feedback'];
-
-    /* ============================================================
-       STATE
-       ============================================================ */
-    var currentFilter = 'all';
-    var searchTerm = '';
-    var acceptTarget = null, rejectTarget = null, feedbackTarget = null, noteTarget = null;
-    var acceptRescheduleTarget = null;
-
-    /* ============================================================
-       HELPERS
-       ============================================================ */
-    function apptStart(r) { return new Date(r.scheduledDate + 'T' + r.scheduledTime + ':00'); }
-    function apptEnd(r) {
-      var d = apptStart(r);
-      d.setMinutes(d.getMinutes() + (r.duration || 45));
-      return d;
-    }
-    function feedbackOpensAt(r) {
-      var d = apptStart(r);
-      d.setMinutes(d.getMinutes() + 1);
-      return d;
-    }
-    function isFeedbackAvailable(r) { return new Date() >= feedbackOpensAt(r); }
-
-    function isOnline(r) { return r.mode === 'Online Video Call'; }
-
-    function fmtDate(iso) {
-      if (!iso) return '—';
-      var d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
-    }
-    function fmtDateLong(iso) {
-      if (!iso) return '—';
-      var d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
-    }
-    function fmtTime(t) {
-      if (!t) return '—';
-      var p = t.split(':'); var h = parseInt(p[0],10), m = p[1];
-      var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
-      return h + ':' + m + ' ' + ampm;
-    }
-    function fmtRelTime(iso) {
-      if (!iso) return '';
-      var diff = Date.now() - new Date(iso).getTime();
-      var min = Math.floor(diff / 60000);
-      if (min < 1) return 'just now';
-      if (min < 60) return min + 'm ago';
-      var hr = Math.floor(min / 60);
-      if (hr < 24) return hr + 'h ago';
-      var d = Math.floor(hr / 24);
-      if (d < 30) return d + 'd ago';
-      return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
-    }
-
-    function effectiveStatus(r) {
-      if (r.status === 'accepted' && isFeedbackAvailable(r) && r.status !== 'completed') {
-        return 'awaiting_feedback';
-      }
-      return r.status;
-    }
-    function isVisibleOnRequestsPage(r) {
-      return VISIBLE_STATUSES.indexOf(effectiveStatus(r)) !== -1;
-    }
-    function visiblePipeline() {
-      return REQUESTS.filter(isVisibleOnRequestsPage);
-    }
-    function getStatusConfig(s) {
-      var map = {
-        new:               { label:'New Request',       cls:'status-new' },
-        rescheduled:       { label:'Reschedule Sent',   cls:'status-rescheduled' },
-        awaiting_feedback: { label:'Awaiting Feedback', cls:'status-awaiting' }
-      };
-      return map[s] || map.new;
-    }
-    function modeBadgeHTML(r) {
-      return isOnline(r)
-        ? '<span class="mode-badge online"><span class="material-symbols-outlined">videocam</span> Online</span>'
-        : '<span class="mode-badge chamber"><span class="material-symbols-outlined">location_on</span> Chamber</span>';
-    }
-
-    /* ============================================================
-       SEARCH
-       ============================================================ */
-    function onSearchChange() {
-      searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-      document.getElementById('searchClear').classList.toggle('show', searchTerm.length > 0);
-      render();
-    }
-    function clearSearch() {
-      document.getElementById('searchInput').value = '';
-      searchTerm = '';
-      document.getElementById('searchClear').classList.remove('show');
-      render();
-    }
-    function matchesSearch(r) {
-      if (!searchTerm) return true;
-      var hay = [r.clientName, r.matterType, r.service, r.clientEmail, r.clientPhone].join(' ').toLowerCase();
-      return hay.indexOf(searchTerm) !== -1;
-    }
-
-    /* ============================================================
-       FILTERS + COUNTS
-       ============================================================ */
-    function setFilter(f, el) {
-      currentFilter = f;
-      document.querySelectorAll('.flt-pill').forEach(function (b) { b.classList.toggle('active', b === el); });
-      render();
-    }
-    function updateCounts() {
-      var pool = visiblePipeline();
-      var nNew = 0, nResched = 0, nAwait = 0;
-      pool.forEach(function (r) {
-        var eff = effectiveStatus(r);
-        if (eff === 'new') nNew++;
-        else if (eff === 'rescheduled') nResched++;
-        else if (eff === 'awaiting_feedback') nAwait++;
-      });
-      document.getElementById('cntAll').textContent     = pool.length;
-      document.getElementById('cntNew').textContent     = nNew;
-      document.getElementById('cntResched').textContent = nResched;
-      document.getElementById('cntAwait').textContent   = nAwait;
-    }
-
-    /* ============================================================
-       RENDER
-       ============================================================ */
-    function render() {
-      updateCounts();
-      var grid = document.getElementById('requestsGrid');
-      var empty = document.getElementById('emptyState');
-      if (!grid) return;
-
-      var pool = visiblePipeline();
-      var list = pool.filter(function (r) {
-        var passFilter = currentFilter === 'all' || effectiveStatus(r) === currentFilter;
-        var passSearch = matchesSearch(r);
-        return passFilter && passSearch;
-      });
-
-      var sortBy = document.getElementById('sortSelect').value;
-      list.sort(function (a, b) {
-        if (sortBy === 'date-asc')  return apptStart(a) - apptStart(b);
-        if (sortBy === 'date-desc') return apptStart(b) - apptStart(a);
-        if (sortBy === 'requested-desc') return new Date(b.requestedAt) - new Date(a.requestedAt);
-        return 0;
-      });
-
-      document.getElementById('resultCount').textContent = list.length;
-      document.getElementById('totalCount').textContent  = pool.length;
-
-      var filterLabelMap = {
-        all: 'All actionable items',
-        new: 'New requests',
-        rescheduled: 'Reschedule proposals',
-        awaiting_feedback: 'Awaiting feedback'
-      };
-      var sortLabelMap = {
-        'date-asc': 'sorted by date (nearest first)',
-        'date-desc': 'sorted by date (farthest first)',
-        'requested-desc': 'sorted by request time'
-      };
-      document.getElementById('activeFilterLabel').textContent =
-        (filterLabelMap[currentFilter] || 'All') + ' · ' + (sortLabelMap[sortBy] || '');
-
-      if (list.length === 0) {
-        grid.innerHTML = '';
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-      grid.innerHTML = list.map(cardHTML).join('');
-    }
-
-    function cardHTML(r) {
+  function apptStart(r) { return new Date(r.scheduledDate + 'T' + r.scheduledTime + ':00'); }
+  function feedbackOpensAt(r) { var d = apptStart(r); d.setMinutes(d.getMinutes() + 1); return d; }
+  function isFeedbackAvailable(r) { return new Date() >= feedbackOpensAt(r); }
+  function isOnline(r) { return r.mode === 'Online Video Call'; }
+  function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }); }
+  function fmtTime(t) { if (!t) return '—'; var p = t.split(':'); var h = parseInt(p[0],10), m = p[1];
+    var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + m + ' ' + ampm; }
+  function fmtRelTime(iso) {
+    if (!iso) return '';
+    var diff = Date.now() - new Date(iso).getTime();
+    var min = Math.floor(diff / 60000);
+    if (min < 1) return 'just now';
+    if (min < 60) return min + 'm ago';
+    var hr = Math.floor(min / 60);
+    if (hr < 24) return hr + 'h ago';
+    var d = Math.floor(hr / 24);
+    if (d < 30) return d + 'd ago';
+    return new Date(iso).toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  }
+  function effectiveStatus(r) {
+    if (r.status === 'accepted' && isFeedbackAvailable(r) && r.status !== 'completed') return 'awaiting_feedback';
+    return r.status;
+  }
+  function isVisibleOnRequestsPage(r) { return VISIBLE_STATUSES.indexOf(effectiveStatus(r)) !== -1; }
+  function visiblePipeline() { return REQUESTS.filter(isVisibleOnRequestsPage); }
+  function getStatusConfig(s) {
+    var map = {
+      new: { label:'New Request', cls:'badge-gold' },
+      rescheduled: { label:'Reschedule Sent', cls:'badge-purple' },
+      awaiting_feedback: { label:'Awaiting Feedback', cls:'badge-blue' }
+    };
+    return map[s] || map.new;
+  }
+  function modeBadgeHTML(r) {
+    return isOnline(r)
+      ? '<span class="mode-badge online"><span class="material-symbols-outlined">videocam</span> Online</span>'
+      : '<span class="mode-badge chamber"><span class="material-symbols-outlined">location_on</span> Chamber</span>';
+  }
+  function onSearchChange() {
+    searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    document.getElementById('searchClear').classList.toggle('hidden', !searchTerm);
+    render();
+  }
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    searchTerm = '';
+    document.getElementById('searchClear').classList.add('hidden');
+    render();
+  }
+  function matchesSearch(r) {
+    if (!searchTerm) return true;
+    var hay = [r.clientName, r.matterType, r.service, r.clientEmail, r.clientPhone].join(' ').toLowerCase();
+    return hay.indexOf(searchTerm) !== -1;
+  }
+  function setFilter(f, el) {
+    currentFilter = f;
+    document.querySelectorAll('#statusFilters .filter-tab').forEach(function (b) {
+      b.classList.toggle('active', b === el);
+    });
+    render();
+  }
+  function updateCounts() {
+    var pool = visiblePipeline();
+    var nNew=0, nResched=0, nAwait=0;
+    pool.forEach(function (r) {
       var eff = effectiveStatus(r);
-      var s = getStatusConfig(eff);
-
-      var actions = '';
-      if (eff === 'new') {
-        actions =
-          '<button type="button" class="lp-btn lp-btn-outline" style="font-size:12px;padding:8px 14px;" onclick="openView(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
-          '<button type="button" class="lp-btn lp-btn-danger" style="font-size:12px;padding:8px 14px;" onclick="openReject(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">cancel</span> Reject</button>' +
-          '<button type="button" class="lp-btn lp-btn-primary" style="font-size:12px;padding:8px 16px;" onclick="openAccept(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">check</span> Accept</button>';
-      } else if (eff === 'rescheduled') {
-        actions =
-          '<button type="button" class="lp-btn lp-btn-outline" style="font-size:12px;padding:8px 14px;" onclick="openView(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
-          '<button type="button" class="lp-btn lp-btn-danger" style="font-size:12px;padding:8px 14px;" onclick="openReject(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">cancel</span> Withdraw</button>' +
-          '<button type="button" class="lp-btn lp-btn-primary" style="font-size:12px;padding:8px 16px;" onclick="openAcceptReschedule(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">check</span> Accept</button>';
-      } else if (eff === 'awaiting_feedback') {
-        actions =
-          '<button type="button" class="lp-btn lp-btn-outline" style="font-size:12px;padding:8px 14px;" onclick="openView(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
-          '<button type="button" class="lp-btn lp-btn-primary" style="font-size:12px;padding:8px 16px;" onclick="openFeedback(' + r.id + ')">' +
-            '<span class="material-symbols-outlined text-[16px]">rate_review</span> Submit Feedback</button>';
-      }
-
-      return '<div class="req-card ' + (eff === 'awaiting_feedback' ? 'pulse-ready' : '') + '">' +
+      if (eff === 'new') nNew++;
+      else if (eff === 'rescheduled') nResched++;
+      else if (eff === 'awaiting_feedback') nAwait++;
+    });
+    document.getElementById('cntAll').textContent = pool.length;
+    document.getElementById('cntNew').textContent = nNew;
+    document.getElementById('cntResched').textContent = nResched;
+    document.getElementById('cntAwait').textContent = nAwait;
+  }
+  function render() {
+    updateCounts();
+    var grid = document.getElementById('requestsGrid');
+    var empty = document.getElementById('emptyState');
+    var pool = visiblePipeline();
+    var list = pool.filter(function (r) {
+      var passFilter = currentFilter === 'all' || effectiveStatus(r) === currentFilter;
+      return passFilter && matchesSearch(r);
+    });
+    var sortBy = document.getElementById('sortSelect').value;
+    list.sort(function (a, b) {
+      if (sortBy === 'date-asc') return apptStart(a) - apptStart(b);
+      if (sortBy === 'date-desc') return apptStart(b) - apptStart(a);
+      if (sortBy === 'requested-desc') return new Date(b.requestedAt) - new Date(a.requestedAt);
+      return 0;
+    });
+    document.getElementById('resultCount').textContent = list.length;
+    document.getElementById('totalCount').textContent = pool.length;
+    var filterLabelMap = { all:'All actionable items', new:'New requests', rescheduled:'Reschedule proposals', awaiting_feedback:'Awaiting feedback' };
+    var sortLabelMap = { 'date-asc':'sorted by date (nearest first)', 'date-desc':'sorted by date (farthest first)', 'requested-desc':'sorted by request time' };
+    document.getElementById('activeFilterLabel').textContent = (filterLabelMap[currentFilter] || 'All') + ' · ' + (sortLabelMap[sortBy] || '');
+    if (list.length === 0) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    grid.innerHTML = list.map(cardHTML).join('');
+  }
+  function cardHTML(r) {
+    var eff = effectiveStatus(r);
+    var s = getStatusConfig(eff);
+    var online = isOnline(r);
+    var actions = '';
+    if (eff === 'new') {
+      actions =
+        '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openView(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
+        '<button class="px-3.5 py-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-[12px] font-semibold hover:bg-red-100 inline-flex items-center gap-1.5" onclick="openReject(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">cancel</span> Reject</button>' +
+        '<button class="px-4 py-2 bg-navy text-white rounded-lg text-[12px] font-semibold hover:bg-navy-800 inline-flex items-center gap-1.5" onclick="openAccept(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">check</span> Accept</button>';
+    } else if (eff === 'rescheduled') {
+      actions =
+        '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openView(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
+        '<button class="px-3.5 py-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-[12px] font-semibold hover:bg-red-100 inline-flex items-center gap-1.5" onclick="openReject(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">cancel</span> Withdraw</button>' +
+        '<button class="px-4 py-2 bg-navy text-white rounded-lg text-[12px] font-semibold hover:bg-navy-800 inline-flex items-center gap-1.5" onclick="openAcceptReschedule(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">check</span> Accept</button>';
+    } else if (eff === 'awaiting_feedback') {
+      actions =
+        '<button class="px-3.5 py-2 border border-slate-200 rounded-lg text-[12px] font-semibold hover:bg-offwhite inline-flex items-center gap-1.5" onclick="openView(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">visibility</span> View</button>' +
+        '<button class="px-4 py-2 bg-navy text-white rounded-lg text-[12px] font-semibold hover:bg-navy-800 inline-flex items-center gap-1.5" onclick="openFeedback(' + r.id + ')"><span class="material-symbols-outlined text-[16px]">rate_review</span> Submit Feedback</button>';
+    }
+    return '<div class="bg-white rounded-2xl shadow-card border overflow-hidden ' + (eff === 'awaiting_feedback' ? 'border-gold/60' : 'border-slate-100') + '">' +
+      '<div class="flex items-center justify-between gap-3 px-5 py-3 bg-gradient-to-r from-navy to-navy-800 text-white">' +
+        '<div class="flex items-center gap-2 text-sm font-bold"><span class="material-symbols-outlined text-[16px] text-gold">event</span>' + fmtDate(r.scheduledDate) + '</div>' +
+        '<div class="flex items-center gap-1.5 px-3 py-1 rounded-full font-extrabold bg-gold text-navy text-[14px]"><span class="material-symbols-outlined text-[14px]">schedule</span>' + fmtTime(r.scheduledTime) + '</div>' +
+      '</div>' +
+      '<div class="p-5 flex flex-col gap-3.5">' +
         '<div class="flex items-start justify-between gap-3">' +
           '<div class="flex items-center gap-3 min-w-0">' +
-            '<div class="avatar-badge">' + r.clientInitials + '</div>' +
-            '<div class="min-w-0">' +
-              '<p class="text-sm font-bold text-primary m-0 truncate">' + r.clientName + '</p>' +
-              '<p class="text-xs text-secondary m-0 truncate">' + r.matterType + '</p>' +
-            '</div>' +
+            '<div class="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-[14px] flex-shrink-0 bg-gradient-to-br from-gold to-[#d4af5e] text-white">' + r.clientInitials + '</div>' +
+            '<div class="min-w-0"><p class="text-sm font-bold truncate">' + r.clientName + '</p><p class="text-xs text-slate2 truncate">' + r.matterType + '</p></div>' +
           '</div>' +
           '<div class="flex flex-col items-end gap-1.5 flex-shrink-0">' +
-            '<span class="status-badge ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' +
+            '<span class="badge-pill ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' +
             modeBadgeHTML(r) +
           '</div>' +
         '</div>' +
-
         (eff === 'rescheduled' && r.rescheduledTo
-          ? '<div style="background:#f5f3ff;border:1px solid #ddd6fe;padding:10px 12px;border-radius:10px;">' +
-              '<p style="font-size:10.5px;font-weight:700;color:#5b21b6;text-transform:uppercase;letter-spacing:0.4px;margin:0 0 4px;">Proposed new slot</p>' +
-              '<p style="font-size:13.5px;font-weight:700;color:#5b21b6;margin:0;">' + fmtDate(r.rescheduledTo.date) + ' · ' + fmtTime(r.rescheduledTo.time) + '</p>' +
-              (r.rescheduleReason ? '<p style="font-size:11.5px;color:#6d28d9;margin:4px 0 0;">' + r.rescheduleReason + '</p>' : '') +
+          ? '<div class="p-2.5 rounded-lg bg-violet-50 border border-violet-200">' +
+              '<p class="text-[10.5px] font-bold uppercase tracking-wide text-violet-700 mb-1">Proposed new slot</p>' +
+              '<p class="text-[13px] font-bold text-violet-700">' + fmtDate(r.rescheduledTo.date) + ' · ' + fmtTime(r.rescheduledTo.time) + '</p>' +
+              (r.rescheduleReason ? '<p class="text-xs mt-1 text-violet-600">' + r.rescheduleReason + '</p>' : '') +
             '</div>'
           : '') +
-
-        '<div class="grid grid-cols-2 gap-2.5">' +
-          '<div class="info-row"><span class="material-symbols-outlined">event</span>' + fmtDate(r.scheduledDate) + '</div>' +
-          '<div class="info-row"><span class="material-symbols-outlined">schedule</span>' + fmtTime(r.scheduledTime) + '</div>' +
-          '<div class="info-row" style="grid-column: 1 / -1;">' +
-            '<span class="material-symbols-outlined">' + (isOnline(r) ? 'videocam' : 'location_on') + '</span>' +
-            '<span style="font-weight:600;color:#041627;">' + r.mode + '</span></div>' +
-          '<div class="info-row"><span class="material-symbols-outlined">payments</span><strong class="text-[#a07d3a]">৳' + r.fee.toLocaleString() + '</strong></div>' +
+        '<div class="grid grid-cols-2 gap-2.5 text-[12.5px] text-slate2">' +
+          '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">' + (online ? 'videocam' : 'location_on') + '</span>' + r.mode + '</div>' +
+          '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px]">payments</span><strong class="text-gold-dark">৳' + r.fee.toLocaleString() + '</strong></div>' +
         '</div>' +
-
-        '<p class="text-xs text-secondary m-0 leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + r.caseSummary + '</p>' +
-
-        '<div class="flex items-center justify-between pt-3 border-t border-[#eef1f4]">' +
-          '<span class="text-[11px] text-secondary">Requested ' + fmtRelTime(r.requestedAt) + '</span>' +
+        '<p class="text-xs text-slate2 leading-relaxed line-clamp-2">' + r.caseSummary + '</p>' +
+        '<div class="flex items-center justify-between pt-3 border-t border-slate-100 flex-wrap gap-2">' +
+          '<span class="text-[11px] text-slate2">Requested ' + fmtRelTime(r.requestedAt) + '</span>' +
           '<div class="flex gap-2 flex-wrap justify-end">' + actions + '</div>' +
         '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function openModal(id) { var m = document.getElementById(id); m.classList.remove('hidden'); m.classList.add('show'); document.body.style.overflow = 'hidden'; }
+  function closeModal(id) { var m = document.getElementById(id); m.classList.add('hidden'); m.classList.remove('show'); document.body.style.overflow = ''; }
+
+  function setFieldState(value, inputId, errId, isEmpty) {
+    var input = document.getElementById(inputId);
+    var err = document.getElementById(errId);
+    if (isEmpty) { input.classList.add('invalid'); err.classList.remove('hidden'); err.classList.add('show'); return false; }
+    input.classList.remove('invalid'); err.classList.add('hidden'); err.classList.remove('show'); return true;
+  }
+
+  function openView(id) {
+    var r = REQUESTS.find(function (x) { return x.id === id; }); if (!r) return;
+    var eff = effectiveStatus(r);
+    var s = getStatusConfig(eff);
+    document.getElementById('vTitle').textContent = r.clientName;
+    document.getElementById('vSubtitle').textContent = r.matterType + ' · ' + r.service;
+
+    var stepMap = { new: 0, rescheduled: 0, awaiting_feedback: 1 };
+    var stepIndex = stepMap[eff] || 0;
+    var stepLabels = ['Requested','Accepted','Completed'];
+    var stepperHtml = '<div class="flex items-center mb-4">' + stepLabels.map(function (label, i) {
+      var cls = i < stepIndex ? 'done' : (i === stepIndex ? 'active' : '');
+      var bg = i < stepIndex ? '#1A2B3C' : (i === stepIndex ? '#C5A059' : '#fff');
+      var color = i < stepIndex ? '#fff' : (i === stepIndex ? '#fff' : '#94A3B8');
+      var border = i < stepIndex ? '#1A2B3C' : (i === stepIndex ? '#C5A059' : '#E2E8F0');
+      var line = i < stepLabels.length - 1 ? '<div class="flex-1 h-[2.5px] rounded" style="background:' + (i < stepIndex ? '#1A2B3C' : '#E2E8F0') + ';margin:0 2px;margin-bottom:22px;min-width:12px"></div>' : '';
+      return '<div class="flex flex-col items-center gap-1.5 flex-1 min-w-0">' +
+               '<div class="w-8 h-8 rounded-full flex items-center justify-center font-extrabold text-[12px]" style="background:' + bg + ';border:2px solid ' + border + ';color:' + color + '">' + (cls==='done'?'✓':(i+1)) + '</div>' +
+               '<div class="text-[9.5px] font-bold uppercase tracking-wide text-center whitespace-nowrap" style="color:' + (cls?'#1A2B3C':'#94A3B8') + '">' + label + '</div>' +
+             '</div>' + line;
+    }).join('') + '</div>';
+
+    var filesHtml = r.files.length
+      ? r.files.map(function (f) {
+          return '<div class="flex items-center gap-3 p-2.5 rounded-lg bg-offwhite border border-slate-100 mb-2"><span class="material-symbols-outlined text-[16px] text-gold-dark">description</span><div><div class="text-[12.5px] font-semibold">' + f.name + '</div><div class="text-[11px] text-slate-400">' + f.size + '</div></div></div>';
+        }).join('')
+      : '<p class="text-xs text-slate2 italic">No documents uploaded.</p>';
+
+    var thread = [];
+    (r.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
+    (r.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
+    thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
+    var threadHtml = thread.length
+      ? thread.map(function (n) {
+          return '<div class="note-bubble ' + n.from + '">' + (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text + '<span class="meta">' + fmtRelTime(n.at) + '</span></div>';
+        }).join('')
+      : '<p class="text-xs text-slate2 italic">No notes yet.</p>';
+
+    var body =
+      '<div class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl mb-4 bg-gradient-to-r from-navy to-navy-800 text-white">' +
+        '<div class="flex items-center gap-2 text-sm font-bold"><span class="material-symbols-outlined text-[16px] text-gold">event</span>' + fmtDate(r.scheduledDate) + '</div>' +
+        '<div class="flex items-center gap-1.5 px-3 py-1 rounded-full font-extrabold bg-gold text-navy text-[14px]"><span class="material-symbols-outlined text-[14px]">schedule</span>' + fmtTime(r.scheduledTime) + '</div>' +
+      '</div>' +
+      '<div class="flex items-center justify-between gap-3 mb-4 flex-wrap">' +
+        '<div class="flex items-center gap-2 flex-wrap">' +
+          '<span class="badge-pill ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' + modeBadgeHTML(r) +
+        '</div>' +
+        '<span class="text-xs text-slate2">Requested ' + fmtRelTime(r.requestedAt) + '</span>' +
+      '</div>' + stepperHtml +
+      '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">' +
+        '<div class="bg-offwhite p-3 rounded-lg border border-slate-100"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Client</p><p class="text-[13px] font-semibold">' + r.clientPhone + '</p><p class="text-[11.5px] text-slate2">' + r.clientEmail + '</p></div>' +
+        '<div class="bg-offwhite p-3 rounded-lg border border-slate-100"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Mode</p><p class="text-[13px] font-semibold">' + r.mode + '</p><p class="text-[11.5px] text-slate2">' + (isOnline(r) ? 'Video call' : 'In-person meeting') + '</p></div>' +
+      '</div>' +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100 mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-1">Case Summary</p><p class="text-[13px] leading-relaxed">' + r.caseSummary + '</p></div>' +
+      '<div class="mb-4"><p class="text-[10.5px] font-bold text-slate2 uppercase mb-2">Client Files (' + r.files.length + ')</p>' + filesHtml + '</div>' +
+      '<div class="mb-4">' +
+        '<div class="flex items-center justify-between mb-2">' +
+          '<p class="text-[10.5px] font-bold text-slate2 uppercase">Notes &amp; Messages</p>' +
+          '<button class="text-[11.5px] font-bold text-gold-dark hover:underline" onclick="openNote(' + r.id + ')"><span class="material-symbols-outlined text-[14px] align-middle">add_comment</span> Send Note</button>' +
+        '</div>' +
+        '<div>' + threadHtml + '</div>' +
+      '</div>' +
+      (eff === 'awaiting_feedback' ? '<div class="bg-gold-50 border border-gold/40 rounded-xl p-3.5 flex items-center gap-3 mb-4"><div class="w-9 h-9 rounded-lg bg-gold text-white flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">rate_review</span></div><div class="flex-1"><p class="text-[13px] font-bold">Meeting completed?</p><p class="text-[11.5px] text-slate2 mt-0.5">Submit feedback to mark as Completed.</p></div><button class="px-3.5 py-2 bg-navy text-white rounded-lg text-[12px] font-semibold" onclick="openFeedback(' + r.id + ')">Submit</button></div>' : '') +
+      (r.rescheduleReason ? '<div class="bg-violet-50 border border-violet-200 p-3 rounded-lg mb-4"><p class="text-[11px] font-bold text-violet-700 uppercase mb-1">Your Reschedule Proposal</p><p class="text-[13px] text-violet-700">Reason: ' + r.rescheduleReason + '</p>' + (r.rescheduledTo ? '<p class="text-[13px] font-bold text-violet-700 mt-1.5">New: ' + fmtDate(r.rescheduledTo.date) + ' · ' + fmtTime(r.rescheduledTo.time) + '</p>' : '') + '</div>' : '') +
+      '<div class="bg-offwhite p-3 rounded-lg border border-slate-100">' +
+        '<div class="flex justify-between text-[12.5px] mb-1.5"><span class="text-slate2">Consultation Fee</span><span class="font-semibold">৳' + r.fee.toLocaleString() + '</span></div>' +
+        '<div class="flex justify-between text-[12.5px] mb-1.5"><span class="text-slate2">Platform Charge</span><span class="text-slate2">৳' + r.platformCharge + '</span></div>' +
+        '<div class="flex justify-between pt-2 border-t border-slate-100"><span class="text-[12.5px] font-bold">You will earn</span><span class="text-[14px] font-extrabold text-gold-dark">৳' + Math.round(r.fee * 0.9).toLocaleString() + '</span></div>' +
       '</div>';
+
+    document.getElementById('vBody').innerHTML = body;
+    var footer = '';
+    if (eff === 'new') {
+      footer = '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeView()">Close</button>' +
+               '<button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="openReject(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">cancel</span> Reject</button>' +
+               '<button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="openAccept(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">check</span> Accept</button>';
+    } else if (eff === 'rescheduled') {
+      footer = '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeView()">Close</button>' +
+               '<button class="px-5 py-2.5 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="openReject(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">cancel</span> Withdraw</button>' +
+               '<button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="openAcceptReschedule(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">check</span> Accept Proposal</button>';
+    } else if (eff === 'awaiting_feedback') {
+      footer = '<button class="px-5 py-2.5 border border-slate-200 rounded-lg text-sm font-semibold hover:bg-offwhite" onclick="closeView()">Close</button>' +
+               '<button class="px-5 py-2.5 bg-navy text-white rounded-lg text-sm font-semibold inline-flex items-center gap-2" onclick="openFeedback(' + r.id + ')"><span class="material-symbols-outlined text-[18px]">rate_review</span> Submit Feedback</button>';
     }
+    document.getElementById('vFooter').innerHTML = footer;
+    openModal('viewModal');
+  }
+  function closeView() { closeModal('viewModal'); }
 
-    /* ============================================================
-       VIEW MODAL
-       ============================================================ */
-    function openView(id) {
-      var r = REQUESTS.find(function (x) { return x.id === id; });
-      if (!r) return;
-      var eff = effectiveStatus(r);
-      var s = getStatusConfig(eff);
-
-      document.getElementById('vTitle').textContent = r.clientName;
-      document.getElementById('vSubtitle').textContent = r.matterType + ' · ' + r.service;
-
-      var stepMap = { new: 0, rescheduled: 0, awaiting_feedback: 1 };
-      var stepIndex = stepMap[eff] || 0;
-      var stepLabels = ['Requested','Accepted','Completed'];
-      var stepperHtml = '<div class="step-track">' + stepLabels.map(function (label, i) {
-        var cls = i < stepIndex ? 'done' : (i === stepIndex ? 'active' : '');
-        var line = i < stepLabels.length - 1 ? '<div class="step-line ' + (i < stepIndex ? 'done' : '') + '"></div>' : '';
-        return '<div class="step-node ' + cls + '">' +
-                 '<div class="step-circle"><span>' + (i+1) + '</span></div>' +
-                 '<div class="step-label">' + label + '</div>' +
-               '</div>' + line;
-      }).join('') + '</div>';
-
-      var filesHtml = r.files.length
-        ? r.files.map(function (f) {
-            return '<div class="file-chip">' +
-                     '<span class="material-symbols-outlined">description</span>' +
-                     '<div><div style="font-weight:600;color:#041627;">' + f.name + '</div>' +
-                     '<div style="font-size:11px;color:#94a3b8;">' + f.size + '</div></div>' +
-                     '<button type="button" style="margin-left:auto;background:none;border:none;color:#94a3b8;cursor:pointer;" onclick="alert(\'Downloading ' + f.name + '\')">' +
-                       '<span class="material-symbols-outlined" style="font-size:18px;">download</span></button>' +
-                   '</div>';
-          }).join('')
-        : '<p class="text-xs text-secondary italic m-0">No documents uploaded.</p>';
-
-      var thread = [];
-      (r.userNotes || []).forEach(function (n) { thread.push({ from:'user', text:n.text, at:n.at }); });
-      (r.lawyerNotesSent || []).forEach(function (n) { thread.push({ from:'lawyer', text:n.text, at:n.at }); });
-      thread.sort(function (a, b) { return new Date(a.at) - new Date(b.at); });
-      var threadHtml = thread.length
-        ? thread.map(function (n) {
-            return '<div class="note-bubble ' + n.from + '">' +
-                     (n.from === 'lawyer' ? '<strong>You:</strong> ' : '<strong>Client:</strong> ') + n.text +
-                     '<span class="meta">' + fmtRelTime(n.at) + '</span></div>';
-          }).join('')
-        : '<p class="text-xs text-secondary italic m-0">No notes yet.</p>';
-
-      var body =
-        '<div class="flex items-center justify-between gap-3 mb-4 flex-wrap">' +
-          '<div class="flex items-center gap-2 flex-wrap">' +
-            '<span class="status-badge ' + s.cls + '"><span class="dot"></span>' + s.label + '</span>' +
-            modeBadgeHTML(r) +
-          '</div>' +
-          '<span class="text-xs text-secondary">Requested ' + fmtRelTime(r.requestedAt) + '</span>' +
-        '</div>' + stepperHtml +
-
-        '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 4px;">Client Contact</p>' +
-            '<p style="font-size:13.5px;font-weight:600;color:#041627;margin:0;">' + r.clientPhone + '</p>' +
-            '<p style="font-size:12px;color:#64748b;margin:0;">' + r.clientEmail + '</p>' +
-          '</div>' +
-          '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 4px;">' +
-              (eff === 'awaiting_feedback' ? 'Confirmed Slot' : 'Preferred Slot') + '</p>' +
-            '<p style="font-size:13.5px;font-weight:600;color:#041627;margin:0;">' + fmtDate(r.scheduledDate) + '</p>' +
-            '<p style="font-size:12px;color:#64748b;margin:0;">' + fmtTime(r.scheduledTime) + ' · ' + r.mode + '</p>' +
-          '</div>' +
-        '</div>' +
-
-        (r.rescheduleReason
-          ? '<div style="background:#f5f3ff;border:1px solid #ddd6fe;padding:12px;border-radius:12px;margin-bottom:16px;">' +
-              '<p style="font-size:11px;font-weight:700;color:#5b21b6;text-transform:uppercase;margin:0 0 4px;">Your Reschedule Proposal</p>' +
-              '<p style="font-size:13px;color:#6d28d9;margin:0;">Reason: ' + r.rescheduleReason + '</p>' +
-              (r.rescheduledTo
-                ? '<p style="font-size:13px;color:#5b21b6;margin:6px 0 0;font-weight:700;">New proposed slot: ' + fmtDate(r.rescheduledTo.date) + ' · ' + fmtTime(r.rescheduledTo.time) + '</p>'
-                : '') +
-            '</div>'
-          : '') +
-
-        '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 6px;">Case Summary</p>' +
-          '<p style="font-size:13.5px;color:#041627;margin:0;line-height:1.6;">' + r.caseSummary + '</p>' +
-          '<p style="font-size:12px;color:#64748b;margin:6px 0 0;">Existing case: <strong>' + (r.existingCase ? 'Yes' : 'No') + '</strong></p>' +
-        '</div>' +
-
-        '<div style="margin-bottom:16px;">' +
-          '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0 0 8px;">Client Files (' + r.files.length + ')</p>' +
-          filesHtml +
-        '</div>' +
-
-        '<div style="margin-bottom:16px;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
-            '<p style="font-size:10.5px;font-weight:700;color:#64748b;text-transform:uppercase;margin:0;">Notes &amp; Messages</p>' +
-            '<button type="button" style="background:none;border:none;font-size:11.5px;font-weight:700;color:#a07d3a;cursor:pointer;" onclick="openNote(' + r.id + ')">' +
-              '<span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">add_comment</span> Send Note' +
-            '</button>' +
-          '</div>' +
-          '<div>' + threadHtml + '</div>' +
-        '</div>' +
-
-        (eff === 'awaiting_feedback'
-          ? '<div class="feedback-callout" style="margin-bottom:16px;">' +
-              '<div class="fc-icon"><span class="material-symbols-outlined">rate_review</span></div>' +
-              '<div style="flex:1;">' +
-                '<p style="font-size:13px;font-weight:700;color:#041627;margin:0;">Meeting completed?</p>' +
-                '<p style="font-size:12px;color:#64748b;margin:2px 0 0;">Submit your feedback to mark this as Completed.</p>' +
-              '</div>' +
-              '<button type="button" class="lp-btn lp-btn-primary" style="font-size:12px;padding:8px 14px;" onclick="openFeedback(' + r.id + ')">Submit</button>' +
-            '</div>'
-          : '') +
-
-        '<div style="background:#f8fafc;padding:14px;border-radius:12px;border:1px solid #eef1f4;">' +
-          '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">' +
-            '<span style="font-size:12px;color:#64748b;">Consultation Fee</span>' +
-            '<span style="font-size:13.5px;font-weight:600;color:#041627;">৳' + r.fee.toLocaleString() + '</span>' +
-          '</div>' +
-          '<div style="display:flex;justify-content:space-between;margin-bottom:6px;">' +
-            '<span style="font-size:12px;color:#64748b;">Platform Charge</span>' +
-            '<span style="font-size:13.5px;color:#64748b;">৳' + r.platformCharge + '</span>' +
-          '</div>' +
-          '<div style="display:flex;justify-content:space-between;padding-top:8px;border-top:1px solid #eef1f4;">' +
-            '<span style="font-size:12px;font-weight:700;color:#041627;">You will earn</span>' +
-            '<span style="font-size:14px;font-weight:800;color:#a07d3a;">৳' + Math.round(r.fee * 0.9).toLocaleString() + '</span>' +
-          '</div>' +
-        '</div>';
-
-      document.getElementById('vBody').innerHTML = body;
-
-      var footer = '';
-      if (eff === 'new') {
-        footer = '<button type="button" class="lp-btn lp-btn-outline" onclick="closeView()">Close</button>' +
-                 '<button type="button" class="lp-btn lp-btn-danger" onclick="openReject(' + r.id + ')">' +
-                   '<span class="material-symbols-outlined text-[18px]">cancel</span> Reject</button>' +
-                 '<button type="button" class="lp-btn lp-btn-primary" onclick="openAccept(' + r.id + ')">' +
-                   '<span class="material-symbols-outlined text-[18px]">check</span> Accept</button>';
-      } else if (eff === 'rescheduled') {
-        footer = '<button type="button" class="lp-btn lp-btn-outline" onclick="closeView()">Close</button>' +
-                 '<button type="button" class="lp-btn lp-btn-danger" onclick="openReject(' + r.id + ')">' +
-                   '<span class="material-symbols-outlined text-[18px]">cancel</span> Withdraw</button>' +
-                 '<button type="button" class="lp-btn lp-btn-primary" onclick="openAcceptReschedule(' + r.id + ')">' +
-                   '<span class="material-symbols-outlined text-[18px]">check</span> Accept Proposal</button>';
-      } else if (eff === 'awaiting_feedback') {
-        footer = '<button type="button" class="lp-btn lp-btn-outline" onclick="closeView()">Close</button>' +
-                 '<button type="button" class="lp-btn lp-btn-primary" onclick="openFeedback(' + r.id + ')">' +
-                   '<span class="material-symbols-outlined text-[18px]">rate_review</span> Submit Feedback</button>';
-      }
-      document.getElementById('vFooter').innerHTML = footer;
-
-      document.getElementById('viewModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
+  function openAccept(id) {
+    var r = REQUESTS.find(function (x) { return x.id === id; }); if (!r) return;
+    acceptTarget = r;
+    document.getElementById('accSubtitle').textContent = 'Confirm details for ' + r.clientName + "'s consultation.";
+    document.getElementById('accDate').value = r.scheduledDate;
+    document.getElementById('accTime').value = r.scheduledTime;
+    var needLink = isOnline(r);
+    document.getElementById('accLinkField').style.display = needLink ? 'block' : 'none';
+    document.getElementById('accLink').value = '';
+    document.getElementById('accNote').value = '';
+    ['accDateErr','accTimeErr','accLinkErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
+    ['accDate','accTime','accLink'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
+    closeModal('viewModal');
+    openModal('acceptModal');
+  }
+  function closeAccept() { closeModal('acceptModal'); acceptTarget = null; }
+  function confirmAccept() {
+    if (!acceptTarget) return;
+    var d = document.getElementById('accDate').value;
+    var t = document.getElementById('accTime').value;
+    var link = document.getElementById('accLink').value.trim();
+    var note = document.getElementById('accNote').value.trim();
+    var needLink = isOnline(acceptTarget);
+    var ok = true;
+    ok = setFieldState(d, 'accDate', 'accDateErr', !d) && ok;
+    ok = setFieldState(t, 'accTime', 'accTimeErr', !t) && ok;
+    if (needLink) ok = setFieldState(link, 'accLink', 'accLinkErr', !link) && ok;
+    if (!ok) return;
+    acceptTarget.status = 'accepted';
+    acceptTarget.scheduledDate = d;
+    acceptTarget.scheduledTime = t;
+    acceptTarget.meetingLink = needLink ? link : null;
+    if (note) {
+      acceptTarget.lawyerNote = note;
+      acceptTarget.lawyerNotesSent = acceptTarget.lawyerNotesSent || [];
+      acceptTarget.lawyerNotesSent.push({ text: note, at: new Date().toISOString() });
     }
-    function closeView() {
-      document.getElementById('viewModal').classList.remove('show');
-      document.body.style.overflow = '';
+    closeAccept(); render();
+    alert('Request accepted! Client has been notified.');
+  }
+
+  function openAcceptReschedule(id) {
+    var r = REQUESTS.find(function (x) { return x.id === id; }); if (!r) return;
+    acceptRescheduleTarget = r;
+    document.getElementById('accReschSubtitle').textContent = 'Confirm the new slot for ' + r.clientName + "'s session.";
+    document.getElementById('accReschProposed').textContent = fmtDate(r.rescheduledTo.date) + ' at ' + fmtTime(r.rescheduledTo.time);
+    document.getElementById('accReschDate').value = r.rescheduledTo.date;
+    document.getElementById('accReschTime').value = r.rescheduledTo.time;
+    var needLink = isOnline(r);
+    document.getElementById('accReschLinkField').style.display = needLink ? 'block' : 'none';
+    document.getElementById('accReschLink').value = '';
+    document.getElementById('accReschNote').value = '';
+    ['accReschDateErr','accReschTimeErr','accReschLinkErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
+    ['accReschDate','accReschTime','accReschLink'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
+    closeModal('viewModal');
+    openModal('acceptRescheduleModal');
+  }
+  function closeAcceptReschedule() { closeModal('acceptRescheduleModal'); acceptRescheduleTarget = null; }
+  function confirmAcceptReschedule() {
+    if (!acceptRescheduleTarget) return;
+    var d = document.getElementById('accReschDate').value;
+    var t = document.getElementById('accReschTime').value;
+    var link = document.getElementById('accReschLink').value.trim();
+    var note = document.getElementById('accReschNote').value.trim();
+    var needLink = isOnline(acceptRescheduleTarget);
+    var ok = true;
+    ok = setFieldState(d, 'accReschDate', 'accReschDateErr', !d) && ok;
+    ok = setFieldState(t, 'accReschTime', 'accReschTimeErr', !t) && ok;
+    if (needLink) ok = setFieldState(link, 'accReschLink', 'accReschLinkErr', !link) && ok;
+    if (!ok) return;
+    acceptRescheduleTarget.status = 'accepted';
+    acceptRescheduleTarget.scheduledDate = d;
+    acceptRescheduleTarget.scheduledTime = t;
+    acceptRescheduleTarget.meetingLink = needLink ? link : null;
+    if (note) {
+      acceptRescheduleTarget.lawyerNote = note;
+      acceptRescheduleTarget.lawyerNotesSent = acceptRescheduleTarget.lawyerNotesSent || [];
+      acceptRescheduleTarget.lawyerNotesSent.push({ text: note, at: new Date().toISOString() });
     }
+    acceptRescheduleTarget.rescheduleReason = null;
+    acceptRescheduleTarget.rescheduledTo = null;
+    closeAcceptReschedule(); render();
+    alert('Reschedule proposal accepted!');
+  }
 
-    /* ============================================================
-       ACCEPT (new request)
-       ============================================================ */
-    function openAccept(id) {
-      var r = REQUESTS.find(function (x) { return x.id === id; });
-      if (!r) return;
-      acceptTarget = r;
-      document.getElementById('accSubtitle').textContent = 'Confirm details for ' + r.clientName + "'s consultation.";
-      document.getElementById('accDate').value = r.scheduledDate;
-      document.getElementById('accTime').value = r.scheduledTime;
-      var needLink = isOnline(r);
-      document.getElementById('accLinkField').style.display = needLink ? 'block' : 'none';
-      document.getElementById('accLink').value = '';
-      document.getElementById('accNote').value = '';
-      ['accDateErr','accTimeErr','accLinkErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
-      ['accDate','accTime','accLink'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
-      document.getElementById('viewModal').classList.remove('show');
-      document.getElementById('acceptModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeAccept() {
-      document.getElementById('acceptModal').classList.remove('show');
-      document.body.style.overflow = '';
-      acceptTarget = null;
-    }
-    function confirmAccept() {
-      if (!acceptTarget) return;
-      var d = document.getElementById('accDate').value;
-      var t = document.getElementById('accTime').value;
-      var link = document.getElementById('accLink').value.trim();
-      var note = document.getElementById('accNote').value.trim();
-      var needLink = isOnline(acceptTarget);
-      var ok = true;
-      ok = setFieldState(d, 'accDate', 'accDateErr', !d) && ok;
-      ok = setFieldState(t, 'accTime', 'accTimeErr', !t) && ok;
-      if (needLink) ok = setFieldState(link, 'accLink', 'accLinkErr', !link) && ok;
-      if (!ok) return;
+  function openReject(id) {
+    var r = REQUESTS.find(function (x) { return x.id === id; }); if (!r) return;
+    rejectTarget = r;
+    var eff = effectiveStatus(r);
+    var isWithdraw = (eff === 'rescheduled');
+    document.getElementById('rejTitle').textContent = isWithdraw ? 'Withdraw Reschedule Proposal' : 'Reject Request';
+    document.getElementById('rejSubtitle').textContent = isWithdraw ? 'Withdrawing cancels the appointment. An apology note helps the client understand.' : 'Please provide a reason — this is shown to the client.';
+    document.getElementById('rejWarning').innerHTML = isWithdraw ? '<strong>Note:</strong> Withdrawing will cancel the appointment. The client will be refunded in full.' : '<strong>Note:</strong> The client will be refunded in full and given a chance to book another advocate.';
+    document.getElementById('rejNoteLabel').innerHTML = isWithdraw ? 'Apology note to client <span class="text-red-600">*</span>' : 'Additional details <span class="text-slate-400 font-normal text-[11px] normal-case tracking-normal ml-1">(optional)</span>';
+    document.getElementById('rejConfirmLabel').textContent = isWithdraw ? 'Withdraw & Cancel' : 'Confirm Rejection';
+    document.getElementById('rejReasonField').style.display = isWithdraw ? 'none' : 'block';
+    document.getElementById('rejReason').value = '';
+    document.getElementById('rejNote').value = '';
+    ['rejReasonErr','rejNoteErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
+    ['rejReason','rejNote'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
+    closeModal('viewModal');
+    openModal('rejectModal');
+  }
+  function closeReject() { closeModal('rejectModal'); rejectTarget = null; }
+  function confirmReject() {
+    if (!rejectTarget) return;
+    var eff = effectiveStatus(rejectTarget);
+    var isWithdraw = (eff === 'rescheduled');
+    var reason = isWithdraw ? 'Reschedule withdrawn' : document.getElementById('rejReason').value;
+    var note = document.getElementById('rejNote').value.trim();
+    var ok = true;
+    if (!isWithdraw) ok = setFieldState(reason, 'rejReason', 'rejReasonErr', !reason) && ok;
+    if (isWithdraw) ok = setFieldState(note, 'rejNote', 'rejNoteErr', !note) && ok;
+    if (!ok) return;
+    rejectTarget.status = 'rejected';
+    rejectTarget.rejectionReason = reason + (note ? ' — ' + note : '');
+    rejectTarget.rejectedAt = new Date().toISOString();
+    closeReject(); render();
+    alert(isWithdraw ? 'Proposal withdrawn.' : 'Request rejected.');
+  }
 
-      acceptTarget.status = 'accepted';
-      acceptTarget.scheduledDate = d;
-      acceptTarget.scheduledTime = t;
-      acceptTarget.meetingLink = needLink ? link : null;
-      if (note) {
-        acceptTarget.lawyerNote = note;
-        acceptTarget.lawyerNotesSent = acceptTarget.lawyerNotesSent || [];
-        acceptTarget.lawyerNotesSent.push({ text: note, at: new Date().toISOString() });
-      }
-      closeAccept();
-      render();
-      alert('Request accepted! Client has been notified.');
-    }
+  function openFeedback(id) {
+    var r = REQUESTS.find(function (x) { return x.id === id; }); if (!r) return;
+    if (!isFeedbackAvailable(r)) { alert('Feedback will be available once the consultation has started.'); return; }
+    feedbackTarget = r;
+    document.getElementById('fbSubtitle').textContent = 'Session with ' + r.clientName + ' · ' + fmtDate(r.scheduledDate) + ' at ' + fmtTime(r.scheduledTime);
+    document.getElementById('fbDecision').value = '';
+    document.getElementById('fbNote').value = '';
+    document.getElementById('fbFiles').value = '';
+    document.getElementById('fbConfirm').checked = false;
+    ['fbDecisionErr','fbNoteErr','fbConfirmErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
+    ['fbDecision','fbNote'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
+    closeModal('viewModal');
+    openModal('feedbackModal');
+  }
+  function closeFeedback() { closeModal('feedbackModal'); feedbackTarget = null; }
+  function confirmFeedback() {
+    if (!feedbackTarget) return;
+    var decision = document.getElementById('fbDecision').value;
+    var note = document.getElementById('fbNote').value.trim();
+    var confirmed = document.getElementById('fbConfirm').checked;
+    var files = document.getElementById('fbFiles').files;
+    var ok = true;
+    ok = setFieldState(decision, 'fbDecision', 'fbDecisionErr', !decision) && ok;
+    ok = setFieldState(note, 'fbNote', 'fbNoteErr', !note) && ok;
+    var confirmErr = document.getElementById('fbConfirmErr');
+    if (!confirmed) { ok = false; confirmErr.classList.remove('hidden'); confirmErr.classList.add('show'); } else { confirmErr.classList.add('hidden'); confirmErr.classList.remove('show'); }
+    if (!ok) return;
+    var fileList = [];
+    for (var i = 0; i < files.length; i++) fileList.push({ name: files[i].name, size: (files[i].size / 1024).toFixed(0) + ' KB' });
+    feedbackTarget.status = 'completed';
+    feedbackTarget.completedAt = new Date().toISOString();
+    feedbackTarget.feedback = { decision: decision, note: note, files: fileList, at: new Date().toISOString() };
+    closeFeedback(); render();
+    alert('Feedback submitted.');
+  }
 
-    /* ============================================================
-       ACCEPT RESCHEDULE PROPOSAL
-       ============================================================ */
-    function openAcceptReschedule(id) {
-      var r = REQUESTS.find(function (x) { return x.id === id; });
-      if (!r) return;
-      acceptRescheduleTarget = r;
+  function openNote(id) {
+    var r = REQUESTS.find(function (x) { return x.id === id; }); if (!r) return;
+    noteTarget = r;
+    document.getElementById('noteSubtitle').textContent = 'To ' + r.clientName + ' · ' + r.matterType;
+    document.getElementById('noteText').value = '';
+    document.getElementById('noteTextErr').classList.remove('show');
+    document.getElementById('noteText').classList.remove('invalid');
+    closeModal('viewModal');
+    openModal('noteModal');
+  }
+  function closeNote() { closeModal('noteModal'); noteTarget = null; }
+  function confirmNote() {
+    if (!noteTarget) return;
+    var text = document.getElementById('noteText').value.trim();
+    if (!text) { document.getElementById('noteText').classList.add('invalid'); document.getElementById('noteTextErr').classList.add('show'); return; }
+    noteTarget.lawyerNotesSent = noteTarget.lawyerNotesSent || [];
+    noteTarget.lawyerNotesSent.push({ text: text, at: new Date().toISOString() });
+    var id = noteTarget.id;
+    closeNote(); render(); openView(id);
+  }
 
-      document.getElementById('accReschSubtitle').textContent = 'Confirm the new slot for ' + r.clientName + "'s session.";
-      document.getElementById('accReschProposed').textContent =
-        fmtDateLong(r.rescheduledTo.date) + ' at ' + fmtTime(r.rescheduledTo.time);
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!document.getElementById('noteModal').classList.contains('hidden')) return closeNote();
+    if (!document.getElementById('feedbackModal').classList.contains('hidden')) return closeFeedback();
+    if (!document.getElementById('rejectModal').classList.contains('hidden')) return closeReject();
+    if (!document.getElementById('acceptRescheduleModal').classList.contains('hidden')) return closeAcceptReschedule();
+    if (!document.getElementById('acceptModal').classList.contains('hidden')) return closeAccept();
+    if (!document.getElementById('viewModal').classList.contains('hidden')) return closeView();
+  });
 
-      document.getElementById('accReschDate').value = r.rescheduledTo.date;
-      document.getElementById('accReschTime').value = r.rescheduledTo.time;
-
-      var needLink = isOnline(r);
-      document.getElementById('accReschLinkField').style.display = needLink ? 'block' : 'none';
-      document.getElementById('accReschLink').value = '';
-      document.getElementById('accReschNote').value = '';
-
-      ['accReschDateErr','accReschTimeErr','accReschLinkErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
-      ['accReschDate','accReschTime','accReschLink'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
-
-      document.getElementById('viewModal').classList.remove('show');
-      document.getElementById('acceptRescheduleModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeAcceptReschedule() {
-      document.getElementById('acceptRescheduleModal').classList.remove('show');
-      document.body.style.overflow = '';
-      acceptRescheduleTarget = null;
-    }
-    function confirmAcceptReschedule() {
-      if (!acceptRescheduleTarget) return;
-      var d = document.getElementById('accReschDate').value;
-      var t = document.getElementById('accReschTime').value;
-      var link = document.getElementById('accReschLink').value.trim();
-      var note = document.getElementById('accReschNote').value.trim();
-      var needLink = isOnline(acceptRescheduleTarget);
-
-      var ok = true;
-      ok = setFieldState(d, 'accReschDate', 'accReschDateErr', !d) && ok;
-      ok = setFieldState(t, 'accReschTime', 'accReschTimeErr', !t) && ok;
-      if (needLink) ok = setFieldState(link, 'accReschLink', 'accReschLinkErr', !link) && ok;
-      if (!ok) return;
-
-      /* Commit the new slot */
-      acceptRescheduleTarget.status = 'accepted';
-      acceptRescheduleTarget.scheduledDate = d;
-      acceptRescheduleTarget.scheduledTime = t;
-
-      /* NEW link REPLACES any previous link for online sessions */
-      if (needLink) {
-        acceptRescheduleTarget.meetingLink = link;
-      } else {
-        acceptRescheduleTarget.meetingLink = null;
-      }
-
-      /* Optional lawyer note */
-      if (note) {
-        acceptRescheduleTarget.lawyerNote = note;
-        acceptRescheduleTarget.lawyerNotesSent = acceptRescheduleTarget.lawyerNotesSent || [];
-        acceptRescheduleTarget.lawyerNotesSent.push({ text: note, at: new Date().toISOString() });
-      }
-
-      /* Reschedule proposal resolved */
-      acceptRescheduleTarget.rescheduleReason = null;
-      acceptRescheduleTarget.rescheduledTo = null;
-
-      closeAcceptReschedule();
-      render();
-      alert('Reschedule proposal accepted! The new meeting link has replaced the previous one, and the client has been notified.');
-    }
-
-    /* ============================================================
-       REJECT / WITHDRAW
-       ============================================================ */
-    function openReject(id) {
-      var r = REQUESTS.find(function (x) { return x.id === id; });
-      if (!r) return;
-      rejectTarget = r;
-      var eff = effectiveStatus(r);
-      var isWithdraw = (eff === 'rescheduled');
-
-      document.getElementById('rejTitle').textContent = isWithdraw ? 'Withdraw Reschedule Proposal' : 'Reject Request';
-      document.getElementById('rejSubtitle').textContent = isWithdraw
-        ? 'Withdrawing cancels the appointment. An apology note helps the client understand.'
-        : 'Please provide a reason — this is shown to the client.';
-      document.getElementById('rejWarning').innerHTML = isWithdraw
-        ? '<strong>Note:</strong> Withdrawing will cancel the appointment. The client will be refunded in full.'
-        : '<strong>Note:</strong> The client will be refunded in full and given a chance to book another advocate.';
-      document.getElementById('rejNoteLabel').innerHTML = isWithdraw
-        ? 'Apology note to client <span class="req">*</span>'
-        : 'Additional details <span class="opt">(optional)</span>';
-      document.getElementById('rejConfirmLabel').textContent = isWithdraw ? 'Withdraw & Cancel' : 'Confirm Rejection';
-      document.getElementById('rejReasonField').style.display = isWithdraw ? 'none' : 'block';
-      document.getElementById('rejReason').value = '';
-      document.getElementById('rejNote').value = '';
-      ['rejReasonErr','rejNoteErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
-      ['rejReason','rejNote'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
-      document.getElementById('viewModal').classList.remove('show');
-      document.getElementById('rejectModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeReject() {
-      document.getElementById('rejectModal').classList.remove('show');
-      document.body.style.overflow = '';
-      rejectTarget = null;
-    }
-    function confirmReject() {
-      if (!rejectTarget) return;
-      var eff = effectiveStatus(rejectTarget);
-      var isWithdraw = (eff === 'rescheduled');
-      var reason = isWithdraw ? 'Reschedule withdrawn' : document.getElementById('rejReason').value;
-      var note = document.getElementById('rejNote').value.trim();
-      var ok = true;
-      if (!isWithdraw) ok = setFieldState(reason, 'rejReason', 'rejReasonErr', !reason) && ok;
-      if (isWithdraw) ok = setFieldState(note, 'rejNote', 'rejNoteErr', !note) && ok;
-      if (!ok) return;
-
-      rejectTarget.status = 'rejected';
-      rejectTarget.rejectionReason = reason + (note ? ' — ' + note : '');
-      rejectTarget.rejectedAt = new Date().toISOString();
-      closeReject();
-      render();
-      alert(isWithdraw ? 'Proposal withdrawn. Appointment cancelled and client refunded.' : 'Request rejected. Client refunded and notified.');
-    }
-
-    /* ============================================================
-       FEEDBACK
-       ============================================================ */
-    function openFeedback(id) {
-      var r = REQUESTS.find(function (x) { return x.id === id; });
-      if (!r) return;
-      if (!isFeedbackAvailable(r)) {
-        alert('Feedback will be available once the consultation has started.');
-        return;
-      }
-      feedbackTarget = r;
-      document.getElementById('fbSubtitle').textContent = 'Session with ' + r.clientName + ' · ' + fmtDate(r.scheduledDate) + ' at ' + fmtTime(r.scheduledTime);
-      document.getElementById('fbDecision').value = '';
-      document.getElementById('fbNote').value = '';
-      document.getElementById('fbFiles').value = '';
-      document.getElementById('fbConfirm').checked = false;
-      ['fbDecisionErr','fbNoteErr','fbConfirmErr'].forEach(function (i) { document.getElementById(i).classList.remove('show'); });
-      ['fbDecision','fbNote'].forEach(function (i) { document.getElementById(i).classList.remove('invalid'); });
-      document.getElementById('viewModal').classList.remove('show');
-      document.getElementById('feedbackModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeFeedback() {
-      document.getElementById('feedbackModal').classList.remove('show');
-      document.body.style.overflow = '';
-      feedbackTarget = null;
-    }
-    function confirmFeedback() {
-      if (!feedbackTarget) return;
-      var decision = document.getElementById('fbDecision').value;
-      var note = document.getElementById('fbNote').value.trim();
-      var confirmed = document.getElementById('fbConfirm').checked;
-      var files = document.getElementById('fbFiles').files;
-      var ok = true;
-      ok = setFieldState(decision, 'fbDecision', 'fbDecisionErr', !decision) && ok;
-      ok = setFieldState(note, 'fbNote', 'fbNoteErr', !note) && ok;
-      var confirmErr = document.getElementById('fbConfirmErr');
-      if (!confirmed) { ok = false; confirmErr.classList.add('show'); } else { confirmErr.classList.remove('show'); }
-      if (!ok) return;
-
-      var fileList = [];
-      for (var i = 0; i < files.length; i++) fileList.push({ name: files[i].name, size: (files[i].size / 1024).toFixed(0) + ' KB' });
-
-      feedbackTarget.status = 'completed';
-      feedbackTarget.completedAt = new Date().toISOString();
-      feedbackTarget.feedback = { decision: decision, note: note, files: fileList, at: new Date().toISOString() };
-      closeFeedback();
-      render();
-      alert('Feedback submitted. Appointment marked as Completed and moved to History.');
-    }
-
-    /* ============================================================
-       SEND NOTE
-       ============================================================ */
-    function openNote(id) {
-      var r = REQUESTS.find(function (x) { return x.id === id; });
-      if (!r) return;
-      noteTarget = r;
-      document.getElementById('noteSubtitle').textContent = 'To ' + r.clientName + ' · ' + r.matterType;
-      document.getElementById('noteText').value = '';
-      document.getElementById('noteTextErr').classList.remove('show');
-      document.getElementById('noteText').classList.remove('invalid');
-      document.getElementById('viewModal').classList.remove('show');
-      document.getElementById('noteModal').classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeNote() {
-      document.getElementById('noteModal').classList.remove('show');
-      document.body.style.overflow = '';
-      noteTarget = null;
-    }
-    function confirmNote() {
-      if (!noteTarget) return;
-      var text = document.getElementById('noteText').value.trim();
-      if (!text) {
-        document.getElementById('noteText').classList.add('invalid');
-        document.getElementById('noteTextErr').classList.add('show');
-        return;
-      }
-      noteTarget.lawyerNotesSent = noteTarget.lawyerNotesSent || [];
-      noteTarget.lawyerNotesSent.push({ text: text, at: new Date().toISOString() });
-      var id = noteTarget.id;
-      closeNote();
-      render();
-      openView(id);
-    }
-
-    /* ============================================================
-       HELPERS
-       ============================================================ */
-    function setFieldState(value, inputId, errId, isEmpty) {
-      var input = document.getElementById(inputId);
-      var err = document.getElementById(errId);
-      if (isEmpty) {
-        if (input) input.classList.add('invalid');
-        if (err) err.classList.add('show');
-        return false;
-      }
-      if (input) input.classList.remove('invalid');
-      if (err) err.classList.remove('show');
-      return true;
-    }
-
-    /* ============================================================
-       CLOSE HANDLERS
-       ============================================================ */
-    document.addEventListener('keydown', function (e) {
-      if (e.key !== 'Escape') return;
-      if (document.getElementById('noteModal').classList.contains('show')) return closeNote();
-      if (document.getElementById('feedbackModal').classList.contains('show')) return closeFeedback();
-      if (document.getElementById('rejectModal').classList.contains('show')) return closeReject();
-      if (document.getElementById('acceptRescheduleModal').classList.contains('show')) return closeAcceptReschedule();
-      if (document.getElementById('acceptModal').classList.contains('show')) return closeAccept();
-      if (document.getElementById('viewModal').classList.contains('show')) return closeView();
+  document.querySelectorAll('.lp-modal-overlay').forEach(function (o) {
+    o.addEventListener('click', function (e) {
+      if (e.target !== o) return;
+      if (o.id === 'viewModal') closeView();
+      if (o.id === 'acceptModal') closeAccept();
+      if (o.id === 'acceptRescheduleModal') closeAcceptReschedule();
+      if (o.id === 'rejectModal') closeReject();
+      if (o.id === 'feedbackModal') closeFeedback();
+      if (o.id === 'noteModal') closeNote();
     });
+  });
 
-    document.querySelectorAll('.lp-modal-overlay').forEach(function (o) {
-      o.addEventListener('click', function (e) {
-        if (e.target !== o) return;
-        if (o.id === 'viewModal') closeView();
-        if (o.id === 'acceptModal') closeAccept();
-        if (o.id === 'acceptRescheduleModal') closeAcceptReschedule();
-        if (o.id === 'rejectModal') closeReject();
-        if (o.id === 'feedbackModal') closeFeedback();
-        if (o.id === 'noteModal') closeNote();
-      });
-    });
+  document.addEventListener('DOMContentLoaded', function () {
+    render();
+    setInterval(render, 30 * 1000);
+  });
+</script>
 
-    /* ============================================================
-       INIT
-       ============================================================ */
-    document.addEventListener('DOMContentLoaded', function () {
-      render();
-      setInterval(render, 30 * 1000);
-    });
-  </script>
 </body>
 </html>
