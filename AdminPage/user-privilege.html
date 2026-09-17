@@ -15,6 +15,130 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ═══ Role Chips ═══ */
+  .role-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .role-chip:hover { border-color: #C5A059; transform: translateY(-1px); }
+  .role-chip.active {
+    border-color: #C5A059;
+    background: linear-gradient(135deg, #FBF6ED 0%, #fff 100%);
+    box-shadow: 0 4px 12px rgba(197,160,89,0.15);
+  }
+  .role-chip .chip-icon {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .role-chip .chip-name { font-size: 12.5px; font-weight: 700; color: #1A2B3C; }
+  .role-chip .chip-count { font-size: 10.5px; font-weight: 600; color: #94A3B8; margin-top: 1px; }
+  .role-chip.active .chip-count { color: #A07D3A; }
+
+  /* ═══ Stat Tile ═══ */
+  .stat-tile {
+    background: #fff; border: 1px solid #EEF1F4;
+    border-radius: 12px; padding: 12px 16px;
+    position: relative; overflow: hidden; transition: all .2s;
+  }
+  .stat-tile::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: currentColor; opacity: 0.8;
+  }
+  .stat-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,43,60,0.08); }
+  .stat-tile .num { font-size: 22px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat-tile .lbl {
+    font-size: 10.5px; color: #64748B; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em; margin-top: 6px;
+  }
+  .stat-tile .icon { position: absolute; right: 12px; top: 12px; font-size: 18px; opacity: 0.15; }
+
+  /* ═══ Access Matrix ═══ */
+  .access-matrix {
+    width: 100%; border-collapse: collapse; table-layout: fixed;
+  }
+  .access-matrix th {
+    padding: 10px 12px; font-size: 10.5px; font-weight: 700;
+    color: #64748B; text-transform: uppercase;
+    letter-spacing: 0.05em; text-align: center;
+    background: #F8FAFC; border-bottom: 1px solid #EEF1F4;
+  }
+  .access-matrix th:first-child {
+    text-align: left; padding-left: 16px; width: 40%;
+  }
+  .access-matrix td {
+    padding: 10px 12px; font-size: 12.5px;
+    border-bottom: 1px solid #F1F5F9; text-align: center;
+  }
+  .access-matrix td:first-child { text-align: left; padding-left: 16px; }
+  .access-matrix tbody tr:hover { background: #FBFDFF; }
+  .access-matrix .group-row td {
+    background: #F8FAFC; color: #94A3B8;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 8px 16px; border-bottom: 1px solid #EEF1F4;
+    text-align: left;
+  }
+
+  /* ═══ Access Cell Badges (read-only) ═══ */
+  .acc-yes {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    background: #ECFDF5; color: #047857;
+    border-radius: 6px; font-size: 12px; font-weight: 800;
+  }
+  .acc-no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    background: #F8FAFC; color: #CBD5E1;
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+  }
+  .acc-partial {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    background: #FFFBEB; color: #B45309;
+    border-radius: 6px; font-size: 12px; font-weight: 800;
+  }
+
+  /* ═══ Page Cell ═══ */
+  .page-cell { display: flex; align-items: center; gap: 8px; }
+  .page-cell .p-icon { font-size: 14px; width: 20px; text-align: center; flex-shrink: 0; }
+  .page-cell .p-name { font-weight: 500; color: #1A2B3C; }
+
+  /* ═══ Info Banner ═══ */
+  .info-banner {
+    background: linear-gradient(135deg, #FBF6ED 0%, #fff 100%);
+    border: 1px solid rgba(197,160,89,0.3);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .info-banner .ib-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(197,160,89,0.15);
+    color: #A07D3A;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+
+  /* ═══ Search Input ═══ */
+  .search-input {
+    border: 1px solid #E2E8F0; border-radius: 8px;
+    padding: 8px 12px; font-size: 13px;
+    outline: none; transition: border-color .15s;
+    background: #F8FAFC; font-family: inherit;
+  }
+  .search-input:focus { border-color: #C5A059; background: #fff; }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -31,51 +155,113 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+    <main class="flex-1 overflow-y-auto p-5 space-y-4">
 
-      <div>
-        <h1 class="text-2xl font-bold">User Privilege</h1>
-        <p class="text-slate2 text-sm mt-1">Role-based access overview — who can access what in the system.</p>
+      <!-- Title + Link to Edit -->
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-bold">User Privilege</h1>
+          <p class="text-slate2 text-xs mt-0.5">Read-only reference — see exactly what each role can access in the system.</p>
+        </div>
+        <a href="roles-permissions.html"
+           class="text-xs font-semibold text-white px-4 py-2 rounded-lg inline-flex items-center gap-1.5"
+           style="background: linear-gradient(135deg, #C5A059 0%, #A07D3A 100%); box-shadow: 0 2px 8px rgba(197,160,89,0.28);">
+          🔑 Edit in Roles & Permissions
+        </a>
       </div>
 
-      <div class="grid grid-cols-4 gap-5">
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="text-slate2 text-xs">Client Access</p>
-          <p class="text-2xl font-bold mt-2">6</p>
-          <p class="text-xs text-slate2 mt-1">modules permitted</p>
-        </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="text-slate2 text-xs">Lawyer Access</p>
-          <p class="text-2xl font-bold mt-2">9</p>
-          <p class="text-xs text-slate2 mt-1">modules permitted</p>
-        </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="text-slate2 text-xs">Deed-Writer Access</p>
-          <p class="text-2xl font-bold mt-2">5</p>
-          <p class="text-xs text-slate2 mt-1">modules permitted</p>
-        </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="text-slate2 text-xs">Admin Access</p>
-          <p class="text-2xl font-bold mt-2 text-gold">18</p>
-          <p class="text-xs text-slate2 mt-1">modules permitted</p>
+      <!-- Info Banner -->
+      <div class="info-banner">
+        <div class="ib-icon">ℹ️</div>
+        <div class="flex-1">
+          <div class="text-[12.5px] font-bold text-navy">Read-only reference view</div>
+          <div class="text-[11px] text-slate2 mt-0.5">
+            Permissions এখানে পরিবর্তন করা যাবে না। Edit করতে হলে <strong class="text-gold">Roles & Permissions</strong> page এ যান (Super Admin only)।
+          </div>
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl p-5 shadow-card border">
-        <h3 class="font-semibold text-sm mb-4">Access Matrix</h3>
-        <table class="w-full text-sm">
-          <thead class="bg-offwhite text-slate2 text-xs uppercase tracking-wide">
-            <tr>
-              <th class="text-left font-semibold px-5 py-3">Module</th>
-              <th class="text-left font-semibold px-5 py-3">Client</th>
-              <th class="text-left font-semibold px-5 py-3">Lawyer</th>
-              <th class="text-left font-semibold px-5 py-3">Deed-Writer</th>
-              <th class="text-right font-semibold px-5 py-3">Admin</th>
-            </tr>
-          </thead>
-          <tbody id="privTbody" class="divide-y divide-slate-100"></tbody>
-        </table>
-        <p class="text-xs text-slate2 mt-4">Super Admin can toggle any checkbox to enable/disable access for that role.</p>
+      <!-- Role Chips -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-3">
+        <div class="text-[10px] font-bold text-slate2 uppercase tracking-wide mb-2 px-1">View access for role:</div>
+        <div id="roleChips" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Selected Role Info Bar -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+        <div class="flex items-center justify-between flex-wrap gap-4">
+          <div class="flex items-center gap-4">
+            <div id="selectedRoleIcon" class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl" style="background: #FBF6ED;">👑</div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 id="selectedRoleName" class="text-lg font-bold">Super Admin</h2>
+                <span id="selectedRoleBadge" class="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style="background:#FBF6ED;color:#A07D3A;">FULL ACCESS</span>
+              </div>
+              <p id="selectedRoleDesc" class="text-[11.5px] text-slate2 mt-0.5">Full system access — can manage everything</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="text-center">
+              <div class="text-2xl font-extrabold text-emerald-600 leading-none" id="statAccessCount">21</div>
+              <div class="text-[9.5px] font-bold text-slate2 uppercase tracking-wider mt-1">Pages with Access</div>
+            </div>
+            <div class="w-px h-10 bg-slate-200"></div>
+            <div class="text-center">
+              <div class="text-2xl font-extrabold text-red-500 leading-none" id="statDeniedCount">0</div>
+              <div class="text-[9.5px] font-bold text-slate2 uppercase tracking-wider mt-1">Pages Denied</div>
+            </div>
+            <div class="w-px h-10 bg-slate-200"></div>
+            <div class="text-center">
+              <div class="text-2xl font-extrabold text-navy leading-none" id="statUserCount">1</div>
+              <div class="text-[9.5px] font-bold text-slate2 uppercase tracking-wider mt-1">Users in Role</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Access Matrix -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 overflow-hidden">
+        <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
+          <div>
+            <h3 class="font-semibold text-sm">Access Matrix</h3>
+            <p class="text-[11px] text-slate2 mt-0.5">Module-level access for the selected role</p>
+          </div>
+          <input id="moduleSearch" type="text" placeholder="Search module..." class="search-input w-64">
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="access-matrix">
+            <thead>
+              <tr>
+                <th>Module / Page</th>
+                <th>View</th>
+                <th>Create</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                <th>Approve</th>
+              </tr>
+            </thead>
+            <tbody id="matrixBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+        <div class="flex flex-wrap items-center gap-5 text-[11.5px]">
+          <div class="flex items-center gap-2">
+            <span class="acc-yes">✓</span>
+            <span class="text-slate2">Access granted</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="acc-partial">✓</span>
+            <span class="text-slate2">Conditional / under review</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="acc-no">✗</span>
+            <span class="text-slate2">Access denied</span>
+          </div>
+        </div>
       </div>
 
     </main>
@@ -85,14 +271,280 @@
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
 <script>
-document.getElementById('privTbody').innerHTML = DATA.permissions.map(p => `
-  <tr>
-    <td class="px-5 py-3.5 font-medium">${p.module}</td>
-    <td class="px-5 py-3.5"><input type="checkbox" ${p.user==='✓'?'checked':''} class="accent-gold"></td>
-    <td class="px-5 py-3.5"><input type="checkbox" ${p.lawyer==='✓'?'checked':''} class="accent-gold"></td>
-    <td class="px-5 py-3.5"><input type="checkbox" ${p.deed==='✓'?'checked':''} class="accent-gold"></td>
-    <td class="px-5 py-3.5 text-right"><input type="checkbox" ${p.admin==='✓'?'checked':''} class="accent-gold"></td>
-  </tr>`).join('');
+/* ═══════════════════════════════════════════════════════════════════
+   USER PRIVILEGE — Read-only reference
+   ═══════════════════════════════════════════════════════════════════ */
+
+const ACTIONS = ['view', 'create', 'edit', 'delete', 'approve'];
+
+const PAGES_GROUPS = [
+  { section: 'Overview', pages: [
+    { key: 'dashboard', name: 'Dashboard', icon: '📊' }
+  ]},
+  { section: 'User Management', pages: [
+    { key: 'clients', name: 'Clients', icon: '👤' },
+    { key: 'lawyers', name: 'Lawyers', icon: '⚖️' },
+    { key: 'deed-writers', name: 'Deed-Writers', icon: '📜' },
+    { key: 'admin-users', name: 'Admin Users', icon: '👑' }
+  ]},
+  { section: 'Operations', pages: [
+    { key: 'bookings', name: 'Bookings & Consultations', icon: '📅' },
+    { key: 'affidavit-requests', name: 'Affidavit Requests', icon: '📄' },
+    { key: 'land-requests', name: 'Land & Property Requests', icon: '🏠' },
+    { key: 'tax-requests', name: 'Tax & Income Requests', icon: '💰' }
+  ]},
+  { section: 'Services & Analytics', pages: [
+    { key: 'affidavit-services', name: 'Affidavit Services', icon: '📈' },
+    { key: 'land-services', name: 'Land & Property Services', icon: '📈' },
+    { key: 'tax-services', name: 'Tax & Income Services', icon: '📈' },
+    { key: 'executive-analytics', name: 'Executive Analytics', icon: '📊' },
+    { key: 'financial-reports', name: 'Financial Reports', icon: '💵' },
+    { key: 'throughput-reports', name: 'Throughput Reports', icon: '⚡' }
+  ]},
+  { section: 'Security & Compliance', pages: [
+    { key: 'security-center', name: 'Security Center', icon: '🔒' },
+    { key: 'login-sessions', name: 'Login & Active Sessions', icon: '🖥️' },
+    { key: 'audit-logs', name: 'Audit & Activity Logs', icon: '📋' },
+    { key: 'risk-events', name: 'Risk Events', icon: '⚠️' }
+  ]},
+  { section: 'Administration', pages: [
+    { key: 'roles-permissions', name: 'Role & Permissions', icon: '🔑' },
+    { key: 'service-control', name: 'Service Control Center', icon: '🎛️' },
+    { key: 'transaction-monitoring', name: 'Transaction Monitoring', icon: '💳' },
+    { key: 'user-privilege', name: 'User Privilege', icon: '🛡️' }
+  ]}
+];
+
+/* ─── Helper for perms ─── */
+function emptyPerms() {
+  const p = {};
+  PAGES_GROUPS.forEach(g => g.pages.forEach(pg => {
+    p[pg.key] = { view:false, create:false, edit:false, delete:false, approve:false };
+  }));
+  return p;
+}
+function allPerms() {
+  const p = {};
+  PAGES_GROUPS.forEach(g => g.pages.forEach(pg => {
+    p[pg.key] = { view:true, create:true, edit:true, delete:true, approve:true };
+  }));
+  return p;
+}
+function viewOnly(keys) {
+  const p = emptyPerms();
+  keys.forEach(k => { if (p[k]) p[k].view = true; });
+  return p;
+}
+
+/* ─── Role access definitions (SAME as roles-permissions.html) ─── */
+const ROLES = {
+  'client': {
+    name: 'Client', icon: '👤', bg: '#EFF6FF', color: '#3B82F6',
+    desc: 'End users — restricted to their own services and requests',
+    badge: 'LIMITED', badgeBg: '#EFF6FF', badgeColor: '#1D4ED8',
+    userCount: 14902,
+    pages: viewOnly(['dashboard','bookings','affidavit-requests','land-requests','tax-requests'])
+  },
+  'lawyer': {
+    name: 'Lawyer', icon: '⚖️', bg: '#FBF6ED', color: '#C5A059',
+    desc: 'Legal professionals — access to assigned cases and profile',
+    badge: 'LIMITED', badgeBg: '#FBF6ED', badgeColor: '#A07D3A',
+    userCount: 642,
+    pages: viewOnly(['dashboard','bookings','affidavit-requests','land-requests','tax-requests'])
+  },
+  'deed-writer': {
+    name: 'Deed-Writer', icon: '📜', bg: '#F5F3FF', color: '#8B5CF6',
+    desc: 'Document specialists — access to land & property requests',
+    badge: 'MINIMAL', badgeBg: '#F5F3FF', badgeColor: '#6D28D9',
+    userCount: 128,
+    pages: viewOnly(['dashboard','land-requests'])
+  },
+  'super-admin': {
+    name: 'Super Admin', icon: '👑', bg: '#FBF6ED', color: '#C5A059',
+    desc: 'Full system access — can manage everything',
+    badge: 'FULL ACCESS', badgeBg: '#FBF6ED', badgeColor: '#A07D3A',
+    userCount: 1,
+    pages: allPerms()
+  },
+  'system-admin': {
+    name: 'System Admin', icon: '⚙️', bg: '#F1F5F9', color: '#64748B',
+    desc: 'Technical administration — system, health, and configuration',
+    badge: 'TECHNICAL', badgeBg: '#F1F5F9', badgeColor: '#475569',
+    userCount: 2,
+    pages: (() => {
+      const p = emptyPerms();
+      p.dashboard.view = true;
+      p['admin-users'].view = true;
+      p['security-center'].view = true;
+      p['login-sessions'].view = true; p['login-sessions'].delete = true;
+      p['audit-logs'].view = true;
+      p['service-control'].view = true; p['service-control'].edit = true;
+      p['roles-permissions'].view = true;
+      p['throughput-reports'].view = true;
+      return p;
+    })()
+  },
+  'security-admin': {
+    name: 'Security Admin', icon: '🔒', bg: '#FEF2F2', color: '#EF4444',
+    desc: 'Security operations — monitoring, incidents, compliance',
+    badge: 'SECURITY', badgeBg: '#FEF2F2', badgeColor: '#B91C1C',
+    userCount: 1,
+    pages: (() => {
+      const p = emptyPerms();
+      p.dashboard.view = true;
+      p['security-center'].view = true; p['security-center'].edit = true;
+      p['login-sessions'].view = true; p['login-sessions'].delete = true;
+      p['audit-logs'].view = true;
+      p['risk-events'].view = true; p['risk-events'].edit = true;
+      p['transaction-monitoring'].view = true; p['transaction-monitoring'].approve = true;
+      p['user-privilege'].view = true;
+      return p;
+    })()
+  },
+  'user-admin': {
+    name: 'User Admin', icon: '👥', bg: '#F0FDF4', color: '#10B981',
+    desc: 'User management — clients, lawyers, deed-writers',
+    badge: 'MANAGEMENT', badgeBg: '#F0FDF4', badgeColor: '#047857',
+    userCount: 3,
+    pages: (() => {
+      const p = emptyPerms();
+      p.dashboard.view = true;
+      p.clients.view = true; p.clients.create = true; p.clients.edit = true;
+      p.lawyers.view = true; p.lawyers.create = true; p.lawyers.edit = true; p.lawyers.approve = true;
+      p['deed-writers'].view = true; p['deed-writers'].create = true; p['deed-writers'].edit = true;
+      p['admin-users'].view = true;
+      p.bookings.view = true;
+      p['affidavit-requests'].view = true;
+      p['land-requests'].view = true;
+      p['tax-requests'].view = true;
+      return p;
+    })()
+  },
+  'support-admin': {
+    name: 'Support Admin', icon: '🛟', bg: '#EFF6FF', color: '#3B82F6',
+    desc: 'Customer support — view and assist users',
+    badge: 'READ-ONLY', badgeBg: '#EFF6FF', badgeColor: '#1D4ED8',
+    userCount: 4,
+    pages: (() => {
+      const p = emptyPerms();
+      p.dashboard.view = true;
+      p.clients.view = true; p.lawyers.view = true; p['deed-writers'].view = true;
+      p.bookings.view = true; p['affidavit-requests'].view = true;
+      p['land-requests'].view = true; p['tax-requests'].view = true;
+      return p;
+    })()
+  }
+};
+
+let currentRole = 'super-admin';
+let moduleFilter = '';
+
+/* ─── Render Role Chips ─── */
+function renderRoleChips() {
+  const el = document.getElementById('roleChips');
+  el.innerHTML = Object.entries(ROLES).map(([key, role]) => `
+    <button class="role-chip ${key === currentRole ? 'active' : ''}" onclick="selectRole('${key}')">
+      <div class="chip-icon" style="background: ${role.bg}; color: ${role.color};">${role.icon}</div>
+      <div>
+        <div class="chip-name">${role.name}</div>
+        <div class="chip-count">${role.userCount.toLocaleString()} users</div>
+      </div>
+    </button>
+  `).join('');
+}
+
+/* ─── Select Role ─── */
+function selectRole(key) {
+  currentRole = key;
+  renderAll();
+}
+
+/* ─── Render Info Bar ─── */
+function renderInfoBar() {
+  const role = ROLES[currentRole];
+
+  document.getElementById('selectedRoleIcon').textContent = role.icon;
+  document.getElementById('selectedRoleIcon').style.background = role.bg;
+  document.getElementById('selectedRoleName').textContent = role.name;
+  document.getElementById('selectedRoleDesc').textContent = role.desc;
+
+  const badgeEl = document.getElementById('selectedRoleBadge');
+  badgeEl.textContent = role.badge;
+  badgeEl.style.background = role.badgeBg;
+  badgeEl.style.color = role.badgeColor;
+
+  // Compute stats
+  const totalPages = PAGES_GROUPS.reduce((sum, g) => sum + g.pages.length, 0);
+  const accessCount = Object.values(role.pages).filter(p => p.view).length;
+  const deniedCount = totalPages - accessCount;
+
+  document.getElementById('statAccessCount').textContent = accessCount;
+  document.getElementById('statDeniedCount').textContent = deniedCount;
+  document.getElementById('statUserCount').textContent = role.userCount.toLocaleString();
+}
+
+/* ─── Render Matrix ─── */
+function renderMatrix() {
+  const role = ROLES[currentRole];
+  const tbody = document.getElementById('matrixBody');
+  const search = moduleFilter.toLowerCase();
+
+  let html = '';
+  let visibleCount = 0;
+
+  PAGES_GROUPS.forEach(group => {
+    // Filter pages by search
+    const filteredPages = group.pages.filter(pg =>
+      !search || pg.name.toLowerCase().includes(search)
+    );
+
+    if (filteredPages.length === 0) return;
+
+    html += `<tr class="group-row"><td colspan="6">${group.section}</td></tr>`;
+
+    filteredPages.forEach(page => {
+      visibleCount++;
+      const perm = role.pages[page.key] || { view:false, create:false, edit:false, delete:false, approve:false };
+
+      html += `
+        <tr>
+          <td>
+            <div class="page-cell">
+              <span class="p-icon">${page.icon}</span>
+              <span class="p-name">${page.name}</span>
+            </div>
+          </td>
+          ${ACTIONS.map(action => {
+            const has = perm[action];
+            return `<td>${has ? '<span class="acc-yes">✓</span>' : '<span class="acc-no">✗</span>'}</td>`;
+          }).join('')}
+        </tr>`;
+    });
+  });
+
+  if (visibleCount === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate2 text-sm">No modules match your search.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = html;
+}
+
+/* ─── Render All ─── */
+function renderAll() {
+  renderRoleChips();
+  renderInfoBar();
+  renderMatrix();
+}
+
+/* ─── Search ─── */
+document.getElementById('moduleSearch').addEventListener('input', (e) => {
+  moduleFilter = e.target.value;
+  renderMatrix();
+});
+
+/* ─── Init ─── */
+renderAll();
 </script>
 </body>
 </html>

@@ -15,6 +15,303 @@
   } } }
 </script>
 <link rel="stylesheet" href="css/style.css">
+<style>
+  /* ═══ System Status Banner ═══ */
+  .system-banner {
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    border-radius: 14px;
+    padding: 20px 26px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .system-banner::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, rgba(197,160,89,0.15), transparent 70%);
+    border-radius: 50%; transform: translate(30%, -30%);
+  }
+  .system-banner::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #C5A059, #F5E8C8, #C5A059);
+  }
+  .system-health-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 999px;
+    letter-spacing: 0.04em;
+    background: rgba(34,197,94,0.15);
+    color: #4ADE80;
+    border: 1px solid rgba(34,197,94,0.35);
+  }
+  .system-health-badge.warning {
+    background: rgba(245,158,11,0.15); color: #FCD34D;
+    border-color: rgba(245,158,11,0.35);
+  }
+  .system-health-badge.critical {
+    background: rgba(239,68,68,0.15); color: #FCA5A5;
+    border-color: rgba(239,68,68,0.35);
+  }
+  .system-health-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  /* ═══ Stat Tile ═══ */
+  .stat-tile {
+    background: #fff;
+    border: 1px solid #EEF1F4;
+    border-radius: 12px;
+    padding: 12px 16px;
+    position: relative;
+    overflow: hidden;
+    transition: all .2s;
+  }
+  .stat-tile::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: currentColor;
+    opacity: 0.8;
+  }
+  .stat-tile:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(26,43,60,0.08); }
+  .stat-tile .num { font-size: 22px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+  .stat-tile .lbl {
+    font-size: 10.5px; color: #64748B; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-top: 6px;
+  }
+  .stat-tile .icon { position: absolute; right: 12px; top: 12px; font-size: 18px; opacity: 0.15; }
+
+  /* ═══ Service Card ═══ */
+  .service-card {
+    background: #fff;
+    border: 1.5px solid #EEF1F4;
+    border-radius: 14px;
+    padding: 16px;
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card:hover {
+    border-color: #C5A059;
+    box-shadow: 0 8px 24px rgba(26,43,60,0.08);
+  }
+  /* Colored top border by status */
+  .service-card.status-active      { border-top: 3px solid #10B981; }
+  .service-card.status-maintenance { border-top: 3px solid #F59E0B; }
+  .service-card.status-paused      { border-top: 3px solid #94A3B8; }
+  .service-card.status-disabled    { border-top: 3px solid #EF4444; }
+
+  .svc-header {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .svc-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .svc-icon.booking { background: #EFF6FF; color: #3B82F6; }
+  .svc-icon.affidavit { background: #FBF6ED; color: #C5A059; }
+  .svc-icon.land { background: #F0FDF4; color: #10B981; }
+  .svc-icon.tax { background: #F5F3FF; color: #8B5CF6; }
+  .svc-icon.payment { background: #FFFBEB; color: #F59E0B; }
+  .svc-icon.auth { background: #FEF2F2; color: #EF4444; }
+  .svc-icon.notify { background: #ECFEFF; color: #06B6D4; }
+
+  /* Status dot on icon */
+  .svc-status-dot {
+    position: absolute;
+    top: -2px; right: -2px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+  .svc-status-dot.active      { background: #10B981; animation: pulse 2s infinite; }
+  .svc-status-dot.maintenance { background: #F59E0B; }
+  .svc-status-dot.paused      { background: #94A3B8; }
+  .svc-status-dot.disabled    { background: #EF4444; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+
+  .svc-title {
+    font-size: 14px; font-weight: 700; color: #1A2B3C;
+    line-height: 1.2;
+  }
+  .svc-desc {
+    font-size: 11px; color: #94A3B8;
+    margin-top: 2px; line-height: 1.4;
+  }
+
+  /* ═══ Service Stats Row ═══ */
+  .svc-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 10px 0;
+    border-top: 1px solid #F1F5F9;
+    border-bottom: 1px solid #F1F5F9;
+    margin: 10px 0 12px 0;
+  }
+  .svc-stat .s-val {
+    font-size: 14px; font-weight: 800; color: #1A2B3C;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .svc-stat .s-lbl {
+    font-size: 9px; color: #94A3B8;
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.04em; margin-top: 3px;
+  }
+
+  /* ═══ Manage Button ═══ */
+  .btn-manage {
+    width: 100%;
+    background: linear-gradient(135deg, #1A2B3C 0%, #152233 100%);
+    color: #fff;
+    border: none;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-manage:hover {
+    background: linear-gradient(135deg, #C5A059 0%, #A07D3A 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(197,160,89,0.3);
+  }
+
+  /* ═══ Activity Item ═══ */
+  .activity-item {
+    display: flex; gap: 12px;
+    padding: 11px 14px;
+    background: #F8FAFC;
+    border-left: 3px solid #CBD5E1;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .activity-item.active      { border-left-color: #10B981; background: #F0FDF4; }
+  .activity-item.maintenance { border-left-color: #F59E0B; background: #FFFBEB; }
+  .activity-item.paused      { border-left-color: #94A3B8; background: #F1F5F9; }
+  .activity-item.disabled    { border-left-color: #EF4444; background: #FEF2F2; }
+
+  .activity-item .a-icon {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    background: #fff;
+  }
+  .activity-item .a-body { flex: 1; min-width: 0; }
+  .activity-item .a-title {
+    font-size: 12.5px; font-weight: 700; color: #1A2B3C;
+  }
+  .activity-item .a-meta {
+    font-size: 10.5px; color: #94A3B8;
+    margin-top: 2px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .activity-item .a-meta .who {
+    background: #fff; color: #64748B;
+    padding: 1px 6px; border-radius: 4px;
+    font-weight: 700; font-size: 9.5px;
+    text-transform: uppercase;
+  }
+
+  /* ═══ Emergency Panel ═══ */
+  .emergency-panel {
+    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+    border: 1.5px solid #FECACA;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .emergency-panel .e-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: #FEE2E2;
+    color: #B91C1C;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ═══ Modal ═══ */
+  .modal-backdrop { display: none; }
+  .modal-backdrop.open { display: flex; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .15s;
+    background: #fff;
+    font-family: inherit;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: #C5A059;
+    box-shadow: 0 0 0 3px rgba(197,160,89,0.12);
+  }
+  .form-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  /* ═══ Status Options (in Modal) ═══ */
+  .status-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .status-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 12px;
+    border-radius: 9px;
+    border: 1.5px solid #E2E8F0;
+    background: #fff;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .status-opt:hover { border-color: #C5A059; }
+  .status-opt.selected-active      { border-color: #10B981; background: #F0FDF4; }
+  .status-opt.selected-maintenance { border-color: #F59E0B; background: #FFFBEB; }
+  .status-opt.selected-paused      { border-color: #94A3B8; background: #F1F5F9; }
+  .status-opt.selected-disabled    { border-color: #EF4444; background: #FEF2F2; }
+  .status-opt input { display: none; }
+  .status-opt .opt-icon {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    background: #F1F5F9;
+    flex-shrink: 0;
+  }
+  .status-opt .opt-name { font-size: 12.5px; font-weight: 700; color: #1A2B3C; }
+  .status-opt .opt-desc { font-size: 10px; color: #94A3B8; margin-top: 1px; }
+</style>
 </head>
 <body class="bg-offwhite text-navy">
 <div class="flex h-screen overflow-hidden">
@@ -31,67 +328,573 @@
         <div class="flex items-center gap-2 text-sm"><span class="dot bg-emerald-500"></span><span class="text-slate2">All systems operational</span></div>
       </div>
     </header>
-    <main class="flex-1 overflow-y-auto p-8 space-y-6">
+    <main class="flex-1 overflow-y-auto p-5 space-y-4">
 
-      <div>
-        <h1 class="text-2xl font-bold">Service Control Center</h1>
-        <p class="text-slate2 text-sm mt-1">Turn platform services on, off, or into maintenance.</p>
+     
+
+      <!-- ═══ System Status Banner ═══ -->
+      <div class="system-banner">
+        <div class="relative z-10 flex items-center justify-between flex-wrap gap-4">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center text-3xl" style="background: rgba(197,160,89,0.2);">🎛️</div>
+            <div>
+              <div class="flex items-center gap-3">
+                <h2 class="text-lg font-bold text-white">Service Control Center</h2>
+                <span id="systemHealthBadge" class="system-health-badge warning">
+                  <span class="dot"></span>
+                  Partial Maintenance
+                </span>
+              </div>
+              <p class="text-xs text-white/55 mt-1">8 core services monitored · click "Manage" on any card to change status</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div>
+              <div class="text-2xl font-extrabold text-gold leading-none" id="bannerActiveCount">7</div>
+              <div class="text-[9.5px] font-bold text-white/45 uppercase tracking-wider mt-1">Active</div>
+            </div>
+            <div class="w-px h-10 bg-white/10"></div>
+            <div>
+              <div class="text-2xl font-extrabold text-amber-400 leading-none" id="bannerMaintenanceCount">1</div>
+              <div class="text-[9.5px] font-bold text-white/45 uppercase tracking-wider mt-1">Maintenance</div>
+            </div>
+            <div class="w-px h-10 bg-white/10"></div>
+            <div>
+              <div class="text-2xl font-extrabold text-white leading-none" id="bannerRequestsToday">4,318</div>
+              <div class="text-[9.5px] font-bold text-white/45 uppercase tracking-wider mt-1">Requests Today</div>
+            </div>
+          </div>
+        </div>
       </div>
 
+      <!-- ═══ Stats Row ═══ -->
       <div class="grid grid-cols-4 gap-4">
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="font-semibold text-sm">Lawyer Booking</p>
-          <div class="mt-2"><span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full"><span class="dot bg-emerald-500"></span>Active</span></div>
-          <button onclick="openModal('modal-manage-service')" class="mt-4 w-full bg-offwhite border border-slate-200 text-xs font-semibold py-2 rounded-lg">Manage Service</button>
+        <div class="stat-tile" style="color: #10B981;">
+          <span class="icon">🟢</span>
+          <div class="num" style="color: #047857;" id="statActive">7</div>
+          <div class="lbl">Active Services</div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="font-semibold text-sm">Affidavit</p>
-          <div class="mt-2"><span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full"><span class="dot bg-emerald-500"></span>Active</span></div>
-          <button onclick="openModal('modal-manage-service')" class="mt-4 w-full bg-offwhite border border-slate-200 text-xs font-semibold py-2 rounded-lg">Manage Service</button>
+        <div class="stat-tile" style="color: #F59E0B;">
+          <span class="icon">🟡</span>
+          <div class="num" style="color: #B45309;" id="statMaintenance">1</div>
+          <div class="lbl">In Maintenance</div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="font-semibold text-sm">Land Verification</p>
-          <div class="mt-2"><span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-2.5 py-1 rounded-full"><span class="dot bg-emerald-500"></span>Active</span></div>
-          <button onclick="openModal('modal-manage-service')" class="mt-4 w-full bg-offwhite border border-slate-200 text-xs font-semibold py-2 rounded-lg">Manage Service</button>
+        <div class="stat-tile" style="color: #94A3B8;">
+          <span class="icon">⚪</span>
+          <div class="num" style="color: #475569;" id="statPaused">0</div>
+          <div class="lbl">Paused</div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-card border">
-          <p class="font-semibold text-sm">Tax & Income</p>
-          <div class="mt-2"><span class="inline-flex items-center gap-1.5 bg-gold-50 text-gold text-xs font-semibold px-2.5 py-1 rounded-full"><span class="dot bg-gold"></span>Maintenance</span></div>
-          <button onclick="openModal('modal-manage-service')" class="mt-4 w-full bg-offwhite border border-slate-200 text-xs font-semibold py-2 rounded-lg">Manage Service</button>
+        <div class="stat-tile" style="color: #EF4444;">
+          <span class="icon">🔴</span>
+          <div class="num" style="color: #B91C1C;" id="statDisabled">0</div>
+          <div class="lbl">Disabled</div>
         </div>
+      </div>
+
+      <!-- ═══ Service Cards ═══ -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-bold">Core Services</h2>
+          <span class="text-[10.5px] text-slate2">Read-only view · status changes via <strong class="text-navy">Manage</strong> button</span>
+        </div>
+        <div class="grid grid-cols-4 gap-4" id="servicesGrid"></div>
+      </div>
+
+      <!-- ═══ Emergency + Activity Row ═══ -->
+      <div class="grid grid-cols-3 gap-4">
+
+        <!-- Emergency Controls -->
+        <div class="space-y-4">
+          <div class="emergency-panel">
+            <div class="e-icon">⚠️</div>
+            <div class="flex-1">
+              <div class="text-[13px] font-bold text-red-800">Emergency Controls</div>
+              <div class="text-[11px] text-red-700/80 mt-0.5">Bulk status change for all services</div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-card border border-slate-100 p-4">
+            <div class="space-y-2">
+              <button onclick="emergencyAction('lockdown')" class="w-full text-left flex items-center justify-between p-3 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 transition">
+                <div>
+                  <div class="text-[12.5px] font-bold text-red-800">🔒 Platform Lockdown</div>
+                  <div class="text-[10.5px] text-red-700/80">Disable all services + new signups</div>
+                </div>
+                <span class="text-red-500 text-xs">→</span>
+              </button>
+
+              <button onclick="emergencyAction('maintenance-all')" class="w-full text-left flex items-center justify-between p-3 rounded-lg border border-amber-200 bg-amber-50 hover:bg-amber-100 transition">
+                <div>
+                  <div class="text-[12.5px] font-bold text-amber-800">🛠️ Full Maintenance Mode</div>
+                  <div class="text-[10.5px] text-amber-700/80">Show maintenance page to all users</div>
+                </div>
+                <span class="text-amber-600 text-xs">→</span>
+              </button>
+
+              <button onclick="emergencyAction('resume-all')" class="w-full text-left flex items-center justify-between p-3 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition">
+                <div>
+                  <div class="text-[12.5px] font-bold text-emerald-800">✅ Resume All Services</div>
+                  <div class="text-[10.5px] text-emerald-700/80">Re-enable everything normally</div>
+                </div>
+                <span class="text-emerald-500 text-xs">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-span-2 bg-white rounded-xl shadow-card border border-slate-100 p-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold text-sm">Recent Activity</h3>
+            <span class="text-[10px] text-slate2 font-bold uppercase tracking-wide">Last 24 hours</span>
+          </div>
+          <div id="activityLog"></div>
+        </div>
+
       </div>
 
     </main>
   </div>
 </div>
 
+<!-- ═══ Advanced Manage Service Modal ═══ -->
 <div id="modal-manage-service" class="modal-backdrop fixed inset-0 bg-navy/40 items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
-    <div class="flex items-center justify-between px-6 py-4 border-b">
-      <h3 class="font-bold text-lg">Manage Service</h3>
-      <button onclick="closeModal('modal-manage-service')" class="text-slate2">✕</button>
-    </div>
-    <div class="px-6 py-5 space-y-4 text-sm">
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[92vh] overflow-y-auto">
+    <div class="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between z-10">
       <div>
-        <label class="text-xs font-semibold text-slate2 block mb-2">Status</label>
-        <div class="space-y-2">
-          <label class="flex items-center gap-2"><input type="radio" name="svc" checked> Active</label>
-          <label class="flex items-center gap-2"><input type="radio" name="svc"> Paused</label>
-          <label class="flex items-center gap-2"><input type="radio" name="svc"> Maintenance</label>
-          <label class="flex items-center gap-2"><input type="radio" name="svc"> Disabled</label>
+        <h3 class="font-bold text-lg" id="modalServiceName">Manage Service</h3>
+        <p class="text-[11px] text-slate2 mt-0.5">Configure status, scheduling, and client-facing message</p>
+      </div>
+      <button onclick="closeModal('modal-manage-service')" class="text-slate2 hover:text-navy text-xl">✕</button>
+    </div>
+
+    <div class="px-6 py-5 space-y-5">
+
+      <!-- Status Options -->
+      <div>
+        <label class="form-label">Service Status</label>
+        <div class="status-options" id="statusOptions">
+          <label class="status-opt selected-active" data-status="active">
+            <input type="radio" name="svc-status" value="active" checked>
+            <div class="opt-icon" style="background:#ECFDF5;color:#047857;">🟢</div>
+            <div>
+              <div class="opt-name">Active</div>
+              <div class="opt-desc">Fully operational</div>
+            </div>
+          </label>
+          <label class="status-opt" data-status="maintenance">
+            <input type="radio" name="svc-status" value="maintenance">
+            <div class="opt-icon" style="background:#FFFBEB;color:#B45309;">🟡</div>
+            <div>
+              <div class="opt-name">Maintenance</div>
+              <div class="opt-desc">Temporarily unavailable</div>
+            </div>
+          </label>
+          <label class="status-opt" data-status="paused">
+            <input type="radio" name="svc-status" value="paused">
+            <div class="opt-icon" style="background:#F1F5F9;color:#475569;">⏸️</div>
+            <div>
+              <div class="opt-name">Paused</div>
+              <div class="opt-desc">Accepting no new requests</div>
+            </div>
+          </label>
+          <label class="status-opt" data-status="disabled">
+            <input type="radio" name="svc-status" value="disabled">
+            <div class="opt-icon" style="background:#FEF2F2;color:#B91C1C;">🔴</div>
+            <div>
+              <div class="opt-name">Disabled</div>
+              <div class="opt-desc">Hidden from all users</div>
+            </div>
+          </label>
         </div>
       </div>
-      <input placeholder="Reason (e.g. scheduled maintenance)" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
-      <textarea rows="2" placeholder="Client-facing message..." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"></textarea>
+
+      <!-- Reason -->
+      <div>
+        <label class="form-label">Reason for Change <span class="text-red-500">*</span></label>
+        <input id="modalReason" class="form-input" placeholder="e.g. Scheduled database migration, Bug fix deployment...">
+      </div>
+
+      <!-- Client Message -->
+      <div>
+        <label class="form-label">Client-Facing Message</label>
+        <textarea id="modalClientMsg" class="form-textarea" rows="2" placeholder="Affidavit service is temporarily unavailable. Back at 3 PM."></textarea>
+        <p class="text-[10.5px] text-slate2 mt-1.5">This message appears to users when they try to access the service.</p>
+      </div>
+
+      <!-- Scheduling -->
+      <div>
+        <label class="form-label">Schedule (Optional)</label>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <div class="text-[10px] text-slate2 font-semibold mb-1">Start Time</div>
+            <input type="datetime-local" id="modalStartTime" class="form-input">
+          </div>
+          <div>
+            <div class="text-[10px] text-slate2 font-semibold mb-1">End Time (Auto-resume)</div>
+            <input type="datetime-local" id="modalEndTime" class="form-input">
+          </div>
+        </div>
+        <p class="text-[10.5px] text-slate2 mt-1.5">Leave blank to apply status immediately without auto-resume.</p>
+      </div>
+
+      <!-- Behavior Options -->
+      <div>
+        <label class="form-label">Behavior</label>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-offwhite cursor-pointer">
+            <input type="checkbox" id="optPreventNew" checked class="rounded border-slate-300">
+            <div>
+              <div class="text-[12.5px] font-semibold text-navy">Prevent new requests</div>
+              <div class="text-[10.5px] text-slate2">Block new submissions during this state</div>
+            </div>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-offwhite cursor-pointer">
+            <input type="checkbox" id="optExistingContinue" checked class="rounded border-slate-300">
+            <div>
+              <div class="text-[12.5px] font-semibold text-navy">Existing requests continue processing</div>
+              <div class="text-[10.5px] text-slate2">Do not interrupt in-progress work</div>
+            </div>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg border border-slate-200 hover:bg-offwhite cursor-pointer">
+            <input type="checkbox" id="optNotifyUsers" checked class="rounded border-slate-300">
+            <div>
+              <div class="text-[12.5px] font-semibold text-navy">Notify affected users</div>
+              <div class="text-[10.5px] text-slate2">Send email + in-app notification</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Dependency Warning -->
+      <div class="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 flex gap-3">
+        <span class="text-lg">⚠️</span>
+        <div class="text-[11.5px] text-amber-900 leading-relaxed">
+          <strong>Dependency check:</strong> Disabling <span id="modalDependencyHint">this service</span> may affect <strong>2 linked services</strong> and 47 active requests. Admin actions here are logged to the audit trail.
+        </div>
+      </div>
     </div>
-    <div class="px-6 py-4 border-t flex justify-end gap-3">
-      <button onclick="closeModal('modal-manage-service')" class="text-sm font-semibold text-slate2 px-4 py-2">Cancel</button>
-      <button onclick="closeModal('modal-manage-service')" class="bg-navy text-white text-sm font-semibold px-5 py-2.5 rounded-lg">Save & Apply</button>
+
+    <div class="sticky bottom-0 bg-white border-t border-slate-100 px-6 py-4 flex justify-between items-center">
+      <div class="text-[11px] text-slate2">All changes are audit-logged</div>
+      <div class="flex items-center gap-3">
+        <button onclick="closeModal('modal-manage-service')" class="text-sm font-semibold text-slate2 px-4 py-2 hover:text-navy">Cancel</button>
+        <button onclick="saveServiceChanges()" class="text-sm font-semibold text-white px-5 py-2.5 rounded-lg" style="background: linear-gradient(135deg, #C5A059 0%, #A07D3A 100%); box-shadow: 0 2px 8px rgba(197,160,89,0.28);">
+          💾 Save & Apply
+        </button>
+      </div>
     </div>
   </div>
 </div>
 
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   SERVICE CONTROL CENTER
+   ═══════════════════════════════════════════════════════════════════ */
+
+const SERVICES = [
+  {
+    id: 'booking', name: 'Lawyer Booking', icon: '⚖️', iconClass: 'booking',
+    desc: 'Client-lawyer consultation scheduling',
+    status: 'active',
+    stats: { requests: 188, uptime: '99.98%', avgTime: '2.4h' },
+    lastChange: '3 days ago'
+  },
+  {
+    id: 'affidavit', name: 'Affidavit', icon: '📄', iconClass: 'affidavit',
+    desc: 'Affidavit generation & legal documentation',
+    status: 'active',
+    stats: { requests: 127, uptime: '99.95%', avgTime: '1.8d' },
+    lastChange: '2 hours ago'
+  },
+  {
+    id: 'land', name: 'Land & Property', icon: '🏠', iconClass: 'land',
+    desc: 'Land verification, deeds, mutation',
+    status: 'active',
+    stats: { requests: 65, uptime: '99.92%', avgTime: '9.2d' },
+    lastChange: '5 days ago'
+  },
+  {
+    id: 'tax', name: 'Tax & Income', icon: '💰', iconClass: 'tax',
+    desc: 'Tax filing and income declarations',
+    status: 'maintenance',
+    stats: { requests: 61, uptime: '99.80%', avgTime: '3.1d' },
+    lastChange: '30 min ago'
+  },
+  {
+    id: 'payment', name: 'Payment Gateway', icon: '💳', iconClass: 'payment',
+    desc: 'Transactions, refunds, settlements',
+    status: 'active',
+    stats: { requests: 1248, uptime: '99.99%', avgTime: '0.3s' },
+    lastChange: '1 day ago'
+  },
+  {
+    id: 'auth', name: 'Authentication', icon: '🔐', iconClass: 'auth',
+    desc: 'Login, registration, MFA',
+    status: 'active',
+    stats: { requests: 8942, uptime: '100%', avgTime: '0.1s' },
+    lastChange: '1 week ago'
+  },
+  {
+    id: 'notify', name: 'Notifications', icon: '🔔', iconClass: 'notify',
+    desc: 'Email, SMS, push notifications',
+    status: 'active',
+    stats: { requests: 3201, uptime: '99.96%', avgTime: '1.2s' },
+    lastChange: '3 days ago'
+  },
+  {
+    id: 'storage', name: 'File Storage', icon: '📦', iconClass: 'notify',
+    desc: 'Document uploads, downloads, backups',
+    status: 'active',
+    stats: { requests: 512, uptime: '99.99%', avgTime: '0.8s' },
+    lastChange: '6 days ago'
+  }
+];
+
+const ACTIVITY = [
+  { action: 'maintenance', service: 'Tax & Income', status: 'Maintenance', by: 'Rafiq Ahmed', time: '30 min ago', reason: 'Scheduled database migration' },
+  { action: 'active',      service: 'Affidavit',    status: 'Active',       by: 'System', time: '2 hours ago', reason: 'Auto-resumed after maintenance window' },
+  { action: 'paused',      service: 'Notifications', status: 'Paused',      by: 'Kamrul Hasan', time: '5 hours ago', reason: 'Provider rate limit reached — temporary pause' },
+  { action: 'active',      service: 'Notifications', status: 'Active',      by: 'Kamrul Hasan', time: '4 hours ago', reason: 'Rate limit resolved' },
+  { action: 'disabled',    service: 'Land & Property', status: 'Disabled → Active', by: 'Sabrina Akhter', time: 'Yesterday', reason: 'Brief lockdown during security incident' },
+  { action: 'active',      service: 'Payment Gateway', status: 'Active',    by: 'System', time: 'Yesterday', reason: 'Scheduled resume' }
+];
+
+let currentServiceId = null;
+
+/* ─── Status Config ─── */
+const STATUS_CONFIG = {
+  active:      { label: 'Active',      cardClass: 'status-active',      icon: '🟢' },
+  maintenance: { label: 'Maintenance', cardClass: 'status-maintenance', icon: '🟡' },
+  paused:      { label: 'Paused',      cardClass: 'status-paused',      icon: '⏸️' },
+  disabled:    { label: 'Disabled',    cardClass: 'status-disabled',    icon: '🔴' }
+};
+
+/* ─── Render Service Grid (READ-ONLY, no quick toggle) ─── */
+function renderServices() {
+  const grid = document.getElementById('servicesGrid');
+  grid.innerHTML = SERVICES.map(s => {
+    const cfg = STATUS_CONFIG[s.status];
+
+    return `
+      <div class="service-card ${cfg.cardClass}">
+        <!-- Header (icon has colored status dot) -->
+        <div class="svc-header">
+          <div class="svc-icon ${s.iconClass}">
+            ${s.icon}
+            <span class="svc-status-dot ${s.status}" title="${cfg.label}"></span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="svc-title truncate">${s.name}</div>
+            <div class="svc-desc">${s.desc}</div>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="svc-stats">
+          <div class="svc-stat text-center">
+            <div class="s-val">${s.stats.requests.toLocaleString()}</div>
+            <div class="s-lbl">Requests</div>
+          </div>
+          <div class="svc-stat text-center">
+            <div class="s-val">${s.stats.uptime}</div>
+            <div class="s-lbl">Uptime</div>
+          </div>
+          <div class="svc-stat text-center">
+            <div class="s-val">${s.stats.avgTime}</div>
+            <div class="s-lbl">Avg Time</div>
+          </div>
+        </div>
+
+        <!-- Manage Button — ONLY way to change status -->
+        <button onclick="openManage('${s.id}')" class="btn-manage">
+          ⚙️ Manage Service
+        </button>
+      </div>
+    `;
+  }).join('');
+
+  updateStats();
+}
+
+/* ─── Update Top Stats ─── */
+function updateStats() {
+  const active      = SERVICES.filter(s => s.status === 'active').length;
+  const maintenance = SERVICES.filter(s => s.status === 'maintenance').length;
+  const paused      = SERVICES.filter(s => s.status === 'paused').length;
+  const disabled    = SERVICES.filter(s => s.status === 'disabled').length;
+
+  document.getElementById('statActive').textContent      = active;
+  document.getElementById('statMaintenance').textContent = maintenance;
+  document.getElementById('statPaused').textContent      = paused;
+  document.getElementById('statDisabled').textContent    = disabled;
+
+  document.getElementById('bannerActiveCount').textContent      = active;
+  document.getElementById('bannerMaintenanceCount').textContent = maintenance;
+
+  const badge = document.getElementById('systemHealthBadge');
+  if (disabled > 0) {
+    badge.className = 'system-health-badge critical';
+    badge.innerHTML = '<span class="dot"></span>Service Outage';
+  } else if (maintenance > 0 || paused > 0) {
+    badge.className = 'system-health-badge warning';
+    badge.innerHTML = '<span class="dot"></span>Partial Maintenance';
+  } else {
+    badge.className = 'system-health-badge';
+    badge.innerHTML = '<span class="dot"></span>All Systems Operational';
+  }
+}
+
+/* ─── Open Advanced Manage Modal ─── */
+function openManage(id) {
+  const svc = SERVICES.find(s => s.id === id);
+  if (!svc) return;
+  currentServiceId = id;
+
+  document.getElementById('modalServiceName').textContent = `Manage — ${svc.name}`;
+  document.getElementById('modalDependencyHint').textContent = svc.name;
+  document.getElementById('modalReason').value = '';
+  document.getElementById('modalClientMsg').value = '';
+  document.getElementById('modalStartTime').value = '';
+  document.getElementById('modalEndTime').value = '';
+
+  document.querySelectorAll('input[name="svc-status"]').forEach(r => {
+    r.checked = (r.value === svc.status);
+  });
+  updateStatusOptionStyles(svc.status);
+
+  openModal('modal-manage-service');
+}
+
+/* ─── Status Option Selection ─── */
+document.querySelectorAll('input[name="svc-status"]').forEach(r => {
+  r.addEventListener('change', (e) => updateStatusOptionStyles(e.target.value));
+});
+
+function updateStatusOptionStyles(status) {
+  document.querySelectorAll('.status-opt').forEach(opt => {
+    opt.classList.remove('selected-active', 'selected-maintenance', 'selected-paused', 'selected-disabled');
+    if (opt.dataset.status === status) {
+      opt.classList.add(`selected-${status}`);
+    }
+  });
+}
+
+/* ─── Save Service Changes (FROM MODAL ONLY) ─── */
+function saveServiceChanges() {
+  const svc = SERVICES.find(s => s.id === currentServiceId);
+  if (!svc) return;
+
+  const newStatus = document.querySelector('input[name="svc-status"]:checked').value;
+  const reason = document.getElementById('modalReason').value.trim();
+
+  if (!reason) {
+    showToast('Reason is required', 'error');
+    return;
+  }
+
+  const oldStatus = svc.status;
+
+  // If status hasn't changed, just close
+  if (oldStatus === newStatus) {
+    closeModal('modal-manage-service');
+    showToast('No status change was made', 'info');
+    currentServiceId = null;
+    return;
+  }
+
+  svc.status = newStatus;
+  svc.lastChange = 'just now';
+
+  ACTIVITY.unshift({
+    action: newStatus,
+    service: svc.name,
+    status: STATUS_CONFIG[newStatus].label,
+    by: 'Rafiq Ahmed',
+    time: 'just now',
+    reason: reason
+  });
+
+  closeModal('modal-manage-service');
+  renderServices();
+  renderActivity();
+
+  showToast(`${svc.name}: ${STATUS_CONFIG[oldStatus].label} → ${STATUS_CONFIG[newStatus].label}`, 'success');
+  currentServiceId = null;
+}
+
+/* ─── Render Activity Log ─── */
+function renderActivity() {
+  const el = document.getElementById('activityLog');
+  el.innerHTML = ACTIVITY.slice(0, 5).map(a => `
+    <div class="activity-item ${a.action}">
+      <div class="a-icon">${STATUS_CONFIG[a.action]?.icon || '⚙️'}</div>
+      <div class="a-body">
+        <div class="a-title">${a.service} → ${a.status}</div>
+        <div class="a-meta">
+          <span>🕐 ${a.time}</span>
+          <span>·</span>
+          <span class="who">${a.by}</span>
+        </div>
+        <div class="text-[11px] text-slate2 mt-1 italic">"${a.reason}"</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ─── Emergency Actions (Bulk Status Change) ─── */
+function emergencyAction(type) {
+  const messages = {
+    lockdown: {
+      title: '🔒 Activate Platform Lockdown?',
+      body: 'This will disable ALL services and prevent new user signups. Active users will see a maintenance page.',
+    },
+    'maintenance-all': {
+      title: '🛠️ Enable Full Maintenance Mode?',
+      body: 'All services will show maintenance page to users. Internal admin access will remain.',
+    },
+    'resume-all': {
+      title: '✅ Resume All Services?',
+      body: 'All paused, maintenance, and disabled services will be set to Active. Only proceed if issues are resolved.',
+    }
+  };
+
+  const cfg = messages[type];
+  if (!confirm(`${cfg.title}\n\n${cfg.body}`)) return;
+
+  if (type === 'lockdown' || type === 'maintenance-all') {
+    const target = type === 'lockdown' ? 'disabled' : 'maintenance';
+    SERVICES.forEach(s => {
+      s.status = target;
+      s.lastChange = 'just now';
+    });
+    showToast(`All services set to ${STATUS_CONFIG[target].label}`, 'warning');
+  } else if (type === 'resume-all') {
+    SERVICES.forEach(s => {
+      s.status = 'active';
+      s.lastChange = 'just now';
+    });
+    showToast('All services resumed', 'success');
+  }
+
+  ACTIVITY.unshift({
+    action: type === 'resume-all' ? 'active' : (type === 'lockdown' ? 'disabled' : 'maintenance'),
+    service: 'All Services',
+    status: type === 'resume-all' ? 'Active' : (type === 'lockdown' ? 'Disabled' : 'Maintenance'),
+    by: 'Rafiq Ahmed',
+    time: 'just now',
+    reason: `Emergency action: ${type}`
+  });
+
+  renderServices();
+  renderActivity();
+}
+
+/* ─── Init ─── */
+renderServices();
+renderActivity();
+</script>
 </body>
 </html>
